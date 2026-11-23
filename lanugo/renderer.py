@@ -2,15 +2,20 @@
 
 from mipswords import Code
 
-# Keep the original actor projection and hit testing. Suppress only Lanugo's mesh packets.
+# Keep actor projection and hit testing. Suppress the mesh only during Lanugo’s idle animation.
 def suppress(origin, order_table_register="v1"):
     c=Code(origin)
     c.mem("lw","t8",0x74,"sp")
     c.address("t9",0x8002a5d8)
     c.branch("bne","t8","t9","normal")
     c.mem("lw","t8",0x158,"sp")
-    c.imm("ori","t9","zero",10)
+    c.nop()
+    c.mem("lbu","t9",23,"t8")
     c.mem("lbu","t8",26,"t8")
+    c.imm("andi","t9","t9",0x3f)
+    c.imm("xori","t9","t9",0x20)
+    c.branch("bne","t9","zero","normal")
+    c.imm("ori","t9","zero",10)
     c.nop()
     c.branch("bne","t8","t9","normal")
     c.nop()
@@ -36,7 +41,14 @@ def draw(origin, metadata, direction_table):
     c.mem("lbu","t2",26,"t0")
     c.nop()
     c.branch("bne","t2","t1","finish")
-    c.nop()
+    c.mem("lbu","t4",23,"t0")
+    c.mem("lhu","t6",12,"t0")
+    c.imm("andi","t4","t4",0x3f)
+    c.imm("xori","t4","t4",0x20)
+    c.branch("bne","t4","zero","finish")
+    # Group the native seven idle frames into four DOS phases.
+    c.shift("srl","t6","t6",13)
+    c.imm("andi","t6","t6",3)
     c.alu("subu","t1","a3","a1")
     c.branch("blez","t1","zero","finish")
     c.nop()
@@ -56,6 +68,8 @@ def draw(origin, metadata, direction_table):
     c.alu("addu", "t0", "t0", "t2")
     c.mem("lbu", "t2", 0, "t0")
     c.address("t0", metadata)
+    c.shift("sll", "t2", "t2", 2)
+    c.alu("addu", "t2", "t2", "t6")
     c.shift("sll", "t2", "t2", 3)
     c.alu("addu", "t0", "t0", "t2")
 

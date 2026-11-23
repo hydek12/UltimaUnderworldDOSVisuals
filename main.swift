@@ -181,22 +181,40 @@ func exportFrame(root: URL, actor: Int, slot: Int, frame: Int, output: URL) thro
 }
 
 func exportLanugoAtlas(root: URL, directory: URL) throws {
-    let cellSize = 64
-    let columns = 4
-    let width = cellSize * columns
-    let height = cellSize * 2
+    let width = 256
+    let height = 192
+    let sequence = try (32...39).flatMap { slot in
+        try (0..<4).map { phase in
+            (slot, phase, try readFrame(root: root, actor: 70, slot: slot, frame: phase))
+        }
+    }
+    var uniqueFrames: [Int: DOSFrame] = [:]
+    for (_, _, frame) in sequence {
+        uniqueFrames[frame.index] = frame
+    }
+    let orderedFrames = uniqueFrames.values.sorted {
+        if $0.bitmap.pixelsHigh != $1.bitmap.pixelsHigh {
+            return $0.bitmap.pixelsHigh > $1.bitmap.pixelsHigh
+        }
+        return $0.index < $1.index
+    }
     var pixels = [UInt16](repeating: 0, count: width * height)
-    var rows = ["slot,u,v,width,height,hotspot_x,hotspot_y"]
-    for (index, slot) in (32...39).enumerated() {
-        let frame = try readFrame(root: root, actor: 70, slot: slot, frame: 0)
+    var positions: [Int: (u: Int, v: Int)] = [:]
+    var u = 0
+    var v = 0
+    var shelfHeight = 0
+    for frame in orderedFrames {
         let bitmap = frame.bitmap
         let frameWidth = bitmap.pixelsWide
         let frameHeight = bitmap.pixelsHigh
-        guard frameWidth <= cellSize, frameHeight <= cellSize, let rgba = bitmap.bitmapData else {
-            throw FormatError("Lanugo frame does not fit the atlas cell.")
+        if u + frameWidth > width {
+            u = 0
+            v += shelfHeight
+            shelfHeight = 0
         }
-        let u = (index % columns) * cellSize
-        let v = (index / columns) * cellSize
+        guard frameWidth <= width, v + frameHeight <= height, let rgba = bitmap.bitmapData else {
+            throw FormatError("Lanugo idle sequence exceeds the atlas bounds.")
+        }
         for y in 0..<frameHeight {
             for x in 0..<frameWidth {
                 let color = y * bitmap.bytesPerRow + x * 4
@@ -205,11 +223,19 @@ func exportLanugoAtlas(root: URL, directory: URL) throws {
                 let green = UInt16(rgba[color + 1]) >> 3
                 let blue = UInt16(rgba[color + 2]) >> 3
                 let value = red | green << 5 | blue << 10
-                // Zero is transparent on PSX. Preserve black when drawing opaque primitives.
                 pixels[(v + y) * width + u + x] = value == 0 ? 0x8000 : value
             }
         }
-        rows.append("\(slot),\(u),\(v),\(frameWidth),\(frameHeight),\(frame.hotspotX),\(frame.hotspotY)")
+        positions[frame.index] = (u, v)
+        u += frameWidth
+        shelfHeight = max(shelfHeight, frameHeight)
+    }
+    var rows = ["slot,phase,u,v,width,height,hotspot_x,hotspot_y"]
+    for (slot, phase, frame) in sequence {
+        guard let position = positions[frame.index] else {
+            throw FormatError("Lanugo frame is missing from the packed atlas.")
+        }
+        rows.append("\(slot),\(phase),\(position.u),\(position.v),\(frame.bitmap.pixelsWide),\(frame.bitmap.pixelsHigh),\(frame.hotspotX),\(frame.hotspotY)")
     }
 
     // A 16-bit TIM with no CLUT. VRAM placement is relative until allocated by the renderer.

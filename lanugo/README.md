@@ -10,9 +10,9 @@ python3 lanugo/build_track.py japan-rev1-track01.bin /tmp/lanugo-atlas lanugo-tr
 
 The track builder needs Python 3.11 or newer. The patch builder needs xdelta3. The output CHD can be produced with chdman after pointing a copy of the original CUE at the newly patched Track 1. Preserve the three original audio tracks and their index settings.
 
-Lanugo's original model still supplies camera projection bounds and selection geometry. The patch suppresses his original model's two GPU queue insertion paths and submits one textured quad in the same ordering table. It chooses one of eight idle views by comparing Lanugo's heading with camera yaw in 32 sectors, using the original DOS idle-view order, and scales the sprite with the original projected height and hotspot. The rendering functions are specific to Japanese Rev 1.
+Lanugo's original model still supplies camera projection bounds and selection geometry. During idle, the patch suppresses his original model’s two GPU queue insertion paths and submits one textured quad in the same ordering table. The exporter packs 25 unique DOS idle images and maps four entries per facing to them. The renderer uses PSX animation frames 0–6 to select DOS phases 0, 0, 1, 1, 2, 2 and 3. Other PSX actions use their original mesh. It chooses one of eight idle views by comparing Lanugo's heading with camera yaw in 32 sectors, using the original DOS idle-view order, and scales the sprite with the original projected height and hotspot. The rendering functions are specific to Japanese Rev 1.
 
-The loader places the texture and palette in a region that was empty in the captured Level 1 frame. The builder patches an executable region checked against the original BIN and uses initially empty data-track sectors 145980–145989 for the payload. It checks and recomputes Mode 2 Form 1 integrity data. It preserves the size of Track 1 so the CUE can keep its original layout.
+The loader places the texture and palette in a region that was empty in the captured Level 1 frame. The builder patches an executable region checked against the original BIN and uses initially empty data-track sectors 145980–145993 for the payload. It checks and recomputes Mode 2 Form 1 integrity data. It preserves the size of Track 1 so the CUE can keep its original layout.
 
 This is an idle-sprite prototype for Lanugo. Walk, attack and death sprites, DOS lighting, and other actors are outside the prototype. Use a fresh boot for comparison since an emulator state may carry the original executable in RAM. Full-game play, hardware testing and VRAM use after a level transition require separate checks.
 
@@ -27,7 +27,7 @@ xdelta3 -d -s clean-japanese-rev1-track01.bin english-dos.xdelta verified-track0
 cmp english-dos-track01.bin verified-track01.bin
 ```
 
-The clean Japanese Rev 1 input has SHA-1 `937ae8cf9a65526f2622c39d34205941f22c10cb`. The palette-aligned combined data track has SHA-1 `d5eae6826575db1f4404ad8e2a5c8a57c511301c`. The English release relocates movies. The builder appends ten atlas sectors after the English track, updates the ISO volume size and verifies each original executable hook before patching. The Japanese-only patch script's equal-size guard remains specific to that build. For a combined CHD, point a copy of the Japanese CUE at the combined BIN and preserve audio Tracks 2 through 4 and their indexes.
+The clean Japanese Rev 1 input has SHA-1 `937ae8cf9a65526f2622c39d34205941f22c10cb`. The palette-aligned combined data track has SHA-1 `60ccc3b62635aadf48e003e8c9b1ba0eee5e36a4`. The English release relocates movies. The builder appends fourteen atlas sectors after the English track, updates the ISO volume size and verifies each original executable hook before patching. The Japanese-only patch script's equal-size guard remains specific to that build. For a combined CHD, point a copy of the Japanese CUE at the combined BIN and preserve audio Tracks 2 through 4 and their indexes.
 
 Translation credit and source are available from [Gertius's Ultima Underworld PSX English project](https://github.com/gertius1/UU_PSX_ENG).
 

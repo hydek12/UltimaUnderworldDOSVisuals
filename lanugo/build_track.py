@@ -18,7 +18,7 @@ EXE_LOAD = 0x80010000
 AVATAR_LBA = 397
 PAYLOAD_LBA = 145980
 PAYLOAD_RAM = 0x801F6000
-PAYLOAD_BYTES = 0x5000
+PAYLOAD_BYTES = 0x7000
 PAYLOAD_MAGIC = 0x4C414E55
 READY_MAGIC = 0x4C414E52
 BOOT = 0x800C2300
@@ -99,9 +99,9 @@ def uploader():
 
 def payload(directory):
     palette_data = (directory / "lanugo-idle.tim").read_bytes()
-    if len(palette_data) != 65556 or struct.unpack_from("<IIIHHHH", palette_data) != (16, 2, 65548, 0, 0, 256, 128):
-        raise ValueError("Expected the Xcode tool's 256×128 16-bit Lanugo TIM.")
-    texels = struct.unpack_from("<32768H", palette_data, 20)
+    if len(palette_data) != 98324 or struct.unpack_from("<IIIHHHH", palette_data) != (16, 2, 98316, 0, 0, 256, 192):
+        raise ValueError("Expected the Xcode tool's 256×192 16-bit Lanugo TIM.")
+    texels = struct.unpack_from("<49152H", palette_data, 20)
     colors = sorted(set(texels))
     if len(colors) != 16 or colors[0] != 0:
         raise ValueError("The verified eight-frame atlas must have exactly 16 RGB555 entries including transparency.")
@@ -109,21 +109,23 @@ def payload(directory):
     image = bytes(indexed[left] | indexed[right] << 4 for left, right in zip(texels[::2], texels[1::2]))
     with (directory / "lanugo-idle.csv").open() as csv_file:
         rows = list(csv.DictReader(csv_file))
-    if [int(row["slot"]) for row in rows] != list(range(32, 40)):
-        raise ValueError("Expected one row for each DOS idle slot 32 through 39.")
+    if [(int(row["slot"]), int(row["phase"])) for row in rows] != [
+        (slot, phase) for slot in range(32, 40) for phase in range(4)
+    ]:
+        raise ValueError("Expected four frames per DOS idle slot 32 through 39.")
     metadata = b"".join(struct.pack("8B", *(int(row[key]) for key in (
         "u", "v", "width", "height", "hotspot_x", "hotspot_y")), 0, 0) for row in rows)
 
     sections = {
         0: struct.pack("<I", PAYLOAD_MAGIC),
-        0x10: struct.pack("<8H", 384, 256, 64, 128, 448, 256, 16, 1),
+        0x10: struct.pack("<8H", 384, 256, 64, 192, 448, 256, 16, 1),
         0x30: struct.pack("<16H", *colors),
-        0x50: metadata,
         0x90: renderer.DOS_IDLE_DIRECTIONS,
         0x100: renderer.suppress(SUPPRESS_RAM),
         0x160: renderer.suppress(SUPPRESS_DELAY_RAM, "a0"),
-        0x200: renderer.draw(DRAW_RAM, PAYLOAD_RAM + 0x50, PAYLOAD_RAM + 0x90),
+        0x200: renderer.draw(DRAW_RAM, PAYLOAD_RAM + 0x800, PAYLOAD_RAM + 0x90),
         0x700: uploader(),
+        0x800: metadata,
         0x1000: image,
     }
     result = bytearray(PAYLOAD_BYTES)
