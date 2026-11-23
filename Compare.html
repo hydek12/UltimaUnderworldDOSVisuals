@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ultima Underworld visual comparison</title>
+<style>
+:root { color-scheme: dark; font: 16px system-ui; background: #1c1916; color: #f6eddd; }
+body { margin: 2rem auto; max-width: 90rem; padding: 0 1rem; }
+h1 { font: 2.4rem Georgia, serif; margin: 0 0 1.5rem; }
+h2 { font: 1.5rem Georgia, serif; }
+select, input { font: inherit; }
+.controls { display: flex; flex-wrap: wrap; gap: 1rem 2rem; margin-bottom: 1.2rem; }
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+figure { margin: 0; }
+figcaption { margin-bottom: .5rem; }
+.screen { aspect-ratio: 4 / 3; background: #11100e; position: relative; overflow: hidden; }
+.screen img { position: absolute; width: 100%; height: 100%; object-fit: fill; image-rendering: pixelated; }
+.screen img:not([src]) { display: none; }
+#overlay { margin-top: 1rem; max-width: 46rem; }
+.refs { display: flex; flex-wrap: wrap; gap: .75rem; }
+.refs figure { display: grid; place-items: center; gap: .35rem; padding: .5rem; background: #2d2720; }
+.refs img { image-rendering: pixelated; height: 104px; width: auto; }
+@media (max-width: 620px) { .pair { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<h1>Ultima Underworld visual comparison</h1>
+<div class="controls">
+<label>DOS capture <input type="file" id="dos" accept="image/*"></label>
+<label>PSX capture <input type="file" id="psx" accept="image/*"></label>
+<label>PSX overlay opacity <input type="range" id="opacity" min="0" max="100" value="50"></label>
+</div>
+<p>Choose full-frame captures from the same position, facing, actor state, and lighting. The viewer displays both frames at 4:3.</p>
+<div class="pair">
+<figure><figcaption id="dos-label">DOS</figcaption><div class="screen"><img id="dos-image" alt="DOS capture"></div></figure>
+<figure><figcaption id="psx-label">PlayStation</figcaption><div class="screen"><img id="psx-image" alt="PlayStation capture"></div></figure>
+</div>
+<figure id="overlay" hidden>
+<figcaption>Capture overlay</figcaption>
+<div class="screen"><img id="dos-overlay" alt=""><img id="psx-overlay" alt=""></div>
+</figure>
+<h2>DOS green goblin idle frames</h2>
+<div class="refs" id="goblins"></div>
+<h2>DOS troll palette variants</h2>
+<div class="refs" id="trolls"></div>
+<script>
+const byID = id => document.getElementById(id);
+const urls = new Map();
+
+for (const platform of ["dos", "psx"]) {
+    byID(platform).addEventListener("change", event => {
+        const file = event.target.files[0];
+        if (!file) return;
+        if (urls.has(platform)) URL.revokeObjectURL(urls.get(platform));
+        const url = URL.createObjectURL(file);
+        urls.set(platform, url);
+        const image = byID(platform + "-image");
+        image.onload = () => {
+            const label = platform === "dos" ? "DOS" : "PlayStation";
+            byID(platform + "-label").textContent = label + " · " + image.naturalWidth + " × " + image.naturalHeight;
+        };
+        image.src = url;
+        byID(platform + "-overlay").src = url;
+        byID("overlay").hidden = urls.size !== 2;
+    });
+}
+
+function setOpacity() {
+    byID("psx-overlay").style.opacity = Number(byID("opacity").value) / 100;
+}
+byID("opacity").addEventListener("input", setOpacity);
+setOpacity();
+
+function addReference(group, filename, label) {
+    const figure = document.createElement("figure");
+    const image = document.createElement("img");
+    image.src = "frames/" + filename;
+    image.alt = label;
+    const caption = document.createElement("figcaption");
+    caption.textContent = label;
+    figure.append(image, caption);
+    byID(group).append(figure);
+}
+
+const directions = ["Rear", "135°", "90°", "45°", "Front", "−45°", "−90°", "−135°"];
+directions.forEach((label, index) => addReference("goblins", "goblin-slot-" + (32 + index) + ".png", label));
+[96, 111, 112].forEach(id => addReference("trolls", "troll-" + id + ".png", "Actor " + id));
+</script>
+</body>
+</html>
