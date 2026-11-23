@@ -119,9 +119,10 @@ def payload(directory):
         0x10: struct.pack("<8H", 384, 256, 64, 128, 448, 256, 16, 1),
         0x30: struct.pack("<16H", *colors),
         0x50: metadata,
+        0x90: renderer.DOS_IDLE_DIRECTIONS,
         0x100: renderer.suppress(SUPPRESS_RAM),
         0x160: renderer.suppress(SUPPRESS_DELAY_RAM, "a0"),
-        0x200: renderer.draw(DRAW_RAM, PAYLOAD_RAM + 0x50),
+        0x200: renderer.draw(DRAW_RAM, PAYLOAD_RAM + 0x50, PAYLOAD_RAM + 0x90),
         0x700: uploader(),
         0x1000: image,
     }

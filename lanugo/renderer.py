@@ -22,7 +22,14 @@ def suppress(origin, order_table_register="v1"):
     c.mem("sw","v0",0,order_table_register)
     return c.out()
 
-def draw(origin, metadata):
+# Idle view order measured in the DOS renderer's 32-sector direction table.
+DOS_IDLE_DIRECTIONS = bytes((
+    0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4,
+    4, 4, 4, 5, 5, 5, 6, 6, 6, 6, 6, 7, 7, 7, 0, 0,
+))
+
+
+def draw(origin, metadata, direction_table):
     c=Code(origin)
     c.mem("lw","t0",0xe0,"sp")
     c.imm("ori","t1","zero",10)
@@ -36,58 +43,21 @@ def draw(origin, metadata):
     c.imm("sltiu","t2","t1",256)
     c.branch("beq","t2","zero","finish")
     c.nop()
-    # Compute the viewer's octant in world coordinates. North = 0, east = 2.
-    c.mem("lh","t3",0xe8,"sp")
-    c.mem("lh","t4",0xf8,"sp")
-    c.mem("lhu","t5",2,"t0")
-    c.alu("slt","t6","zero","t3")
-    c.alu("slt","t7","zero","t4")
-    c.branch("bne","t6","zero","x_pos")
-    c.nop()
-    c.alu("subu","t3","zero","t3")
-    c.label("x_pos")
-    c.branch("bne","t7","zero","z_pos")
-    c.nop()
-    c.alu("subu","t4","zero","t4")
-    c.label("z_pos")
-    c.shift("srl","t5","t5",7)
-    c.imm("andi","t5","t5",7)
-    # Near an axis, use a cardinal view. Compare 5*min with 2*max.
-    c.shift("sll","t8","t3",2)
-    c.alu("addu","t8","t8","t3")
-    c.shift("sll","t9","t4",1)
-    c.alu("sltu","t2","t8","t9")
-    c.branch("bne","t2","zero","north_south")
-    c.nop()
-    c.shift("sll","t8","t4",2)
-    c.alu("addu","t8","t8","t4")
-    c.shift("sll","t9","t3",1)
-    c.alu("sltu","t2","t8","t9")
-    c.branch("bne","t2","zero","east_west")
-    c.nop()
-    c.branch("beq","t7","zero","north_diagonal")
-    c.nop()
-    c.shift("sll","t2","t6",1)
-    c.branch("beq","zero","zero","octant")
-    c.imm("addiu","t2","t2",3)
-    c.label("north_diagonal")
-    c.shift("sll","t2","t6",1)
-    c.alu("subu","t2","zero","t2")
-    c.branch("beq","zero","zero","octant")
-    c.imm("addiu","t2","t2",1)
-    c.label("north_south")
-    c.branch("beq","zero","zero","octant")
-    c.shift("sll","t2","t7",2)
-    c.label("east_west")
-    c.shift("sll","t2","t6",2)
-    c.imm("addiu","t2","t2",2)
-    c.label("octant")
-    c.alu("subu","t2","t5","t2")
-    c.imm("addiu","t2","t2",4)
-    c.imm("andi","t2","t2",7)
-    c.shift("sll","t2","t2",3)
-    c.address("t0",metadata)
-    c.alu("addu","t0","t0","t2")
+    # DOS chooses the idle view from actor facing and camera yaw.
+    c.mem("lhu", "t5", 2, "t0")
+    c.imm("lui", "t4", "zero", 0x801d)
+    c.mem("lhu", "t4", 0x53d4, "t4")
+    c.imm("andi", "t5", "t5", 0x380)
+    c.shift("srl", "t5", "t5", 5)  # Actor heading in 32nds of a turn.
+    c.shift("srl", "t4", "t4", 11)
+    c.alu("subu", "t2", "t5", "t4")
+    c.imm("andi", "t2", "t2", 31)
+    c.address("t0", direction_table)
+    c.alu("addu", "t0", "t0", "t2")
+    c.mem("lbu", "t2", 0, "t0")
+    c.address("t0", metadata)
+    c.shift("sll", "t2", "t2", 3)
+    c.alu("addu", "t0", "t0", "t2")
 
     # Pass the original projected foot/center through the DOS hotspot.
     c.mem("lbu","t2",2,"t0") # width
