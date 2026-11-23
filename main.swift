@@ -180,10 +180,9 @@ func exportFrame(root: URL, actor: Int, slot: Int, frame: Int, output: URL) thro
     print("\(result.pageName), frame \(result.index), \(bitmap.pixelsWide)×\(bitmap.pixelsHigh), hotspot (\(result.hotspotX), \(result.hotspotY))")
 }
 
-func exportLanugoAtlas(root: URL, directory: URL) throws {
+func exportLanugoAtlas(root: URL, directory: URL, name: String, slots: ClosedRange<Int>, height: Int) throws {
     let width = 256
-    let height = 192
-    let sequence = try (32...39).flatMap { slot in
+    let sequence = try slots.flatMap { slot in
         try (0..<4).map { phase in
             (slot, phase, try readFrame(root: root, actor: 70, slot: slot, frame: phase))
         }
@@ -213,7 +212,7 @@ func exportLanugoAtlas(root: URL, directory: URL) throws {
             shelfHeight = 0
         }
         guard frameWidth <= width, v + frameHeight <= height, let rgba = bitmap.bitmapData else {
-            throw FormatError("Lanugo idle sequence exceeds the atlas bounds.")
+            throw FormatError("Lanugo \(name) sequence exceeds the atlas bounds.")
         }
         for y in 0..<frameHeight {
             for x in 0..<frameWidth {
@@ -252,9 +251,9 @@ func exportLanugoAtlas(root: URL, directory: URL) throws {
     }
 
     try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false)
-    try data.write(to: directory.appendingPathComponent("lanugo-idle.tim"), options: .withoutOverwriting)
+    try data.write(to: directory.appendingPathComponent("lanugo-\(name).tim"), options: .withoutOverwriting)
     try Data((rows.joined(separator: "\n") + "\n").utf8)
-        .write(to: directory.appendingPathComponent("lanugo-idle.csv"), options: .withoutOverwriting)
+        .write(to: directory.appendingPathComponent("lanugo-\(name).csv"), options: .withoutOverwriting)
 }
 
 let arguments = Array(CommandLine.arguments.dropFirst())
@@ -264,7 +263,12 @@ do {
         try inspectArchive(Bytes(URL(fileURLWithPath: arguments[1])))
     case "export-lanugo-tim" where arguments.count == 3:
         try exportLanugoAtlas(root: URL(fileURLWithPath: arguments[1]),
-                              directory: URL(fileURLWithPath: arguments[2]))
+                              directory: URL(fileURLWithPath: arguments[2]),
+                              name: "idle", slots: 0x20...0x27, height: 192)
+    case "export-lanugo-walk-tim" where arguments.count == 3:
+        try exportLanugoAtlas(root: URL(fileURLWithPath: arguments[1]),
+                              directory: URL(fileURLWithPath: arguments[2]),
+                              name: "walk", slots: 0x80...0x87, height: 224)
     case "export-dos" where arguments.count == 6:
         guard let actor = Int(arguments[2]), (64...127).contains(actor),
               let slot = Int(arguments[3]), (0...255).contains(slot),
@@ -278,6 +282,7 @@ do {
         Usage
           UnderworldVisuals inspect-psx AVATAR
           UnderworldVisuals export-lanugo-tim DOS_ROOT NEW_OUTPUT_DIRECTORY
+          UnderworldVisuals export-lanugo-walk-tim DOS_ROOT NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-dos DOS_ROOT ACTOR_ID SLOT FRAME OUTPUT.png
         """)
     }

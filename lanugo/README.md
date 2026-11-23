@@ -16,6 +16,16 @@ The loader places the texture and palette in a region that was empty in the capt
 
 This is an idle-sprite prototype for Lanugo. Walk, attack and death sprites, DOS lighting, and other actors are outside the prototype. Use a fresh boot for comparison since an emulator state may carry the original executable in RAM. Full-game play, hardware testing and VRAM use after a level transition require separate checks.
 
+## Walking atlas
+
+```sh
+UnderworldVisuals export-lanugo-walk-tim "/path/to/ultimaunderworld/uu" /tmp/lanugo-walk-atlas
+```
+
+The command exports `lanugo-walk.tim` and `lanugo-walk.csv` from DOS creature 70, slots `0x80` through `0x87`. The CSV records all four phases per facing, including repeated source frames, and the original sprite hotspots. The 30 unique images use 222 rows of a 256×224 atlas. The idle and walk atlases have the same 16 RGB555 values, including transparency, so a future 4bpp renderer can use one CLUT for both.
+
+The disc builders still use the idle atlas. Before enabling walk sprite substitution, trace Lanugo's clean Rev 1 actor record through natural movement and identify which action and frame values coincide with position changes. Use those values in both mesh suppression paths and the sprite selector. Check the second texture's placement against actual VRAM uploads, then exercise idle-to-walk and walk-to-idle transitions on a fresh boot.
+
 ## English v2.0 and DOS Lanugo
 
 Use the same DOS atlas exported by the Xcode scheme. Extract the raw Track 1 BIN from the English v2.0 CHD or obtain it by applying Gertius's v2.0 fan translation to clean Japanese Rev 1. The combined builder expects the English Track 1 SHA-1 `325585c11548538e323e8896c3fb8b1cc5d65521`.
