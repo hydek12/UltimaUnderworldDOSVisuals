@@ -58,7 +58,7 @@ After verifying a visual change in DuckStation, supply its rebuilt raw Track 1 B
 xdelta3 -d -s japanese-rev1-track1.bin dos-visuals.xdelta patched-track1.bin
 ```
 
-On a working copy of the disc, point the CUE’s data-track filename at the patched BIN and retain all three CD audio tracks and index settings. Boot the CUE as a clean launch, then create a separate CHD with `chdman createcd -i patched.cue -o dos-visuals.chd` and boot the CHD again. Ship the xdelta, source and target hashes, and instructions. The project’s DOS sprite export is for local development and comparison.
+On a working copy of the disc, point the CUE’s data-track filename at the patched BIN and retain all three CD audio tracks and index settings. Boot the CUE as a clean launch, then create a separate CHD with `chdman createcd -i patched.cue -o dos-visuals.chd` and boot the CHD again. Generate the combined xdelta on the user’s machine. The [local patch builder guide](docs/local-patch-builder.md) covers the current one-command workflow, the release file review, and the macOS application plan.
 
 Start the visual work with one camera-facing goblin using the original DOS frames, anchor and eight viewing angles. Trace the retail renderer on the original Japanese Rev 1 before porting any executable change found on the English build. Extend actor coverage after palette, lighting, wall occlusion, facing and animation work on the first actor. Restore DOS materials and color response next. The viewport and HUD need a separate pass to fit the console menus and any chosen language. The patch builder is packaging infrastructure and does not implement these visual changes.
 
