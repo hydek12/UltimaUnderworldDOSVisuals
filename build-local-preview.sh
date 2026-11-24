@@ -1,20 +1,27 @@
 #!/bin/bash
 set -euo pipefail
 
+translation_patch=0
+if [[ ${1:-} == --english-patch ]]; then
+    translation_patch=1
+    shift
+fi
+
 if [[ $# != 5 ]]; then
-    printf 'Usage: %s DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_V2_TRACK1.bin UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
+    printf 'Usage: %s [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
     exit 2
 fi
 
 project=$(cd -- "$(dirname -- "$0")" && pwd)
 dos_root=$1
 japanese_track=$2
-english_track=$3
+english_input=$3
+english_track=$english_input
 exporter=$4
 output=$5
 
-if [[ ! -d "$dos_root/CRIT" || ! -x "$exporter" || ! -f "$japanese_track" || ! -f "$english_track" ]]; then
-    printf 'Select the extracted DOS folder containing CRIT, both raw Track 1 BINs, and the built UnderworldVisuals executable.\n' >&2
+if [[ ! -d "$dos_root/CRIT" || ! -x "$exporter" || ! -f "$japanese_track" || ! -f "$english_input" ]]; then
+    printf 'Select the extracted DOS folder containing CRIT, the clean Track 1 BIN, the English input, and the built UnderworldVisuals executable.\n' >&2
     exit 1
 fi
 if [[ -e "$output" || -L "$output" || ! -d "$(dirname -- "$output")" ]]; then
@@ -27,6 +34,17 @@ scratch=$(mktemp -d "${TMPDIR:-/tmp}/underworld-local.XXXXXX")
 trap 'rm -rf -- "$scratch"' EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
+
+if (( translation_patch )); then
+    japanese_sha1=$(shasum < "$japanese_track" | cut -d ' ' -f 1)
+    if [[ "$japanese_sha1" != 937ae8cf9a65526f2622c39d34205941f22c10cb ]]; then
+        printf 'The translation patch requires clean Japanese Rev 1 Track 1.\n' >&2
+        exit 1
+    fi
+    english_track=$scratch/english.bin
+    printf 'Applying the supplied translation patch locally…\n'
+    env -u XDELTA "${XDELTA3:-xdelta3}" -d -s "$japanese_track" "$english_input" "$english_track"
+fi
 
 printf 'Exporting creature sprites from the selected DOS installation…\n'
 "$exporter" export-lanugo-tim "$dos_root" "$scratch/idle"
