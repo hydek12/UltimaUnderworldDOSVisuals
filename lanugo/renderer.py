@@ -4,6 +4,7 @@ from mipswords import Code
 
 IDLE_ACTION = 0x20
 WALK_ACTION = 0x2c
+GREEN_GOBLIN_TYPE = 70
 
 
 def require_atlas_action(c, action, scratch, walk_ready, fallback):
@@ -29,7 +30,10 @@ def suppress(origin, order_table_register="v1", walk_ready=None):
     c.mem("lw","t8",0x158,"sp")
     c.nop()
     c.mem("lbu","t9",23,"t8")
-    c.mem("lbu","t8",26,"t8")
+    if walk_ready is None:
+        c.mem("lbu","t8",26,"t8")
+    else:
+        c.mem("lhu","t8",0,"t8")
     c.imm("andi","t9","t9",0x3f)
     c.imm("xori","t9","t9",IDLE_ACTION)
     if walk_ready is None:
@@ -39,7 +43,8 @@ def suppress(origin, order_table_register="v1", walk_ready=None):
         c.branch("bne","t8","t9","normal")
         c.nop()
     else:
-        c.imm("xori", "t8", "t8", 10)
+        c.imm("andi", "t8", "t8", 0x1ff)
+        c.imm("xori", "t8", "t8", GREEN_GOBLIN_TYPE)
         c.branch("bne", "t8", "zero", "normal")
         c.nop()
         require_atlas_action(c, "t9", "t8", walk_ready, "normal")
@@ -61,9 +66,14 @@ DOS_IDLE_DIRECTIONS = bytes((
 def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None):
     c=Code(origin)
     c.mem("lw","t0",0xe0,"sp")
-    c.imm("ori","t1","zero",10)
-    c.mem("lbu","t2",26,"t0")
-    c.nop()
+    c.imm("ori", "t1", "zero", 10 if walk_ready is None else GREEN_GOBLIN_TYPE)
+    if walk_ready is None:
+        c.mem("lbu","t2",26,"t0")
+        c.nop()
+    else:
+        c.mem("lhu", "t2", 0, "t0")
+        c.nop()
+        c.imm("andi", "t2", "t2", 0x1ff)
     c.branch("bne","t2","t1","finish")
     c.mem("lbu","t4",23,"t0")
     c.mem("lhu","t6",12,"t0")

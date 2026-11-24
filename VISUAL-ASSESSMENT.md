@@ -7,6 +7,8 @@
 - Batocera input is `roms/psx/Ultima Underworld - The Stygian Abyss (English v2.0).chd`. Raw data Track 1 SHA-1 is `325585c11548538e323e8896c3fb8b1cc5d65521`. The disc also has three CD audio tracks. The 11,632,640-byte `DATA/AVATAR` archive begins at LBA 397 and contains 230 sector-aligned top-level entries. Its SHA-256 is `26493e897af94fd29177fcd26165e35a5c3447accb0a88acbb5fcc7f5e78fbe1`. It contains English text. The exact translation build is inferred from the filename. Asset roles are still unassigned. [English translation source](https://github.com/gertius1/UU_PSX_ENG)
 - The local check covered asset bytes and DOS still-frame exports. The PSX observations below use published footage and side-by-side captures. Matching screenshots from the local executables, an exhaustive per-asset comparison, and an in-game patch are pending. [Translation author’s PSX video](https://www.youtube.com/watch?v=XuXlTk50Amk) · [Side-by-side observations and captures](https://www.wiki.ultimacodex.com/wiki/Technical_Differences_in_Ultima_Underworld_on_the_PSX)
 
+The NPC audit walked all nine DOS tile maps and found 595 placed creature records across 63 types. The clean Japanese Rev 1 object archive has one exact record candidate for 548, two candidates for one, and none for 46. All 63 types have eight directional idle slots. Types 125 and 126 have no directional walk slots. The remaining 61 types have eight. Each of the four types sharing the green goblin artwork uses its own auxiliary palette.
+
 ## Differences and target behavior
 
 | Area | Observed release difference | DOS-fidelity target |

@@ -30,6 +30,14 @@ See [Visual assessment and patch design](VISUAL-ASSESSMENT.md) for local finding
 
 The command creates a fresh comparison folder and prints its path. It contains eight DOS goblin idle directions, three troll palette samples, a frame and hotspot manifest, and the PSX resource index. Open its `Compare.html`, then select matching DOS and PSX screenshots for side-by-side and opacity-overlay review. Screenshot selection stays in the browser. Save captures in the generated `captures` folder using the same scene name with `-dos` and `-psx` suffixes so pairs remain easy to find. The viewer normalizes full output frames to 4:3. For pixel-level actor alignment, first capture at matched yaw, distance, camera pitch, and screen-space scale.
 
+## Audit NPC records and DOS animation coverage
+
+```sh
+python3 audit-npcs.py /path/to/ultimaunderworld/uu /path/to/japanese-rev1/AVATAR > npc-records.csv
+```
+
+The audit walks the linked objects in the nine DOS tile maps. It lists each creature, the animation file and palette it uses, and the number of idle and walk phases present for each facing. Candidate PSX offsets match the record's first six bytes, packed home tile, and conversation ID in the clean Japanese object archive. Unique matches are strong leads for runtime confirmation. A blank means the exact signature search found no candidate.
+
 ## Build a patch for the original Japanese release
 
 The release source is the clean Japanese Rev 1 raw Mode 2 Track 1 BIN for SLPS-00742, SHA-1 `937ae8cf9a65526f2622c39d34205941f22c10cb`. The English CHD can be a development and comparison build. A Japanese-language visual edition should use the clean Japanese track as its edit base. An English edition can use Gertius’s v2.0 translation as its edit base. Both editions can use the original Japanese track as the only xdelta source. [Gertius’s Rev 1 source and track layout](https://github.com/gertius1/UU_PSX_ENG)

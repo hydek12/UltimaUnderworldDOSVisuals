@@ -28,6 +28,9 @@ BOOT = 0x800C2300
 SUPPRESS_NORMAL = 0x800C23C0
 SUPPRESS_DELAY = 0x800C2400
 DRAW_GATE = 0x800C2440
+VRAM_UPLOAD_GATE = 0x800C2480
+MENU_GATE = 0x800C24B0
+LEVEL_ONE_MODELS = 0x800AB890
 SUPPRESS_RAM = PAYLOAD_RAM + 0x100
 SUPPRESS_DELAY_RAM = PAYLOAD_RAM + 0x160
 WALK_SUPPRESS_DELAY_RAM = PAYLOAD_RAM + 0x180
@@ -35,6 +38,8 @@ WALK_READY_RAM = PAYLOAD_RAM + 8
 DRAW_RAM = PAYLOAD_RAM + 0x200
 UPLOAD_RAM = PAYLOAD_RAM + 0x700
 WALK_UPLOAD_RAM = PAYLOAD_RAM + 0xa00
+MENU_RAM = PAYLOAD_RAM + 0xe00
+VRAM_GUARD_RAM = PAYLOAD_RAM + 0xe80
 RESIDENT_BYTES = 0x1000
 TEXTURE_STAGING_RAM = 0x801F8800
 BAND_BYTES = 0x4000
@@ -42,8 +47,10 @@ BAND_BYTES = 0x4000
 def jump(address, link=False):
     return struct.pack("<I", ((3 if link else 2) << 26) | ((address >> 2) & 0x3ffffff))
 
-def gate(origin, destination, fallback_register=None):
+def gate(origin, destination, fallback_register=None, walking=False):
     c = Code(origin)
+    if walking:
+        require_level_one(c, "fallback")
     c.address("t8", PAYLOAD_RAM)
     c.mem("lw", "t8", 4, "t8")
     c.address("t9", READY_MAGIC)
@@ -59,6 +66,101 @@ def gate(origin, destination, fallback_register=None):
         c.jump(0x8002b684)
         c.mem("sw", "v0", 0, fallback_register)
     return c.out()
+
+def require_level_one(c, fallback):
+    # The native level loader installs a different model table for every floor.
+    c.mem("lw", "t8", 0x998, "gp")
+    c.address("t9", LEVEL_ONE_MODELS)
+    c.branch("bne", "t8", "t9", fallback)
+    c.nop()
+
+
+def menu_gate():
+    c = Code(MENU_GATE)
+    c.address("t0", PAYLOAD_RAM)
+    c.mem("lw", "t1", 0, "t0")
+    c.address("t2", PAYLOAD_MAGIC)
+    c.branch("bne", "t1", "t2", "native")
+    c.nop()
+    c.jump(MENU_RAM)
+    c.nop()
+    c.label("native")
+    c.jump(0x8005b368)
+    c.nop()
+    return c.out()
+
+
+def menu_return():
+    c = Code(MENU_RAM)
+    c.imm("addiu", "sp", "sp", -32)
+    c.mem("sw", "ra", 28, "sp")
+    c.jump(0x8005b368, True)
+    c.nop()
+    c.mem("sw", "v0", 24, "sp")
+    require_level_one(c, "done")
+    c.address("t0", PAYLOAD_RAM)
+    c.mem("lw", "t1", 0, "t0")
+    c.address("t2", PAYLOAD_MAGIC)
+    c.branch("bne", "t1", "t2", "done")
+    c.mem("lw", "t1", 4, "t0")
+    c.address("t2", READY_MAGIC)
+    c.branch("beq", "t1", "t2", "done")
+    c.nop()
+    c.mem("lw", "a0", 12, "t0")
+    c.jump(WALK_UPLOAD_RAM, True)
+    c.nop()
+    c.label("done")
+    c.mem("lw", "ra", 28, "sp")
+    c.mem("lw", "v0", 24, "sp")
+    ret(c, lambda: c.imm("addiu", "sp", "sp", 32))
+    return c.out()
+
+
+def resume_native_upload(c):
+    # Replay the SDK routine's first two instructions.
+    c.imm("addiu", "sp", "sp", -32)
+    c.jump(0x800905dc)
+    c.mem("sw", "s0", 16, "sp")
+
+
+def vram_upload_gate():
+    c = Code(VRAM_UPLOAD_GATE)
+    c.address("t0", PAYLOAD_RAM)
+    c.mem("lw", "t1", 4, "t0")
+    c.address("t2", READY_MAGIC)
+    c.branch("bne", "t1", "t2", "upload")
+    c.nop()
+    c.jump(VRAM_GUARD_RAM)
+    c.nop()
+    c.label("upload")
+    resume_native_upload(c)
+    return c.out()
+
+
+def vram_guard():
+    c = Code(VRAM_GUARD_RAM)
+    # Native TIM uploads must invalidate sprites before sharing this VRAM region.
+    c.mem("lhu", "t0", 0, "a0")
+    c.mem("lhu", "t1", 2, "a0")
+    c.mem("lhu", "t2", 4, "a0")
+    c.mem("lhu", "t3", 6, "a0")
+    c.imm("sltiu", "t4", "t0", 512)
+    c.branch("beq", "t4", "zero", "upload")
+    c.imm("sltiu", "t4", "t1", 480)
+    c.branch("beq", "t4", "zero", "upload")
+    c.alu("addu", "t2", "t0", "t2")
+    c.imm("sltiu", "t4", "t2", 385)
+    c.branch("bne", "t4", "zero", "upload")
+    c.alu("addu", "t3", "t1", "t3")
+    c.imm("sltiu", "t4", "t3", 257)
+    c.branch("bne", "t4", "zero", "upload")
+    c.nop()
+    c.address("t0", PAYLOAD_RAM)
+    c.mem("sw", "zero", 4, "t0")
+    c.label("upload")
+    resume_native_upload(c)
+    return c.out()
+
 
 def loader(payload_lba=PAYLOAD_LBA, walking=False):
     c = Code(BOOT)
@@ -85,6 +187,7 @@ def loader(payload_lba=PAYLOAD_LBA, walking=False):
     c.nop()
     if walking:
         c.address("a0", offset)
+        c.mem("sw", "a0", 12, "t2")
     c.jump(WALK_UPLOAD_RAM if walking else UPLOAD_RAM, True)
     c.nop()
     c.label("done")
@@ -220,6 +323,8 @@ def payload(directory, walk_atlas=None):
         sections[0x20] = struct.pack("<4H", 384, 384, 64, 64)
         sections[0x50] = struct.pack("<8H", 448, 256, 64, 128, 448, 384, 64, 96)
         sections[WALK_UPLOAD_RAM - PAYLOAD_RAM] = walking_uploader()
+        sections[MENU_RAM - PAYLOAD_RAM] = menu_return()
+        sections[VRAM_GUARD_RAM - PAYLOAD_RAM] = vram_guard()
         sections[0x900] = walk_metadata
         sections[IDLE_PAYLOAD_BYTES] = struct.pack("<I", WALK_MAGIC)
         sections[IDLE_PAYLOAD_BYTES + WALK_HEADER_BYTES] = walk_image
@@ -290,10 +395,13 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False):
     target = bytearray(original)
     code = {
         BOOT: loader(payload_lba, walking),
-        SUPPRESS_NORMAL: gate(SUPPRESS_NORMAL, SUPPRESS_RAM, "v1"),
-        SUPPRESS_DELAY: gate(SUPPRESS_DELAY, WALK_SUPPRESS_DELAY_RAM if walking else SUPPRESS_DELAY_RAM, "a0"),
-        DRAW_GATE: gate(DRAW_GATE, DRAW_RAM),
+        SUPPRESS_NORMAL: gate(SUPPRESS_NORMAL, SUPPRESS_RAM, "v1", walking),
+        SUPPRESS_DELAY: gate(SUPPRESS_DELAY, WALK_SUPPRESS_DELAY_RAM if walking else SUPPRESS_DELAY_RAM, "a0", walking),
+        DRAW_GATE: gate(DRAW_GATE, DRAW_RAM, walking=walking),
     }
+    if walking:
+        code[MENU_GATE] = menu_gate()
+        code[VRAM_UPLOAD_GATE] = vram_upload_gate()
     for address, blob in code.items():
         offset = 2048 + address - EXE_LOAD
         if any(target[offset:offset + len(blob)]):
@@ -308,6 +416,11 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False):
         (0x8002b680, struct.pack("<I", 0xac620000), jump(SUPPRESS_NORMAL)),
         (0x8002aedc, jump(0x8002b684) + struct.pack("<I", 0xac820000), jump(SUPPRESS_DELAY) + bytes(4)),
     )
+    if walking:
+        hooks += (
+            (0x8006f2c8, jump(0x8005b368, True), jump(MENU_GATE, True)),
+            (0x800905d4, bytes.fromhex("e0ffbd271000b0af"), jump(VRAM_UPLOAD_GATE) + bytes(4)),
+        )
     for address, expect, replace in hooks:
         offset = 2048 + address - EXE_LOAD
         if target[offset:offset + len(expect)] != expect:
