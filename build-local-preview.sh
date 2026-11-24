@@ -130,6 +130,9 @@ if (( expanded_preview )); then
     done
     wizard_args+=(--expanded-level-six)
     if [[ $academy_bank == runtime ]]; then
+        for actor in 74 75 81 91 105; do
+            "$exporter" export-creature-combat "$dos_root" "$actor" "$scratch/wizards/type-$actor/combat"
+        done
         wizard_args+=(--academy-runtime)
     elif [[ -n $academy_bank ]]; then
         wizard_args+=(--academy-bank "$academy_bank")

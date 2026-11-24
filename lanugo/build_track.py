@@ -660,6 +660,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     order_log = PAYLOAD_RAM + ORDER_COUNT_OFFSET, ORDER_LOG_RAM
     extra_atlas = None
     extra_sections = {}
+    bank_combat_slots = None
     if expanded_level_six:
         # Keep persistent frame lookups below 0x801f8000, where the native floor load writes.
         if not (casting and combat and extra_type == 92 and texture_pages == creature_atlas.TEXTURE_PAGES[:1]):
@@ -677,23 +678,44 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         format_override = academy_banks.SPECIAL_FORMATS.get(academy_bank)
         primary_types = actor_types
         if format_override:
-            bits, scale, both_pages = format_override
-            special_pages = texture_pages if both_pages else texture_pages[1:]
-            special_images, palette_data, table = creature_atlas.build(
-                creature_sources(variants, families[0]), special_pages, bits=bits, scale=scale,
+            bits, scale, _ = format_override
+            if academy_bank == "imps":
+                bank_combat_slots = creature_atlas.COMBAT_SLOTS + ((13, 4),)
+            elif academy_bank == "ghouls":
+                bank_combat_slots = ((0, 4), (7, 4))
+            else:
+                bank_combat_slots = creature_atlas.COMBAT_SLOTS
+            primary_types = families[0]
+            special_sources = creature_sources(variants, primary_types)
+            # The exporter emits all applicable pose slots. Keep only the groups that fit.
+            available = creature_atlas.COMBAT_SLOTS + (((13, 4),) if academy_bank == "imps" else ())
+            selected = []
+            first = 0
+            for slot, count in available:
+                if (slot, count) in bank_combat_slots:
+                    selected.extend(range(first, first + count))
+                first += count
+            pose_sources = tuple(
+                read_source_atlas(variants / f"type-{actor}" / "combat", "combat",
+                                  creature_atlas.SOURCE_HEIGHT, 0, prefix="creature", poses=available)
+                for actor in primary_types
             )
-            images = special_images if both_pages else images + special_images
-            primary_types = () if both_pages else actor_types
+            special_sources += (tuple((pixels, [frames[i] for i in selected]) for pixels, frames in pose_sources),)
+            images, palette_data, metadata = creature_atlas.build(
+                special_sources, texture_pages, bits=bits, scale=scale,
+            )
             palette_stride = 64 if bits == 8 else 32
             palettes = [palette_data[i:i + palette_stride] for i in range(0, len(palette_data), palette_stride)]
-            directional = (table,)
+            families, directional, table_slots = (), (), ()
         else:
             image, palettes, directional = creature_atlas.build_families(
                 [creature_sources(variants, types) for types in families], texture_pages[1],
             )
             images += (image,)
             palette_stride = 32
-        primary_palettes = [clut[i:i + 32] for i in range(0, len(primary_types) * 32, 32)]
+        primary_palettes = (
+            [] if bank_combat_slots else [clut[i:i + 32] for i in range(0, len(primary_types) * 32, 32)]
+        )
         if palette_stride == 64:
             # Each 8-bit sprite uses only the first 32 entries in its own CLUT row.
             rows = [palette.ljust(64, b"\0") for palette in primary_palettes] + list(palettes)
@@ -740,12 +762,27 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     combat_sections = {}
     if combat or casting:
         actions, phases = creature_atlas.wizard_actions(combat) if casting else creature_atlas.combat_actions()
+        death_index = actions[creature_atlas.DEATH_SLOT]
         phase_offset = 0xc10 if casting else 0x700
-        combat_sections = {0xb0: actions, phase_offset: phases, 0x1600: metadata[0x400:]}
+        action_offset = academy_banks.COMBAT_ACTIONS if academy_sections is not None else 0xb0
+        if bank_combat_slots:
+            actions = bytearray(actions)
+            phases = bytearray(len(phases))
+            counts = dict(bank_combat_slots)
+            first = 0
+            for action, _ in (*creature_atlas.COMBAT_SLOTS, creature_atlas.CAST_SLOT):
+                index = actions[action] - 2
+                if action in counts:
+                    count = counts[action]
+                    phases[index*16:(index+1)*16] = bytes(first + min(frame, count-1) for frame in range(16))
+                    first += count
+                else:
+                    actions[action] = 255
+        combat_sections = {action_offset: actions, phase_offset: phases, 0x1600: metadata[0x400:]}
         metadata = metadata[:0x400]
         action_addresses = (
-            PAYLOAD_RAM + 0xb0, PAYLOAD_RAM + phase_offset, PAYLOAD_RAM + 0x1600,
-            actions[creature_atlas.DEATH_SLOT],
+            PAYLOAD_RAM + action_offset, PAYLOAD_RAM + phase_offset, PAYLOAD_RAM + 0x1600,
+            death_index,
         )
     registry = PAYLOAD_RAM + 0xf00 if expanded_level_six else None
     suppress_addr = SUPPRESS_RAM if extra_type is None else PAYLOAD_RAM + 0x700

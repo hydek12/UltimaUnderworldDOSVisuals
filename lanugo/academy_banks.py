@@ -35,9 +35,10 @@ ACADEMY_NPCS = tuple(
     for index, (_, _, tiles) in enumerate(LEVEL_SIX_BANKS, 1)
     for x, z in tiles
 )
+COMBAT_ACTIONS = 0x1580
 BANK_FAMILIES = {name: families for name, families, _ in LEVEL_SIX_BANKS}
 # (texture depth, sixteenths of original size, uses both pages)
-SPECIAL_FORMATS = {"imps": (8, 16, False), "skeletons": (4, 16, True),
+SPECIAL_FORMATS = {"imps": (8, 16, True), "skeletons": (4, 16, True),
                    "ghouls": (8, 14, True), "headless": (8, 16, True)}
 
 

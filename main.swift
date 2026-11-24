@@ -444,6 +444,15 @@ do {
             try exportAtlas(root: root, directory: directory.appendingPathComponent("combat"),
                             actor: actor, name: "creature-combat", poses: combatPoses, height: 512)
         }
+    case "export-creature-combat" where arguments.count == 4:
+        guard let actor = Int(arguments[2]), [74, 75, 81, 91, 105].contains(actor) else {
+            throw FormatError("Choose a Level 6 creature type with a verified combat slot map.")
+        }
+        let melee = [(0, 4), (1, 5), (2, 5), (3, 5), (7, 4), (12, 4)]
+        let poses = [75, 81].contains(actor) ? melee + [(13, 4)] : melee
+        try exportAtlas(root: URL(fileURLWithPath: arguments[1]),
+                        directory: URL(fileURLWithPath: arguments[3]), actor: actor,
+                        name: "creature-combat", poses: poses, height: 512)
     case "export-wizard-casting" where arguments.count == 4,
          "export-wizard-combat" where arguments.count == 4:
         guard let actor = Int(arguments[2]), [103, 108, 109].contains(actor) else {
@@ -487,6 +496,7 @@ do {
           UnderworldVisuals export-lanugo-walk-tim DOS_ROOT NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-goblin-atlases DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-creature-atlases DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY [--lizardman-combat]
+          UnderworldVisuals export-creature-combat DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-wizard-casting DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-wizard-combat DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-dos DOS_ROOT ACTOR_ID SLOT FRAME OUTPUT.png [SHADE_ROW]
