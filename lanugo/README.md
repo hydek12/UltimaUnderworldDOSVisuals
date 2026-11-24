@@ -10,21 +10,30 @@ python3 lanugo/build_track.py japan-rev1-track01.bin /tmp/lanugo-atlas lanugo-tr
 
 The track builder needs Python 3.11 or newer. The patch builder needs xdelta3. The output CHD can be produced with chdman after pointing a copy of the original CUE at the newly patched Track 1. Preserve the three original audio tracks and their index settings.
 
-Lanugo's original model still supplies camera projection bounds and selection geometry. During idle, the patch suppresses his original model’s two GPU queue insertion paths and submits one textured quad in the same ordering table. The exporter packs 25 unique DOS idle images and maps four entries per facing to them. The renderer uses PSX animation frames 0–6 to select DOS phases 0, 0, 1, 1, 2, 2 and 3. Other PSX actions use their original mesh. It chooses one of eight idle views by comparing Lanugo's heading with camera yaw in 32 sectors, using the original DOS idle-view order, and scales the sprite with the original projected height and hotspot. The rendering functions are specific to Japanese Rev 1.
+Lanugo's original model still supplies camera projection bounds and selection geometry. In the idle-only build, the patch suppresses his original model’s two GPU queue insertion paths and submits one textured quad in the same ordering table. The exporter packs 25 unique DOS idle images and maps four entries per facing to them. The renderer uses PSX animation frames 0–6 to select DOS phases 0, 0, 1, 1, 2, 2 and 3. Other PSX actions use their original mesh. It chooses one of eight idle views by comparing Lanugo's heading with camera yaw in 32 sectors, using the original DOS idle-view order, and scales the sprite with the original projected height and hotspot. The rendering functions are specific to Japanese Rev 1.
 
 The loader places the texture and palette in a region that was empty in the captured Level 1 frame. The builder patches an executable region checked against the original BIN and uses initially empty data-track sectors 145980–145993 for the payload. It checks and recomputes Mode 2 Form 1 integrity data. It preserves the size of Track 1 so the CUE can keep its original layout.
 
-This is an idle-sprite prototype for Lanugo. Walk, attack and death sprites, DOS lighting, and other actors are outside the prototype. Use a fresh boot for comparison since an emulator state may carry the original executable in RAM. Full-game play, hardware testing and VRAM use after a level transition require separate checks.
+Use a fresh boot for comparison since an emulator state may carry the original executable in RAM. Full-game play, hardware testing, and VRAM after a level transition need separate checks.
 
-## Walking atlas
+## Idle and walking sprites
 
 ```sh
 UnderworldVisuals export-lanugo-walk-tim "/path/to/ultimaunderworld/uu" /tmp/lanugo-walk-atlas
+python3 lanugo/build_english.py english-v2-track01.bin /tmp/lanugo-atlas english-dos-walk-track01.bin \
+  --walk-atlas /tmp/lanugo-walk-atlas
 ```
 
-The command exports `lanugo-walk.tim` and `lanugo-walk.csv` from DOS creature 70, slots `0x80` through `0x87`. The CSV records all four phases per facing, including repeated source frames, and the original sprite hotspots. The 30 unique images use 222 rows of a 256×224 atlas. The idle and walk atlases have the same 16 RGB555 values, including transparency, so a future 4bpp renderer can use one CLUT for both.
+The command exports `lanugo-walk.tim` and `lanugo-walk.csv` from DOS creature 70, slots `0x80` through `0x87`. The CSV records all four phases per facing, including repeated source frames, and the original sprite hotspots. The 30 unique images use 222 rows of a 256×224 atlas. The idle and walk atlases have the same 16 RGB555 values, including transparency, so the 4bpp renderer uses one CLUT for both.
 
-The disc builders still use the idle atlas. Before enabling walk sprite substitution, trace Lanugo's clean Rev 1 actor record through natural movement and identify which action and frame values coincide with position changes. Use those values in both mesh suppression paths and the sprite selector. Check the second texture's placement against actual VRAM uploads, then exercise idle-to-walk and walk-to-idle transitions on a fresh boot.
+Both disc builders accept the optional `--walk-atlas` argument. Lanugo's masked PSX action `0x20` selects the idle texture. Action `0x2c` selects the walk texture after its upload completes. Each seven-frame PSX cycle maps to DOS phases 0, 0, 1, 1, 2, 2, 3. The two atlas textures use the same eight-direction table and their individual hotspots. Attack, hit and death animations still use the PSX model.
+
+The two-atlas build reads 29 sectors and uploads each texture in two bands from a shared 18 KiB buffer at `0x801f8800`. This keeps live memory near `0x801f8000` out of the transfer. It waits for the GPU after each band before reusing the buffer. Both atlas textures and the palette can be checked against a raw DuckStation GPU capture taken in Lanugo's room.
+
+```sh
+zstd -dc capture.psxgpu.zst > capture.psxgpu
+python3 lanugo/verify_vram.py capture.psxgpu /tmp/lanugo-atlas /tmp/lanugo-walk-atlas
+```
 
 ## English v2.0 and DOS Lanugo
 
@@ -32,12 +41,12 @@ Use the same DOS atlas exported by the Xcode scheme. Extract the raw Track 1 BIN
 
 ```sh
 python3 lanugo/build_english.py english-v2-track01.bin /tmp/lanugo-atlas english-dos-track01.bin
-xdelta3 -e -A -s clean-japanese-rev1-track01.bin english-dos-track01.bin english-dos.xdelta
+./build-rev1-patch.sh --allow-expanded-track clean-japanese-rev1-track01.bin english-dos-track01.bin english-dos.xdelta
 xdelta3 -d -s clean-japanese-rev1-track01.bin english-dos.xdelta verified-track01.bin
 cmp english-dos-track01.bin verified-track01.bin
 ```
 
-The clean Japanese Rev 1 input has SHA-1 `937ae8cf9a65526f2622c39d34205941f22c10cb`. The palette-aligned combined data track has SHA-1 `60ccc3b62635aadf48e003e8c9b1ba0eee5e36a4`. The English release relocates movies. The builder appends fourteen atlas sectors after the English track, updates the ISO volume size and verifies each original executable hook before patching. The Japanese-only patch script's equal-size guard remains specific to that build. For a combined CHD, point a copy of the Japanese CUE at the combined BIN and preserve audio Tracks 2 through 4 and their indexes.
+The clean Japanese Rev 1 input has SHA-1 `937ae8cf9a65526f2622c39d34205941f22c10cb`. The palette-aligned combined data track has SHA-1 `60ccc3b62635aadf48e003e8c9b1ba0eee5e36a4`. The English release relocates movies. The builder appends fourteen sectors for idle or twenty-nine for both atlases after the English track, updates the ISO volume size and verifies each original executable hook before patching. Use `--allow-expanded-track` to package the larger English build with the split-BIN CUE layout. For a combined CHD, point a copy of the Japanese CUE at the combined BIN and preserve audio Tracks 2 through 4 and their indexes.
 
 Translation credit and source are available from [Gertius's Ultima Underworld PSX English project](https://github.com/gertius1/UU_PSX_ENG).
 

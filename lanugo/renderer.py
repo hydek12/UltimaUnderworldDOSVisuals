@@ -2,8 +2,26 @@
 
 from mipswords import Code
 
-# Keep actor projection and hit testing. Suppress the mesh only during Lanugo’s idle animation.
-def suppress(origin, order_table_register="v1"):
+IDLE_ACTION = 0x20
+WALK_ACTION = 0x2c
+
+
+def require_atlas_action(c, action, scratch, walk_ready, fallback):
+    # The caller masked the native action and XORed it with IDLE_ACTION.
+    c.branch("beq", action, "zero", "atlas_action")
+    c.imm("xori", scratch, action, WALK_ACTION ^ IDLE_ACTION)
+    c.branch("bne", scratch, "zero", fallback)
+    c.nop()
+    c.address(scratch, walk_ready)
+    c.mem("lw", scratch, 0, scratch)
+    c.nop()
+    c.branch("beq", scratch, "zero", fallback)
+    c.nop()
+    c.label("atlas_action")
+
+
+# Keep actor projection and hit testing when substituting a sprite.
+def suppress(origin, order_table_register="v1", walk_ready=None):
     c=Code(origin)
     c.mem("lw","t8",0x74,"sp")
     c.address("t9",0x8002a5d8)
@@ -13,12 +31,18 @@ def suppress(origin, order_table_register="v1"):
     c.mem("lbu","t9",23,"t8")
     c.mem("lbu","t8",26,"t8")
     c.imm("andi","t9","t9",0x3f)
-    c.imm("xori","t9","t9",0x20)
-    c.branch("bne","t9","zero","normal")
-    c.imm("ori","t9","zero",10)
-    c.nop()
-    c.branch("bne","t8","t9","normal")
-    c.nop()
+    c.imm("xori","t9","t9",IDLE_ACTION)
+    if walk_ready is None:
+        c.branch("bne","t9","zero","normal")
+        c.imm("ori","t9","zero",10)
+        c.nop()
+        c.branch("bne","t8","t9","normal")
+        c.nop()
+    else:
+        c.imm("xori", "t8", "t8", 10)
+        c.branch("bne", "t8", "zero", "normal")
+        c.nop()
+        require_atlas_action(c, "t9", "t8", walk_ready, "normal")
     c.mem("sh","s3",0x18c,"sp")
     c.jump(0x8002b684)
     c.nop()
@@ -34,7 +58,7 @@ DOS_IDLE_DIRECTIONS = bytes((
 ))
 
 
-def draw(origin, metadata, direction_table):
+def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None):
     c=Code(origin)
     c.mem("lw","t0",0xe0,"sp")
     c.imm("ori","t1","zero",10)
@@ -44,9 +68,14 @@ def draw(origin, metadata, direction_table):
     c.mem("lbu","t4",23,"t0")
     c.mem("lhu","t6",12,"t0")
     c.imm("andi","t4","t4",0x3f)
-    c.imm("xori","t4","t4",0x20)
-    c.branch("bne","t4","zero","finish")
-    # Group the native seven idle frames into four DOS phases.
+    c.imm("xori","t4","t4",IDLE_ACTION)
+    if walk_ready is None:
+        c.branch("bne","t4","zero","finish")
+    else:
+        require_atlas_action(c, "t4", "t7", walk_ready, "finish")
+        c.alu("sltu", "t7", "zero", "t4")
+        c.shift("sll", "t7", "t7", 8)  # Walking metadata follows the 256-byte idle table.
+    # Group the seven native animation frames into four DOS phases.
     c.shift("srl","t6","t6",13)
     c.imm("andi","t6","t6",3)
     c.alu("subu","t1","a3","a1")
@@ -55,7 +84,7 @@ def draw(origin, metadata, direction_table):
     c.imm("sltiu","t2","t1",256)
     c.branch("beq","t2","zero","finish")
     c.nop()
-    # DOS chooses the idle view from actor facing and camera yaw.
+    # DOS chooses the view from actor facing and camera yaw.
     c.mem("lhu", "t5", 2, "t0")
     c.imm("lui", "t4", "zero", 0x801d)
     c.mem("lhu", "t4", 0x53d4, "t4")
@@ -72,6 +101,8 @@ def draw(origin, metadata, direction_table):
     c.alu("addu", "t2", "t2", "t6")
     c.shift("sll", "t2", "t2", 3)
     c.alu("addu", "t0", "t0", "t2")
+    if walk_ready is not None:
+        c.alu("addu", "t0", "t0", "t7")
 
     # Pass the original projected foot/center through the DOS hotspot.
     c.mem("lbu","t2",2,"t0") # width
@@ -140,12 +171,17 @@ def draw(origin, metadata, direction_table):
     c.mem("sw","v1",24,"t7")
     c.alu("OR","v1","t2","t3")
     c.mem("sw","v1",32,"t7")
-    c.imm("lui","v1","zero",0x401c)
+    c.imm("lui","v1","zero",clut)
     c.alu("OR","v1","v1","t4")
     c.mem("sw","v1",12,"t7")
     c.imm("addiu","t5","t5",-1)
     c.alu("addu","t5","t4","t5")
-    c.imm("lui","v1","zero",0x16)
+    if walk_ready is None:
+        c.imm("lui","v1","zero",0x16)
+    else:
+        c.mem("lbu", "v1", 6, "t0")
+        c.nop()
+        c.shift("sll", "v1", "v1", 16)
     c.alu("OR","v1","v1","t5")
     c.mem("sw","v1",20,"t7")
     c.mem("lbu","v1",3,"t0")

@@ -34,7 +34,7 @@ The command creates a fresh comparison folder and prints its path. It contains e
 
 The release source is the clean Japanese Rev 1 raw Mode 2 Track 1 BIN for SLPS-00742, SHA-1 `937ae8cf9a65526f2622c39d34205941f22c10cb`. The English CHD can be a development and comparison build. A Japanese-language visual edition should use the clean Japanese track as its edit base. An English edition can use Gertius’s v2.0 translation as its edit base. Both editions can use the original Japanese track as the only xdelta source. [Gertius’s Rev 1 source and track layout](https://github.com/gertius1/UU_PSX_ENG)
 
-After verifying a visual change in DuckStation, supply its rebuilt raw Track 1 BIN to the release builder. The edit must fit the same total number of sectors. Update the Mode 2 EDC/ECC and ISO file references when rebuilding Track 1. This tool verifies the patch's source hash and output bytes. It assumes the input visual build has already passed the emulator test.
+After verifying a visual change in DuckStation, supply its rebuilt raw Track 1 BIN to the release builder. The packager expects the original sector count by default. Pass `--allow-expanded-track` for the larger English build and use a split-BIN CUE. Update the Mode 2 EDC/ECC and ISO file references when rebuilding Track 1. This tool verifies the patch's source hash and output bytes. It assumes the input visual build has already passed the emulator test.
 
 ```sh
 ./build-rev1-patch.sh japanese-rev1-track1.bin tested-visual-track1.bin dos-visuals.xdelta
@@ -53,4 +53,4 @@ The downloaded Rev 1 ZIP was verified. Its four-track CUE begins with a 343,678,
 - Build the Xcode scheme and run `UnderworldVisuals export-lanugo-tim DOS_ROOT NEW_OUTPUT_DIRECTORY` to generate a 256×192 16-bit PlayStation TIM with 25 unique idle frames. The CSV records UVs, dimensions and original hotspots for four sequence entries in each of idle slots 32–39. The TIM uses zero for transparent texels. Its VRAM placement is a placeholder that must be assigned by the rendering integration.
 - The patch builder converts the TIM to a 4-bit texture with a 16-entry palette. See the Lanugo build notes for the renderer and disc layout.
 
-For the experimental on-disc Lanugo implementation, see [Japanese Rev 1 Lanugo sprite prototype](lanugo/README.md).
+See the [Lanugo sprite build and verification instructions](lanugo/README.md) for the English release with eight-direction idle and walking animation.
