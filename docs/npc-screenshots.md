@@ -31,3 +31,15 @@ The original renderer shows this wizard as a shaded, polygonal red-robed model. 
 ![The same red-robed wizard rendered as a DOS sprite in the same corridor](screenshots/ultima-underworld-wizard-dos-sprite.png)
 
 The patch shows the same wizard using the original red DOS palette. The sprite preserves the brighter robe, pixel-drawn beard, and folded hands.
+
+## Level 6 spider, original PlayStation model
+
+![The Level 6 spider drawn as a dark polygonal model with long legs](screenshots/ultima-underworld-spider-native-psx.png)
+
+The original renderer gives this spider a dark polygonal body and long articulated legs. The paired capture uses the same actor, camera, and facing.
+
+## Level 6 spider, DOS sprite preview
+
+![The same Level 6 spider drawn as a gray DOS sprite with red markings](screenshots/ultima-underworld-spider-dos-sprite.png)
+
+The DOS sprite has a lower, broader silhouette with a bright gray body and red markings. It uses the original type 92 DOS palette.
