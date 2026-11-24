@@ -25,12 +25,17 @@ def require_palette_type(c, actor, scratch, fallback, palette_types, extra_type=
     c.label("palette_type")
 
 
-def require_casting_family(c, actor, action, scratch, extra_type, fallback):
+def require_fixed_pose_family(c, actor, action, scratch, extra_type, fallback, wizard_combat):
     # The second texture page has directional sprites but no fixed casting frames.
     c.imm("ori", scratch, "zero", extra_type)
     c.branch("bne", actor, scratch, "casting_family")
-    c.imm("ori", scratch, "zero", 0x0d)
-    c.branch("beq", action, scratch, fallback)
+    if wizard_combat:
+        c.nop()
+        c.imm("sltiu", scratch, action, IDLE_ACTION)
+        c.branch("bne", scratch, "zero", fallback)
+    else:
+        c.imm("ori", scratch, "zero", 0x0d)
+        c.branch("beq", action, scratch, fallback)
     c.nop()
     c.label("casting_family")
 
@@ -60,7 +65,7 @@ def atlas_action_index(c, table, action, result, scratch, fallback):
 
 # Keep actor projection and hit testing when substituting a sprite.
 def suppress(origin, order_table_register="v1", walk_ready=None, wide=False, lower_floor=False,
-             palette_types=GOBLIN_PALETTE_TYPES, order_writer=None, action_map=None, extra_type=None):
+             palette_types=GOBLIN_PALETTE_TYPES, order_writer=None, action_map=None, extra_type=None, wizard_combat=False):
     c=Code(origin)
     c.mem("lw","t8",0x74,"sp")
     c.address("t9",0x8002a5d8)
@@ -93,7 +98,7 @@ def suppress(origin, order_table_register="v1", walk_ready=None, wide=False, low
             require_atlas_action(c, "t9", "t8", walk_ready, "normal")
         else:
             if extra_type is not None:
-                require_casting_family(c, "t8", "t9", "t7", extra_type, "normal")
+                require_fixed_pose_family(c, "t8", "t9", "t7", extra_type, "normal", wizard_combat)
             atlas_action_index(c, action_map, "t9", "t8", "t7", "normal")
     c.mem("sh","s3",0x18c,"sp")
     if order_writer is None:
@@ -116,7 +121,7 @@ DOS_IDLE_DIRECTIONS = bytes((
 
 def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=False,
          shade_selector=None, overlay_offset=None, palette_types=GOBLIN_PALETTE_TYPES,
-         order_log=None, combat=None, extra_atlas=None):
+         order_log=None, combat=None, extra_atlas=None, wizard_combat=False):
     c=Code(origin)
     shade_return = None
     extra_type = extra_atlas[0] if extra_atlas else None
@@ -152,7 +157,7 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
         c.imm("andi","t6","t6",3)
     else:
         if extra_type is not None:
-            require_casting_family(c, "t2", "t4", "t3", extra_type, "finish")
+            require_fixed_pose_family(c, "t2", "t4", "t3", extra_type, "finish", wizard_combat)
         atlas_action_index(c, combat[0], "t4", "t7", "t3", "finish")
         c.shift("srl", "t6", "t6", 12)
     c.alu("subu","t1","a3","a1")

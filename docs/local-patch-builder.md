@@ -38,6 +38,10 @@ Use `--level-six-spiders` as the first option. It includes the wizard preview an
 
 Use `--level-six-casting` as the first option to include the Level 6 wizards and spiders and replace the wizard casting pose. The PlayStation casting state uses action `0x0d` and phases 0–4. The builder reads those five poses from DOS slot `0x0d` for each of the three wizard palettes. The wizard uses standing sprites when viewed from the sides or rear, following the DOS view rule. Spell effects, hit logic, and cast timing use the PlayStation routines. The expected Track 1 SHA-1 is `812bdaa643bd2c247ee9b16a80812dabfc331d64`.
 
+### Build the Level 6 wizard combat preview
+
+Use `--level-six-combat` as the first option. It includes the wizard casting preview and adds the combat stance, three melee attacks, retreat, and death poses for all seven Level 6 wizards. The three wizard palettes share one texture page, with the spiders on the adjacent page. Front views use the fixed DOS poses. Side and rear views use directional standing sprites, except death uses its fixed pose from all angles. The PlayStation still handles damage, timing, and spell effects. The expected Track 1 SHA-1 is `1a6812c72b0e97f534b3ccc77c8fe23d7f40cd9c`.
+
 ## Separate release code from game assets
 
 1. Freeze a tested build and record the Japanese and English baseline hashes, the final Track 1 hash, the exporter and builder revisions, and the supported DOS source versions. Record individual input signatures for the DOS files the exporter consumes, so unsupported releases fail with actionable errors.

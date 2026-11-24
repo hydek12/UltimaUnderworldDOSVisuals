@@ -1,6 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
+combat_preview=0
 casting_preview=0
 spider_preview=0
 wizard_preview=0
@@ -16,6 +17,12 @@ elif [[ ${1:-} == --level-six-casting ]]; then
     spider_preview=1
     casting_preview=1
     shift
+elif [[ ${1:-} == --level-six-combat ]]; then
+    wizard_preview=1
+    spider_preview=1
+    casting_preview=1
+    combat_preview=1
+    shift
 fi
 
 translation_patch=0
@@ -25,7 +32,7 @@ if [[ ${1:-} == --english-patch ]]; then
 fi
 
 if [[ $# != 5 ]]; then
-    printf 'Usage: %s [--level-six-wizards|--level-six-spiders|--level-six-casting] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
+    printf 'Usage: %s [--level-six-wizards|--level-six-spiders|--level-six-casting|--level-six-combat] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
     exit 2
 fi
 
@@ -83,8 +90,13 @@ if (( wizard_preview )); then
     done
     wizard_args=(--level-six-wizards "$scratch/wizards")
     if (( casting_preview )); then
+        wizard_export=export-wizard-casting
+        if (( combat_preview )); then
+            wizard_export=export-wizard-combat
+            wizard_args+=(--level-six-combat)
+        fi
         for actor in 103 108 109; do
-            "$exporter" export-wizard-casting "$dos_root" "$actor" "$scratch/wizards/type-$actor/combat"
+            "$exporter" "$wizard_export" "$dos_root" "$actor" "$scratch/wizards/type-$actor/combat"
         done
         wizard_args+=(--level-six-casting)
     fi

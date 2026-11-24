@@ -14,7 +14,9 @@ def bcd(number):
 
 def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
           dos_light_preview=None, lower_floor_goblins=False, lizardmen=None, lizardman_combat=False, level_eight_rats=None,
-          level_six_wizards=None, level_six_spiders=False, level_six_casting=False):
+          level_six_wizards=None, level_six_spiders=False, level_six_casting=False, level_six_combat=False):
+    if level_six_combat and not level_six_casting:
+        raise ValueError("Wizard combat extends the casting preview.")
     if level_six_casting and not level_six_spiders:
         raise ValueError("The casting preview requires the combined Level 6 payload.")
     if level_six_spiders and level_six_wizards is None:
@@ -52,7 +54,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
                     level_six_wizards, lanugo.creature_atlas.LEVEL_SIX_WIZARD_TYPES,
                     lanugo.creature_atlas.TEXTURE_PAGES[:1],
                     extra_type=lanugo.creature_atlas.LEVEL_SIX_SPIDER_TYPE if level_six_spiders else None,
-                    casting=level_six_casting,
+                    casting=level_six_casting, combat=level_six_combat,
                 )
         else:
             payload = lanugo.payload(atlas, walk_atlas, goblin_variants, dos_light_preview)
@@ -116,4 +118,5 @@ if __name__ == "__main__":
     parser.add_argument("--level-six-wizards", type=Path, metavar="EXPORTED_ATLASES")
     parser.add_argument("--level-six-spiders", action="store_true")
     parser.add_argument("--level-six-casting", action="store_true")
+    parser.add_argument("--level-six-combat", action="store_true")
     build(**vars(parser.parse_args()))

@@ -585,10 +585,11 @@ def lower_floor_payload(variants):
 
 def creature_sources(variants, actor_types, combat=False, casting=False):
     modes = [("idle", 0x20, None), ("walk", 0x80, None)]
-    if combat:
-        modes.append(("combat", 0, creature_atlas.COMBAT_SLOTS))
-    elif casting:
-        modes.append(("combat", 0, ((0x0d, 5),)))
+    if combat or casting:
+        poses = creature_atlas.COMBAT_SLOTS if combat else ()
+        if casting:
+            poses += (creature_atlas.CAST_SLOT,)
+        modes.append(("combat", 0, poses))
     return tuple(
         tuple(read_source_atlas(
             variants / f"type-{actor}" / mode, mode, creature_atlas.SOURCE_HEIGHT, slot,
@@ -624,8 +625,8 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     extra_atlas = None
     extra_sections = {}
     if extra_type is not None:
-        if combat or texture_pages != creature_atlas.TEXTURE_PAGES[:1]:
-            raise ValueError("The extra atlas requires one primary idle and walk page.")
+        if (combat and not casting) or texture_pages != creature_atlas.TEXTURE_PAGES[:1]:
+            raise ValueError("The extra atlas requires one primary wizard or directional page.")
         extra_page = creature_atlas.TEXTURE_PAGES[1:]
         extra_images, extra_clut, extra_metadata = creature_atlas.build(
             creature_sources(variants, (extra_type,)), extra_page,
@@ -642,7 +643,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     action_addresses = None
     combat_sections = {}
     if combat or casting:
-        actions, phases = creature_atlas.casting_actions() if casting else creature_atlas.combat_actions()
+        actions, phases = creature_atlas.wizard_actions(combat) if casting else creature_atlas.combat_actions()
         phase_offset = 0xc10 if casting else 0x700
         combat_sections = {0xb0: actions, phase_offset: phases, 0x1600: metadata[0x400:]}
         metadata = metadata[:0x400]
@@ -659,16 +660,18 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             suppress_addr, walk_ready=WALK_READY_RAM, wide=True,
             palette_types=palette_types, order_writer=ORDER_WRITER_RAM,
             action_map=None if action_addresses is None else action_addresses[0], extra_type=extra_type,
+            wizard_combat=casting and combat,
         ),
         delay_addr - PAYLOAD_RAM: renderer.suppress(
             delay_addr, "a0", WALK_READY_RAM, wide=True,
             palette_types=palette_types, order_writer=ORDER_WRITER_RAM,
             action_map=None if action_addresses is None else action_addresses[0], extra_type=extra_type,
+            wizard_combat=casting and combat,
         ),
         0x200: renderer.draw(
             DRAW_RAM, PAYLOAD_RAM + 0x800, PAYLOAD_RAM + 0x90,
             clut=creature_atlas.CLUT_BASE, walk_ready=WALK_READY_RAM, wide=True,
-            palette_types=palette_types, order_log=order_log, combat=action_addresses, extra_atlas=extra_atlas,
+            palette_types=palette_types, order_log=order_log, combat=action_addresses, extra_atlas=extra_atlas, wizard_combat=casting and combat,
         )[0],
         ORDER_WRITER_RAM - PAYLOAD_RAM: renderer.log_native_order(ORDER_WRITER_RAM, *order_log),
         0x800: metadata,

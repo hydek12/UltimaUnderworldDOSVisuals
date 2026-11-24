@@ -10,6 +10,7 @@ LEVEL_SIX_WIZARD_TYPES = (103, 108, 109)
 LEVEL_SIX_SPIDER_TYPE = 92
 COMBAT_SLOTS = ((0, 4), (1, 5), (2, 5), (3, 5), (7, 4), (0x0c, 4))
 DEATH_SLOT = 0x0c
+CAST_SLOT = (0x0d, 5)
 SOURCE_HEIGHT = 512
 TEXTURE_PAGES = ((384, 256, 248), (448, 256, 248))
 RAT_TEXTURE_PAGES = TEXTURE_PAGES[:1]
@@ -29,10 +30,17 @@ def combat_actions():
     return bytes(actions), bytes(phases)
 
 
-def casting_actions():
+def wizard_actions(combat=False):
+    slots = (*COMBAT_SLOTS, CAST_SLOT) if combat else (CAST_SLOT,)
     actions = bytearray([255] * 64)
-    actions[0x20], actions[0x2c], actions[0x0d] = 0, 1, 2
-    return bytes(actions), bytes(min(phase, 4) for phase in range(16))
+    actions[0x20], actions[0x2c] = 0, 1
+    phases = bytearray()
+    first = 0
+    for index, (slot, count) in enumerate(slots, 2):
+        actions[slot] = index
+        phases.extend(first + min(phase, count - 1) for phase in range(16))
+        first += count
+    return bytes(actions), bytes(phases)
 
 
 def build(sources, texture_pages=TEXTURE_PAGES):
