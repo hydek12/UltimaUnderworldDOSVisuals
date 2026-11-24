@@ -29,6 +29,12 @@ def combat_actions():
     return bytes(actions), bytes(phases)
 
 
+def casting_actions():
+    actions = bytearray([255] * 64)
+    actions[0x20], actions[0x2c], actions[0x0d] = 0, 1, 2
+    return bytes(actions), bytes(min(phase, 4) for phase in range(16))
+
+
 def build(sources, texture_pages=TEXTURE_PAGES):
     variant_count = len(sources[0])
     patterns = {(0,) * variant_count}

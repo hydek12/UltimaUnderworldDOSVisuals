@@ -583,10 +583,12 @@ def lower_floor_payload(variants):
     return compact_payload(sections, images, clut, lower_atlas.TEXTURE_PAGES, lower_atlas.HEIGHT, lower_atlas.CLUT_RECT)
 
 
-def creature_sources(variants, actor_types, combat=False):
+def creature_sources(variants, actor_types, combat=False, casting=False):
     modes = [("idle", 0x20, None), ("walk", 0x80, None)]
     if combat:
         modes.append(("combat", 0, creature_atlas.COMBAT_SLOTS))
+    elif casting:
+        modes.append(("combat", 0, ((0x0d, 5),)))
     return tuple(
         tuple(read_source_atlas(
             variants / f"type-{actor}" / mode, mode, creature_atlas.SOURCE_HEIGHT, slot,
@@ -608,8 +610,9 @@ def rat_payload(variants):
     return creature_payload(variants, creature_atlas.LEVEL_EIGHT_RAT_TYPES, creature_atlas.RAT_TEXTURE_PAGES)
 
 
-def creature_payload(variants, actor_types, texture_pages, combat=False, extra_type=None):
-    images, clut, metadata = creature_atlas.build(creature_sources(variants, actor_types, combat), texture_pages)
+def creature_payload(variants, actor_types, texture_pages, combat=False, extra_type=None, casting=False):
+    sources = creature_sources(variants, actor_types, combat, casting)
+    images, clut, metadata = creature_atlas.build(sources, texture_pages)
     base = actor_types[0]
     if len(actor_types) == 1:
         palette_types = base, base, 1
@@ -638,12 +641,13 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         order_log = PAYLOAD_RAM + ORDER_COUNT_OFFSET, PAYLOAD_RAM + LOWER_RESIDENT_BYTES
     action_addresses = None
     combat_sections = {}
-    if combat:
-        actions, phases = creature_atlas.combat_actions()
-        combat_sections = {0xb0: actions, 0x700: phases, 0x1600: metadata[0x400:]}
+    if combat or casting:
+        actions, phases = creature_atlas.casting_actions() if casting else creature_atlas.combat_actions()
+        phase_offset = 0xc10 if casting else 0x700
+        combat_sections = {0xb0: actions, phase_offset: phases, 0x1600: metadata[0x400:]}
         metadata = metadata[:0x400]
         action_addresses = (
-            PAYLOAD_RAM + 0xb0, PAYLOAD_RAM + 0x700, PAYLOAD_RAM + 0x1600,
+            PAYLOAD_RAM + 0xb0, PAYLOAD_RAM + phase_offset, PAYLOAD_RAM + 0x1600,
             actions[creature_atlas.DEATH_SLOT],
         )
     suppress_addr = SUPPRESS_RAM if extra_type is None else PAYLOAD_RAM + 0x700

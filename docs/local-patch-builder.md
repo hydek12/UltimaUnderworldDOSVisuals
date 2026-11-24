@@ -34,6 +34,10 @@ Add `--level-six-wizards` as the first argument. It adds the seven initially lin
 
 Use `--level-six-spiders` as the first option. It includes the wizard preview and adds the six initially active Level 6 type 92 spiders, with the DOS spider palette tied to that type. The two families use separate texture pages and share the floor loader. Type 92 on other floors and non-idle/non-walking actions retain their native graphics. The expected Track 1 SHA-1 is `9fdef5197a7e80f7a291172ae37f6e0155045918`.
 
+### Build the Level 6 wizard casting preview
+
+Use `--level-six-casting` as the first option to include the Level 6 wizards and spiders and replace the wizard casting pose. The PlayStation casting state uses action `0x0d` and phases 0–4. The builder reads those five poses from DOS slot `0x0d` for each of the three wizard palettes. The wizard uses standing sprites when viewed from the sides or rear, following the DOS view rule. Spell effects, hit logic, and cast timing use the PlayStation routines. The expected Track 1 SHA-1 is `812bdaa643bd2c247ee9b16a80812dabfc331d64`.
+
 ## Separate release code from game assets
 
 1. Freeze a tested build and record the Japanese and English baseline hashes, the final Track 1 hash, the exporter and builder revisions, and the supported DOS source versions. Record individual input signatures for the DOS files the exporter consumes, so unsupported releases fail with actionable errors.

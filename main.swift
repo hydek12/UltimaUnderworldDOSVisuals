@@ -352,6 +352,13 @@ do {
             try exportAtlas(root: root, directory: directory.appendingPathComponent("combat"),
                             actor: actor, name: "creature-combat", poses: combatPoses, height: 512)
         }
+    case "export-wizard-casting" where arguments.count == 4:
+        guard let actor = Int(arguments[2]), [103, 108, 109].contains(actor) else {
+            throw FormatError("Wizard casting export requires DOS creature ID 103, 108, or 109.")
+        }
+        try exportAtlas(root: URL(fileURLWithPath: arguments[1]),
+                        directory: URL(fileURLWithPath: arguments[3]), actor: actor,
+                        name: "creature-combat", poses: [(0x0d, 5)], height: 512)
     case "export-dos" where [6, 7, 11].contains(arguments.count):
         guard let actor = Int(arguments[2]), (64...127).contains(actor),
               let slot = Int(arguments[3]), (0...255).contains(slot),
@@ -383,6 +390,7 @@ do {
           UnderworldVisuals export-lanugo-walk-tim DOS_ROOT NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-goblin-atlases DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-creature-atlases DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY [--lizardman-combat]
+          UnderworldVisuals export-wizard-casting DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-dos DOS_ROOT ACTOR_ID SLOT FRAME OUTPUT.png [SHADE_ROW]
           UnderworldVisuals export-dos DOS_ROOT ACTOR_ID SLOT FRAME OUTPUT.png --dos-light LEVEL DX DY DZ
         """)

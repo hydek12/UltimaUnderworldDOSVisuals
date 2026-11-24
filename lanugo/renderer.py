@@ -25,6 +25,16 @@ def require_palette_type(c, actor, scratch, fallback, palette_types, extra_type=
     c.label("palette_type")
 
 
+def require_casting_family(c, actor, action, scratch, extra_type, fallback):
+    # The second texture page has directional sprites but no fixed casting frames.
+    c.imm("ori", scratch, "zero", extra_type)
+    c.branch("bne", actor, scratch, "casting_family")
+    c.imm("ori", scratch, "zero", 0x0d)
+    c.branch("beq", action, scratch, fallback)
+    c.nop()
+    c.label("casting_family")
+
+
 def require_atlas_action(c, action, scratch, walk_ready, fallback):
     # The caller masked the native action and XORed it with IDLE_ACTION.
     c.branch("beq", action, "zero", "atlas_action")
@@ -82,6 +92,8 @@ def suppress(origin, order_table_register="v1", walk_ready=None, wide=False, low
         if action_map is None:
             require_atlas_action(c, "t9", "t8", walk_ready, "normal")
         else:
+            if extra_type is not None:
+                require_casting_family(c, "t8", "t9", "t7", extra_type, "normal")
             atlas_action_index(c, action_map, "t9", "t8", "t7", "normal")
     c.mem("sh","s3",0x18c,"sp")
     if order_writer is None:
@@ -139,6 +151,8 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
         c.shift("srl","t6","t6",13)
         c.imm("andi","t6","t6",3)
     else:
+        if extra_type is not None:
+            require_casting_family(c, "t2", "t4", "t3", extra_type, "finish")
         atlas_action_index(c, combat[0], "t4", "t7", "t3", "finish")
         c.shift("srl", "t6", "t6", 12)
     c.alu("subu","t1","a3","a1")
