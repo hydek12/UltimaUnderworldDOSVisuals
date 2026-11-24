@@ -43,3 +43,15 @@ The original renderer gives this spider a dark polygonal body and long articulat
 ![The same Level 6 spider drawn as a gray DOS sprite with red markings](screenshots/ultima-underworld-spider-dos-sprite.png)
 
 The DOS sprite has a lower, broader silhouette with a bright gray body and red markings. It uses the original type 92 DOS palette.
+
+## Level 6 wizard casting, original PlayStation model
+
+![The PlayStation wizard raising both arms during the staged cast](screenshots/ultima-underworld-wizard-casting-native-psx.png)
+
+The native model raises both arms during the staged cast. The next capture uses the same wizard, camera, and facing with the DOS casting sprites enabled.
+
+## Level 6 wizard casting, DOS sprite preview
+
+![The same wizard in a gold DOS robe with one hand forward](screenshots/ultima-underworld-wizard-casting-dos-sprite.png)
+
+The DOS animation uses a smaller hand gesture and the original gold palette. The PlayStation still controls when the spell fires.
