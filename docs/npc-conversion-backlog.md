@@ -8,6 +8,8 @@ Of 657 PSX records, 550 are initially linked. The cumulative preview has verifie
 
 The optional lizardman combat preview adds DOS stance, melee, retreat and death poses for 18 records. Other creature families retain native combat.
 
+The cumulative preview passed 197 DuckStation floor transitions across all 56 directed pairs among Levels 1–8. The Level 8 menu cleared the rat atlas while open and restored it on resume. A separate entry into Level 9 verified native rendering was selected there. Repeated Level 9 travel remains unverified.
+
 ## Remaining models by type
 
 In the floor column, the number after L identifies the dungeon level. Counts are for initially linked records. A DOS association identifies source art for that type. The CSV identifies individual record matches.
