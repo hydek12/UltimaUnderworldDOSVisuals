@@ -75,7 +75,7 @@ LEVEL_EIGHT_BANKS = (
     ("carasso", ((72,), (104,)), ((47, 44),)),
 )
 ROOM_BANKS = {1: LEVEL_ONE_BANKS, 2: LEVEL_TWO_BANKS, 3: LEVEL_THREE_BANKS, 4: LEVEL_FOUR_BANKS,
-              5: LEVEL_FIVE_BANKS, 7: LEVEL_SEVEN_BANKS, 8: LEVEL_EIGHT_BANKS}
+              5: LEVEL_FIVE_BANKS, 7: LEVEL_SEVEN_BANKS, 8: LEVEL_EIGHT_BANKS, 9: ()}
 # Additional banks for recurring encounters in the cumulative preview.
 RECURRING_BANKS = {
     1: (
@@ -124,10 +124,61 @@ RECURRING_BANKS = {
         ("reapers", ((118,),), ((4, 40),)),
         ("wizards", ((106,),), ((8, 55), (8, 56))),
     ),
+    5: (
+        ("rats-grubs-five", ((72,), (82,)),
+         ((6, 34), (2, 36), (26, 37), (39, 37), (6, 40), (22, 40), (41, 43), (41, 47), (22, 49))),
+        ("skeletons", ((74,),), ((47, 41), (53, 42), (49, 48), (45, 54), (38, 59), (46, 59), (39, 60), (47, 60))),
+        ("imps-five", ((81,),), ((25, 44),)),
+        ("headless", ((91,),), ((34, 39), (25, 40), (36, 41), (35, 44))),
+        ("spiders", ((68, 83, 92),), ((36, 52), (27, 53), (35, 53), (37, 54), (29, 55), (36, 55), (26, 56))),
+        ("ghosts-five", ((97, 100, 101, 113),), ((9, 2), (52, 3), (42, 3), (17, 8), (6, 11), (60, 13), (11, 14), (15, 18), (8, 36), (9, 36), (48, 36), (53, 49), (57, 49), (54, 53))),
+        ("gazers", ((102,),), ((4, 43),)),
+        ("reapers", ((118,),), ((18, 44), (14, 46))),
+        ("fire", ((120,),), ((19, 50),)),
+    ),
+    7: (
+        ("bats-rats-seven", ((66,), (72,)),
+         ((3, 8), (35, 20), (10, 22), (37, 22), (4, 23), (36, 24), (38, 26), (38, 30), (44, 61))),
+        ("lurkers", ((87, 116),), ((7, 1), (9, 2), (2, 6), (4, 7), (2, 9), (15, 9), (6, 23), (23, 23))),
+        ("spiders", ((68, 83, 92),), ((11, 39), (15, 40), (3, 41), (4, 43), (13, 43), (19, 45))),
+        ("ghosts-shadows", ((97, 113), (117,)),
+         ((36, 15), (16, 26), (19, 34), (19, 35), (33, 40), (50, 44), (40, 50), (51, 54))),
+        ("gazers-golems", ((102,), (114, 121)), ((39, 2), (30, 10), (34, 36), (36, 38), (42, 57), (61, 57))),
+        ("bats-lurkers", ((66,), (87, 116)), ((3, 8), (4, 23))),
+        ("fire", ((120,),), ((47, 40), (51, 40), (42, 41), (56, 41), (38, 43), (60, 43), (35, 45), (33, 49), (34, 53), (35, 56), (35, 59), (32, 61))),
+        ("reapers", ((118,),), ((27, 3), (33, 8))),
+    ),
+    8: (
+        ("rats-imps", ((72,), (81,)),
+         ((15, 3), (49, 3), (7, 12), (36, 13), (7, 17), (13, 31), (50, 38), (31, 39), (7, 43), (39, 46),
+          (1, 47), (25, 48), (39, 53), (59, 59), (51, 60), (8, 61), (30, 61))),
+        ("rats-grubs-eight", ((72,), (82,)), ((54, 2), (35, 3), (10, 12), (7, 26), (3, 41), (30, 49), (35, 58))),
+        ("rats-spiders", ((67, 72), (68, 83, 92)),
+         ((2, 2), (7, 7), (12, 41), (58, 45), (23, 48), (34, 51), (2, 52), (60, 52), (50, 54), (8, 58),
+          (14, 62))),
+        ("headless", ((91,),), ((12, 3), (44, 7), (48, 7), (46, 8), (52, 13), (56, 26), (56, 27), (21, 40), (50, 48), (27, 49), (6, 60), (36, 60), (30, 62))),
+        ("ghosts-eight", ((97, 113),), ((31, 1), (10, 3), (7, 20), (4, 24), (52, 25), (20, 40), (37, 45), (6, 51), (26, 58), (9, 60))),
+        ("gazers-wisps-rats", ((102,), (122,), (72,)), ((25, 32), (39, 32), (39, 36), (56, 55))),
+        ("ghouls-eight", ((110,),), ((49, 36),)),
+        ("troll-seven", ((111,),), ((60, 49), (31, 54))),
+        ("reapers", ((118,),), ((31, 3), (52, 18), (46, 29), (8, 40), (28, 47), (58, 47), (15, 57))),
+        ("golems-wisps", ((114, 119, 121), (122,)),
+         ((39, 2), (4, 14), (10, 20), (37, 28), (38, 32), (53, 32), (55, 47), (61, 47))),
+        ("fire", ((120,),), ((22, 5), (54, 7), (23, 15), (41, 22), (31, 27), (33, 27), (9, 30), (4, 36), (53, 37), (33, 38), (41, 51))),
+        ("demon", ((124,),), ((32, 33),)),
+        ("imps-ghosts", ((81,), (97, 113)), ((8, 61),)),
+    ),
 }
 
 RECURRING_FORMATS = {
     "grubs-slugs": (4, (16, 16)),
+    "rats-grubs-five": (4, (16, 16)),
+    "rats-grubs-eight": (4, (16, 16)),
+    "bats-rats-seven": (4, (16, 16)),
+    "rats-imps": (8, (16, 16)),
+    "bats-lurkers": (8, (16, 16)),
+    "golems-wisps": (4, (16, 16)),
+    "imps-ghosts": (8, (16, 16)),
     "bats-rats": (4, (16, 16)),
     "rats-spiders": (4, (16, 16)),
     "gazers-golems": (4, (16, 16)),
@@ -137,6 +188,9 @@ RECURRING_FORMATS = {
 RECURRING_SINGLE_FORMATS = {
     "spiders": (4, 16), "skeletons": (4, 16), "lurkers": (8, 16),
     "headless": (8, 16), "imps": (8, 16), "reapers": (4, 16), "wizards": (4, 16),
+    "imps-five": (8, 16), "ghosts-five": (4, 16), "gazers": (4, 16), "fire": (4, 16),
+    "ghosts-eight": (4, 16), "ghouls-eight": (8, 14), "golems-eight": (4, 16),
+    "ghouls-five-recurring": (8, 14), "demon": (8, 16),
 }
 
 
@@ -151,6 +205,14 @@ def room_banks(floor, recurring=False):
         dwarves, corby = banks
         banks = ((dwarves[0], dwarves[1], (*dwarves[2], (12, 6), (14, 6), (18, 6),
                  (12, 10), (14, 10), (18, 10), (29, 17), (20, 23))), corby)
+    if recurring and floor == 5:
+        judy, ghouls, anjor = banks
+        banks = (judy, ("ghouls-five-recurring", ((99, 110),), (*ghouls[2], *((43, 9), (52, 9), (43, 17)))), anjor)
+    if recurring and floor == 7:
+        troll = banks[4]
+        troll_spawns = (*troll[2], (24, 2), (23, 3), (20, 5), (6, 29),
+                        (4, 31), (3, 33), (7, 34), (25, 57), (52, 59))
+        banks = (*banks[:4], ("troll-seven-recurring", ((111, 112),), troll_spawns), *banks[5:])
     if recurring and floor == 4:
         troll_spawns = (*banks[2][2], (54, 9), (53, 14), (47, 23), (43, 33), (47, 38))
         banks = (*banks[:2], ("trolls-four-recurring", ((96, 111, 112),), troll_spawns))
@@ -159,12 +221,24 @@ def room_banks(floor, recurring=False):
 
 ROOM_FAMILIES = {name: families for banks in (*ROOM_BANKS.values(), *RECURRING_BANKS.values())
                  for name, families, _ in banks}
-ROOM_FAMILIES["trolls-four-recurring"] = ((96, 111, 112),)
+ROOM_FAMILIES.update({
+    "trolls-four-recurring": ((96, 111, 112),),
+    "troll-seven-recurring": ((111, 112),),
+    "ghouls-five-recurring": ((99, 110),),
+    "hazards-nine": ((124,), (126,), (79,), (125,)),
+})
+# Each entry gives one texture page's bit depth and scales for its families.
+SHARED_PAGE_FORMATS = {
+    "prison-seven": ((4, (16,)), (8, (9, 8))),
+    "bats-grubs-rats": ((4, (16, 16)), (4, (16,))),
+    "hazards-nine": ((8, (10, 10)), (8, (10, 10))),
+    "gazers-wisps-rats": ((4, (16, 16)), (4, (16,))),
+}
 ROOM_FORMATS = {**LEVEL_ONE_FORMATS, "dwarves": (8, 16), "corby": (8, 15),
                 "bandits": (8, 15), "zak": (8, 15), "fighters-four": (8, 15), "trolls-four": (4, 16), "trolls-four-recurring": (4, 16),
                 "judy": (4, 16), "ghouls-five": (8, 14), "anjor": (4, 16),
                 "tyball": (4, 16), "cardon": (8, 15), "gray-guards-seven": (4, 16),
-                "troll-seven": (4, 16), "imp-seven": (8, 16), **RECURRING_SINGLE_FORMATS}
+                "troll-seven": (4, 16), "troll-seven-recurring": (4, 16), "imp-seven": (8, 16), **RECURRING_SINGLE_FORMATS}
 SPLIT_ROOM_FORMATS = {"prisoner": (4, (12, 16)), "town": (8, (11, 11)), "carasso": (8, (16, 11)),
                       **RECURRING_FORMATS}
 ROOM_STRIDE = 0x19800
@@ -289,9 +363,22 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None, recurring=False)
         for index, (_, _, tiles) in enumerate(room_banks(floor, recurring), 1)
         for x, z in tiles
     ) if has_rooms else ACADEMY_NPCS
-    grid = room_grid(points, 6 if has_rooms else 9, x_step=2 if has_rooms else 4,
-                     z_step=2 if has_rooms else 4, level_one=floor == 1)
-    if floor == 7 or recurring and floor in (1, 2, 3, 4):
+    grid = (room_grid(points, 6 if has_rooms else 9, x_step=2 if has_rooms else 4,
+                      z_step=2 if has_rooms else 4, level_one=floor == 1) if points else bytes(512))
+    if recurring and not has_rooms:
+        # Keep the stock Academy atlas at the actual common-creature and trap cells.
+        grid = bytearray(grid)
+        for x, z, owner in (
+            (42, 43, 0), (43, 45, 0), (45, 45, 0), (4, 53, 0), (47, 56, 0),
+            (35, 50, 0), (35, 53, 0), (40, 48, 0), (40, 50, 0), (40, 52, 0),
+            (17, 53, 0), (18, 53, 0), (16, 54, 0), (18, 56, 0), (16, 55, 0),
+            (43, 59, 0), (41, 61, 0), (35, 56, 3), (8, 57, 4), (57, 56, 6),
+        ):
+            index = z // 4 * 16 + x // 4
+            shift = 4 * (index & 1)
+            grid[index // 2] = (grid[index // 2] & ~(15 << shift)) | owner << shift
+        grid = bytes(grid)
+    if floor == 7 or recurring and floor in (1, 2, 3, 4, 5, 8):
         fallback_cells = {
             1: ((8, 43), (10, 43), (36, 28), (3, 38), (11, 38), (54, 38),
                 (45, 52), (52, 52), (46, 55), (45, 56), (47, 56), (51, 58)),
@@ -300,12 +387,24 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None, recurring=False)
                 (41, 23), (34, 24), (57, 24), (41, 29), (44, 29), (37, 32),
                 (11, 7), (17, 7), (10, 10)),
             4: ((31, 44),),
+            5: ((3, 42), (4, 42), (5, 42)),
             7: ((28, 57), (27, 55), (25, 55)),
+            8: ((18, 12), (55, 12), (3, 13), (45, 23), (44, 34), (6, 38),
+                (9, 51), (5, 58)),
         }
         grid = bytearray(grid)
-        for x, z in fallback_cells[floor]:
+        cells = fallback_cells[floor]
+        if recurring and floor == 7:
+            cells += ((21, 2), (22, 5), (19, 7), (20, 7), (18, 8),
+                      (5, 29), (9, 28), (11, 28), (8, 30), (2, 34), (3, 35))
+        for x, z in cells:
             index = z // 2 * 32 + x // 2
             grid[index // 2] &= ~(15 << (4 * (index & 1)))
+        if floor == 8:
+            index = 60 // 2 * 32 + 6 // 2
+            shift = 4 * (index & 1)
+            headless = next(i for i, (name, _, _) in enumerate(room_banks(8, True), 1) if name == "headless")
+            grid[index // 2] = (grid[index // 2] & ~(15 << shift)) | headless << shift
         grid = bytes(grid)
     return {
         POINTER: struct.pack("<I", SELECTOR),

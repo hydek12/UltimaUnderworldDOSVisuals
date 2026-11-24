@@ -119,6 +119,11 @@ These percentages track the project checklist. They are estimates based on verif
 | 73% | Verified | Native encounter palette probes and directed floor transition matrix |
 | 74% | Verified | Revised Level 4 mixed bank, disc readback, and reproducible xdelta |
 | 75% | Verified | Final English CHD cold boot, directional render probes, and shared palette submission |
+| 76% | Verified | Levels 5–9 record and DOS animation inventory |
+| 77% | Verified | Late-floor bank layouts and byte-level facing and palette checks |
+| 78% | Verified | Native dormant activation probes and Level 6 and 7 spawned palette checks |
+| 79% | Verified | Level 8 directional draws and Level 9 special-model renderer checks |
+| 80% | Verified | Cumulative English CHD boot and clean Japanese Rev 1 xdelta round-trip |
 
 ## Levels 1–4 recurring creature preview
 
@@ -136,6 +141,20 @@ DuckStation confirmed DOS sprite packets at original encounters for 82 combinati
 
 The final CHD cold-booted through the English title and character creation into fresh gameplay. The Xcode-built exporter reproduced the combined xdelta byte for byte. Decoding against clean Japanese Rev 1 Track 1 (SHA-1 `937ae8cf9a65526f2622c39d34205941f22c10cb`) yielded the patched data track (SHA-1 `11e712449846d8ecad84a148cbdc0f365bdc0e2c`). The CHD verified with internal SHA-1 `673809e6ec4fe18b921f65a3e6e01aad87adae2f`, and all four extracted tracks matched. Use `--late-dialogue` from the [local build guide](local-patch-builder.md) to reproduce it using your own source files.
 
+## Levels 5–9 recurring creatures and special models
+
+The source audit contains 400 records across these floors. The serialized initial marker is set for 329 and clear for 71. The marker describes initialization. Runtime tile chains and the original create-object traps identify which template records can become actors.
+
+The new banks cover the recurring late-floor types and extend the Academy’s shared troll palette to type 96. The Slasher of Veils follows the Avatar across Level 9. A floor-wide bank holds the Slasher, bat skull, lightning, and eye. It uses 10/16 textures and preserves the DOS frame sizes, palettes, and anchors. The lightning and eye reuse their directional standing frames for movement because their DOS art has no walk slots. Unsupported actions retain native art.
+
+A disc readback matched 5,248 frame slots and 5,892,063 sampled texels across 41 packs on Levels 5, 7, 8, and 9. The build uses the Xcode exporter and user-supplied DOS data. The final banks cover 328 initially marked records at their spawn cells, with the Level 5 Gazer drawing from an adjacent cell. Clean Japanese Rev 1 Track 1 decoded to `039e4a79a468c1dda7e8617b0eb463e867891ee7`. The CHD internal SHA-1 `cf4ce44c3b7a18043233558c31d08a8c249ce97b` verified and all four extracted tracks matched byte for byte.
+
+DuckStation’s trap audit checked the runtime tile chains. It confirmed 24 distinct native create-object activations on Levels 5–8. The final image rechecked the Level 7 dormant troll at (52, 59), including its DOS palette submission after the trap created the actor. An Academy fire elemental created at (57, 56) also submitted its DOS palette. Both Level 9 zero-marker records were already linked when loaded. The debugger invoked original trap handlers in the disposable run. The remaining noninitial records include actors already on the map and events whose full in-game trigger sequence remains unverified.
+
+The final CHD cold-booted to the English menu. In Level 9, the eye and lightning submitted their expected palettes at their native records. A staged idle test submitted the bat skull’s palette. The Slasher’s palette and quad passed using another actor’s captured native projection and the Slasher’s real frame table. The Slasher’s unstaged encounter draw remains unverified.
+
+The live facing sweeps checked 256 idle and walk packets on Level 8 and 64 idle packets across the eight eye and lightning facings on Level 9. The Level 7 and 9 tested banks matched the final disc’s resident renderer, palette registry, and room grid in DuckStation.
+
 ## Next milestone
 
-The 80% gate covers the remaining recurring encounters on Levels 5–9, special models, and dormant activations. Verify the native fallback wherever room visibility or DOS pose coverage prevents a replacement.
+Check the Slasher’s unstaged encounter, remaining conditional triggers, and special actions beyond the currently supported DOS poses before expanding combat coverage.

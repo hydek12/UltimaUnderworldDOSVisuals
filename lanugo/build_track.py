@@ -652,11 +652,17 @@ def creature_sources(variants, actor_types, combat=False, casting=False):
         if casting:
             poses += (creature_atlas.CAST_SLOT,)
         modes.append(("combat", 0, poses))
-    return tuple(
-        tuple(read_source_atlas(
+
+    def read_mode(actor, mode, slot, poses):
+        if mode == "walk" and actor in (125, 126):
+            mode, slot = "idle", 0x20
+        return read_source_atlas(
             variants / f"type-{actor}" / mode, mode, creature_atlas.SOURCE_HEIGHT, slot,
             prefix="creature", poses=poses,
-        ) for actor in actor_types)
+        )
+
+    return tuple(
+        tuple(read_mode(actor, mode, slot, poses) for actor in actor_types)
         for mode, slot, poses in modes
     )
 
@@ -676,7 +682,8 @@ def rat_payload(variants, bank_sections=None):
 
 
 def creature_payload(variants, actor_types, texture_pages, combat=False, extra_type=None, casting=False,
-                     expanded_level_six=False, academy_bank=None, academy_sections=None, room_bank=None, room_default=False):
+                     expanded_level_six=False, academy_bank=None, academy_sections=None, room_bank=None, room_default=False,
+                     recurring_academy=False):
     sources = creature_sources(variants, actor_types, combat, casting)
     images, clut, metadata = creature_atlas.build(sources, texture_pages)
     base = actor_types[0]
@@ -691,8 +698,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     extra_sections = {}
     bank_combat_slots = None
     split_format = academy_banks.SPLIT_ROOM_FORMATS.get(room_bank)
-    prison = room_bank == "prison-seven"
-    bats_grubs_rats = room_bank == "bats-grubs-rats"
+    shared_format = academy_banks.SHARED_PAGE_FORMATS.get(room_bank)
     if expanded_level_six:
         # Keep persistent frame lookups below 0x801f8000, where the native floor load writes.
         if not (casting and combat and extra_type == 92 and texture_pages == creature_atlas.TEXTURE_PAGES[:1]):
@@ -700,9 +706,13 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         # Both Academy families fit individually with all facing frames intact.
         # One table can occupy the two adjacent upper resident slots.
         families = academy_banks.BANK_FAMILIES[academy_bank] if academy_bank else LEVEL_SIX_DIRECTIONAL
+        if recurring_academy and academy_bank == "trolls":
+            families = ((96, 111, 112),)
         if room_bank:
             families = academy_banks.ROOM_FAMILIES[room_bank]
-        if prison or bats_grubs_rats:
+        if room_bank == "hazards-nine":
+            table_slots = ((0x804, 0x3fc), (0x1000, 0x400), (0x1800, 0x200), (0x1a00, 0x200))
+        elif shared_format:
             table_slots = ((0x804, 0x3fc), (0x1000, 0x400), (0x1800, 0x400))
         elif split_format:
             # The shared room needs two compact tables below the order log at 0x1800.
@@ -718,30 +728,19 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         texture_pages = creature_atlas.TEXTURE_PAGES
         format_override = academy_banks.SPECIAL_FORMATS.get(academy_bank)
         primary_types = actor_types
-        if prison:
-            wizard_image, wizard_palettes, wizard_tables = creature_atlas.build_families(
-                [creature_sources(variants, families[0])], texture_pages[0],
-            )
-            prison_image, prison_palettes, prison_tables = creature_atlas.build_families(
-                [creature_sources(variants, types) for types in families[1:]], texture_pages[1],
-                bits=8, scales=(9, 8),
-            )
-            images = wizard_image, prison_image
-            palette_stride = 64
-            palettes = [p.ljust(64, b"\0") for p in wizard_palettes] + prison_palettes
-            directional = (*wizard_tables, *prison_tables)
-            primary_types = ()
-        elif bats_grubs_rats:
-            left, left_palettes, left_tables = creature_atlas.build_families(
-                [creature_sources(variants, types) for types in families[:2]], texture_pages[0],
-            )
-            right, right_palettes, right_tables = creature_atlas.build_families(
-                [creature_sources(variants, families[2])], texture_pages[1],
-            )
-            images = left, right
-            palette_stride = 32
-            palettes = left_palettes + right_palettes
-            directional = (*left_tables, *right_tables)
+        if shared_format:
+            texture_pages = creature_atlas.TEXTURE_PAGES
+            images, palettes, directional = [], [], []
+            palette_stride = 64 if any(bits == 8 for bits, _ in shared_format) else 32
+            next_family = 0
+            for page, (bits, scales) in zip(texture_pages, shared_format, strict=True):
+                end = next_family + len(scales)
+                page_families = [creature_sources(variants, types) for types in families[next_family:end]]
+                art, colors, tables = creature_atlas.build_families(page_families, page, bits=bits, scales=scales)
+                images.append(art)
+                palettes.extend(clut.ljust(palette_stride, b"\0") for clut in colors)
+                directional.extend(tables)
+                next_family = end
             primary_types = ()
         elif split_format:
             bits, scales = split_format
@@ -828,7 +827,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
                 struct.pack_into("<HH", registry_data, 4 * (actor - 64), location - 0x800, palette)
                 row += 1
         extra_sections[0xf00] = registry_data
-        log_offset = EXPANDED_RESIDENT_BYTES if prison or bats_grubs_rats else LOWER_RESIDENT_BYTES
+        log_offset = EXPANDED_RESIDENT_BYTES if shared_format else LOWER_RESIDENT_BYTES
         order_log = PAYLOAD_RAM + ORDER_COUNT_OFFSET, PAYLOAD_RAM + log_offset
     elif extra_type is not None:
         if (combat and not casting) or texture_pages != creature_atlas.TEXTURE_PAGES[:1]:
@@ -899,7 +898,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             palette_types=palette_types, order_log=order_log, combat=action_addresses, extra_atlas=extra_atlas, wizard_combat=casting and combat, registry=registry,
         )[0],
         ORDER_WRITER_RAM - PAYLOAD_RAM: renderer.log_native_order(ORDER_WRITER_RAM, *order_log),
-        0x800: b"" if split_format or prison or bats_grubs_rats else metadata,
+        0x800: b"" if split_format or shared_format else metadata,
         0xc00: jump(PAYLOAD_RAM + 0x1400) + bytes(4),
         0xe00: menu_return(VARIANT_UPLOAD_RAM, floor_aware=True),
         0xe80: vram_guard(lower_floor=True, right_edge=texture_pages[-1][0] + 64),

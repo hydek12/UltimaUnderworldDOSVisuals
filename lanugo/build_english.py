@@ -93,19 +93,19 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
                     bank_sections = None
                     if academy_runtime:
                         byte_offset = (wizard_payload_lba - lanugo.AVATAR_LBA) * 2048
-                        bank_sections = lanugo.academy_banks.sections(byte_offset, bank_size, bank_id)
+                        bank_sections = lanugo.academy_banks.sections(byte_offset, bank_size, bank_id, recurring=late_dialogue)
                     bank_payload = lanugo.creature_payload(
                         level_six_wizards, lanugo.creature_atlas.LEVEL_SIX_WIZARD_TYPES,
                         lanugo.creature_atlas.TEXTURE_PAGES[:1],
                         extra_type=lanugo.creature_atlas.LEVEL_SIX_SPIDER_TYPE if level_six_spiders else None,
                         casting=level_six_casting, combat=level_six_combat, expanded_level_six=expanded_level_six,
-                        academy_bank=bank, academy_sections=bank_sections,
+                        academy_bank=bank, academy_sections=bank_sections, recurring_academy=late_dialogue,
                     )
                     if academy_runtime and len(bank_payload) != bank_size:
                         raise ValueError("The runtime Academy banks must have the same disc stride.")
                     payload += bank_payload
             for floor, enabled in ((2, level_two_dialogue), (3, level_three_dialogue),
-                                   (4, level_four_dialogue), (5, late_dialogue), (8, late_dialogue), (7, late_dialogue)):
+                                   (4, level_four_dialogue), (5, late_dialogue), (8, late_dialogue), (7, late_dialogue), (9, late_dialogue)):
                 if not enabled:
                     continue
                 lbas = room_lbas.setdefault(floor, [])
@@ -118,13 +118,13 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
                         bank_payload = lanugo.lower_floor_payload(goblin_variants, bank_sections)
                     elif bank is None and floor == 8:
                         bank_payload = lanugo.rat_payload(level_eight_rats, bank_sections)
-                    elif bank is None:
+                    elif bank is None and floor != 9:
                         bank_payload = lanugo.lizard_payload(lizardmen, lizardman_combat, bank_sections)
                     else:
                         bank_payload = lanugo.creature_payload(
                             level_six_wizards, lanugo.creature_atlas.LEVEL_SIX_WIZARD_TYPES,
                             lanugo.creature_atlas.TEXTURE_PAGES[:1], extra_type=92, combat=True,
-                            casting=True, expanded_level_six=True, academy_sections=bank_sections, room_bank=bank,
+                            casting=True, expanded_level_six=True, academy_sections=bank_sections, room_bank=bank or "hazards-nine",
                         )
                     if len(bank_payload) != stride:
                         raise ValueError(f"Level {floor} room banks must have the same disc stride.")

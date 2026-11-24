@@ -167,7 +167,7 @@ if (( expanded_preview )); then
                         done
                         wizard_args+=(--level-four-dialogue)
                         if (( late_dialogue )); then
-                            for actor in 67 68 72 83 87 99 113 114 116 117 118 121 122 123; do
+                            for actor in 67 68 72 83 79 87 99 100 101 110 113 114 116 117 118 121 122 123 124 125 126; do
                                 "$exporter" export-creature-atlases "$dos_root" "$actor" "$scratch/wizards/type-$actor"
                             done
                             wizard_args+=(--late-dialogue)

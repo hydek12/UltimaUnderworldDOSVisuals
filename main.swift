@@ -439,8 +439,11 @@ do {
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false)
         try exportAtlas(root: root, directory: directory.appendingPathComponent("idle"),
                         actor: actor, name: "creature-idle", poses: idlePoses, height: 512)
-        try exportAtlas(root: root, directory: directory.appendingPathComponent("walk"),
-                        actor: actor, name: "creature-walk", poses: walkPoses, height: 512)
+        // The lightning and eye only have directional standing art in the DOS archive.
+        if actor != 125 && actor != 126 {
+            try exportAtlas(root: root, directory: directory.appendingPathComponent("walk"),
+                            actor: actor, name: "creature-walk", poses: walkPoses, height: 512)
+        }
         if includeCombat {
             let combatPoses = [(0, 4), (1, 5), (2, 5), (3, 5), (7, 4), (12, 4)]
             try exportAtlas(root: root, directory: directory.appendingPathComponent("combat"),
