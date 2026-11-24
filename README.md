@@ -2,6 +2,8 @@
 
 This macOS Xcode command-line project uses the local DOS release as the visual reference and the English-patched PlayStation disc as the target. The current target inventories the PSX resource archive and exports original DOS critter frames, including their anchors. Game data is supplied locally.
 
+[View the NPC screenshot gallery](docs/npc-screenshots.md) for a matched Level 3 lizardman comparison and a Level 7 goblin capture.
+
 ## Reproduce the asset checks
 
 1. Open `UnderworldVisuals.xcodeproj` and build the `UnderworldVisuals` scheme.
