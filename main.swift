@@ -110,12 +110,42 @@ struct DOSFrame {
     let hotspotY: Int
 }
 
-func readFrame(root: URL, actor: Int, slot: Int, frame: Int, shade: Int? = nil) throws -> DOSFrame {
-    let shadeRow = try shade.map { row in
-        let light = try Bytes(root.appendingPathComponent("DATA/LIGHT.DAT")).data
-        guard light.count == 16 * 256 else {
-            throw FormatError("Expected sixteen 256-color rows in LIGHT.DAT.")
+struct DOSShade {
+    let row: Int
+    let file: String
+}
+
+func distanceShade(root: URL, level: Int, dx: Int, dy: Int, dz: Int) throws -> DOSShade {
+    let settings = try Bytes(root.appendingPathComponent("DATA/SHADES.DAT"))
+    guard settings.data.count == 8 * 12 else {
+        throw FormatError("Expected eight 12-byte rows in SHADES.DAT.")
+    }
+    let offset = level * 12
+    let divisor = max(1, Int(Int16(truncatingIfNeeded: try settings.littleEndian(offset, size: 2))))
+    let base = try settings.byte(offset + 2)
+    let lowpass = Int(Int16(truncatingIfNeeded: try settings.littleEndian(offset + 4, size: 2)))
+    let x = dx >> 5, y = dy >> 5, z = dz >> 5
+    let squared = Int(Int16(truncatingIfNeeded: x * x + y * y + z * z))
+    var distance = 0
+    if squared > 0 {
+        // The DOS game takes five integer Newton steps with a byte-dependent seed.
+        distance = squared < 256 ? 4 : 64
+        for _ in 0..<5 {
+            distance = (distance + squared / distance) >> 1
         }
+    }
+    let shade = max(0, ((distance * divisor) >> 6) + lowpass)
+    let row = min(14, Int(UInt8(truncatingIfNeeded: shade + base)))
+    return DOSShade(row: row, file: level == 5 ? "MONO.DAT" : "LIGHT.DAT")
+}
+
+func readFrame(root: URL, actor: Int, slot: Int, frame: Int, shade: DOSShade? = nil) throws -> DOSFrame {
+    let shadeRow = try shade.map { shade in
+        let light = try Bytes(root.appendingPathComponent("DATA/\(shade.file)")).data
+        guard light.count == 16 * 256 else {
+            throw FormatError("Expected sixteen 256-color rows in \(shade.file).")
+        }
+        let row = shade.row
         return Array(light[(row * 256)..<((row + 1) * 256)])
     }
     let crit = root.appendingPathComponent("CRIT")
@@ -178,14 +208,15 @@ func readFrame(root: URL, actor: Int, slot: Int, frame: Int, shade: Int? = nil) 
     throw FormatError("Animation slot is absent from both CRIT pages.")
 }
 
-func exportFrame(root: URL, actor: Int, slot: Int, frame: Int, output: URL, shade: Int?) throws {
+func exportFrame(root: URL, actor: Int, slot: Int, frame: Int, output: URL, shade: DOSShade?) throws {
     let result = try readFrame(root: root, actor: actor, slot: slot, frame: frame, shade: shade)
     let bitmap = result.bitmap
     guard let png = bitmap.representation(using: .png, properties: [:]) else {
         throw FormatError("Could not encode PNG.")
     }
     try png.write(to: output, options: .withoutOverwriting)
-    print("\(result.pageName), frame \(result.index), \(bitmap.pixelsWide)×\(bitmap.pixelsHigh), hotspot (\(result.hotspotX), \(result.hotspotY))")
+    let lighting = shade.map { ", \($0.file) row \($0.row)" } ?? ""
+    print("\(result.pageName), frame \(result.index), \(bitmap.pixelsWide)×\(bitmap.pixelsHigh), hotspot (\(result.hotspotX), \(result.hotspotY))\(lighting)")
 }
 
 func exportAtlas(root: URL, directory: URL, actor: Int, name: String,
@@ -289,21 +320,29 @@ do {
                         actor: actor, name: "goblin-idle", slots: 0x20...0x27, height: 192)
         try exportAtlas(root: root, directory: directory.appendingPathComponent("walk"),
                         actor: actor, name: "goblin-walk", slots: 0x80...0x87, height: 224)
-    case "export-dos" where arguments.count == 6 || arguments.count == 7:
+    case "export-dos" where [6, 7, 11].contains(arguments.count):
         guard let actor = Int(arguments[2]), (64...127).contains(actor),
               let slot = Int(arguments[3]), (0...255).contains(slot),
               let frame = Int(arguments[4]), (0...7).contains(frame) else {
             throw FormatError("Use decimal actor ID 64–127, slot 0–255, and frame 0–7.")
         }
-        var shade: Int?
+        let root = URL(fileURLWithPath: arguments[1])
+        var shade: DOSShade?
         if arguments.count == 7 {
             guard let row = Int(arguments[6]), (0...15).contains(row) else {
                 throw FormatError("Use a DOS shade row from 0 to 15.")
             }
-            shade = row
+            shade = DOSShade(row: row, file: "LIGHT.DAT")
         }
-        try exportFrame(root: URL(fileURLWithPath: arguments[1]), actor: actor, slot: slot,
-                        frame: frame, output: URL(fileURLWithPath: arguments[5]), shade: shade)
+        if arguments.count == 11 {
+            guard arguments[6] == "--dos-light", let level = Int(arguments[7]), (0...7).contains(level),
+                  let dx = Int16(arguments[8]), let dy = Int16(arguments[9]), let dz = Int16(arguments[10]) else {
+                throw FormatError("Use --dos-light LEVEL DX DY DZ with level 0 to 7 and signed 16-bit deltas.")
+            }
+            shade = try distanceShade(root: root, level: level, dx: Int(dx), dy: Int(dy), dz: Int(dz))
+        }
+        try exportFrame(root: root, actor: actor, slot: slot, frame: frame,
+                        output: URL(fileURLWithPath: arguments[5]), shade: shade)
     default:
         throw FormatError("""
         Usage
@@ -312,6 +351,7 @@ do {
           UnderworldVisuals export-lanugo-walk-tim DOS_ROOT NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-goblin-atlases DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-dos DOS_ROOT ACTOR_ID SLOT FRAME OUTPUT.png [SHADE_ROW]
+          UnderworldVisuals export-dos DOS_ROOT ACTOR_ID SLOT FRAME OUTPUT.png --dos-light LEVEL DX DY DZ
         """)
     }
 } catch {

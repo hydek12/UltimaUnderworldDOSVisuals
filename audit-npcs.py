@@ -1,6 +1,7 @@
 """Inventory live DOS dungeon actors and candidate Japanese Rev 1 record matches."""
 
 import argparse
+from collections import defaultdict
 import csv
 from pathlib import Path
 import struct
@@ -79,39 +80,95 @@ def asset_coverage(crit):
         yield actor, (animation, label, palette, idle, walk)
 
 
-def record_offsets(objects, base, dos_record):
-    # The first six bytes, packed home tile, and conversation ID survive the port.
-    signature = dos_record[:6]
-    position = 0
-    while (position := objects.find(signature, position)) != -1:
-        end = position + PSX_RECORD_BYTES
-        record = objects[position:end]
-        if len(record) == PSX_RECORD_BYTES and record[20:22] == dos_record[22:24]:
-            if record[26] == dos_record[26]:
-                yield base + position
-        position += 1
+def psx_creatures(avatar):
+    base, end = struct.unpack_from("<II", avatar, 4 * PSX_OBJECT_ENTRY)
+    if (base, end) != (0x9a4000, 0x9b3000) or end > len(avatar):
+        raise ValueError("Expected the clean Japanese Rev 1 AVATAR object entry.")
+    previous_end = base + 9 * 8
+    for level in range(1, 10):
+        # Loader 0x8004b034 takes the low halfword count and shifts word +4 by ten.
+        count, _, packed_offset = struct.unpack_from("<HHI", avatar, base + (level - 1) * 8)
+        start = base + (packed_offset >> 10)
+        stop = start + PSX_RECORD_BYTES * count
+        if not 0 < count < MOBILE_SLOTS or not previous_end <= start < stop <= end:
+            raise ValueError(f"Invalid PSX mobile record table for level {level}.")
+        for address in range(start, stop, PSX_RECORD_BYTES):
+            record = avatar[address:address + PSX_RECORD_BYTES]
+            actor = word(record, 0) & 511
+            if actor not in DOS_CREATURE_RANGE:
+                raise ValueError(f"Unexpected PSX creature type {actor} at {address:#x}.")
+            yield level, address, actor, record
+        previous_end = stop
 
 
-def audit(dos_root, psx_avatar):
+def crosswalk(dos_records, psx_records):
+    by_identity = defaultdict(list)
+    for level, address, actor, record in psx_records:
+        by_identity[level, actor, record[26]].append((address, record))
+    matches = {}
+    reserved = set()
+    for level, _, _, _, actor, address, record in dos_records:
+        candidates = by_identity[level, actor, record[26]]
+        exact = tuple(psx_address for psx_address, psx in candidates
+                      if psx[:6] == record[:6] and psx[20:22] == record[22:24])
+        if exact:
+            matches[address] = ("exact", exact)
+            reserved.update(exact)
+    for level, x, y, _, actor, address, record in dos_records:
+        if address in matches:
+            continue
+        candidates = [(psx_address, psx) for psx_address, psx in by_identity[level, actor, record[26]]
+                      if psx_address not in reserved]
+        same_tile = tuple(psx_address for psx_address, psx in candidates
+                          if (word(psx, 4) & 63, word(psx, 6) & 63) == (x, y))
+        if same_tile:
+            matches[address] = ("spawn tile", same_tile)
+        elif record[26] not in (0, 255) and len(candidates) == 1:
+            matches[address] = ("conversation ID", (candidates[0][0],))
+    return matches
+
+
+def asset_columns(assets, actor):
+    animation, label, palette, idle, walk = assets.get(actor, ("", "", "", (), ()))
+    return animation, label, palette, " ".join(map(str, idle)), " ".join(map(str, walk))
+
+
+def audit(dos_root, psx_avatar, psx_inventory=False):
     levels = (dos_root / "DATA" / "LEV.ARK").read_bytes()
     assets = dict(asset_coverage(dos_root / "CRIT"))
-    avatar = psx_avatar.read_bytes()
-    base, end = struct.unpack_from("<II", avatar, 4 * PSX_OBJECT_ENTRY)
-    if (base, end) != (0x9a4000, 0x9b3000):
-        raise ValueError("Expected the clean Japanese Rev 1 AVATAR object entry.")
-    objects = avatar[base:end]
+    dos_records = list(dos_actors(levels))
+    psx_records = list(psx_creatures(psx_avatar.read_bytes()))
+    matches = crosswalk(dos_records, psx_records)
     writer = csv.writer(sys.stdout)
+    if psx_inventory:
+        dos_candidates = defaultdict(list)
+        for dos_address, (_, addresses) in matches.items():
+            for address in addresses:
+                dos_candidates[address].append(dos_address)
+        writer.writerow((
+            "level", "psx_record_offset", "psx_type", "conversation_id", "initially_linked",
+            "spawn_x", "spawn_y", "home_x", "home_y", "dos_candidate_offsets", "dos_animation",
+            "dos_asset", "dos_palette", "idle_frames_by_direction", "walk_frames_by_direction",
+        ))
+        for level, address, actor, record in psx_records:
+            home = word(record, 20)
+            writer.writerow((
+                level, f"{address:#08x}", actor, record[26], int(bool(record[27])),
+                word(record, 4) & 63, word(record, 6) & 63, home >> 10, (home >> 4) & 63,
+                " ".join(f"{offset:#08x}" for offset in dos_candidates[address]),
+                *asset_columns(assets, actor),
+            ))
+        return
     writer.writerow((
         "level", "tile_x", "tile_y", "dos_slot", "dos_type", "conversation_id", "dos_record_offset",
         "psx_candidate_offsets", "dos_animation", "dos_asset", "dos_palette",
-        "idle_frames_by_direction", "walk_frames_by_direction",
+        "idle_frames_by_direction", "walk_frames_by_direction", "match_evidence",
     ))
-    for level, x, y, slot, actor, address, record in dos_actors(levels):
-        matches = " ".join(f"{offset:#08x}" for offset in record_offsets(objects, base, record))
-        animation, label, palette, idle, walk = assets.get(actor, ("", "", "", (), ()))
+    for level, x, y, slot, actor, address, record in dos_records:
+        evidence, addresses = matches.get(address, ("", ()))
         writer.writerow((
-            level, x, y, slot, actor, record[26], f"{address:#08x}", matches, animation, label, palette,
-            " ".join(map(str, idle)), " ".join(map(str, walk)),
+            level, x, y, slot, actor, record[26], f"{address:#08x}",
+            " ".join(f"{offset:#08x}" for offset in addresses), *asset_columns(assets, actor), evidence,
         ))
 
 
@@ -119,4 +176,5 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("dos_root", type=Path)
     parser.add_argument("psx_avatar", type=Path)
+    parser.add_argument("--psx-inventory", action="store_true", help="List every PSX creature record.")
     audit(**vars(parser.parse_args()))

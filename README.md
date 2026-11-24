@@ -13,12 +13,15 @@ This macOS Xcode command-line project uses the local DOS release as the visual r
 UnderworldVisuals inspect-psx /path/to/AVATAR > avatar-index.csv
 UnderworldVisuals export-dos /path/to/ultimaunderworld/uu 70 36 0 goblin.png
 UnderworldVisuals export-dos /path/to/ultimaunderworld/uu 70 36 0 goblin-shade-8.png 8
+UnderworldVisuals export-dos /path/to/ultimaunderworld/uu 70 36 0 goblin-at-two-tiles.png --dos-light 0 512 0 0
 UnderworldVisuals export-dos /path/to/ultimaunderworld/uu 96 36 0 troll.png
 UnderworldVisuals export-dos /path/to/ultimaunderworld/uu 111 36 0 troll-111.png
 UnderworldVisuals export-dos /path/to/ultimaunderworld/uu 112 36 0 troll-112.png
 ```
 
 The export arguments after the DOS path are decimal actor type ID, animation slot, frame within the slot, and output path. Slot 36 is the front-facing idle direction. Slots 32–39 provide the other view directions for idle, where available. With an optional shade row from 0 to 15, the exporter maps the original VGA indices through `DATA/LIGHT.DAT` before looking up their colors and keeps the original transparency. Omit the shade for the source palette used by the disc atlas. The DOS renderer selects shade by scene conditions and also handles ghost blend, palette cycling, and projection.
+
+`--dos-light LEVEL DX DY DZ` computes the original DOS creature shade. `LEVEL` is the active DOS light level from 0 to 7. The signed deltas run from the player to the sprite anchor in DOS world units, with 256 units per horizontal tile. The calculation includes height, signed 16-bit distance behavior, and the parameters in `SHADES.DAT`. Light level 5 uses `MONO.DAT`. The exporter prints the table and row it used. [Reconstructed DOS drawing routine](https://github.com/abedegno/underworld-exhumed/blob/54ffea7c08d562176a8edf7398a6ff3fd372a9d2/uw1/src/3d/GAMESORT.C#L330) · [DOS lighting table loader](https://github.com/abedegno/underworld-exhumed/blob/54ffea7c08d562176a8edf7398a6ff3fd372a9d2/uw1/src/map/LIGHTING.C#L35)
 
 See [Visual assessment and patch design](VISUAL-ASSESSMENT.md) for local findings, the intended renderer changes, and the acceptance tests.
 
@@ -35,9 +38,10 @@ The command creates a fresh comparison folder and prints its path. It contains e
 
 ```sh
 python3 audit-npcs.py /path/to/ultimaunderworld/uu /path/to/japanese-rev1/AVATAR > npc-records.csv
+python3 audit-npcs.py /path/to/ultimaunderworld/uu /path/to/japanese-rev1/AVATAR --psx-inventory > psx-npc-records.csv
 ```
 
-The audit walks the linked objects in the nine DOS tile maps. It lists each creature, the animation file and palette it uses, and the number of idle and walk phases present for each facing. Candidate PSX offsets match the record's first six bytes, packed home tile, and conversation ID in the clean Japanese object archive. Unique matches are strong leads for runtime confirmation. A blank means the exact signature search found no candidate.
+The audit walks the linked objects in the nine DOS tile maps and parses each PSX floor’s 28-byte creature records using the native loader’s table offsets. It checks the type, conversation ID, first six bytes, and packed home tile for full matches. For changed records it looks for an unmatched PSX candidate on the same spawn tile, then for a unique named candidate with the same conversation ID. Each row lists the evidence and the number of idle and walk phases per facing. The PSX inventory includes records the level loader leaves unlinked.
 
 ## Build a patch for the original Japanese release
 
