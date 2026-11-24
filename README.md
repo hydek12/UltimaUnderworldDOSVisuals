@@ -38,6 +38,8 @@ The command creates a fresh comparison folder and prints its path. It contains e
 
 ## Audit NPC records and DOS animation coverage
 
+[View the NPC conversion backlog](docs/npc-conversion-backlog.md) for coverage by floor and type, the full record audit, and the measured atlas candidates.
+
 ```sh
 python3 audit-npcs.py /path/to/ultimaunderworld/uu /path/to/japanese-rev1/AVATAR > npc-records.csv
 python3 audit-npcs.py /path/to/ultimaunderworld/uu /path/to/japanese-rev1/AVATAR --psx-inventory > psx-npc-records.csv
