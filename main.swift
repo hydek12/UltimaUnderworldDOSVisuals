@@ -220,25 +220,34 @@ func exportFrame(root: URL, actor: Int, slot: Int, frame: Int, output: URL, shad
 }
 
 func exportAtlas(root: URL, directory: URL, actor: Int, name: String,
-                 slots: ClosedRange<Int>, height: Int) throws {
+                 poses: [(slot: Int, count: Int)], height: Int) throws {
     let width = 256
-    let sequence = try slots.flatMap { slot in
-        try (0..<4).map { phase in
+    let sequence = try poses.flatMap { slot, count in
+        try (0..<count).map { phase in
             (slot, phase, try readFrame(root: root, actor: actor, slot: slot, frame: phase))
         }
     }
-    var uniqueFrames: [Int: DOSFrame] = [:]
+    struct FrameKey: Hashable {
+        let page: String
+        let index: Int
+
+        init(_ frame: DOSFrame) {
+            page = frame.pageName
+            index = frame.index
+        }
+    }
+    var uniqueFrames: [FrameKey: DOSFrame] = [:]
     for (_, _, frame) in sequence {
-        uniqueFrames[frame.index] = frame
+        uniqueFrames[FrameKey(frame)] = frame
     }
     let orderedFrames = uniqueFrames.values.sorted {
         if $0.bitmap.pixelsHigh != $1.bitmap.pixelsHigh {
             return $0.bitmap.pixelsHigh > $1.bitmap.pixelsHigh
         }
-        return $0.index < $1.index
+        return ($0.pageName, $0.index) < ($1.pageName, $1.index)
     }
     var pixels = [UInt16](repeating: 0, count: width * height)
-    var positions: [Int: (u: Int, v: Int)] = [:]
+    var positions: [FrameKey: (u: Int, v: Int)] = [:]
     var u = 0
     var v = 0
     var shelfHeight = 0
@@ -265,13 +274,13 @@ func exportAtlas(root: URL, directory: URL, actor: Int, name: String,
                 pixels[(v + y) * width + u + x] = value == 0 ? 0x8000 : value
             }
         }
-        positions[frame.index] = (u, v)
+        positions[FrameKey(frame)] = (u, v)
         u += frameWidth
         shelfHeight = max(shelfHeight, frameHeight)
     }
     var rows = ["slot,phase,u,v,width,height,hotspot_x,hotspot_y"]
     for (slot, phase, frame) in sequence {
-        guard let position = positions[frame.index] else {
+        guard let position = positions[FrameKey(frame)] else {
             throw FormatError("A frame is missing from the packed atlas.")
         }
         rows.append("\(slot),\(phase),\(position.u),\(position.v),\(frame.bitmap.pixelsWide),\(frame.bitmap.pixelsHigh),\(frame.hotspotX),\(frame.hotspotY)")
@@ -296,6 +305,8 @@ func exportAtlas(root: URL, directory: URL, actor: Int, name: String,
         .write(to: directory.appendingPathComponent("\(name).csv"), options: .withoutOverwriting)
 }
 
+let idlePoses = (0x20...0x27).map { ($0, 4) }
+let walkPoses = (0x80...0x87).map { ($0, 4) }
 let arguments = Array(CommandLine.arguments.dropFirst())
 do {
     switch arguments.first {
@@ -304,11 +315,11 @@ do {
     case "export-lanugo-tim" where arguments.count == 3:
         try exportAtlas(root: URL(fileURLWithPath: arguments[1]),
                               directory: URL(fileURLWithPath: arguments[2]),
-                              actor: 70, name: "lanugo-idle", slots: 0x20...0x27, height: 192)
+                              actor: 70, name: "lanugo-idle", poses: idlePoses, height: 192)
     case "export-lanugo-walk-tim" where arguments.count == 3:
         try exportAtlas(root: URL(fileURLWithPath: arguments[1]),
                               directory: URL(fileURLWithPath: arguments[2]),
-                              actor: 70, name: "lanugo-walk", slots: 0x80...0x87, height: 224)
+                              actor: 70, name: "lanugo-walk", poses: walkPoses, height: 224)
     case "export-goblin-atlases" where arguments.count == 4:
         guard let actor = Int(arguments[2]), [70, 76, 77, 78].contains(actor) else {
             throw FormatError("Use a DOS green goblin type of 70, 76, 77, or 78.")
@@ -317,9 +328,30 @@ do {
         let directory = URL(fileURLWithPath: arguments[3])
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false)
         try exportAtlas(root: root, directory: directory.appendingPathComponent("idle"),
-                        actor: actor, name: "goblin-idle", slots: 0x20...0x27, height: 192)
+                        actor: actor, name: "goblin-idle", poses: idlePoses, height: 192)
         try exportAtlas(root: root, directory: directory.appendingPathComponent("walk"),
-                        actor: actor, name: "goblin-walk", slots: 0x80...0x87, height: 224)
+                        actor: actor, name: "goblin-walk", poses: walkPoses, height: 224)
+    case "export-creature-atlases" where arguments.count == 4
+                                       || (arguments.count == 5 && arguments[4] == "--lizardman-combat"):
+        guard let actor = Int(arguments[2]), (64...127).contains(actor) else {
+            throw FormatError("Use a decimal DOS creature ID from 64 to 127.")
+        }
+        let includeCombat = arguments.count == 5
+        guard !includeCombat || [85, 88, 89].contains(actor) else {
+            throw FormatError("Lizardman combat export requires DOS creature ID 85, 88, or 89.")
+        }
+        let root = URL(fileURLWithPath: arguments[1])
+        let directory = URL(fileURLWithPath: arguments[3])
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false)
+        try exportAtlas(root: root, directory: directory.appendingPathComponent("idle"),
+                        actor: actor, name: "creature-idle", poses: idlePoses, height: 512)
+        try exportAtlas(root: root, directory: directory.appendingPathComponent("walk"),
+                        actor: actor, name: "creature-walk", poses: walkPoses, height: 512)
+        if includeCombat {
+            let combatPoses = [(0, 4), (1, 5), (2, 5), (3, 5), (7, 4), (12, 4)]
+            try exportAtlas(root: root, directory: directory.appendingPathComponent("combat"),
+                            actor: actor, name: "creature-combat", poses: combatPoses, height: 512)
+        }
     case "export-dos" where [6, 7, 11].contains(arguments.count):
         guard let actor = Int(arguments[2]), (64...127).contains(actor),
               let slot = Int(arguments[3]), (0...255).contains(slot),
@@ -350,6 +382,7 @@ do {
           UnderworldVisuals export-lanugo-tim DOS_ROOT NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-lanugo-walk-tim DOS_ROOT NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-goblin-atlases DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY
+          UnderworldVisuals export-creature-atlases DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY [--lizardman-combat]
           UnderworldVisuals export-dos DOS_ROOT ACTOR_ID SLOT FRAME OUTPUT.png [SHADE_ROW]
           UnderworldVisuals export-dos DOS_ROOT ACTOR_ID SLOT FRAME OUTPUT.png --dos-light LEVEL DX DY DZ
         """)

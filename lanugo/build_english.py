@@ -1,4 +1,4 @@
-"""Merge the Lanugo atlas into the verified English v2.0 Rev 1 data track."""
+"""Add DOS creature sprites to the verified English v2.0 Rev 1 data track."""
 import argparse
 import hashlib
 from pathlib import Path
@@ -13,7 +13,9 @@ def bcd(number):
     return ((number // 10) << 4) | (number % 10)
 
 def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
-          dos_light_preview=None, lower_floor_goblins=False):
+          dos_light_preview=None, lower_floor_goblins=False, lizardmen=None, lizardman_combat=False, level_eight_rats=None):
+    if lizardman_combat and lizardmen is None:
+        raise ValueError("Lizardman combat requires --lizardmen.")
     with english.open("rb") as source:
         if hashlib.file_digest(source, "sha1").hexdigest() != ENGLISH_SHA1:
             raise ValueError("Expected the verified English v2.0 raw data track.")
@@ -22,12 +24,21 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
         if remainder:
             raise ValueError("Incomplete raw data sector.")
         lower_payload_lba = None
-        if lower_floor_goblins:
+        lizard_payload_lba = None
+        rat_payload_lba = None
+        if lower_floor_goblins or lizardmen is not None or level_eight_rats is not None:
             if walk_atlas is None or goblin_variants is None:
-                raise ValueError("Lower-floor goblins require both --walk-atlas and --goblin-variants.")
+                raise ValueError("Floor-specific atlases require both --walk-atlas and --goblin-variants.")
             payload = lanugo.variant_payload(atlas, walk_atlas, goblin_variants, dos_light_preview, floor_aware=True)
-            lower_payload_lba = first_lba + len(payload) // 2048
-            payload += lanugo.lower_floor_payload(goblin_variants)
+            if lower_floor_goblins:
+                lower_payload_lba = first_lba + len(payload) // 2048
+                payload += lanugo.lower_floor_payload(goblin_variants)
+            if lizardmen is not None:
+                lizard_payload_lba = first_lba + len(payload) // 2048
+                payload += lanugo.lizard_payload(lizardmen, lizardman_combat)
+            if level_eight_rats is not None:
+                rat_payload_lba = first_lba + len(payload) // 2048
+                payload += lanugo.rat_payload(level_eight_rats)
         else:
             payload = lanugo.payload(atlas, walk_atlas, goblin_variants, dos_light_preview)
         sectors = [
@@ -37,7 +48,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
         executable = b"".join(sector[24:2072] for sector in sectors)
         edited = lanugo.edit_executable(
             executable, first_lba, walking=walk_atlas is not None, wide=goblin_variants is not None,
-            lower_payload_lba=lower_payload_lba,
+            lower_payload_lba=lower_payload_lba, lizard_payload_lba=lizard_payload_lba, rat_payload_lba=rat_payload_lba,
         )
         updates = {}
         for index, original in enumerate(sectors):
@@ -83,4 +94,7 @@ if __name__ == "__main__":
     parser.add_argument("--goblin-variants", type=Path)
     parser.add_argument("--dos-light-preview", type=Path, metavar="DOS_ROOT")
     parser.add_argument("--lower-floor-goblins", action="store_true")
+    parser.add_argument("--lizardmen", type=Path, metavar="EXPORTED_ATLASES")
+    parser.add_argument("--lizardman-combat", action="store_true")
+    parser.add_argument("--level-eight-rats", type=Path, metavar="EXPORTED_ATLASES")
     build(**vars(parser.parse_args()))

@@ -64,6 +64,34 @@ The lower-floor renderer uses two 4-bit pages at VRAM x=384..511, y=256..505, an
 
 For a GPU frame captured on Levels 2, 5, or 7, pass both `--lower-floor-goblins` and `--goblin-variants /tmp/goblin-variants` to `verify_vram.py`. On Level 1 pass the existing four-palette arguments. Generate the xdelta against the clean Japanese Rev 1 Track 1 through `build-rev1-patch.sh --allow-expanded-track`. Keep the three original audio tracks and their CUE indexes.
 
+## DOS lizardmen on Levels 3 and 4
+
+Export the three DOS lizardman palettes using the Xcode target.
+
+```sh
+mkdir -p /tmp/lizardmen
+for type in 85 88 89; do
+  UnderworldVisuals export-creature-atlases DOS_ROOT "$type" "/tmp/lizardmen/type-$type"
+done
+```
+
+Add `--lower-floor-goblins --lizardmen /tmp/lizardmen` to the English four-palette build. The renderer selects the lizardman atlas on Levels 3 and 4 and covers native idle and walk actions for types 85, 88, and 89. Each action has eight views and four phases. The three source palettes share one index map. Exact duplicates and horizontal mirrors share texture space, with UVs maintaining the DOS pose and orientation. Each draw uses one 4-bit textured quad and the actor’s own palette.
+
+The lizardman pages occupy x=384..511, y=256..503. Their three CLUT rows occupy x=384..399, y=504..506. Native level textures at x=512..639 remain available. Use `verify_vram.py` with `--lizardmen /tmp/lizardmen` to check both pages and palettes in a GPU capture from either floor. Apply the combined xdelta to clean Japanese Rev 1 Track 1, with the original CUE indexes and audio tracks.
+
+The replacement preserves native model packets until the sprite passes projection and packet-capacity checks. An oversized or otherwise unsupported draw retains the native model. Type 85, 88, and 89 share this behavior with the rat renderer.
+
+To include the optional DOS combat poses, add `--lizardman-combat` to the three Xcode export commands and to `build_english.py` and `verify_vram.py`. The preview covers combat stance, three melee actions, retreat and death. The DOS front-view rule selects a directional standing pose for views other than 3–5 during fixed-view actions. Death uses its fixed animation in all views. The preview maps native phases onto the available DOS frame counts while preserving the original gameplay code and timing. Other actions retain their PSX rendering.
+
+## DOS rats on Level 8
+
+```sh
+mkdir -p /tmp/rat-atlases
+UnderworldVisuals export-creature-atlases DOS_ROOT 72 /tmp/rat-atlases/type-72
+```
+
+Add `--level-eight-rats /tmp/rat-atlases` to the English four-palette build. The atlas covers type 72 idle and walk on Level 8, where their 20 initially linked records use the second DOS rat palette. The patch occupies one page at VRAM x=384..447, y=256..503, with one palette at y=504. Use the same flag in `verify_vram.py` to verify a Level 8 GPU capture.
+
 ## DOS lighting preview
 
 To build the separate preview, add `--dos-light-preview DOS_ROOT` to the four-palette `build_english.py` command above. Pass the same argument to `verify_vram.py` with a GPU capture of the preview. The preview packs the normal and monochrome remap tables into 8,192 bytes of PSX CLUTs, with four palette variants per shade. It calculates a shade from signed three-dimensional actor distance before selecting the palette for each quad. The ordinary English DOS Goblins build remains the unshaded reference.

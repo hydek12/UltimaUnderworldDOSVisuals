@@ -6,16 +6,19 @@ IDLE_ACTION = 0x20
 WALK_ACTION = 0x2c
 GREEN_GOBLIN_TYPE = 70
 LOWER_GOBLIN_TYPE = 78
+GOBLIN_PALETTE_TYPES = (70, 76, 3)
+ORDER_LOG_ENTRIES = 128
 
 
-def require_goblin_type(c, actor, scratch, fallback):
-    c.imm("addiu", scratch, actor, -76)
-    c.imm("sltiu", scratch, scratch, 3)
-    c.branch("bne", scratch, "zero", "goblin_type")
-    c.imm("ori", scratch, "zero", GREEN_GOBLIN_TYPE)
+def require_palette_type(c, actor, scratch, fallback, palette_types):
+    base, first_variant, variant_count = palette_types
+    c.imm("addiu", scratch, actor, -first_variant)
+    c.imm("sltiu", scratch, scratch, variant_count)
+    c.branch("bne", scratch, "zero", "palette_type")
+    c.imm("ori", scratch, "zero", base)
     c.branch("bne", actor, scratch, fallback)
     c.nop()
-    c.label("goblin_type")
+    c.label("palette_type")
 
 
 def require_atlas_action(c, action, scratch, walk_ready, fallback):
@@ -32,8 +35,18 @@ def require_atlas_action(c, action, scratch, walk_ready, fallback):
     c.label("atlas_action")
 
 
+def atlas_action_index(c, table, action, result, scratch, fallback):
+    c.address(result, table)
+    c.alu("addu", result, result, action)
+    c.mem("lbu", result, 0, result)
+    c.imm("ori", scratch, "zero", 255)
+    c.branch("beq", result, scratch, fallback)
+    c.nop()
+
+
 # Keep actor projection and hit testing when substituting a sprite.
-def suppress(origin, order_table_register="v1", walk_ready=None, wide=False, lower_floor=False):
+def suppress(origin, order_table_register="v1", walk_ready=None, wide=False, lower_floor=False,
+             palette_types=GOBLIN_PALETTE_TYPES, order_writer=None, action_map=None):
     c=Code(origin)
     c.mem("lw","t8",0x74,"sp")
     c.address("t9",0x8002a5d8)
@@ -46,7 +59,8 @@ def suppress(origin, order_table_register="v1", walk_ready=None, wide=False, low
     else:
         c.mem("lhu","t8",0,"t8")
     c.imm("andi","t9","t9",0x3f)
-    c.imm("xori","t9","t9",IDLE_ACTION)
+    if action_map is None:
+        c.imm("xori","t9","t9",IDLE_ACTION)
     if walk_ready is None:
         c.branch("bne","t9","zero","normal")
         c.imm("ori","t9","zero",10)
@@ -56,15 +70,22 @@ def suppress(origin, order_table_register="v1", walk_ready=None, wide=False, low
     else:
         c.imm("andi", "t8", "t8", 0x1ff)
         if wide:
-            require_goblin_type(c, "t8", "t7", "normal")
+            require_palette_type(c, "t8", "t7", "normal", palette_types)
         else:
             c.imm("xori", "t8", "t8", LOWER_GOBLIN_TYPE if lower_floor else GREEN_GOBLIN_TYPE)
             c.branch("bne", "t8", "zero", "normal")
             c.nop()
-        require_atlas_action(c, "t9", "t8", walk_ready, "normal")
+        if action_map is None:
+            require_atlas_action(c, "t9", "t8", walk_ready, "normal")
+        else:
+            atlas_action_index(c, action_map, "t9", "t8", "t7", "normal")
     c.mem("sh","s3",0x18c,"sp")
-    c.jump(0x8002b684)
-    c.nop()
+    if order_writer is None:
+        c.jump(0x8002b684)
+        c.nop()
+    else:
+        c.jump(order_writer)
+        c.alu("addu", "t8", order_table_register, "zero")
     c.label("normal")
     c.jump(0x8002b684)
     c.mem("sw","v0",0,order_table_register)
@@ -78,7 +99,8 @@ DOS_IDLE_DIRECTIONS = bytes((
 
 
 def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=False,
-         shade_selector=None, overlay_offset=None):
+         shade_selector=None, overlay_offset=None, palette_types=GOBLIN_PALETTE_TYPES,
+         order_log=None, combat=None):
     c=Code(origin)
     shade_return = None
     c.mem("lw","t0",0xe0,"sp")
@@ -94,28 +116,34 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
         c.nop()
         c.imm("andi", "t2", "t2", 0x1ff)
     if wide and overlay_offset is None:
-        require_goblin_type(c, "t2", "t1", "finish")
+        require_palette_type(c, "t2", "t1", "finish", palette_types)
     else:
         c.branch("bne","t2","t1","finish")
     c.mem("lbu","t4",23,"t0")
     c.mem("lhu","t6",12,"t0")
     c.imm("andi","t4","t4",0x3f)
-    c.imm("xori","t4","t4",IDLE_ACTION)
-    if walk_ready is None:
-        c.branch("bne","t4","zero","finish")
+    if combat is None:
+        c.imm("xori","t4","t4",IDLE_ACTION)
+        if walk_ready is None:
+            c.branch("bne","t4","zero","finish")
+        else:
+            require_atlas_action(c, "t4", "t7", walk_ready, "finish")
+            c.alu("sltu", "t7", "zero", "t4")
+            c.shift("sll", "t7", "t7", 9 if wide else 8)  # Walking metadata follows the idle table.
+        # Group the seven native animation frames into four DOS phases.
+        c.shift("srl","t6","t6",13)
+        c.imm("andi","t6","t6",3)
     else:
-        require_atlas_action(c, "t4", "t7", walk_ready, "finish")
-        c.alu("sltu", "t7", "zero", "t4")
-        c.shift("sll", "t7", "t7", 9 if wide else 8)  # Walking metadata follows the idle table.
-    # Group the seven native animation frames into four DOS phases.
-    c.shift("srl","t6","t6",13)
-    c.imm("andi","t6","t6",3)
+        atlas_action_index(c, combat[0], "t4", "t7", "t3", "finish")
+        c.shift("srl", "t6", "t6", 12)
     c.alu("subu","t1","a3","a1")
     c.branch("blez","t1","zero","finish")
     c.nop()
-    c.imm("sltiu","t2","t1",256)
+    c.imm("sltiu","t2","t1",256 if order_log is None else 512)
     c.branch("beq","t2","zero","finish")
     c.nop()
+    if order_log is not None:
+        rewind_native_order(c, *order_log)
     # DOS chooses the view from actor facing and camera yaw.
     c.mem("lhu", "t5", 2, "t0")
     c.imm("lui", "t4", "zero", 0x801d)
@@ -129,12 +157,15 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
     c.alu("addu", "t0", "t0", "t2")
     c.mem("lbu", "t2", 0, "t0")
     c.address("t0", metadata)
-    c.shift("sll", "t2", "t2", 2)
-    c.alu("addu", "t2", "t2", "t6")
-    c.shift("sll", "t2", "t2", 4 if wide else 3)
-    c.alu("addu", "t0", "t0", "t2")
-    if walk_ready is not None:
-        c.alu("addu", "t0", "t0", "t7")
+    if combat is not None:
+        select_combat_pose(c, *combat[1:])
+    else:
+        c.shift("sll", "t2", "t2", 2)
+        c.alu("addu", "t2", "t2", "t6")
+        c.shift("sll", "t2", "t2", 4 if wide else 3)
+        c.alu("addu", "t0", "t0", "t2")
+        if walk_ready is not None:
+            c.alu("addu", "t0", "t0", "t7")
 
     # Pass the original projected foot/center through the DOS hotspot.
     dimensions = 0 if wide else 2
@@ -226,11 +257,11 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
             c.mem("lw", "v1", 0xe0, "sp")
             c.nop()
             c.mem("lhu", "v1", 0, "v1")
-            c.imm("ori", "t6", "zero", GREEN_GOBLIN_TYPE)
+            c.imm("ori", "t6", "zero", palette_types[0])
             c.imm("andi", "v1", "v1", 0x1ff)
             c.branch("beq", "v1", "t6", "base_clut")
             c.imm("lui", "t6", "zero", clut)
-            c.imm("addiu", "v1", "v1", -75)
+            c.imm("addiu", "v1", "v1", 1 - palette_types[1])
             c.shift("sll", "v1", "v1", 22)  # Select the CLUT row above the first.
             c.alu("addu", "t6", "t6", "v1")
             c.label("base_clut")
@@ -276,6 +307,40 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
     return c.out(), shade_return
 
 
+def select_combat_pose(c, phases, metadata, death):
+    # For fixed-view DOS actions, use the matching standing pose outside views 3–5.
+    c.imm("sltiu", "t3", "t7", 2)
+    c.branch("bne", "t3", "zero", "directional_pose")
+    c.imm("ori", "t3", "zero", death)
+    c.branch("beq", "t7", "t3", "combat_pose")
+    c.imm("addiu", "t3", "t2", -3)
+    c.imm("sltiu", "t3", "t3", 3)
+    c.branch("bne", "t3", "zero", "combat_pose")
+    c.nop()
+    c.imm("ori", "t7", "zero", 0)
+    c.label("directional_pose")
+    c.shift("srl", "t6", "t6", 1)
+    c.imm("andi", "t6", "t6", 3)
+    c.shift("sll", "t7", "t7", 9)
+    c.shift("sll", "t2", "t2", 2)
+    c.alu("addu", "t2", "t2", "t6")
+    c.shift("sll", "t2", "t2", 4)
+    c.alu("addu", "t0", "t0", "t2")
+    c.branch("beq", "zero", "zero", "pose_selected")
+    c.alu("addu", "t0", "t0", "t7")
+    c.label("combat_pose")
+    c.imm("addiu", "t7", "t7", -2)
+    c.shift("sll", "t7", "t7", 4)
+    c.alu("addu", "t7", "t7", "t6")
+    c.address("t0", phases)
+    c.alu("addu", "t0", "t0", "t7")
+    c.mem("lbu", "t7", 0, "t0")
+    c.address("t0", metadata)
+    c.shift("sll", "t7", "t7", 4)
+    c.alu("addu", "t0", "t0", "t7")
+    c.label("pose_selected")
+
+
 def write_layer_uv(c, metadata_offset, packet_offset):
     for uv, packet, parameter, parameter_offset in (
         (4, 12, "lhu", 14),
@@ -313,3 +378,53 @@ def layered_quad(c, overlay_offset):
         c.nop()
         c.mem("sw", "v1", word + 0x28, "t7")
     write_layer_uv(c, overlay_offset, 0x28)
+
+
+def log_native_order(origin, count, buffer):
+    """Record the old bucket head before committing an ordinary native draw."""
+    c = Code(origin)
+    c.address("t9", count)
+    c.mem("lw", "t7", 0, "t9")
+    c.address("t6", buffer)
+    c.imm("sltiu", "t4", "t7", ORDER_LOG_ENTRIES)
+    c.branch("beq", "t4", "zero", "overflow")
+    c.shift("sll", "t5", "t7", 3)
+    c.mem("lw", "t4", 0, "t8")
+    c.alu("addu", "t6", "t6", "t5")
+    c.mem("sw", "t8", 0, "t6")
+    c.mem("sw", "t4", 4, "t6")
+    c.imm("addiu", "t7", "t7", 1)
+    c.branch("beq", "zero", "zero", "submit")
+    c.nop()
+    c.label("overflow")
+    c.imm("ori", "t7", "zero", ORDER_LOG_ENTRIES + 1)
+    c.label("submit")
+    c.mem("sw", "t7", 0, "t9")
+    c.jump(0x8002b684)
+    c.mem("sw", "v0", 0, "t8")
+    return c.out()
+
+
+def rewind_native_order(c, count, buffer):
+    # A failed projection or full packet arena must keep all native primitives.
+    c.address("t4", count)
+    c.mem("lw", "t8", 0, "t4")
+    c.imm("lui", "t9", "zero", 0x800d)
+    c.branch("beq", "t8", "zero", "finish")
+    c.imm("sltiu", "t2", "t8", ORDER_LOG_ENTRIES + 1)
+    c.branch("beq", "t2", "zero", "finish")
+    c.mem("lw", "t4", -0x6188, "t9")
+    c.mem("lw", "t5", -0x6168, "t9")
+    c.imm("addiu", "t4", "t4", 0x28)
+    c.alu("sltu", "t2", "t5", "t4")
+    c.branch("bne", "t2", "zero", "finish")
+    c.shift("sll", "t8", "t8", 3)
+    # Restore newest first because a model may submit several polygons to one bucket.
+    c.address("t9", buffer)
+    c.alu("addu", "t8", "t8", "t9")
+    c.label("rewind_bucket")
+    c.imm("addiu", "t8", "t8", -8)
+    c.mem("lw", "t4", 0, "t8")
+    c.mem("lw", "t5", 4, "t8")
+    c.branch("bne", "t8", "t9", "rewind_bucket")
+    c.mem("sw", "t5", 0, "t4")

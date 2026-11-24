@@ -1,10 +1,11 @@
-"""Compare a DuckStation GPU frame capture against both Lanugo texture atlases."""
+"""Check a DuckStation GPU capture against its floor’s DOS texture atlases."""
 
 import argparse
 from pathlib import Path
 import struct
 
-from build_track import lower_floor_atlas, read_atlas, variant_sources
+from build_track import creature_sources, lizard_sources, lower_floor_atlas, read_atlas, variant_sources
+import creature_atlas
 import lower_atlas
 import preview_lighting
 import variant_atlas
@@ -32,8 +33,32 @@ def read_vram(dump):
     raise ValueError("The capture does not contain an initial VRAM upload.")
 
 
+def creature_rectangles(name, sources, rectangles):
+    images, clut, _ = creature_atlas.build(sources, rectangles)
+    pages = tuple(
+        (f"{name} page {index}", x, y, 64, rows, image)
+        for index, ((x, y, rows), image) in enumerate(zip(rectangles, images, strict=True), start=1)
+    )
+    x, y, width, _ = creature_atlas.CLUT_RECT
+    return (*pages, (f"{name} palettes", x, y, width, len(sources[0]), clut))
+
+
 def expected_rectangles(idle_directory, walk_directory, goblin_variants, dos_light_preview=None,
-                        lower_floor_goblins=False):
+                        lower_floor_goblins=False, lizardmen=None, lizardman_combat=False, level_eight_rats=None):
+    if lizardman_combat and lizardmen is None:
+        raise ValueError("Lizardman combat requires --lizardmen.")
+    if sum((lower_floor_goblins, lizardmen is not None, level_eight_rats is not None,
+            dos_light_preview is not None)) > 1:
+        raise ValueError("Choose the one atlas visible in the captured floor.")
+    if lizardmen is not None:
+        return creature_rectangles(
+            "Lizardman", lizard_sources(lizardmen, lizardman_combat), creature_atlas.TEXTURE_PAGES,
+        )
+    if level_eight_rats is not None:
+        return creature_rectangles(
+            "Rat", creature_sources(level_eight_rats, creature_atlas.LEVEL_EIGHT_RAT_TYPES),
+            creature_atlas.RAT_TEXTURE_PAGES,
+        )
     if lower_floor_goblins:
         if goblin_variants is None:
             raise ValueError("The lower-floor capture needs --goblin-variants.")
@@ -71,10 +96,11 @@ def expected_rectangles(idle_directory, walk_directory, goblin_variants, dos_lig
 
 
 def verify(dump, idle_directory, walk_directory, goblin_variants=None, dos_light_preview=None,
-           lower_floor_goblins=False):
+           lower_floor_goblins=False, lizardmen=None, lizardman_combat=False, level_eight_rats=None):
     vram = read_vram(dump)
     rectangles = expected_rectangles(
-        idle_directory, walk_directory, goblin_variants, dos_light_preview, lower_floor_goblins,
+        idle_directory, walk_directory, goblin_variants, dos_light_preview,
+        lower_floor_goblins, lizardmen, lizardman_combat, level_eight_rats,
     )
     valid = True
     for name, x, y, width, height, expected in rectangles:
@@ -96,4 +122,7 @@ if __name__ == "__main__":
     parser.add_argument("--goblin-variants", type=Path)
     parser.add_argument("--dos-light-preview", type=Path, metavar="DOS_ROOT")
     parser.add_argument("--lower-floor-goblins", action="store_true")
+    parser.add_argument("--lizardmen", type=Path, metavar="EXPORTED_ATLASES")
+    parser.add_argument("--lizardman-combat", action="store_true")
+    parser.add_argument("--level-eight-rats", type=Path, metavar="EXPORTED_ATLASES")
     raise SystemExit(0 if verify(**vars(parser.parse_args())) else 1)

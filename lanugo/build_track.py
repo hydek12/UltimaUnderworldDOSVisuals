@@ -9,6 +9,7 @@ import struct
 from pathlib import Path
 
 from mipswords import Code, ret
+import creature_atlas
 import lower_atlas
 import preview_lighting
 import renderer
@@ -33,6 +34,8 @@ SUPPRESS_DELAY = 0x800C2400
 DRAW_GATE = 0x800C2440
 VRAM_UPLOAD_GATE = 0x800C2480
 MENU_GATE = 0x800C24B0
+ACTOR_GATE = 0x800C24E0
+NATIVE_GP = 0x800C9260
 LEVEL_ONE_MODELS = 0x800AB890
 SUPPRESS_RAM = PAYLOAD_RAM + 0x100
 SUPPRESS_DELAY_RAM = PAYLOAD_RAM + 0x160
@@ -47,6 +50,9 @@ VRAM_GUARD_RAM = PAYLOAD_RAM + 0xe80
 RESIDENT_BYTES = 0x1000
 LOWER_RESIDENT_BYTES = 0x1800
 MODEL_OWNER_OFFSET = 0x58
+ORDER_COUNT_OFFSET = 0x5c
+ORDER_LOG_RAM = PAYLOAD_RAM + 0x1000
+ORDER_WRITER_RAM = PAYLOAD_RAM + 0x600
 TEXTURE_STAGING_RAM = 0x801F8800
 BAND_BYTES = 0x4000
 
@@ -167,7 +173,7 @@ def vram_upload_gate(floor_aware=False):
     return c.out()
 
 
-def vram_guard(wide=False, lower_floor=False):
+def vram_guard(wide=False, lower_floor=False, right_edge=512):
     c = Code(VRAM_GUARD_RAM)
     # Native TIM uploads must invalidate sprites before sharing this VRAM region.
     c.mem("lhu", "t0", 0, "a0")
@@ -194,7 +200,7 @@ def vram_guard(wide=False, lower_floor=False):
         c.nop()
         c.label("invalidate")
     else:
-        c.imm("sltiu", "t4", "t0", 512)
+        c.imm("sltiu", "t4", "t0", right_edge)
         c.branch("beq", "t4", "zero", "upload")
         if not lower_floor:
             c.imm("sltiu", "t4", "t1", 480)
@@ -248,7 +254,16 @@ def loader(payload_lba=PAYLOAD_LBA, walking=False, wide=False):
     ret(c, lambda: c.imm("addiu", "sp", "sp", 32))
     return c.out()
 
-def floor_loader(payload_lba, lower_payload_lba):
+def actor_gate():
+    c = Code(ACTOR_GATE)
+    c.address("t0", PAYLOAD_RAM)
+    c.mem("sw", "zero", ORDER_COUNT_OFFSET, "t0")
+    c.jump(0x8002a260)
+    c.mem("sw", "a1", 0xe0, "sp")
+    return c.out()
+
+
+def floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba=None, rat_payload_lba=None):
     c = Code(BOOT)
     c.imm("addiu", "sp", "sp", -32)
     c.mem("sw", "ra", 28, "sp")
@@ -258,23 +273,53 @@ def floor_loader(payload_lba, lower_payload_lba):
     c.mem("sw", "zero", MODEL_OWNER_OFFSET, "t2")
     c.jump(0x80029f50, True)
     c.nop()
-    c.mem("lw", "t0", 24, "sp")
-    c.imm("ori", "a2", "zero", RESIDENT_BYTES)
-    c.branch("beq", "t0", "zero", "level_one")
-    c.imm("ori", "t1", "zero", 1)
-    c.branch("beq", "t0", "t1", "lower")
-    c.imm("ori", "t1", "zero", 4)
-    c.branch("beq", "t0", "t1", "lower")
-    c.imm("ori", "t1", "zero", 6)
-    c.branch("bne", "t0", "t1", "done")
-    c.nop()
-    c.label("lower")
-    c.address("a0", (lower_payload_lba - AVATAR_LBA) * 2048)
-    c.branch("beq", "zero", "zero", "read")
-    c.imm("ori", "a2", "zero", LOWER_RESIDENT_BYTES)
-    c.label("level_one")
-    c.address("a0", (payload_lba - AVATAR_LBA) * 2048)
-    c.label("read")
+    if lizard_payload_lba is None and rat_payload_lba is None:
+        c.mem("lw", "t0", 24, "sp")
+        c.imm("ori", "a2", "zero", RESIDENT_BYTES)
+        c.branch("beq", "t0", "zero", "level_one")
+        c.imm("ori", "t1", "zero", 1)
+        c.branch("beq", "t0", "t1", "lower")
+        c.imm("ori", "t1", "zero", 4)
+        c.branch("beq", "t0", "t1", "lower")
+        c.imm("ori", "t1", "zero", 6)
+        c.branch("bne", "t0", "t1", "done")
+        c.nop()
+        c.label("lower")
+        c.address("a0", (lower_payload_lba - AVATAR_LBA) * 2048)
+        c.branch("beq", "zero", "zero", "read")
+        c.imm("ori", "a2", "zero", LOWER_RESIDENT_BYTES)
+        c.label("level_one")
+        c.address("a0", (payload_lba - AVATAR_LBA) * 2048)
+        c.label("read")
+    else:
+        # One byte per native floor index, measured in sectors from the Level 1 payload.
+        floor_table_ram = BOOT + 0xb4
+        payload_levels = (None, lower_payload_lba, lizard_payload_lba, lizard_payload_lba,
+                          lower_payload_lba, None, lower_payload_lba, rat_payload_lba, None)
+        floor_offsets = [255 if lba is None else lba - payload_lba for lba in payload_levels]
+        floor_offsets[0] = 0
+        if any(not 0 <= offset <= 255 for offset in floor_offsets):
+            raise ValueError("The resident floor table requires payload starts within 254 sectors.")
+        if any(lba is not None and not 0 < offset < 255
+               for lba, offset in zip(payload_levels, floor_offsets, strict=True)):
+            raise ValueError("Additional floor payloads must follow Level 1 in the resident floor table.")
+        floor_table = bytes(floor_offsets)
+        offset = (payload_lba - AVATAR_LBA) * 2048
+        c.mem("lw", "t0", 24, "sp")
+        c.imm("ori", "a2", "zero", RESIDENT_BYTES)
+        c.imm("sltiu", "t2", "t0", len(floor_table))
+        c.branch("beq", "t2", "zero", "done")
+        c.alu("addu", "t1", "gp", "t0")
+        c.mem("lbu", "t1", floor_table_ram - NATIVE_GP, "t1")
+        c.imm("lui", "t3", "zero", offset >> 16)
+        c.imm("sltiu", "t2", "t1", 255)
+        c.branch("beq", "t2", "zero", "done")
+        c.shift("sll", "a0", "t1", 11)
+        c.alu("sltu", "t2", "zero", "t1")
+        c.shift("sll", "t2", "t2", 11)
+        c.alu("OR", "a2", "a2", "t2")  # Level 1 uses 0x1000, other atlases use 0x1800.
+        c.imm("ori", "t3", "t3", offset)
+        c.alu("addu", "a0", "a0", "t3")
     c.mem("sw", "a0", 20, "sp")
     c.address("a1", PAYLOAD_RAM)
     c.jump(0x8003f004, True)
@@ -292,7 +337,13 @@ def floor_loader(payload_lba, lower_payload_lba):
     c.mem("lw", "ra", 28, "sp")
     c.nop()
     ret(c, lambda: c.imm("addiu", "sp", "sp", 32))
-    return c.out()
+    blob = c.out()
+    if lizard_payload_lba is None and rat_payload_lba is None:
+        return blob
+    gap = floor_table_ram - BOOT - len(blob)
+    if gap < 0:
+        raise ValueError(f"The {len(blob)}-byte loader overlaps its floor table.")
+    return blob + bytes(gap) + floor_table
 
 
 def mark_idle_ready(c, floor_aware=False):
@@ -367,7 +418,7 @@ def walking_uploader():
     return c.out()
 
 
-def read_source_atlas(directory, name, height, first_slot, prefix="lanugo"):
+def read_source_atlas(directory, name, height, first_slot, prefix="lanugo", poses=None):
     data = (directory / f"{prefix}-{name}.tim").read_bytes()
     image_size = 2 * 256 * height
     if len(data) != 20 + image_size or struct.unpack_from("<IIIHHHH", data) != (
@@ -377,10 +428,11 @@ def read_source_atlas(directory, name, height, first_slot, prefix="lanugo"):
     texels = struct.unpack_from(f"<{256 * height}H", data, 20)
     with (directory / f"{prefix}-{name}.csv").open() as csv_file:
         rows = list(csv.DictReader(csv_file))
-    if [(int(row["slot"]), int(row["phase"])) for row in rows] != [
-        (slot, phase) for slot in range(first_slot, first_slot + 8) for phase in range(4)
-    ]:
-        raise ValueError(f"Expected four frames for each of the eight Lanugo {name} slots.")
+    if poses is None:
+        poses = tuple((slot, 4) for slot in range(first_slot, first_slot + 8))
+    expected = [(slot, phase) for slot, count in poses for phase in range(count)]
+    if [(int(row["slot"]), int(row["phase"])) for row in rows] != expected:
+        raise ValueError(f"The {name} texture manifest does not contain the expected slots and phases.")
     metadata = []
     for row in rows:
         u, v, w, h, hx, hy = (int(row[key]) for key in (
@@ -524,17 +576,96 @@ def lower_floor_payload(variants):
         0xe80: vram_guard(lower_floor=True),
         0x1000: overlay,
     }
+    return compact_payload(sections, images, clut, lower_atlas.TEXTURE_PAGES, lower_atlas.HEIGHT, lower_atlas.CLUT_RECT)
+
+
+def creature_sources(variants, actor_types, combat=False):
+    modes = [("idle", 0x20, None), ("walk", 0x80, None)]
+    if combat:
+        modes.append(("combat", 0, creature_atlas.COMBAT_SLOTS))
+    return tuple(
+        tuple(read_source_atlas(
+            variants / f"type-{actor}" / mode, mode, creature_atlas.SOURCE_HEIGHT, slot,
+            prefix="creature", poses=poses,
+        ) for actor in actor_types)
+        for mode, slot, poses in modes
+    )
+
+
+def lizard_sources(variants, combat=False):
+    return creature_sources(variants, creature_atlas.LIZARD_TYPES, combat)
+
+
+def lizard_payload(variants, combat=False):
+    return creature_payload(variants, creature_atlas.LIZARD_TYPES, creature_atlas.TEXTURE_PAGES, combat)
+
+
+def rat_payload(variants):
+    return creature_payload(variants, creature_atlas.LEVEL_EIGHT_RAT_TYPES, creature_atlas.RAT_TEXTURE_PAGES)
+
+
+def creature_payload(variants, actor_types, texture_pages, combat=False):
+    images, clut, metadata = creature_atlas.build(creature_sources(variants, actor_types, combat), texture_pages)
+    base = actor_types[0]
+    if len(actor_types) == 1:
+        palette_types = base, base, 1
+    else:
+        palette_types = base, actor_types[1], len(actor_types) - 1
+    x, y, width, _ = creature_atlas.CLUT_RECT
+    clut_rect = x, y, width, len(actor_types)
+    order_log = PAYLOAD_RAM + ORDER_COUNT_OFFSET, ORDER_LOG_RAM
+    action_addresses = None
+    combat_sections = {}
+    if combat:
+        actions, phases = creature_atlas.combat_actions()
+        combat_sections = {0xb0: actions, 0x700: phases, 0x1600: metadata[0x400:]}
+        metadata = metadata[:0x400]
+        action_addresses = (
+            PAYLOAD_RAM + 0xb0, PAYLOAD_RAM + 0x700, PAYLOAD_RAM + 0x1600,
+            actions[creature_atlas.DEATH_SLOT],
+        )
+    sections = {
+        0: struct.pack("<I", PAYLOAD_MAGIC),
+        0x90: renderer.DOS_IDLE_DIRECTIONS,
+        0x100: renderer.suppress(
+            SUPPRESS_RAM, walk_ready=WALK_READY_RAM, wide=True,
+            palette_types=palette_types, order_writer=ORDER_WRITER_RAM,
+            action_map=None if action_addresses is None else action_addresses[0],
+        ),
+        0x180: renderer.suppress(
+            WALK_SUPPRESS_DELAY_RAM, "a0", WALK_READY_RAM, wide=True,
+            palette_types=palette_types, order_writer=ORDER_WRITER_RAM,
+            action_map=None if action_addresses is None else action_addresses[0],
+        ),
+        0x200: renderer.draw(
+            DRAW_RAM, PAYLOAD_RAM + 0x800, PAYLOAD_RAM + 0x90,
+            clut=creature_atlas.CLUT_BASE, walk_ready=WALK_READY_RAM, wide=True,
+            palette_types=palette_types, order_log=order_log, combat=action_addresses,
+        )[0],
+        ORDER_WRITER_RAM - PAYLOAD_RAM: renderer.log_native_order(ORDER_WRITER_RAM, *order_log),
+        ORDER_LOG_RAM - PAYLOAD_RAM: bytes(8 * renderer.ORDER_LOG_ENTRIES),
+        0x800: metadata,
+        0xc00: jump(PAYLOAD_RAM + 0x1400) + bytes(4),
+        0xe00: menu_return(VARIANT_UPLOAD_RAM, floor_aware=True),
+        0xe80: vram_guard(lower_floor=True, right_edge=texture_pages[-1][0] + 64),
+    }
+    sections.update(combat_sections)
+    pages = tuple((x, y) for x, y, _ in texture_pages)
+    return compact_payload(sections, images, clut, pages, texture_pages[0][2], clut_rect)
+
+
+def compact_payload(sections, images, clut, pages, texture_height, clut_rect):
     bands = []
     offset = LOWER_RESIDENT_BYTES
-    for (x, y), image in zip(lower_atlas.TEXTURE_PAGES, images, strict=True):
+    for (x, y), image in zip(pages, images, strict=True):
         sections[offset] = image
         bands.append(((x, y, 64, 128), offset, BAND_BYTES))
-        bands.append(((x, y + 128, 64, lower_atlas.HEIGHT - 128), offset + BAND_BYTES, BAND_BYTES))
+        bands.append(((x, y + 128, 64, texture_height - 128), offset + BAND_BYTES, BAND_BYTES))
         offset += BAND_BYTES * 2
     sections[offset] = clut
-    bands.append((lower_atlas.CLUT_RECT, offset, 2048))
+    bands.append((clut_rect, offset, 2048))
     sections[0x10] = b"".join(struct.pack("<4H", *rect) for rect, _, _ in bands)
-    sections[0x1400] = variant_uploader(bands, False, True, uploader_ram)
+    sections[0x1400] = variant_uploader(bands, False, True, PAYLOAD_RAM + 0x1400)
     return assemble_payload(sections, offset + 2048)
 
 
@@ -642,11 +773,13 @@ def form1_sector(original, data):
     result[12:16] = original[12:16]
     return result
 
-def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False, lower_payload_lba=None):
+def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False,
+                    lower_payload_lba=None, lizard_payload_lba=None, rat_payload_lba=None):
     target = bytearray(original)
-    floor_aware = lower_payload_lba is not None
+    deferred_ordering = lizard_payload_lba is not None or rat_payload_lba is not None
+    floor_aware = lower_payload_lba is not None or deferred_ordering
     code = {
-        BOOT: floor_loader(payload_lba, lower_payload_lba) if floor_aware else loader(payload_lba, walking, wide),
+        BOOT: floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba, rat_payload_lba) if floor_aware else loader(payload_lba, walking, wide),
         SUPPRESS_NORMAL: gate(SUPPRESS_NORMAL, SUPPRESS_RAM, "v1", walking, floor_aware),
         SUPPRESS_DELAY: gate(SUPPRESS_DELAY, WALK_SUPPRESS_DELAY_RAM if walking else SUPPRESS_DELAY_RAM, "a0", walking, floor_aware),
         DRAW_GATE: gate(DRAW_GATE, DRAW_RAM, walking=walking, floor_aware=floor_aware),
@@ -654,6 +787,8 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
     if walking:
         code[MENU_GATE] = menu_gate()
         code[VRAM_UPLOAD_GATE] = vram_upload_gate(floor_aware)
+    if deferred_ordering:
+        code[ACTOR_GATE] = actor_gate()
     for (address, blob), next_address in zip(sorted(code.items()), sorted(code)[1:]):
         if address + len(blob) > next_address:
             raise ValueError(f"Overlapping executable stubs at 0x{address:08x} and 0x{next_address:08x}.")
@@ -676,6 +811,10 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
             (0x8006f2c8, jump(0x8005b368, True), jump(MENU_GATE, True)),
             (0x800905d4, bytes.fromhex("e0ffbd271000b0af"), jump(VRAM_UPLOAD_GATE) + bytes(4)),
         )
+    if deferred_ordering:
+        stack_prologue = bytes.fromhex("b8febd27")
+        save_actor = bytes.fromhex("e000a5af")
+        hooks += ((0x8002a258, stack_prologue + save_actor, jump(ACTOR_GATE) + stack_prologue),)
     for address, expect, replace in hooks:
         offset = 2048 + address - EXE_LOAD
         if target[offset:offset + len(expect)] != expect:
