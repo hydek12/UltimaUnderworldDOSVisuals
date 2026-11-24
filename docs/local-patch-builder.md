@@ -121,3 +121,9 @@ The expected Track 1 SHA-1 is `1886fa383413e53d4dd1756975f5ced8526b187b`.
 Use `--level-three-dialogue` for the cumulative Level 1–3 and Level 6 preview. Level 3 keeps its standard DOS lizardman bank with combat poses. Three additional room banks cover the bandits, Murgo and nearby lizardmen, and Zak. The bandits and Zak use the local DOS palettes with 15/16 textures. Murgo uses full-resolution 4-bit textures. His room shares VRAM with the three lizard palettes at 12/16 texture resolution for idle and walk. Fixed lizard combat poses there fall back to the native renderer. All sprite screen dimensions and hotspots use the original DOS frames.
 
 The expected Track 1 SHA-1 is `59e4eaa757852bae0c9b1cac0aff28199e6c05b8`.
+
+### Level 4 named NPC preview
+
+Use `--level-four-dialogue` to include the Level 4 named actors. The town bank fits both DOS fighter families on separate 8-bit pages at 11/16 texture resolution. Dedicated fighter rooms use 15/16 textures. Rawstag, Lakshi Longtooth, and Sethar Strongarm share a full-resolution 4-bit troll bank with the matching DOS palettes. The standard lizard bank remains available outside those areas.
+
+The expected Track 1 SHA-1 is `eab1814243f110e993076762d590ed86a4aaae24`.

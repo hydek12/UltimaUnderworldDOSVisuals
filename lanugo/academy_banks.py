@@ -52,10 +52,17 @@ LEVEL_THREE_BANKS = (
     ("prisoner", ((85, 88, 89), (106,)), ((25, 21), (27, 22))),
     ("zak", ((104,),), ((47, 38),)),
 )
-ROOM_BANKS = {1: LEVEL_ONE_BANKS, 2: LEVEL_TWO_BANKS, 3: LEVEL_THREE_BANKS}
+LEVEL_FOUR_BANKS = (
+    ("town", ((90, 95, 98, 104), (93, 94)),
+     ((5, 2), (8, 4), (5, 5), (14, 5), (13, 7), (22, 10), (13, 16), (3, 23), (13, 23), (12, 29))),
+    ("fighters-four", ((90, 95, 98, 104),), ((40, 19), (20, 43), (32, 61))),
+    ("trolls-four", ((96, 112),), ((58, 9), (58, 15), (49, 22))),
+)
+ROOM_BANKS = {1: LEVEL_ONE_BANKS, 2: LEVEL_TWO_BANKS, 3: LEVEL_THREE_BANKS, 4: LEVEL_FOUR_BANKS}
 ROOM_FAMILIES = {name: families for banks in ROOM_BANKS.values() for name, families, _ in banks}
 ROOM_FORMATS = {**LEVEL_ONE_FORMATS, "dwarves": (8, 16), "corby": (8, 15),
-                "bandits": (8, 15), "zak": (8, 15)}
+                "bandits": (8, 15), "zak": (8, 15), "fighters-four": (8, 15), "trolls-four": (4, 16)}
+SPLIT_ROOM_FORMATS = {"prisoner": (4, (12, 16)), "town": (8, (11, 11))}
 ROOM_STRIDE = 0x19800
 # (texture depth, sixteenths of original size, uses both pages)
 SPECIAL_FORMATS = {"imps": (8, 16, True), "skeletons": (4, 16, True),

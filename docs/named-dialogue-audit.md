@@ -64,6 +64,25 @@ The xdelta decoded from clean Japanese Rev 1 Track 1 to SHA-1 `1886fa383413e53d4
 - A standard lizard bank control exercised 48 combat render calls, including eight fixed pose draws for the type 88 control. Within the shared room, lizard idle and walk use DOS art and fixed combat poses use native fallback. The dormant bandit still needs an activation check.
 - The xdelta round-trip from clean Japanese Rev 1 produced Track 1 SHA-1 `59e4eaa757852bae0c9b1cac0aff28199e6c05b8`. CHD SHA-1 `48a93fcd1ab25df91cb07bf142e7e9dd3721fafd` verified internally, and all four extracted tracks matched the split BINs.
 
+## Level 4 named NPC preview verification
+
+DuckStation cold-booted the Level 4 preview with its English Patch title. All 16 initially linked named encounters submitted their expected DOS palette at their native records. The town bank uses both fighter families with 11/16 textures in shared sightlines. Separate fighter rooms use 15/16 textures, and the two troll palettes retain full resolution. Offline verification compared 768 idle and walk frame slots and 664,802 texels. Six in-place bank switches checked resident code, frame tables, and ownership across the standard lizard, town, fighter, and troll banks.
+
+The xdelta decoded from clean Japanese Rev 1 to Track 1 SHA-1 `eab1814243f110e993076762d590ed86a4aaae24`. CHD SHA-1 `c2fd1893e27b1e6127f1c4fed33001efddc3f306` verified internally. All four extracted tracks matched the split BINs.
+
+## Milestone progress in one-percent increments
+
+These percentages track the project checklist. They are estimates based on verified deliverables.
+
+| Progress | Status | Verification gate |
+| --- | --- | --- |
+| 65% | Verified | Matching DOS spell effects and the clean-disc xdelta round-trip |
+| 66% | Verified | Level 6 runtime banks, encounter rendering, and supported combat poses |
+| 67% | Verified | Level 1 named actors, room-bank switching, and representative dialogue |
+| 68% | Verified | Wider floor addressing, Hewstone’s identity, and Level 2 named sprites |
+| 69% | Verified | Level 3 and Level 4 encounter draws, shared rooms, and fresh-disc verification |
+| 70% | Open | Remaining named actors, dormant activation, quest and trade outcomes, and cumulative release verification |
+
 ## Remaining 70% checks
 
 1. Verify the remaining Level 1 dialogue, quest, and trade branches, and check changes to quest or trade state and returning to each encounter.

@@ -5,6 +5,7 @@ academy_bank=
 level_one_dialogue=0
 level_two_dialogue=0
 level_three_dialogue=0
+level_four_dialogue=0
 expanded_preview=0
 effects_preview=0
 combat_preview=0
@@ -23,15 +24,16 @@ elif [[ ${1:-} == --level-six-casting ]]; then
     spider_preview=1
     casting_preview=1
     shift
-elif [[ ${1:-} == --level-six-combat || ${1:-} == --level-six-effects || ${1:-} == --level-six-expanded || ${1:-} == --academy-wizb || ${1:-} == --academy-wizc || ${1:-} == --academy-runtime || ${1:-} == --level-one-dialogue || ${1:-} == --level-two-dialogue || ${1:-} == --level-three-dialogue ]]; then
-    if [[ $1 == --level-six-expanded || $1 == --academy-* || $1 == --level-one-dialogue || $1 == --level-two-dialogue || $1 == --level-three-dialogue ]]; then
+elif [[ ${1:-} == --level-six-combat || ${1:-} == --level-six-effects || ${1:-} == --level-six-expanded || ${1:-} == --academy-wizb || ${1:-} == --academy-wizc || ${1:-} == --academy-runtime || ${1:-} == --level-one-dialogue || ${1:-} == --level-two-dialogue || ${1:-} == --level-three-dialogue || ${1:-} == --level-four-dialogue ]]; then
+    if [[ $1 == --level-six-expanded || $1 == --academy-* || $1 == --level-one-dialogue || $1 == --level-two-dialogue || $1 == --level-three-dialogue || $1 == --level-four-dialogue ]]; then
         expanded_preview=1
     fi
-    if [[ $1 == --level-one-dialogue || $1 == --level-two-dialogue || $1 == --level-three-dialogue ]]; then
+    if [[ $1 == --level-one-dialogue || $1 == --level-two-dialogue || $1 == --level-three-dialogue || $1 == --level-four-dialogue ]]; then
         academy_bank=runtime
         level_one_dialogue=1
         if [[ $1 != --level-one-dialogue ]]; then level_two_dialogue=1; fi
-        if [[ $1 == --level-three-dialogue ]]; then level_three_dialogue=1; fi
+        if [[ $1 == --level-three-dialogue || $1 == --level-four-dialogue ]]; then level_three_dialogue=1; fi
+        if [[ $1 == --level-four-dialogue ]]; then level_four_dialogue=1; fi
     elif [[ $1 == --academy-* ]]; then
         academy_bank=${1#--academy-}
     fi
@@ -52,7 +54,7 @@ if [[ ${1:-} == --english-patch ]]; then
 fi
 
 if [[ $# != 5 ]]; then
-    printf 'Usage: %s [--level-six-wizards|--level-six-spiders|--level-six-casting|--level-six-combat|--level-six-effects|--level-six-expanded|--academy-wizb|--academy-wizc|--academy-runtime|--level-one-dialogue|--level-two-dialogue|--level-three-dialogue] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
+    printf 'Usage: %s [--level-six-wizards|--level-six-spiders|--level-six-casting|--level-six-combat|--level-six-effects|--level-six-expanded|--academy-wizb|--academy-wizc|--academy-runtime|--level-one-dialogue|--level-two-dialogue|--level-three-dialogue|--level-four-dialogue] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
     exit 2
 fi
 
@@ -157,6 +159,12 @@ if (( expanded_preview )); then
                         "$exporter" export-creature-atlases "$dos_root" "$actor" "$scratch/wizards/type-$actor"
                     done
                     wizard_args+=(--level-three-dialogue)
+                    if (( level_four_dialogue )); then
+                        for actor in 95 96; do
+                            "$exporter" export-creature-atlases "$dos_root" "$actor" "$scratch/wizards/type-$actor"
+                        done
+                        wizard_args+=(--level-four-dialogue)
+                    fi
                 fi
             fi
         fi
