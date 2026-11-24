@@ -19,3 +19,15 @@ The patch draws the same actor from the same viewpoint with the DOS sprite. The 
 ![Gray DOS goblin viewed from behind at an angle in a Level 7 passage](screenshots/ultima-underworld-dos-goblin-level-7.png)
 
 The gray DOS goblin sprite is visible from a rear three-quarter angle in a Level 7 passage. This shows the goblin replacement in use beyond the Level 1 Lanugo test.
+
+## Level 6 wizard, original PlayStation model
+
+![The original polygonal red-robed wizard on Level 6](screenshots/ultima-underworld-wizard-native-psx.png)
+
+The original renderer shows this wizard as a shaded, polygonal red-robed model. The paired capture uses the same actor, camera, and facing.
+
+## Level 6 wizard, DOS sprite preview
+
+![The same red-robed wizard rendered as a DOS sprite in the same corridor](screenshots/ultima-underworld-wizard-dos-sprite.png)
+
+The patch shows the same wizard using the original red DOS palette. The sprite preserves the brighter robe, pixel-drawn beard, and folded hands.
