@@ -79,24 +79,30 @@ struct PackedPixels {
         return try (word() << 8) | (word() << 4) | word()
     }
 
-    mutating func decode(pixelCount: Int) throws -> [Int] {
+    mutating func decode(pixelCount: Int, allowMissingTransparentTail: Bool = false) throws -> [Int] {
         var pixels: [Int] = []
-        while pixels.count < pixelCount {
-            let first = try count()
-            if first != 1 {
-                let repeats = first == 2 ? try count() : 1
-                for index in 0..<repeats where pixels.count < pixelCount {
-                    let length = index == 0 && first != 2 ? first : try count()
-                    let value = try word()
-                    pixels.append(contentsOf: repeatElement(value, count: min(length, pixelCount - pixels.count)))
+        do {
+            while pixels.count < pixelCount {
+                let first = try count()
+                if first != 1 {
+                    let repeats = first == 2 ? try count() : 1
+                    for index in 0..<repeats where pixels.count < pixelCount {
+                        let length = index == 0 && first != 2 ? first : try count()
+                        let value = try word()
+                        pixels.append(contentsOf: repeatElement(value, count: min(length, pixelCount - pixels.count)))
+                    }
+                }
+                if pixels.count < pixelCount {
+                    let length = try count()
+                    for _ in 0..<min(length, pixelCount - pixels.count) {
+                        pixels.append(try word())
+                    }
                 }
             }
-            if pixels.count < pixelCount {
-                let length = try count()
-                for _ in 0..<min(length, pixelCount - pixels.count) {
-                    pixels.append(try word())
-                }
-            }
+        } catch {
+            guard allowMissingTransparentTail, position == wordCount,
+                  pixels.count == pixelCount - 1, pixels.last == 0 else { throw error }
+            pixels.append(0)
         }
         return pixels
     }
@@ -185,7 +191,9 @@ func readFrame(root: URL, actor: Int, slot: Int, frame: Int, shade: DOSShade? = 
         let wordCount = try page.littleEndian(offset + 5, size: 2)
         var packed = PackedPixels(page: page, start: offset + 7,
                                   wordSize: compression == 6 ? 5 : 4, wordCount: wordCount)
-        let pixels = try packed.decode(pixelCount: width * height)
+        // Two headless walking frames in the original CR file end one transparent pixel early.
+        let missingTail = actor == 91 && pageNumber == 1 && [29, 31].contains(frameIndex)
+        let pixels = try packed.decode(pixelCount: width * height, allowMissingTransparentTail: missingTail)
         let colors = try Bytes(root.appendingPathComponent("DATA/PALS.DAT"))
         guard let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: width, pixelsHigh: height,
                                            bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,

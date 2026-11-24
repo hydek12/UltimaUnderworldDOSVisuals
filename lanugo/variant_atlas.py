@@ -40,8 +40,8 @@ def subtract(free, placed):
     ]
 
 
-def pack(frames, texture_pages):
-    free = [(page, 0, 0, WIDTH, rows) for page, (_, _, rows) in enumerate(texture_pages)]
+def pack(frames, texture_pages, width=WIDTH):
+    free = [(page, 0, 0, width, rows) for page, (_, _, rows) in enumerate(texture_pages)]
     for frame in sorted(frames, key=lambda item: (-item[4], -item[3], item)):
         _, _, _, width, height = frame
         choices = (

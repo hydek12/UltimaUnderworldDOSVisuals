@@ -122,7 +122,7 @@ if (( expanded_preview )); then
     case $academy_bank in
         wizb) directional_actors=(106 115) ;;
         wizc) directional_actors=(107) ;;
-        runtime) directional_actors=(64 65 66 69 73 82 97 102 106 107 111 112 115 119 120) ;;
+        runtime) directional_actors=(64 65 66 69 73 74 75 81 82 91 97 102 105 106 107 111 112 115 119 120) ;;
         *) directional_actors=(64 65 66 69 73 82) ;;
     esac
     for actor in "${directional_actors[@]}"; do

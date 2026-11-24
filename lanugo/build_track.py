@@ -673,28 +673,49 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             table_slots = (
                 (0x1000, 0x200), (0x1c00, 0x200), (0x1e00, 0x200), (0x1200, 0x200),
             )
-        image, palettes, directional = creature_atlas.build_families(
-            [creature_sources(variants, types) for types in families],
-            creature_atlas.TEXTURE_PAGES[1],
-        )
-        images += (image,)
-        texture_pages += creature_atlas.TEXTURE_PAGES[1:]
-        # Each 16-color palette is one row of an eight-row, two-column CLUT.
-        rows = [clut[i:i + 32] for i in range(0, len(clut), 32)] + list(palettes)
-        rows += [bytes(32)] * (16 - len(rows))
-        clut = b"".join(rows[i] + rows[i + 8] for i in range(8))
+        texture_pages = creature_atlas.TEXTURE_PAGES
+        format_override = academy_banks.SPECIAL_FORMATS.get(academy_bank)
+        primary_types = actor_types
+        if format_override:
+            bits, scale, both_pages = format_override
+            special_pages = texture_pages if both_pages else texture_pages[1:]
+            special_images, palette_data, table = creature_atlas.build(
+                creature_sources(variants, families[0]), special_pages, bits=bits, scale=scale,
+            )
+            images = special_images if both_pages else images + special_images
+            primary_types = () if both_pages else actor_types
+            palette_stride = 64 if bits == 8 else 32
+            palettes = [palette_data[i:i + palette_stride] for i in range(0, len(palette_data), palette_stride)]
+            directional = (table,)
+        else:
+            image, palettes, directional = creature_atlas.build_families(
+                [creature_sources(variants, types) for types in families], texture_pages[1],
+            )
+            images += (image,)
+            palette_stride = 32
+        primary_palettes = [clut[i:i + 32] for i in range(0, len(primary_types) * 32, 32)]
+        if palette_stride == 64:
+            # Each 8-bit sprite uses only the first 32 entries in its own CLUT row.
+            rows = [palette.ljust(64, b"\0") for palette in primary_palettes] + list(palettes)
+            clut = b"".join(rows).ljust(512, b"\0")
+            palette_columns = len(rows)
+        else:
+            rows = primary_palettes + list(palettes)
+            rows += [bytes(32)] * (16 - len(rows))
+            clut = b"".join(rows[i] + rows[i + 8] for i in range(8))
+            palette_columns = 8
         clut_rect = x, y, 32, 8
         registry_data = bytearray(64 * 4)
-        for row, actor in enumerate(actor_types):
+        for row, actor in enumerate(primary_types):
             struct.pack_into("<HH", registry_data, 4 * (actor - 64), 0, creature_atlas.CLUT_BASE + row * 64)
-        row = len(actor_types)
+        row = len(primary_types)
         for types, table, (location, capacity) in zip(families, directional, table_slots, strict=True):
             compact = creature_atlas.compact_frame_table(table)
             if len(compact) > capacity:
                 raise ValueError("The compact Level 6 frame table exceeds its safe RAM range.")
             extra_sections[location] = compact
             for actor in types:
-                palette = creature_atlas.CLUT_BASE + (row % 8) * 64 + row // 8
+                palette = creature_atlas.CLUT_BASE + (row % palette_columns) * 64 + row // palette_columns
                 struct.pack_into("<HH", registry_data, 4 * (actor - 64), location - 0x800, palette)
                 row += 1
         extra_sections[0xf00] = registry_data

@@ -43,7 +43,11 @@ def wizard_actions(combat=False):
     return bytes(actions), bytes(phases)
 
 
-def build(sources, texture_pages=TEXTURE_PAGES):
+def build(sources, texture_pages=TEXTURE_PAGES, *, bits=4, scale=16):
+    if bits not in (4, 8) or not 1 <= scale <= 16:
+        raise ValueError("Unsupported creature texture depth or scale.")
+    page_width = WIDTH * 4 // bits
+    palette_width = 32 if bits == 8 else 16
     variant_count = len(sources[0])
     patterns = {(0,) * variant_count}
     frames = {}
@@ -61,21 +65,29 @@ def build(sources, texture_pages=TEXTURE_PAGES):
                     tuple(zip(*(image[start:start + w] for image in pixels), strict=True))
                     for start in range(v * WIDTH + u, (v + h) * WIDTH + u, WIDTH)
                 )
+                scaled_w, scaled_h = max(1, w * scale // 16), max(1, h * scale // 16)
+                if scale != 16:
+                    samples = tuple(
+                        tuple(samples[min(h - 1, (2*j + 1)*h // (2*scaled_h))]
+                                     [min(w - 1, (2*i + 1)*w // (2*scaled_w))]
+                              for i in range(scaled_w))
+                        for j in range(scaled_h)
+                    )
                 mirror = tuple(row[::-1] for row in samples)
                 canonical = min(samples, mirror)
                 flipped = canonical != samples
                 if canonical not in frames:
-                    frames[canonical] = (len(frames), 0, 0, w, h)
+                    frames[canonical] = (len(frames), 0, 0, scaled_w, scaled_h)
                     patterns.update(color for row in canonical for color in row)
                 by_rectangle[rect] = frames[canonical], flipped
             key, flipped = by_rectangle[rect]
             placements.append((key, flipped, (w, h, hx, hy)))
     bank = sorted(patterns)
-    if len(bank) > 16:
-        raise ValueError("Creature variants require more than sixteen shared palette indices.")
+    if len(bank) > palette_width:
+        raise ValueError(f"Creature variants require more than {palette_width} shared palette indices.")
     indices = {colors: index for index, colors in enumerate(bank)}
-    textures = dict(pack(frames.values(), texture_pages))
-    pages = [bytearray(WIDTH * rows) for _, _, rows in texture_pages]
+    textures = dict(pack(frames.values(), texture_pages, width=page_width))
+    pages = [bytearray(page_width * rows) for _, _, rows in texture_pages]
     for canonical, key in frames.items():
         texture = textures[key]
         height = len(canonical)
@@ -83,22 +95,24 @@ def build(sources, texture_pages=TEXTURE_PAGES):
         for y, row in enumerate(canonical):
             for x, colors in enumerate(row):
                 u, v = (height - 1 - y, x) if texture.rotated else (x, y)
-                page[WIDTH * (texture.v + v) + texture.u + u] = indices[colors]
-    images = tuple(bytes(lo | hi << 4 for lo, hi in zip(page[::2], page[1::2], strict=True))
-                   for page in pages)
+                page[page_width * (texture.v + v) + texture.u + u] = indices[colors]
+    images = tuple(
+        bytes(page) if bits == 8 else bytes(lo | hi << 4 for lo, hi in zip(page[::2], page[1::2], strict=True))
+        for page in pages
+    )
     metadata = bytearray()
     for key, flipped, dimensions in placements:
         texture = textures[key]
-        w, h, _, _ = dimensions
+        _, _, _, w, h = key
         corners = ((0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1))
         if flipped:
             corners = tuple((w - 1 - x, y) for x, y in corners)
         if texture.rotated:
             corners = tuple((h - 1 - y, x) for x, y in corners)
         uvs = tuple((texture.u + x) | ((texture.v + y) << 8) for x, y in corners)
-        page = 0x10 | (texture_pages[texture.page][0] >> 6)
+        page = (0x90 if bits == 8 else 0x10) | (texture_pages[texture.page][0] >> 6)
         metadata.extend(struct.pack("<4B4HB3x", *dimensions, *uvs, page))
-    clut = b"".join(struct.pack("<16H", *palette, *([0] * (16 - len(palette))))
+    clut = b"".join(struct.pack(f"<{palette_width}H", *palette, *([0] * (palette_width - len(palette))))
                     for palette in zip(*bank, strict=True))
     return images, clut, bytes(metadata)
 

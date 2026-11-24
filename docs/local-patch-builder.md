@@ -71,7 +71,7 @@ Run this from the repository root after committing the reviewed release sources.
 ```sh
 git archive --format=zip --output=/tmp/underworld-builder-source.zip HEAD -- \
   build-local-preview.sh build-rev1-patch.sh main.swift docs/local-patch-builder.md \
-  lanugo/build_english.py lanugo/build_track.py lanugo/creature_atlas.py \
+  lanugo/academy_banks.py lanugo/build_english.py lanugo/build_track.py lanugo/creature_atlas.py \
   lanugo/lower_atlas.py lanugo/mipswords.py lanugo/preview_lighting.py \
   lanugo/renderer.py lanugo/spell_effects.py lanugo/variant_atlas.py
 unzip -l /tmp/underworld-builder-source.zip
@@ -90,12 +90,12 @@ Review the archive contents before uploading. Users generate the combined xdelta
 
 Use `--academy-wizb` or `--academy-wizc` in place of `--level-six-expanded` to test one Academy sprite family at a time. Both previews keep the primary wizard page and replace the secondary page. WizB covers types 106 and 115 (including Dr. Owl, Dominus, and Nilpont). WizC covers type 107 (including Delanrey and Louvnon). The previews use the local DOS idle and walking frames at their original dimensions, with native rendering for other actions. Spiders, rot grubs, slugs, and bats use native rendering in these builds.
 
-Each family fits the 256×248 secondary page by itself. Packing both together exceeds that page at the original frame sizes. These are build-time selections. A combined release still needs to select and reload banks during gameplay, with native fallback for actors outside the active bank. Verify that a reload preserves pending draws and that dialogue and inventory returns restore the currently selected bank.
+Each family fits the 256×248 secondary page by itself. Packing both together exceeds that page at the original frame sizes. Use the runtime build to test both on one disc.
 
 ### Level 6 runtime banking preview
 
-Use `--academy-runtime` in place of the static Academy flags. The preview selects a secondary texture page from the camera's Level 6 map cell at the beginning of a frame. At a bank change it waits for pending GPU work, reads the new frame tables and palettes from the disc, and keeps the current disc address for inventory and dialogue restoration. The primary wizard art is present in every bank. Secondary-page actors outside the selected bank use the native renderer.
+Use `--academy-runtime` in place of the static Academy flags. The preview selects an atlas bank at the start of a frame from the camera's four-tile map cell. On a change, it waits for pending GPU work, reads the new tables and textures, and retains the bank's disc address for inventory and dialogue restoration. Actors outside the active bank use the native renderer. The primary wizard page is available except in the banks that use both pages.
 
-The preview includes the expanded Level 6 roster, both Academy families, Warren (97), the gazer (102), two troll variants (111/112), the Level 6 golem (119), and the fire elemental (120). Types 75, 81, and 105 exceed the current shared 16-color limit. Type 74 exceeds the secondary page at full resolution. The current export lacks a complete type 91 walking sequence. Those types use the native renderer. Named NPCs on other floors still need separate room and dialogue verification.
+The runtime build includes all five Level 6 types that were still using native idle and walk art. The imp variants (75/81) share one full-resolution 8-bit page and use independent 32-entry palette rows. The skeleton (74) uses both pages at its original 4-bit resolution. The headless (91) uses both pages at full resolution and 8-bit depth. Its exporter fills one missing transparent tail pixel in each of two identified walking frames. The ghoul (105) uses both pages with 8-bit indices and 7/8-resolution textures. It retains the original DOS frame dimensions and hotspots for on-screen placement.
 
-The remaining five Level 6 types account for 11 initially linked actors. The imp variants (75/81) use up to 23 colors in a single frame, including transparency. The ghouls (105) also reach 23 colors in a frame, so separate 4-bit palettes per frame cannot preserve them. The imp art fits the secondary page at 8 bits per pixel in the offline packing check. The skeleton fits across both current pages at 4 bits per pixel. The ghoul exceeds both pages at 8 bits per pixel. It needs another texture allocation or smaller transfers scheduled between draws. Type 91 first needs repair of the exported DOS walking sequence.
+The Japanese Rev 1 source track remains the input for every generated xdelta. Earlier non-runtime profiles still use their existing layouts. Named quest NPCs beyond Level 6 remain tracked separately.

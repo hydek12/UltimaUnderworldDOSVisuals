@@ -13,7 +13,7 @@ PAYLOAD = 0x801F6000
 SELECTOR = PAYLOAD + 0x108
 SWITCH = PAYLOAD + 0x188
 POINTER = 0x60
-GRID = 0x68
+GRID = 0xC80
 ACTIVE = 0xC08
 
 # Bank 0 has the expanded creature roster. Assign the Academy's cells by
@@ -25,6 +25,10 @@ LEVEL_SIX_BANKS = (
     ("trolls", ((111, 112),), ((58, 42), (13, 57))),
     ("golem", ((119,),), ((6, 22),)),
     ("fire-elemental", ((120,),), ((55, 6),)),
+    ("imps", ((75, 81),), ((60, 36), (37, 50), (36, 52))),
+    ("skeletons", ((74,),), ((22, 57), (23, 58))),
+    ("ghouls", ((105,),), ((41, 37), (44, 37))),
+    ("headless", ((91,),), ((51, 48), (27, 53), (26, 55), (46, 60))),
 )
 ACADEMY_NPCS = tuple(
     (x, z, index)
@@ -32,18 +36,21 @@ ACADEMY_NPCS = tuple(
     for x, z in tiles
 )
 BANK_FAMILIES = {name: families for name, families, _ in LEVEL_SIX_BANKS}
+# (texture depth, sixteenths of original size, uses both pages)
+SPECIAL_FORMATS = {"imps": (8, 16, False), "skeletons": (4, 16, True),
+                   "ghouls": (8, 14, True), "headless": (8, 16, True)}
 
 
 def room_grid():
     banks = []
-    for z in range(4, 64, 8):
-        for x in range(4, 64, 8):
+    for z in range(2, 64, 4):
+        for x in range(2, 64, 4):
             distance, bank = min((abs(x - px) + abs(z - pz), bank) for px, pz, bank in ACADEMY_NPCS)
             banks.append(bank if distance <= 9 else 0)
     for x, z, bank in ACADEMY_NPCS:
         # The gameplay camera is one tile west of the map's teleport coordinate.
         for camera_x in (x - 1, x):
-            banks[(z // 8) * 8 + camera_x // 8] = bank
+            banks[(z // 4) * 16 + camera_x // 4] = bank
     return bytes(a | b << 4 for a, b in zip(banks[::2], banks[1::2], strict=True))
 
 
@@ -76,11 +83,11 @@ def sections(base_byte_offset, bank_bytes, bank):
     c.branch("beq", "t7", "zero", "native")
     c.mem("lhu", "t1", -0x6900, "t0")
     c.mem("lhu", "t2", -0x68FE, "t0")
-    c.shift("srl", "t1", "t1", 11)
-    c.shift("srl", "t2", "t2", 11)
-    c.imm("andi", "t1", "t1", 7)
-    c.imm("andi", "t2", "t2", 7)
-    c.shift("sll", "t2", "t2", 3)
+    c.shift("srl", "t1", "t1", 10)
+    c.shift("srl", "t2", "t2", 10)
+    c.imm("andi", "t1", "t1", 15)
+    c.imm("andi", "t2", "t2", 15)
+    c.shift("sll", "t2", "t2", 4)
     c.alu("addu", "t1", "t1", "t2")
     c.shift("srl", "t2", "t1", 1)
     c.alu("addu", "t2", "t8", "t2")
