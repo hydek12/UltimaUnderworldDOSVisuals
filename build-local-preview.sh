@@ -1,6 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
+expanded_preview=0
 effects_preview=0
 combat_preview=0
 casting_preview=0
@@ -18,8 +19,11 @@ elif [[ ${1:-} == --level-six-casting ]]; then
     spider_preview=1
     casting_preview=1
     shift
-elif [[ ${1:-} == --level-six-combat || ${1:-} == --level-six-effects ]]; then
-    if [[ $1 == --level-six-effects ]]; then
+elif [[ ${1:-} == --level-six-combat || ${1:-} == --level-six-effects || ${1:-} == --level-six-expanded ]]; then
+    if [[ $1 == --level-six-expanded ]]; then
+        expanded_preview=1
+    fi
+    if [[ $1 != --level-six-combat ]]; then
         effects_preview=1
     fi
     wizard_preview=1
@@ -36,7 +40,7 @@ if [[ ${1:-} == --english-patch ]]; then
 fi
 
 if [[ $# != 5 ]]; then
-    printf 'Usage: %s [--level-six-wizards|--level-six-spiders|--level-six-casting|--level-six-combat|--level-six-effects] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
+    printf 'Usage: %s [--level-six-wizards|--level-six-spiders|--level-six-casting|--level-six-combat|--level-six-effects|--level-six-expanded] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
     exit 2
 fi
 
@@ -108,6 +112,13 @@ if (( wizard_preview )); then
         "$exporter" export-creature-atlases "$dos_root" 92 "$scratch/wizards/type-92"
         wizard_args+=(--level-six-spiders)
     fi
+fi
+
+if (( expanded_preview )); then
+    for actor in 64 65 66 69 73 82; do
+        "$exporter" export-creature-atlases "$dos_root" "$actor" "$scratch/wizards/type-$actor"
+    done
+    wizard_args+=(--expanded-level-six)
 fi
 
 if (( effects_preview )); then

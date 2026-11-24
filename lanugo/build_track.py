@@ -49,6 +49,8 @@ MENU_RAM = PAYLOAD_RAM + 0xe00
 VRAM_GUARD_RAM = PAYLOAD_RAM + 0xe80
 RESIDENT_BYTES = 0x1000
 LOWER_RESIDENT_BYTES = 0x1800
+EXPANDED_RESIDENT_BYTES = 0x2800
+LEVEL_SIX_DIRECTIONAL = ((92,), (64, 82), (65, 69), (66, 73))
 MODEL_OWNER_OFFSET = 0x58
 ORDER_COUNT_OFFSET = 0x5c
 ORDER_LOG_RAM = PAYLOAD_RAM + 0x1000
@@ -264,7 +266,7 @@ def actor_gate():
 
 
 def floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba=None, rat_payload_lba=None,
-                 wizard_payload_lba=None):
+                 wizard_payload_lba=None, expanded_level_six=False):
     c = Code(BOOT)
     c.imm("addiu", "sp", "sp", -32)
     c.mem("sw", "ra", 28, "sp")
@@ -320,8 +322,13 @@ def floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba=None, rat_pa
         c.branch("beq", "t2", "zero", "done")
         c.shift("sll", "a0", "t1", 11)
         c.alu("sltu", "t2", "zero", "t1")
-        c.shift("sll", "t2", "t2", 11)
-        c.alu("OR", "a2", "a2", "t2")  # Level 1 uses 0x1000, other atlases use 0x1800.
+        if expanded_level_six:
+            c.alu("subu", "t2", "zero", "t2")
+            c.imm("andi", "t2", "t2", EXPANDED_RESIDENT_BYTES - RESIDENT_BYTES)
+            c.alu("addu", "a2", "a2", "t2")
+        else:
+            c.shift("sll", "t2", "t2", 11)
+            c.alu("OR", "a2", "a2", "t2")  # Level 1 uses 0x1000, other atlases use 0x1800.
         c.imm("ori", "t3", "t3", offset)
         c.alu("addu", "a0", "a0", "t3")
     c.mem("sw", "a0", 20, "sp")
@@ -611,7 +618,8 @@ def rat_payload(variants):
     return creature_payload(variants, creature_atlas.LEVEL_EIGHT_RAT_TYPES, creature_atlas.RAT_TEXTURE_PAGES)
 
 
-def creature_payload(variants, actor_types, texture_pages, combat=False, extra_type=None, casting=False):
+def creature_payload(variants, actor_types, texture_pages, combat=False, extra_type=None, casting=False,
+                     expanded_level_six=False):
     sources = creature_sources(variants, actor_types, combat, casting)
     images, clut, metadata = creature_atlas.build(sources, texture_pages)
     base = actor_types[0]
@@ -624,7 +632,33 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     order_log = PAYLOAD_RAM + ORDER_COUNT_OFFSET, ORDER_LOG_RAM
     extra_atlas = None
     extra_sections = {}
-    if extra_type is not None:
+    if expanded_level_six:
+        if not (casting and combat and extra_type == 92 and texture_pages == creature_atlas.TEXTURE_PAGES[:1]):
+            raise ValueError("The expanded Level 6 atlas requires the wizard-combat and spider preview.")
+        image, palettes, directional = creature_atlas.build_families(
+            [creature_sources(variants, types) for types in LEVEL_SIX_DIRECTIONAL],
+            creature_atlas.TEXTURE_PAGES[1],
+        )
+        images += (image,)
+        texture_pages += creature_atlas.TEXTURE_PAGES[1:]
+        # Each 16-color palette is one row of an eight-row, two-column CLUT.
+        rows = [clut[i:i + 32] for i in range(0, len(clut), 32)] + list(palettes)
+        rows += [bytes(32)] * (16 - len(rows))
+        clut = b"".join(rows[i] + rows[i + 8] for i in range(8))
+        clut_rect = x, y, 32, 8
+        registry_data = bytearray(64 * 4)
+        for row, actor in enumerate(actor_types):
+            struct.pack_into("<HH", registry_data, 4 * (actor - 64), 0, creature_atlas.CLUT_BASE + row * 64)
+        row = len(actor_types)
+        for types, table, location in zip(LEVEL_SIX_DIRECTIONAL, directional, (0x1000, 0x1800, 0x1c00, 0x2000), strict=True):
+            extra_sections[location] = table
+            for actor in types:
+                palette = creature_atlas.CLUT_BASE + (row % 8) * 64 + row // 8
+                struct.pack_into("<HH", registry_data, 4 * (actor - 64), location - 0x800, palette)
+                row += 1
+        extra_sections[0xf00] = registry_data
+        order_log = PAYLOAD_RAM + ORDER_COUNT_OFFSET, PAYLOAD_RAM + 0x2400
+    elif extra_type is not None:
         if (combat and not casting) or texture_pages != creature_atlas.TEXTURE_PAGES[:1]:
             raise ValueError("The extra atlas requires one primary wizard or directional page.")
         extra_page = creature_atlas.TEXTURE_PAGES[1:]
@@ -651,6 +685,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             PAYLOAD_RAM + 0xb0, PAYLOAD_RAM + phase_offset, PAYLOAD_RAM + 0x1600,
             actions[creature_atlas.DEATH_SLOT],
         )
+    registry = PAYLOAD_RAM + 0xf00 if expanded_level_six else None
     suppress_addr = SUPPRESS_RAM if extra_type is None else PAYLOAD_RAM + 0x700
     delay_addr = WALK_SUPPRESS_DELAY_RAM if extra_type is None else PAYLOAD_RAM + 0xd00
     sections = {
@@ -660,18 +695,18 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             suppress_addr, walk_ready=WALK_READY_RAM, wide=True,
             palette_types=palette_types, order_writer=ORDER_WRITER_RAM,
             action_map=None if action_addresses is None else action_addresses[0], extra_type=extra_type,
-            wizard_combat=casting and combat,
+            wizard_combat=casting and combat, registry=registry,
         ),
         delay_addr - PAYLOAD_RAM: renderer.suppress(
             delay_addr, "a0", WALK_READY_RAM, wide=True,
             palette_types=palette_types, order_writer=ORDER_WRITER_RAM,
             action_map=None if action_addresses is None else action_addresses[0], extra_type=extra_type,
-            wizard_combat=casting and combat,
+            wizard_combat=casting and combat, registry=registry,
         ),
         0x200: renderer.draw(
             DRAW_RAM, PAYLOAD_RAM + 0x800, PAYLOAD_RAM + 0x90,
             clut=creature_atlas.CLUT_BASE, walk_ready=WALK_READY_RAM, wide=True,
-            palette_types=palette_types, order_log=order_log, combat=action_addresses, extra_atlas=extra_atlas, wizard_combat=casting and combat,
+            palette_types=palette_types, order_log=order_log, combat=action_addresses, extra_atlas=extra_atlas, wizard_combat=casting and combat, registry=registry,
         )[0],
         ORDER_WRITER_RAM - PAYLOAD_RAM: renderer.log_native_order(ORDER_WRITER_RAM, *order_log),
         0x800: metadata,
@@ -687,12 +722,13 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     sections.update(extra_sections)
     sections.update(combat_sections)
     pages = tuple((x, y) for x, y, _ in texture_pages)
-    return compact_payload(sections, images, clut, pages, texture_pages[0][2], clut_rect)
+    return compact_payload(sections, images, clut, pages, texture_pages[0][2], clut_rect,
+                           EXPANDED_RESIDENT_BYTES if expanded_level_six else LOWER_RESIDENT_BYTES)
 
 
-def compact_payload(sections, images, clut, pages, texture_height, clut_rect):
+def compact_payload(sections, images, clut, pages, texture_height, clut_rect, resident_bytes=LOWER_RESIDENT_BYTES):
     bands = []
-    offset = LOWER_RESIDENT_BYTES
+    offset = resident_bytes
     for (x, y), image in zip(pages, images, strict=True):
         sections[offset] = image
         bands.append(((x, y, 64, 128), offset, BAND_BYTES))
@@ -811,7 +847,7 @@ def form1_sector(original, data):
 
 def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False,
                     lower_payload_lba=None, lizard_payload_lba=None, rat_payload_lba=None,
-                    wizard_payload_lba=None):
+                    wizard_payload_lba=None, expanded_level_six=False):
     target = bytearray(original)
     deferred_ordering = any(
         lba is not None for lba in (lizard_payload_lba, rat_payload_lba, wizard_payload_lba)
@@ -819,7 +855,8 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
     floor_aware = lower_payload_lba is not None or deferred_ordering
     code = {
         BOOT: (
-            floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba, rat_payload_lba, wizard_payload_lba)
+            floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba, rat_payload_lba, wizard_payload_lba,
+                         expanded_level_six)
             if floor_aware else loader(payload_lba, walking, wide)
         ),
         SUPPRESS_NORMAL: gate(SUPPRESS_NORMAL, SUPPRESS_RAM, "v1", walking, floor_aware),

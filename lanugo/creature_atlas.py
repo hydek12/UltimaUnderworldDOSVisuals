@@ -101,3 +101,49 @@ def build(sources, texture_pages=TEXTURE_PAGES):
     clut = b"".join(struct.pack("<16H", *palette, *([0] * (16 - len(palette))))
                     for palette in zip(*bank, strict=True))
     return images, clut, bytes(metadata)
+
+
+def build_families(families, page):
+    """Pack independent palette banks in one page without sharing palette indices."""
+    images, palettes, tables = [], [], []
+    # Use the existing family packer for exact palette and layout agreement.
+    # Repack its individual indexed rectangles into one shared GPU page.
+    candidates = []
+    for family in families:
+        (image,), clut, table = build(family, (page,))
+        images.append(image)
+        palettes.extend(clut[i:i + 32] for i in range(0, len(clut), 32))
+        tables.append(bytearray(table))
+        rects = set()
+        for offset in range(0, len(table), 16):
+            uv = struct.unpack_from("<4H", table, offset + 4)
+            x = min(u & 255 for u in uv)
+            y = min(u >> 8 for u in uv)
+            w = max(u & 255 for u in uv) - x + 1
+            h = max(u >> 8 for u in uv) - y + 1
+            rects.add((x, y, w, h))
+        candidates.extend((len(images) - 1, *rect) for rect in sorted(rects))
+    placements = dict(pack(candidates, (page,)))
+    pixels = bytearray(WIDTH * page[2])
+    for (family, x, y, w, h), placement in placements.items():
+        for j in range(h):
+            for i in range(w):
+                index = (y + j) * WIDTH + x + i
+                color = images[family][index // 2] >> (4 * (index & 1)) & 15
+                u, v = (h - 1 - j, i) if placement.rotated else (i, j)
+                pixels[(placement.v + v) * WIDTH + placement.u + u] = color
+    for family, table in enumerate(tables):
+        for offset in range(0, len(table), 16):
+            uv = struct.unpack_from("<4H", table, offset + 4)
+            xs, ys = [u & 255 for u in uv], [u >> 8 for u in uv]
+            x, y = min(xs), min(ys)
+            h = max(ys) - y + 1
+            placement = placements[family, x, y, max(xs) - x + 1, h]
+            corners = [(u - x, v - y) for u, v in zip(xs, ys, strict=True)]
+            if placement.rotated:
+                corners = [(h - 1 - v, u) for u, v in corners]
+            struct.pack_into("<4H", table, offset + 4, *(
+                placement.u + u | (placement.v + v) << 8 for u, v in corners
+            ))
+    image = bytes(lo | hi << 4 for lo, hi in zip(pixels[::2], pixels[1::2], strict=True))
+    return image, palettes, tables

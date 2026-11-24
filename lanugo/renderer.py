@@ -25,6 +25,33 @@ def require_palette_type(c, actor, scratch, fallback, palette_types, extra_type=
     c.label("palette_type")
 
 
+def registry_entry(c, actor, entry, scratch, registry):
+    c.imm("addiu", entry, actor, -64)
+    c.shift("sll", entry, entry, 2)
+    c.address(scratch, registry)
+    c.alu("addu", entry, entry, scratch)
+    c.mem("lw", entry, 0, entry)
+    c.nop()
+
+
+def require_registered_action(c, actor, action, entry, scratch, registry, fallback):
+    c.imm("addiu", scratch, actor, -64)
+    c.imm("sltiu", scratch, scratch, 64)
+    c.branch("beq", scratch, "zero", fallback)
+    c.nop()
+    registry_entry(c, actor, entry, scratch, registry)
+    c.branch("beq", entry, "zero", fallback)
+    c.imm("andi", scratch, entry, 0xffff)
+    # Wizard entries have no directional-table override and support fixed poses.
+    c.branch("beq", scratch, "zero", "registry_action")
+    c.imm("ori", scratch, "zero", IDLE_ACTION)
+    c.branch("beq", action, scratch, "registry_action")
+    c.imm("ori", scratch, "zero", WALK_ACTION)
+    c.branch("bne", action, scratch, fallback)
+    c.nop()
+    c.label("registry_action")
+
+
 def require_fixed_pose_family(c, actor, action, scratch, extra_type, fallback, wizard_combat):
     # The second texture page has directional sprites but no fixed casting frames.
     c.imm("ori", scratch, "zero", extra_type)
@@ -65,7 +92,7 @@ def atlas_action_index(c, table, action, result, scratch, fallback):
 
 # Keep actor projection and hit testing when substituting a sprite.
 def suppress(origin, order_table_register="v1", walk_ready=None, wide=False, lower_floor=False,
-             palette_types=GOBLIN_PALETTE_TYPES, order_writer=None, action_map=None, extra_type=None, wizard_combat=False):
+             palette_types=GOBLIN_PALETTE_TYPES, order_writer=None, action_map=None, extra_type=None, wizard_combat=False, registry=None):
     c=Code(origin)
     c.mem("lw","t8",0x74,"sp")
     c.address("t9",0x8002a5d8)
@@ -88,7 +115,9 @@ def suppress(origin, order_table_register="v1", walk_ready=None, wide=False, low
         c.nop()
     else:
         c.imm("andi", "t8", "t8", 0x1ff)
-        if wide:
+        if registry is not None:
+            require_registered_action(c, "t8", "t9", "t8", "t7", registry, "normal")
+        elif wide:
             require_palette_type(c, "t8", "t7", "normal", palette_types, extra_type)
         else:
             c.imm("xori", "t8", "t8", LOWER_GOBLIN_TYPE if lower_floor else GREEN_GOBLIN_TYPE)
@@ -121,7 +150,7 @@ DOS_IDLE_DIRECTIONS = bytes((
 
 def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=False,
          shade_selector=None, overlay_offset=None, palette_types=GOBLIN_PALETTE_TYPES,
-         order_log=None, combat=None, extra_atlas=None, wizard_combat=False):
+         order_log=None, combat=None, extra_atlas=None, wizard_combat=False, registry=None):
     c=Code(origin)
     shade_return = None
     extra_type = extra_atlas[0] if extra_atlas else None
@@ -137,9 +166,11 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
         c.mem("lhu", "t2", 0, "t0")
         c.nop()
         c.imm("andi", "t2", "t2", 0x1ff)
-    if wide and overlay_offset is None:
+    if registry is not None and combat is None:
+        raise ValueError("The creature registry requires the action table.")
+    if registry is None and wide and overlay_offset is None:
         require_palette_type(c, "t2", "t1", "finish", palette_types, extra_type)
-    else:
+    elif registry is None:
         c.branch("bne","t2","t1","finish")
     c.mem("lbu","t4",23,"t0")
     c.mem("lhu","t6",12,"t0")
@@ -156,7 +187,9 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
         c.shift("srl","t6","t6",13)
         c.imm("andi","t6","t6",3)
     else:
-        if extra_type is not None:
+        if registry is not None:
+            require_registered_action(c, "t2", "t4", "t5", "t3", registry, "finish")
+        elif extra_type is not None:
             require_fixed_pose_family(c, "t2", "t4", "t3", extra_type, "finish", wizard_combat)
         atlas_action_index(c, combat[0], "t4", "t7", "t3", "finish")
         c.shift("srl", "t6", "t6", 12)
@@ -181,7 +214,16 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
     c.alu("addu", "t0", "t0", "t2")
     c.mem("lbu", "t2", 0, "t0")
     c.address("t0", metadata)
-    if extra_atlas:
+    if registry is not None:
+        c.mem("lw", "t3", 0xe0, "sp")
+        c.nop()
+        c.mem("lhu", "t3", 0, "t3")
+        c.nop()
+        c.imm("andi", "t3", "t3", 0x1ff)
+        registry_entry(c, "t3", "t5", "t4", registry)
+        c.imm("andi", "t3", "t5", 0xffff)
+        c.alu("addu", "t0", "t0", "t3")
+    elif extra_atlas:
         c.mem("lw", "t3", 0xe0, "sp")
         c.imm("ori", "t4", "zero", extra_type)
         c.mem("lhu", "t3", 0, "t3")
@@ -287,7 +329,16 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
         layered_quad(c, overlay_offset)
     elif wide:
         # The 8-bit layout stores four UV corners so rotated frames render upright.
-        if shade_selector is None:
+        if registry is not None:
+            c.mem("lw", "v1", 0xe0, "sp")
+            c.nop()
+            c.mem("lhu", "v1", 0, "v1")
+            c.nop()
+            c.imm("andi", "v1", "v1", 0x1ff)
+            registry_entry(c, "v1", "t6", "v1", registry)
+            c.imm("lui", "v1", "zero", 0xffff)
+            c.alu("AND", "t6", "t6", "v1")
+        elif shade_selector is None:
             c.mem("lw", "v1", 0xe0, "sp")
             c.nop()
             c.mem("lhu", "v1", 0, "v1")

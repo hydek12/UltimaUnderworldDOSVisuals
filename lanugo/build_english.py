@@ -15,7 +15,10 @@ def bcd(number):
 
 def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
           dos_light_preview=None, lower_floor_goblins=False, lizardmen=None, lizardman_combat=False, level_eight_rats=None,
-          level_six_wizards=None, level_six_spiders=False, level_six_casting=False, level_six_combat=False, dos_spell_effects=None):
+          level_six_wizards=None, level_six_spiders=False, level_six_casting=False, level_six_combat=False,
+          dos_spell_effects=None, expanded_level_six=False):
+    if expanded_level_six and not level_six_combat:
+        raise ValueError("The expanded Level 6 atlas requires the wizard combat preview.")
     if level_six_combat and not level_six_casting:
         raise ValueError("Wizard combat extends the casting preview.")
     if level_six_casting and not level_six_spiders:
@@ -55,7 +58,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
                     level_six_wizards, lanugo.creature_atlas.LEVEL_SIX_WIZARD_TYPES,
                     lanugo.creature_atlas.TEXTURE_PAGES[:1],
                     extra_type=lanugo.creature_atlas.LEVEL_SIX_SPIDER_TYPE if level_six_spiders else None,
-                    casting=level_six_casting, combat=level_six_combat,
+                    casting=level_six_casting, combat=level_six_combat, expanded_level_six=expanded_level_six,
                 )
         else:
             payload = lanugo.payload(atlas, walk_atlas, goblin_variants, dos_light_preview)
@@ -67,7 +70,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
         edited = lanugo.edit_executable(
             executable, first_lba, walking=walk_atlas is not None, wide=goblin_variants is not None,
             lower_payload_lba=lower_payload_lba, lizard_payload_lba=lizard_payload_lba, rat_payload_lba=rat_payload_lba,
-            wizard_payload_lba=wizard_payload_lba,
+            wizard_payload_lba=wizard_payload_lba, expanded_level_six=expanded_level_six,
         )
         updates = {}
         if dos_spell_effects is not None:
@@ -123,4 +126,5 @@ if __name__ == "__main__":
     parser.add_argument("--level-six-casting", action="store_true")
     parser.add_argument("--level-six-combat", action="store_true")
     parser.add_argument("--dos-spell-effects", type=Path, metavar="EXPORTED_EFFECTS")
+    parser.add_argument("--expanded-level-six", action="store_true")
     build(**vars(parser.parse_args()))
