@@ -11,7 +11,7 @@ The NPC audit walked all nine DOS tile maps and found 595 placed creature record
 
 The four types sharing green goblin artwork use different auxiliary palettes. The disc covers all 13 initially linked Level 1 records. There are 19 more initially linked type 78 records on Levels 2, 5 and 7.
 
-The DOS renderer selects a VGA remap row using the three-dimensional distance to a creature’s anchor and the active light level. The Xcode exporter can calculate that row from `SHADES.DAT` and apply `LIGHT.DAT` or `MONO.DAT` while keeping the original alpha mask. The shipped atlas uses the unshaded source palette. Live PSX lighting still needs a mapping from native light sources to DOS levels and enough verified VRAM for the additional palettes. [Reconstructed DOS drawing routine](https://github.com/abedegno/underworld-exhumed/blob/54ffea7c08d562176a8edf7398a6ff3fd372a9d2/uw1/src/3d/GAMESORT.C#L330)
+The DOS renderer selects a VGA remap row using the three-dimensional distance to a creature’s anchor and the active light level. The Xcode exporter calculates the row from `SHADES.DAT` and applies `LIGHT.DAT` or `MONO.DAT` while keeping the original alpha mask. The separate lighting preview uses the same calculation on the PSX and starts at DOS light level 0. The original DOS and the preview choose shade row 10 at the matched unlit Lanugo pose. Native PSX torches, spells, and visibility still need to drive the light-level selector. [Reconstructed DOS drawing routine](https://github.com/abedegno/underworld-exhumed/blob/54ffea7c08d562176a8edf7398a6ff3fd372a9d2/uw1/src/3d/GAMESORT.C#L330)
 
 ## Differences and target behavior
 
@@ -30,12 +30,10 @@ The DOS renderer selects a VGA remap row using the three-dimensional distance to
 
 [Original DOS file formats](https://github.com/vividos/UnderworldAdventures/blob/main/uwadv/docs/uw-formats.txt) · [Rendered comparisons](https://www.wiki.ultimacodex.com/wiki/Technical_Differences_in_Ultima_Underworld_on_the_PSX) · [PSX archive research](https://hk47196.github.io/ultima-underworld-psx-outside-a-playstation-abyssx/)
 
-## PSX implementation and acceptance
+## Remaining implementation and acceptance
 
-1. Capture equal scene positions and view angles in DOSBox and DuckStation at native resolution. Include a green goblin approached from eight directions, a named human in conversation, three troll variants, a ghost, and a shadow beast. Match lighting and evaluate presentation at 4:3.
-2. Map PSX actor type to resource records and draw calls using the archive index and DuckStation. Start with a known small palette change and verify that it affects only the intended actor or variants. Locate shared asset references before applying any replacement.
-3. Build one goblin sprite experiment. Use the DOS frame anchor as the actor projection point and select the direction from the camera-to-actor azimuth relative to actor facing. Drive frame selection from the PSX actor state with a fallback for absent slots. Verify front/back direction, foot position, clipping near walls, sprite overlap, distance scaling, transparent edges and combat timing. Profile VRAM loads, texture page limits, primitive count and frame pacing.
-4. Once NPC drawing works, apply palette effects and material swaps. Follow with camera, HUD, portraits, object and UI parity, then map presentation and cinematic work. For each category record paired captures with comparable distance, light and camera orientation. Mark individual assets unverified until compared.
-5. Rebuild only a scratch disc image. Preserve Track 1 Mode 2 sector integrity, references and extents, plus audio tracks and cue pregaps. Boot a separate CHD in DuckStation and on Batocera. Check the English dialogue, controller behavior, combat, music, saves and level transitions. Use a hash-checked local builder with user-supplied files.
-
-The proof of concept in this project is source-frame export plus PSX archive indexing. A bootable visual patch depends on identifying the PSX model and texture records and verifying the sprite drawing path.
+1. Trace the PSX light state with an unlit character, a lit torch, a lantern, and an active light spell. Compare each light source to the corresponding DOS level before connecting the preview selector to gameplay.
+2. Extend the four-palette path to the 19 initially linked green goblins on Levels 2, 5 and 7. The Level 2 texture loader uses VRAM x512–639, y384–511 for a native texture. Build a new texture layout or cache with room for the native texture, then check the dungeon, weapons and menus before enabling further floors.
+3. Match combat actions to DOS slots, including the DOS front-angle restrictions on many attack frames. Keep hit and death timings, selection bounds and native fallback for unavailable art. Verify foot placement, occlusion and overlapping sprites.
+4. Use the nine-floor crosswalk for the remaining creatures. Compare a named human in conversation, three troll variants, a ghost, and a shadow beast before moving to HUD, portraits, dungeon materials, objects, and map presentation. Record paired captures at comparable lighting and camera orientation.
+5. Rebuild a scratch disc image using the hash-checked clean Japanese Rev 1 source. Preserve Mode 2 sector integrity and the three CD audio tracks. Boot each candidate in DuckStation, then test original-hardware and Batocera behavior. Check English dialogue, controller behavior, combat, music, saves, and level transitions.
