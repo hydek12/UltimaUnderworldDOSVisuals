@@ -16,7 +16,9 @@ def bcd(number):
 def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
           dos_light_preview=None, lower_floor_goblins=False, lizardmen=None, lizardman_combat=False, level_eight_rats=None,
           level_six_wizards=None, level_six_spiders=False, level_six_casting=False, level_six_combat=False,
-          dos_spell_effects=None, expanded_level_six=False):
+          dos_spell_effects=None, expanded_level_six=False, academy_bank=None):
+    if academy_bank and (not expanded_level_six or level_six_wizards is None):
+        raise ValueError("An Academy bank requires the expanded Level 6 atlas.")
     if expanded_level_six and not level_six_combat:
         raise ValueError("The expanded Level 6 atlas requires the wizard combat preview.")
     if level_six_combat and not level_six_casting:
@@ -59,6 +61,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
                     lanugo.creature_atlas.TEXTURE_PAGES[:1],
                     extra_type=lanugo.creature_atlas.LEVEL_SIX_SPIDER_TYPE if level_six_spiders else None,
                     casting=level_six_casting, combat=level_six_combat, expanded_level_six=expanded_level_six,
+                    academy_bank=academy_bank,
                 )
         else:
             payload = lanugo.payload(atlas, walk_atlas, goblin_variants, dos_light_preview)
@@ -137,4 +140,5 @@ if __name__ == "__main__":
     parser.add_argument("--level-six-combat", action="store_true")
     parser.add_argument("--dos-spell-effects", type=Path, metavar="EXPORTED_EFFECTS")
     parser.add_argument("--expanded-level-six", action="store_true")
+    parser.add_argument("--academy-bank", choices=lanugo.LEVEL_SIX_ACADEMY)
     build(**vars(parser.parse_args()))

@@ -51,6 +51,7 @@ VRAM_GUARD_RAM = PAYLOAD_RAM + 0xe80
 RESIDENT_BYTES = 0x1000
 LOWER_RESIDENT_BYTES = 0x1800
 EXPANDED_RESIDENT_BYTES = 0x2000
+LEVEL_SIX_ACADEMY = {"wizb": (106, 115), "wizc": (107,)}
 LEVEL_SIX_DIRECTIONAL = ((92,), (64, 82), (65, 69), (66, 73))
 MODEL_OWNER_OFFSET = 0x58
 ORDER_COUNT_OFFSET = 0x5c
@@ -642,7 +643,7 @@ def rat_payload(variants):
 
 
 def creature_payload(variants, actor_types, texture_pages, combat=False, extra_type=None, casting=False,
-                     expanded_level_six=False):
+                     expanded_level_six=False, academy_bank=None):
     sources = creature_sources(variants, actor_types, combat, casting)
     images, clut, metadata = creature_atlas.build(sources, texture_pages)
     base = actor_types[0]
@@ -659,8 +660,14 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         # Keep persistent frame lookups below 0x801f8000, where the native floor load writes.
         if not (casting and combat and extra_type == 92 and texture_pages == creature_atlas.TEXTURE_PAGES[:1]):
             raise ValueError("The expanded Level 6 atlas requires the wizard-combat and spider preview.")
+        # Both Academy families fit individually with all facing frames intact.
+        # One table can occupy the two adjacent upper resident slots.
+        families = (LEVEL_SIX_ACADEMY[academy_bank],) if academy_bank else LEVEL_SIX_DIRECTIONAL
+        table_slots = ((0x1c00, 0x400),) if academy_bank else (
+            (0x1000, 0x200), (0x1c00, 0x200), (0x1e00, 0x200), (0x1200, 0x200),
+        )
         image, palettes, directional = creature_atlas.build_families(
-            [creature_sources(variants, types) for types in LEVEL_SIX_DIRECTIONAL],
+            [creature_sources(variants, types) for types in families],
             creature_atlas.TEXTURE_PAGES[1],
         )
         images += (image,)
@@ -674,10 +681,9 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         for row, actor in enumerate(actor_types):
             struct.pack_into("<HH", registry_data, 4 * (actor - 64), 0, creature_atlas.CLUT_BASE + row * 64)
         row = len(actor_types)
-        table_offsets = (0x1000, 0x1c00, 0x1e00, 0x1200)
-        for types, table, location in zip(LEVEL_SIX_DIRECTIONAL, directional, table_offsets, strict=True):
+        for types, table, (location, capacity) in zip(families, directional, table_slots, strict=True):
             compact = creature_atlas.compact_frame_table(table)
-            if len(compact) > 0x200:
+            if len(compact) > capacity:
                 raise ValueError("The compact Level 6 frame table exceeds its safe RAM range.")
             extra_sections[location] = compact
             for actor in types:

@@ -1,6 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
+academy_bank=
 expanded_preview=0
 effects_preview=0
 combat_preview=0
@@ -19,9 +20,12 @@ elif [[ ${1:-} == --level-six-casting ]]; then
     spider_preview=1
     casting_preview=1
     shift
-elif [[ ${1:-} == --level-six-combat || ${1:-} == --level-six-effects || ${1:-} == --level-six-expanded ]]; then
-    if [[ $1 == --level-six-expanded ]]; then
+elif [[ ${1:-} == --level-six-combat || ${1:-} == --level-six-effects || ${1:-} == --level-six-expanded || ${1:-} == --academy-wizb || ${1:-} == --academy-wizc ]]; then
+    if [[ $1 == --level-six-expanded || $1 == --academy-* ]]; then
         expanded_preview=1
+    fi
+    if [[ $1 == --academy-* ]]; then
+        academy_bank=${1#--academy-}
     fi
     if [[ $1 != --level-six-combat ]]; then
         effects_preview=1
@@ -40,7 +44,7 @@ if [[ ${1:-} == --english-patch ]]; then
 fi
 
 if [[ $# != 5 ]]; then
-    printf 'Usage: %s [--level-six-wizards|--level-six-spiders|--level-six-casting|--level-six-combat|--level-six-effects|--level-six-expanded] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
+    printf 'Usage: %s [--level-six-wizards|--level-six-spiders|--level-six-casting|--level-six-combat|--level-six-effects|--level-six-expanded|--academy-wizb|--academy-wizc] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
     exit 2
 fi
 
@@ -115,10 +119,18 @@ if (( wizard_preview )); then
 fi
 
 if (( expanded_preview )); then
-    for actor in 64 65 66 69 73 82; do
+    case $academy_bank in
+        wizb) directional_actors=(106 115) ;;
+        wizc) directional_actors=(107) ;;
+        *) directional_actors=(64 65 66 69 73 82) ;;
+    esac
+    for actor in "${directional_actors[@]}"; do
         "$exporter" export-creature-atlases "$dos_root" "$actor" "$scratch/wizards/type-$actor"
     done
     wizard_args+=(--expanded-level-six)
+    if [[ -n $academy_bank ]]; then
+        wizard_args+=(--academy-bank "$academy_bank")
+    fi
 fi
 
 if (( effects_preview )); then
