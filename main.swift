@@ -110,7 +110,14 @@ struct DOSFrame {
     let hotspotY: Int
 }
 
-func readFrame(root: URL, actor: Int, slot: Int, frame: Int) throws -> DOSFrame {
+func readFrame(root: URL, actor: Int, slot: Int, frame: Int, shade: Int? = nil) throws -> DOSFrame {
+    let shadeRow = try shade.map { row in
+        let light = try Bytes(root.appendingPathComponent("DATA/LIGHT.DAT")).data
+        guard light.count == 16 * 256 else {
+            throw FormatError("Expected sixteen 256-color rows in LIGHT.DAT.")
+        }
+        return Array(light[(row * 256)..<((row + 1) * 256)])
+    }
     let crit = root.appendingPathComponent("CRIT")
     let associations = try Bytes(crit.appendingPathComponent("ASSOC.ANM"))
     let index = 256 + (actor - 64) * 2
@@ -159,8 +166,9 @@ func readFrame(root: URL, actor: Int, slot: Int, frame: Int) throws -> DOSFrame 
         }
         for (index, atom) in pixels.enumerated() {
             let color = try page.byte(paletteHeader + 1 + palette * 32 + atom)
+            let shadedColor = shadeRow.map { Int($0[color]) } ?? color
             for channel in 0..<3 {
-                destination[index * 4 + channel] = UInt8(clamping: try colors.byte(color * 3 + channel) * 255 / 63)
+                destination[index * 4 + channel] = UInt8(clamping: try colors.byte(shadedColor * 3 + channel) * 255 / 63)
             }
             destination[index * 4 + 3] = color == 0 ? 0 : 255
         }
@@ -170,8 +178,8 @@ func readFrame(root: URL, actor: Int, slot: Int, frame: Int) throws -> DOSFrame 
     throw FormatError("Animation slot is absent from both CRIT pages.")
 }
 
-func exportFrame(root: URL, actor: Int, slot: Int, frame: Int, output: URL) throws {
-    let result = try readFrame(root: root, actor: actor, slot: slot, frame: frame)
+func exportFrame(root: URL, actor: Int, slot: Int, frame: Int, output: URL, shade: Int?) throws {
+    let result = try readFrame(root: root, actor: actor, slot: slot, frame: frame, shade: shade)
     let bitmap = result.bitmap
     guard let png = bitmap.representation(using: .png, properties: [:]) else {
         throw FormatError("Could not encode PNG.")
@@ -281,14 +289,21 @@ do {
                         actor: actor, name: "goblin-idle", slots: 0x20...0x27, height: 192)
         try exportAtlas(root: root, directory: directory.appendingPathComponent("walk"),
                         actor: actor, name: "goblin-walk", slots: 0x80...0x87, height: 224)
-    case "export-dos" where arguments.count == 6:
+    case "export-dos" where arguments.count == 6 || arguments.count == 7:
         guard let actor = Int(arguments[2]), (64...127).contains(actor),
               let slot = Int(arguments[3]), (0...255).contains(slot),
               let frame = Int(arguments[4]), (0...7).contains(frame) else {
             throw FormatError("Use decimal actor ID 64–127, slot 0–255, and frame 0–7.")
         }
+        var shade: Int?
+        if arguments.count == 7 {
+            guard let row = Int(arguments[6]), (0...15).contains(row) else {
+                throw FormatError("Use a DOS shade row from 0 to 15.")
+            }
+            shade = row
+        }
         try exportFrame(root: URL(fileURLWithPath: arguments[1]), actor: actor, slot: slot,
-                        frame: frame, output: URL(fileURLWithPath: arguments[5]))
+                        frame: frame, output: URL(fileURLWithPath: arguments[5]), shade: shade)
     default:
         throw FormatError("""
         Usage
@@ -296,7 +311,7 @@ do {
           UnderworldVisuals export-lanugo-tim DOS_ROOT NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-lanugo-walk-tim DOS_ROOT NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-goblin-atlases DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY
-          UnderworldVisuals export-dos DOS_ROOT ACTOR_ID SLOT FRAME OUTPUT.png
+          UnderworldVisuals export-dos DOS_ROOT ACTOR_ID SLOT FRAME OUTPUT.png [SHADE_ROW]
         """)
     }
 } catch {

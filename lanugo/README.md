@@ -52,6 +52,10 @@ python3 lanugo/build_english.py english-v2-track01.bin /tmp/lanugo-atlas english
 
 For a GPU capture of this build, pass `--goblin-variants /tmp/goblin-variants` to `verify_vram.py`. The four-palette build uses 49 payload sectors. Its second texture page shares VRAM coordinates with native textures on other floors. The render gates check the Level 1 model table before using it.
 
+On DuckStation, crossing the original stairs to Level 2 disabled the sprite atlas. Opening and closing Select there kept it disabled. On climbing back to Level 1, the loader restored both pages and all four palettes. A GPU capture reproduced all 96,512 atlas bytes, and Lanugo’s 32 walking combinations and two idle draws passed again. Inventory and unarmed combat also preserved the atlas.
+
+The final English data track sets the ISO volume label to `ULTIMA UNDERWORLD ENGLISH PATCH`. For a matching title in DuckStation, add the containing directory to its game list and set **Game Properties → Summary → Title** to `Ultima Underworld: The Stygian Abyss (English Patch - DOS Goblins)`. This property is keyed by image path. The original PSX disc serial remains `SLPS-00742`.
+
 ## English v2.0 and DOS Lanugo
 
 Use the same DOS atlas exported by the Xcode scheme. Extract the raw Track 1 BIN from the English v2.0 CHD or obtain it by applying Gertius's v2.0 fan translation to clean Japanese Rev 1. The combined builder expects the English Track 1 SHA-1 `325585c11548538e323e8896c3fb8b1cc5d65521`.

@@ -12,12 +12,13 @@ This macOS Xcode command-line project uses the local DOS release as the visual r
 ```sh
 UnderworldVisuals inspect-psx /path/to/AVATAR > avatar-index.csv
 UnderworldVisuals export-dos /path/to/ultimaunderworld/uu 70 36 0 goblin.png
+UnderworldVisuals export-dos /path/to/ultimaunderworld/uu 70 36 0 goblin-shade-8.png 8
 UnderworldVisuals export-dos /path/to/ultimaunderworld/uu 96 36 0 troll.png
 UnderworldVisuals export-dos /path/to/ultimaunderworld/uu 111 36 0 troll-111.png
 UnderworldVisuals export-dos /path/to/ultimaunderworld/uu 112 36 0 troll-112.png
 ```
 
-The export arguments after the DOS path are decimal actor type ID, animation slot, frame within the slot, and output path. Slot 36 is the front-facing idle direction. Slots 32–39 provide the other view directions for idle, where available. Ghost blend, palette cycling, dungeon lighting and projection belong to the renderer. The PNG exporter shows the source palette and index-zero transparency.
+The export arguments after the DOS path are decimal actor type ID, animation slot, frame within the slot, and output path. Slot 36 is the front-facing idle direction. Slots 32–39 provide the other view directions for idle, where available. With an optional shade row from 0 to 15, the exporter maps the original VGA indices through `DATA/LIGHT.DAT` before looking up their colors and keeps the original transparency. Omit the shade for the source palette used by the disc atlas. The DOS renderer selects shade by scene conditions and also handles ghost blend, palette cycling, and projection.
 
 See [Visual assessment and patch design](VISUAL-ASSESSMENT.md) for local findings, the intended renderer changes, and the acceptance tests.
 
