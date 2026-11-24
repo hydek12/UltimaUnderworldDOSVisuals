@@ -35,6 +35,7 @@ DRAW_GATE = 0x800C2440
 VRAM_UPLOAD_GATE = 0x800C2480
 MENU_GATE = 0x800C24B0
 ACTOR_GATE = 0x800C24E0
+DIALOGUE_RETURN = 0x800C2200
 NATIVE_GP = 0x800C9260
 LEVEL_ONE_MODELS = 0x800AB890
 SUPPRESS_RAM = PAYLOAD_RAM + 0x100
@@ -113,11 +114,11 @@ def menu_gate():
     return c.out()
 
 
-def menu_return(upload_ram=WALK_UPLOAD_RAM, floor_aware=False):
-    c = Code(MENU_RAM)
+def menu_return(upload_ram=WALK_UPLOAD_RAM, floor_aware=False, origin=MENU_RAM, native=0x8005b368):
+    c = Code(origin)
     c.imm("addiu", "sp", "sp", -32)
     c.mem("sw", "ra", 28, "sp")
-    c.jump(0x8005b368, True)
+    c.jump(native, True)
     c.nop()
     c.mem("sw", "v0", 24, "sp")
     if not floor_aware:
@@ -873,6 +874,8 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
         code[VRAM_UPLOAD_GATE] = vram_upload_gate(floor_aware)
     if deferred_ordering:
         code[ACTOR_GATE] = actor_gate()
+    if expanded_level_six:
+        code[DIALOGUE_RETURN] = menu_return(VARIANT_UPLOAD_RAM, True, DIALOGUE_RETURN, 0x8003ea5c)
     for (address, blob), next_address in zip(sorted(code.items()), sorted(code)[1:]):
         if address + len(blob) > next_address:
             raise ValueError(f"Overlapping executable stubs at 0x{address:08x} and 0x{next_address:08x}.")
@@ -899,6 +902,8 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
         stack_prologue = bytes.fromhex("b8febd27")
         save_actor = bytes.fromhex("e000a5af")
         hooks += ((0x8002a258, stack_prologue + save_actor, jump(ACTOR_GATE) + stack_prologue),)
+    if expanded_level_six:
+        hooks += ((0x800260e4, jump(0x8003ea5c, True), jump(DIALOGUE_RETURN, True)),)
     for address, expect, replace in hooks:
         offset = 2048 + address - EXE_LOAD
         if target[offset:offset + len(expect)] != expect:

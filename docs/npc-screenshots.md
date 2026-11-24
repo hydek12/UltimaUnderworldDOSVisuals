@@ -61,3 +61,9 @@ The DOS animation uses a smaller hand gesture and the original gold palette. The
 ![A gold-robed DOS wizard with a blue arc between its raised hands](screenshots/ultima-underworld-wizard-melee-dos-sprite.png)
 
 This staged melee pose shows the gold DOS palette and the blue arc drawn into the sprite itself. PlayStation combat logic still controls when attacks land.
+
+## Level 6 Gralwart dialogue check
+
+![Gralwart’s English dialogue and two response options](screenshots/ultima-underworld-gralwart-dialogue.png)
+
+Gralwart opens his English dialogue through the original PlayStation conversation routine. The expanded build restores the DOS NPC textures on return to the dungeon.

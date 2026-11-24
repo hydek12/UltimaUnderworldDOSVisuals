@@ -54,7 +54,7 @@ For a local comparison, run `UnderworldVisuals export-dos-spell-effects DOS_ROOT
 
 Use `--level-six-expanded` as the first option. It includes the spell-effects preview and adds idle and walking sprites for 14 initially linked Level 6 rot grubs (64 and 82), slugs (65 and 69), and bats (66 and 73). Three dormant records match the same renderer rules. The shared secondary texture page also holds the six previously supported spiders. Each family uses its own DOS palette bank and frame table. Effects, actor records, and dialogue data retain the previous preview's data. Combat actions on the new families use the native renderer.
 
-The expected Track 1 SHA-1 is `846875b8f79e1342fd81b678c5bb3c4b94beb708`. This preview is one batch of the Level 6 and named dialogue work. Additional families need more texture capacity. For example, the two-page layout cannot add the Level 6 spectre alongside the current allocation without moving an existing family or changing the layout.
+The expected Track 1 SHA-1 is `db0159e33a35e974222ae29752ad3eded98f58a3`. This preview is one batch of the Level 6 and named dialogue work. Additional families need more texture capacity. For example, the two-page layout cannot add the Level 6 spectre alongside the current allocation without moving an existing family or changing the layout.
 
 ## Separate release code from game assets
 
