@@ -26,7 +26,7 @@ python3 lanugo/build_english.py english-v2-track01.bin /tmp/lanugo-atlas english
 
 The command exports `lanugo-walk.tim` and `lanugo-walk.csv` from DOS creature 70, slots `0x80` through `0x87`. The CSV records all four phases per facing, including repeated source frames, and the original sprite hotspots. The 30 unique images use 222 rows of a 256×224 atlas. The idle and walk atlases have the same 16 RGB555 values, including transparency, so the 4bpp renderer uses one CLUT for both.
 
-Both disc builders accept the optional `--walk-atlas` argument. Lanugo's masked PSX action `0x20` selects the idle texture. Action `0x2c` selects the walk texture after its upload completes. Each seven-frame PSX cycle maps to DOS phases 0, 0, 1, 1, 2, 2, 3. The two atlas textures use the same eight-direction table and their individual hotspots. Attack, hit and death animations still use the PSX model.
+Both disc builders accept the optional `--walk-atlas` argument. This enables DOS sprites for Level 1 creature type 70, which includes Lanugo and two unnamed green goblins. Masked PSX action `0x20` selects the idle texture. Action `0x2c` selects the walk texture after its upload completes. Each seven-frame PSX cycle maps to DOS phases 0, 0, 1, 1, 2, 2, 3. The two atlas textures use the same eight-direction table and their individual hotspots. Attack, hit and death animations use the PSX model. Native uploads that overlap the sprite textures switch rendering back to those models. The Select menu restores the atlases on return to Level 1.
 
 The two-atlas build reads 29 sectors and uploads each texture in two bands from a shared 18 KiB buffer at `0x801f8800`. This keeps live memory near `0x801f8000` out of the transfer. It waits for the GPU after each band before reusing the buffer. Both atlas textures and the palette can be checked against a raw DuckStation GPU capture taken in Lanugo's room.
 
@@ -34,6 +34,23 @@ The two-atlas build reads 29 sectors and uploads each texture in two bands from 
 zstd -dc capture.psxgpu.zst > capture.psxgpu
 python3 lanugo/verify_vram.py capture.psxgpu /tmp/lanugo-atlas /tmp/lanugo-walk-atlas
 ```
+
+## Four green goblin palettes
+
+Type 70 uses 16 RGB555 values including transparency. The three other palettes for the same DOS artwork use 17 to 23 values. Across the four palettes, 25 distinct index patterns preserve the original color for every pixel. The optional build below uses two 8-bit texture pages and four CLUT rows to preserve those colors. It enables types 70, 76, 77, and 78 on Level 1. Some frames are stored rotated to fit VRAM. Their four UV corners restore their original orientation.
+
+```sh
+mkdir -p /tmp/goblin-variants
+for type in 76 77 78; do
+  UnderworldVisuals export-goblin-atlases DOS_ROOT "$type" "/tmp/goblin-variants/type-$type"
+done
+python3 lanugo/build_english.py english-v2-track01.bin /tmp/lanugo-atlas english-dos-goblins.bin \
+  --walk-atlas /tmp/lanugo-walk-atlas --goblin-variants /tmp/goblin-variants
+./build-rev1-patch.sh --allow-expanded-track clean-japanese-rev1-track01.bin \
+  english-dos-goblins.bin english-dos-goblins.xdelta
+```
+
+For a GPU capture of this build, pass `--goblin-variants /tmp/goblin-variants` to `verify_vram.py`. The four-palette build uses 49 payload sectors. Its second texture page shares VRAM coordinates with native textures on other floors. The render gates check the Level 1 model table before using it.
 
 ## English v2.0 and DOS Lanugo
 

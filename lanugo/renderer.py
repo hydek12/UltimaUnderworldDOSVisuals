@@ -7,6 +7,16 @@ WALK_ACTION = 0x2c
 GREEN_GOBLIN_TYPE = 70
 
 
+def require_goblin_type(c, actor, scratch, fallback):
+    c.imm("addiu", scratch, actor, -76)
+    c.imm("sltiu", scratch, scratch, 3)
+    c.branch("bne", scratch, "zero", "goblin_type")
+    c.imm("ori", scratch, "zero", GREEN_GOBLIN_TYPE)
+    c.branch("bne", actor, scratch, fallback)
+    c.nop()
+    c.label("goblin_type")
+
+
 def require_atlas_action(c, action, scratch, walk_ready, fallback):
     # The caller masked the native action and XORed it with IDLE_ACTION.
     c.branch("beq", action, "zero", "atlas_action")
@@ -22,7 +32,7 @@ def require_atlas_action(c, action, scratch, walk_ready, fallback):
 
 
 # Keep actor projection and hit testing when substituting a sprite.
-def suppress(origin, order_table_register="v1", walk_ready=None):
+def suppress(origin, order_table_register="v1", walk_ready=None, wide=False):
     c=Code(origin)
     c.mem("lw","t8",0x74,"sp")
     c.address("t9",0x8002a5d8)
@@ -44,9 +54,12 @@ def suppress(origin, order_table_register="v1", walk_ready=None):
         c.nop()
     else:
         c.imm("andi", "t8", "t8", 0x1ff)
-        c.imm("xori", "t8", "t8", GREEN_GOBLIN_TYPE)
-        c.branch("bne", "t8", "zero", "normal")
-        c.nop()
+        if wide:
+            require_goblin_type(c, "t8", "t7", "normal")
+        else:
+            c.imm("xori", "t8", "t8", GREEN_GOBLIN_TYPE)
+            c.branch("bne", "t8", "zero", "normal")
+            c.nop()
         require_atlas_action(c, "t9", "t8", walk_ready, "normal")
     c.mem("sh","s3",0x18c,"sp")
     c.jump(0x8002b684)
@@ -63,7 +76,7 @@ DOS_IDLE_DIRECTIONS = bytes((
 ))
 
 
-def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None):
+def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=False):
     c=Code(origin)
     c.mem("lw","t0",0xe0,"sp")
     c.imm("ori", "t1", "zero", 10 if walk_ready is None else GREEN_GOBLIN_TYPE)
@@ -74,7 +87,10 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None):
         c.mem("lhu", "t2", 0, "t0")
         c.nop()
         c.imm("andi", "t2", "t2", 0x1ff)
-    c.branch("bne","t2","t1","finish")
+    if wide:
+        require_goblin_type(c, "t2", "t1", "finish")
+    else:
+        c.branch("bne","t2","t1","finish")
     c.mem("lbu","t4",23,"t0")
     c.mem("lhu","t6",12,"t0")
     c.imm("andi","t4","t4",0x3f)
@@ -84,7 +100,7 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None):
     else:
         require_atlas_action(c, "t4", "t7", walk_ready, "finish")
         c.alu("sltu", "t7", "zero", "t4")
-        c.shift("sll", "t7", "t7", 8)  # Walking metadata follows the 256-byte idle table.
+        c.shift("sll", "t7", "t7", 9 if wide else 8)  # Walking metadata follows the idle table.
     # Group the seven native animation frames into four DOS phases.
     c.shift("srl","t6","t6",13)
     c.imm("andi","t6","t6",3)
@@ -109,16 +125,17 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None):
     c.address("t0", metadata)
     c.shift("sll", "t2", "t2", 2)
     c.alu("addu", "t2", "t2", "t6")
-    c.shift("sll", "t2", "t2", 3)
+    c.shift("sll", "t2", "t2", 4 if wide else 3)
     c.alu("addu", "t0", "t0", "t2")
     if walk_ready is not None:
         c.alu("addu", "t0", "t0", "t7")
 
     # Pass the original projected foot/center through the DOS hotspot.
-    c.mem("lbu","t2",2,"t0") # width
-    c.mem("lbu","t3",3,"t0") # height
-    c.mem("lbu","t4",4,"t0") # hotspot x
-    c.mem("lbu","t5",5,"t0") # hotspot y
+    dimensions = 0 if wide else 2
+    c.mem("lbu","t2",dimensions,"t0") # width
+    c.mem("lbu","t3",dimensions + 1,"t0") # height
+    c.mem("lbu","t4",dimensions + 2,"t0") # hotspot x
+    c.mem("lbu","t5",dimensions + 3,"t0") # hotspot y
     c.muldiv("multu","t1","t4")
     c.nop()
     c.mflo("t4")
@@ -138,8 +155,12 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None):
     c.nop()
     c.mflo("t2")
     c.muldiv("divu","t2","t3")
-    c.mem("lhu","t4",0,"t0") # packed base uv
-    c.mem("lbu","t5",2,"t0")
+    if wide:
+        c.mem("lhu", "t4", 4, "t0")
+        c.mem("lhu", "t5", 6, "t0")
+    else:
+        c.mem("lhu","t4",0,"t0") # packed base uv
+        c.mem("lbu","t5",2,"t0")
     c.mflo("t2")
     c.alu("addu","t2","t8","t2") # right
     c.alu("addu","t3","t9","t1") # bottom
@@ -181,27 +202,51 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None):
     c.mem("sw","v1",24,"t7")
     c.alu("OR","v1","t2","t3")
     c.mem("sw","v1",32,"t7")
-    c.imm("lui","v1","zero",clut)
-    c.alu("OR","v1","v1","t4")
-    c.mem("sw","v1",12,"t7")
-    c.imm("addiu","t5","t5",-1)
-    c.alu("addu","t5","t4","t5")
-    if walk_ready is None:
-        c.imm("lui","v1","zero",0x16)
-    else:
-        c.mem("lbu", "v1", 6, "t0")
+    if wide:
+        # The 8-bit layout stores four UV corners so rotated frames render upright.
+        c.mem("lw", "v1", 0xe0, "sp")
         c.nop()
+        c.mem("lhu", "v1", 0, "v1")
+        c.imm("ori", "t6", "zero", GREEN_GOBLIN_TYPE)
+        c.imm("andi", "v1", "v1", 0x1ff)
+        c.branch("beq", "v1", "t6", "base_clut")
+        c.imm("lui", "t6", "zero", clut)
+        c.imm("addiu", "v1", "v1", -75)
+        c.shift("sll", "v1", "v1", 22)  # Select the CLUT row above the first.
+        c.alu("addu", "t6", "t6", "v1")
+        c.label("base_clut")
+        c.alu("OR", "v1", "t6", "t4")
+        c.mem("sw", "v1", 12, "t7")
+        c.mem("lbu", "v1", 12, "t0")
+        c.mem("lhu", "t4", 8, "t0")
         c.shift("sll", "v1", "v1", 16)
-    c.alu("OR","v1","v1","t5")
-    c.mem("sw","v1",20,"t7")
-    c.mem("lbu","v1",3,"t0")
-    c.nop()
-    c.imm("addiu","v1","v1",-1)
-    c.shift("sll","v1","v1",8)
-    c.alu("addu","t4","t4","v1")
-    c.mem("sw","t4",28,"t7")
-    c.alu("addu","t5","t5","v1")
-    c.mem("sw","t5",36,"t7")
+        c.alu("OR", "v1", "v1", "t5")
+        c.mem("sw", "v1", 20, "t7")
+        c.mem("lhu", "t5", 10, "t0")
+        c.mem("sw", "t4", 28, "t7")
+        c.mem("sw", "t5", 36, "t7")
+    else:
+        c.imm("lui","v1","zero",clut)
+        c.alu("OR","v1","v1","t4")
+        c.mem("sw","v1",12,"t7")
+        c.imm("addiu","t5","t5",-1)
+        c.alu("addu","t5","t4","t5")
+        if walk_ready is None:
+            c.imm("lui","v1","zero",0x16)
+        else:
+            c.mem("lbu", "v1", 6, "t0")
+            c.nop()
+            c.shift("sll", "v1", "v1", 16)
+        c.alu("OR","v1","v1","t5")
+        c.mem("sw","v1",20,"t7")
+        c.mem("lbu","v1",3,"t0")
+        c.nop()
+        c.imm("addiu","v1","v1",-1)
+        c.shift("sll","v1","v1",8)
+        c.alu("addu","t4","t4","v1")
+        c.mem("sw","t4",28,"t7")
+        c.alu("addu","t5","t5","v1")
+        c.mem("sw","t5",36,"t7")
     c.label("finish")
     c.jump(0x800757c4)
     c.nop()

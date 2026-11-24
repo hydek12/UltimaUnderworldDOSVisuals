@@ -10,6 +10,7 @@ from pathlib import Path
 
 from mipswords import Code, ret
 import renderer
+import variant_atlas
 
 SECTOR_SIZE = 2352
 OFFICIAL_HASH = "937ae8cf9a65526f2622c39d34205941f22c10cb"
@@ -38,6 +39,7 @@ WALK_READY_RAM = PAYLOAD_RAM + 8
 DRAW_RAM = PAYLOAD_RAM + 0x200
 UPLOAD_RAM = PAYLOAD_RAM + 0x700
 WALK_UPLOAD_RAM = PAYLOAD_RAM + 0xa00
+VARIANT_UPLOAD_RAM = PAYLOAD_RAM + 0xc00
 MENU_RAM = PAYLOAD_RAM + 0xe00
 VRAM_GUARD_RAM = PAYLOAD_RAM + 0xe80
 RESIDENT_BYTES = 0x1000
@@ -90,7 +92,7 @@ def menu_gate():
     return c.out()
 
 
-def menu_return():
+def menu_return(upload_ram=WALK_UPLOAD_RAM):
     c = Code(MENU_RAM)
     c.imm("addiu", "sp", "sp", -32)
     c.mem("sw", "ra", 28, "sp")
@@ -107,7 +109,7 @@ def menu_return():
     c.branch("beq", "t1", "t2", "done")
     c.nop()
     c.mem("lw", "a0", 12, "t0")
-    c.jump(WALK_UPLOAD_RAM, True)
+    c.jump(upload_ram, True)
     c.nop()
     c.label("done")
     c.mem("lw", "ra", 28, "sp")
@@ -137,24 +139,44 @@ def vram_upload_gate():
     return c.out()
 
 
-def vram_guard():
+def vram_guard(wide=False):
     c = Code(VRAM_GUARD_RAM)
     # Native TIM uploads must invalidate sprites before sharing this VRAM region.
     c.mem("lhu", "t0", 0, "a0")
     c.mem("lhu", "t1", 2, "a0")
     c.mem("lhu", "t2", 4, "a0")
     c.mem("lhu", "t3", 6, "a0")
-    c.imm("sltiu", "t4", "t0", 512)
-    c.branch("beq", "t4", "zero", "upload")
-    c.imm("sltiu", "t4", "t1", 480)
-    c.branch("beq", "t4", "zero", "upload")
-    c.alu("addu", "t2", "t0", "t2")
-    c.imm("sltiu", "t4", "t2", 385)
-    c.branch("bne", "t4", "zero", "upload")
-    c.alu("addu", "t3", "t1", "t3")
-    c.imm("sltiu", "t4", "t3", 257)
-    c.branch("bne", "t4", "zero", "upload")
-    c.nop()
+    if wide:
+        c.alu("addu", "t2", "t0", "t2")
+        c.alu("addu", "t3", "t1", "t3")
+        c.imm("sltiu", "t4", "t0", 512)
+        c.branch("beq", "t4", "zero", "second_page")
+        c.imm("sltiu", "t4", "t2", 385)
+        c.branch("bne", "t4", "zero", "second_page")
+        c.imm("sltiu", "t4", "t3", 257)
+        c.branch("beq", "t4", "zero", "invalidate")
+        c.nop()
+        c.label("second_page")
+        c.imm("sltiu", "t4", "t0", 640)
+        c.branch("beq", "t4", "zero", "upload")
+        c.imm("sltiu", "t4", "t2", 513)
+        c.branch("bne", "t4", "zero", "upload")
+        c.imm("sltiu", "t4", "t3", 385)
+        c.branch("bne", "t4", "zero", "upload")
+        c.nop()
+        c.label("invalidate")
+    else:
+        c.imm("sltiu", "t4", "t0", 512)
+        c.branch("beq", "t4", "zero", "upload")
+        c.imm("sltiu", "t4", "t1", 480)
+        c.branch("beq", "t4", "zero", "upload")
+        c.alu("addu", "t2", "t0", "t2")
+        c.imm("sltiu", "t4", "t2", 385)
+        c.branch("bne", "t4", "zero", "upload")
+        c.alu("addu", "t3", "t1", "t3")
+        c.imm("sltiu", "t4", "t3", 257)
+        c.branch("bne", "t4", "zero", "upload")
+        c.nop()
     c.address("t0", PAYLOAD_RAM)
     c.mem("sw", "zero", 4, "t0")
     c.label("upload")
@@ -162,7 +184,7 @@ def vram_guard():
     return c.out()
 
 
-def loader(payload_lba=PAYLOAD_LBA, walking=False):
+def loader(payload_lba=PAYLOAD_LBA, walking=False, wide=False):
     c = Code(BOOT)
     c.imm("addiu", "sp", "sp", -32)
     c.mem("sw", "ra", 28, "sp")
@@ -188,7 +210,8 @@ def loader(payload_lba=PAYLOAD_LBA, walking=False):
     if walking:
         c.address("a0", offset)
         c.mem("sw", "a0", 12, "t2")
-    c.jump(WALK_UPLOAD_RAM if walking else UPLOAD_RAM, True)
+    upload_ram = VARIANT_UPLOAD_RAM if wide else WALK_UPLOAD_RAM if walking else UPLOAD_RAM
+    c.jump(upload_ram, True)
     c.nop()
     c.label("done")
     c.mem("lw", "ra", 28, "sp")
@@ -265,26 +288,21 @@ def walking_uploader():
     return c.out()
 
 
-def read_atlas(directory, name, height, first_slot, texture_page=0):
-    data = (directory / f"lanugo-{name}.tim").read_bytes()
+def read_source_atlas(directory, name, height, first_slot, prefix="lanugo"):
+    data = (directory / f"{prefix}-{name}.tim").read_bytes()
     image_size = 2 * 256 * height
     if len(data) != 20 + image_size or struct.unpack_from("<IIIHHHH", data) != (
         16, 2, 12 + image_size, 0, 0, 256, height
     ):
         raise ValueError(f"Expected the Xcode tool's 256×{height} 16-bit Lanugo {name} TIM.")
     texels = struct.unpack_from(f"<{256 * height}H", data, 20)
-    colors = sorted(set(texels))
-    if len(colors) != 16 or colors[0] != 0:
-        raise ValueError(f"The Lanugo {name} atlas must contain 16 RGB555 entries including transparency.")
-    indexed = {color: index for index, color in enumerate(colors)}
-    image = bytes(indexed[left] | indexed[right] << 4 for left, right in zip(texels[::2], texels[1::2]))
-    with (directory / f"lanugo-{name}.csv").open() as csv_file:
+    with (directory / f"{prefix}-{name}.csv").open() as csv_file:
         rows = list(csv.DictReader(csv_file))
     if [(int(row["slot"]), int(row["phase"])) for row in rows] != [
         (slot, phase) for slot in range(first_slot, first_slot + 8) for phase in range(4)
     ]:
         raise ValueError(f"Expected four frames for each of the eight Lanugo {name} slots.")
-    metadata = bytearray()
+    metadata = []
     for row in rows:
         u, v, w, h, hx, hy = (int(row[key]) for key in (
             "u", "v", "width", "height", "hotspot_x", "hotspot_y"
@@ -293,11 +311,97 @@ def read_atlas(directory, name, height, first_slot, texture_page=0):
             raise ValueError(f"Lanugo {name} frame lies outside its TIM.")
         if not (0 <= hx < 256 and 0 <= hy < 256):
             raise ValueError(f"Lanugo {name} hotspot is outside the supported byte range.")
-        metadata += struct.pack("8B", u, v, w, h, hx, hy, texture_page, 0)
-    return colors, image, bytes(metadata)
+        metadata.append((u, v, w, h, hx, hy))
+    return texels, metadata
 
 
-def payload(directory, walk_atlas=None):
+def read_atlas(directory, name, height, first_slot, texture_page=0):
+    texels, rows = read_source_atlas(directory, name, height, first_slot)
+    colors = sorted(set(texels))
+    if len(colors) != 16 or colors[0] != 0:
+        raise ValueError(f"The Lanugo {name} atlas must contain 16 RGB555 entries including transparency.")
+    indexed = {color: index for index, color in enumerate(colors)}
+    image = bytes(indexed[left] | indexed[right] << 4 for left, right in zip(texels[::2], texels[1::2]))
+    metadata = b"".join(struct.pack("8B", *row, texture_page, 0) for row in rows)
+    return colors, image, metadata
+
+
+def variant_image_bands():
+    offset = RESIDENT_BYTES
+    for x, y, height in variant_atlas.TEXTURE_PAGES:
+        for start in range(0, height, 64):
+            rows = min(64, height - start)
+            size = variant_atlas.WIDTH * rows
+            yield (x, y + start, variant_atlas.WIDTH // 2, rows), offset, size
+            offset += size
+
+
+def variant_uploader(bands):
+    c = Code(VARIANT_UPLOAD_RAM)
+    c.imm("addiu", "sp", "sp", -32)
+    c.mem("sw", "ra", 28, "sp")
+    c.mem("sw", "a0", 24, "sp")
+    for index, (_, offset, size) in enumerate(bands):
+        c.mem("lw", "a0", 24, "sp")
+        c.address("a1", TEXTURE_STAGING_RAM)
+        c.address("t0", offset)
+        c.alu("addu", "a0", "a0", "t0")
+        c.jump(0x8003f004, True)
+        c.imm("ori", "a2", "zero", size)
+        upload_rectangle(c, 0x10 + 8 * index, TEXTURE_STAGING_RAM)
+        c.jump(0x800903ac, True)
+        c.imm("ori", "a0", "zero", 0)
+    upload_rectangle(c, 0x10 + 8 * len(bands), PAYLOAD_RAM + 0xf00)
+    c.jump(0x800903ac, True)
+    c.imm("ori", "a0", "zero", 0)
+    c.address("t0", PAYLOAD_RAM)
+    c.imm("ori", "t1", "zero", 1)
+    c.mem("sw", "t1", 8, "t0")
+    mark_idle_ready(c)
+    return c.out()
+
+
+def variant_sources(idle_atlas, walk_atlas, variants):
+    data = []
+    for mode, height, slot, base in (("idle", 192, 0x20, idle_atlas), ("walk", 224, 0x80, walk_atlas)):
+        sources = [read_source_atlas(base, mode, height, slot)]
+        for actor in variant_atlas.GOBLIN_TYPES[1:]:
+            directory = variants / f"type-{actor}" / mode
+            sources.append(read_source_atlas(directory, mode, height, slot, prefix="goblin"))
+        data.append(sources)
+    return data
+
+
+def variant_payload(idle_atlas, walk_atlas, variants):
+    sources = variant_sources(idle_atlas, walk_atlas, variants)
+    images, clut, metadata = variant_atlas.build(sources)
+    bands = tuple(variant_image_bands())
+    x, y, _, _ = variant_atlas.CLUT_RECT
+    clut_id = (y << 6) | (x >> 4)
+    rectangles = b"".join(struct.pack("<4H", *rect) for rect, _, _ in bands)
+    rectangles += struct.pack("<4H", *variant_atlas.CLUT_RECT)
+    sections = {
+        0: struct.pack("<I", PAYLOAD_MAGIC),
+        0x10: rectangles,
+        0x90: renderer.DOS_IDLE_DIRECTIONS,
+        0x100: renderer.suppress(SUPPRESS_RAM, walk_ready=WALK_READY_RAM, wide=True),
+        0x180: renderer.suppress(WALK_SUPPRESS_DELAY_RAM, "a0", WALK_READY_RAM, wide=True),
+        0x200: renderer.draw(DRAW_RAM, PAYLOAD_RAM + 0x800, PAYLOAD_RAM + 0x90, clut_id, WALK_READY_RAM, wide=True),
+        0x800: metadata,
+        VARIANT_UPLOAD_RAM - PAYLOAD_RAM: variant_uploader(bands),
+        MENU_RAM - PAYLOAD_RAM: menu_return(VARIANT_UPLOAD_RAM),
+        VRAM_GUARD_RAM - PAYLOAD_RAM: vram_guard(wide=True),
+        0xf00: clut,
+        RESIDENT_BYTES: b"".join(images),
+    }
+    return assemble_payload(sections, RESIDENT_BYTES + sum(map(len, images)))
+
+
+def payload(directory, walk_atlas=None, goblin_variants=None):
+    if goblin_variants is not None:
+        if walk_atlas is None:
+            raise ValueError("The green goblin variants need the idle and walk atlases for type 70.")
+        return variant_payload(directory, walk_atlas, goblin_variants)
     walking = walk_atlas is not None
     colors, image, metadata = read_atlas(directory, "idle", 192, 0x20, 0x16 if walking else 0)
     walk_ready = WALK_READY_RAM if walking else None
@@ -331,6 +435,10 @@ def payload(directory, walk_atlas=None):
     else:
         sections[UPLOAD_RAM - PAYLOAD_RAM] = uploader()
     size = IDLE_PAYLOAD_BYTES + (WALK_PAYLOAD_BYTES if walking else 0)
+    return assemble_payload(sections, size)
+
+
+def assemble_payload(sections, size):
     result = bytearray(size)
     end = 0
     for offset, content in sorted(sections.items()):
@@ -391,10 +499,10 @@ def form1_sector(original, data):
     result[12:16] = original[12:16]
     return result
 
-def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False):
+def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False):
     target = bytearray(original)
     code = {
-        BOOT: loader(payload_lba, walking),
+        BOOT: loader(payload_lba, walking, wide),
         SUPPRESS_NORMAL: gate(SUPPRESS_NORMAL, SUPPRESS_RAM, "v1", walking),
         SUPPRESS_DELAY: gate(SUPPRESS_DELAY, WALK_SUPPRESS_DELAY_RAM if walking else SUPPRESS_DELAY_RAM, "a0", walking),
         DRAW_GATE: gate(DRAW_GATE, DRAW_RAM, walking=walking),
@@ -436,7 +544,7 @@ def write_sector(track, lba, sector):
     track.seek(lba * SECTOR_SIZE)
     track.write(sector)
 
-def build(source, atlas, output, walk_atlas=None):
+def build(source, atlas, output, walk_atlas=None, goblin_variants=None):
     with source.open("rb") as track:
         if hashlib.file_digest(track, "sha1").hexdigest() != OFFICIAL_HASH:
             raise ValueError("Source is not the verified original Japanese Rev 1 Track 1.")
@@ -449,8 +557,8 @@ def build(source, atlas, output, walk_atlas=None):
             raise ValueError("Unexpected Japanese boot executable extent.")
         exe_sectors = [read_sector(track, extent + index) for index in range(length // 2048)]
         exe = b"".join(sector[24:2072] for sector in exe_sectors)
-        edited = edit_executable(exe, walking=walk_atlas is not None)
-        disk_payload = payload(atlas, walk_atlas)
+        disk_payload = payload(atlas, walk_atlas, goblin_variants)
+        edited = edit_executable(exe, walking=walk_atlas is not None, wide=goblin_variants is not None)
         modified = {}
         for index, sector in enumerate(exe_sectors):
             offset = index * 2048
@@ -482,5 +590,6 @@ if __name__ == "__main__":
     parser.add_argument("atlas_directory", type=Path)
     parser.add_argument("output_track", type=Path)
     parser.add_argument("--walk-atlas", type=Path)
+    parser.add_argument("--goblin-variants", type=Path)
     args = parser.parse_args()
-    build(args.japanese_track, args.atlas_directory, args.output_track, args.walk_atlas)
+    build(args.japanese_track, args.atlas_directory, args.output_track, args.walk_atlas, args.goblin_variants)
