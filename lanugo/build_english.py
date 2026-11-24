@@ -12,7 +12,8 @@ ENGLISH_SHA1 = "325585c11548538e323e8896c3fb8b1cc5d65521"
 def bcd(number):
     return ((number // 10) << 4) | (number % 10)
 
-def build(english, atlas, output, walk_atlas=None, goblin_variants=None, dos_light_preview=None):
+def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
+          dos_light_preview=None, lower_floor_goblins=False):
     with english.open("rb") as source:
         if hashlib.file_digest(source, "sha1").hexdigest() != ENGLISH_SHA1:
             raise ValueError("Expected the verified English v2.0 raw data track.")
@@ -20,7 +21,15 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None, dos_lig
         first_lba, remainder = divmod(source.tell(), lanugo.SECTOR_SIZE)
         if remainder:
             raise ValueError("Incomplete raw data sector.")
-        payload = lanugo.payload(atlas, walk_atlas, goblin_variants, dos_light_preview)
+        lower_payload_lba = None
+        if lower_floor_goblins:
+            if walk_atlas is None or goblin_variants is None:
+                raise ValueError("Lower-floor goblins require both --walk-atlas and --goblin-variants.")
+            payload = lanugo.variant_payload(atlas, walk_atlas, goblin_variants, dos_light_preview, floor_aware=True)
+            lower_payload_lba = first_lba + len(payload) // 2048
+            payload += lanugo.lower_floor_payload(goblin_variants)
+        else:
+            payload = lanugo.payload(atlas, walk_atlas, goblin_variants, dos_light_preview)
         sectors = [
             lanugo.read_sector(source, lba)
             for lba in range(lanugo.EXE_LBA, lanugo.EXE_LBA + 761856 // 2048)
@@ -28,6 +37,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None, dos_lig
         executable = b"".join(sector[24:2072] for sector in sectors)
         edited = lanugo.edit_executable(
             executable, first_lba, walking=walk_atlas is not None, wide=goblin_variants is not None,
+            lower_payload_lba=lower_payload_lba,
         )
         updates = {}
         for index, original in enumerate(sectors):
@@ -72,4 +82,5 @@ if __name__ == "__main__":
     parser.add_argument("--walk-atlas", type=Path)
     parser.add_argument("--goblin-variants", type=Path)
     parser.add_argument("--dos-light-preview", type=Path, metavar="DOS_ROOT")
+    parser.add_argument("--lower-floor-goblins", action="store_true")
     build(**vars(parser.parse_args()))

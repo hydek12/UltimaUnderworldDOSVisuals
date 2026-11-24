@@ -5,6 +5,7 @@ from mipswords import Code
 IDLE_ACTION = 0x20
 WALK_ACTION = 0x2c
 GREEN_GOBLIN_TYPE = 70
+LOWER_GOBLIN_TYPE = 78
 
 
 def require_goblin_type(c, actor, scratch, fallback):
@@ -32,7 +33,7 @@ def require_atlas_action(c, action, scratch, walk_ready, fallback):
 
 
 # Keep actor projection and hit testing when substituting a sprite.
-def suppress(origin, order_table_register="v1", walk_ready=None, wide=False):
+def suppress(origin, order_table_register="v1", walk_ready=None, wide=False, lower_floor=False):
     c=Code(origin)
     c.mem("lw","t8",0x74,"sp")
     c.address("t9",0x8002a5d8)
@@ -57,7 +58,7 @@ def suppress(origin, order_table_register="v1", walk_ready=None, wide=False):
         if wide:
             require_goblin_type(c, "t8", "t7", "normal")
         else:
-            c.imm("xori", "t8", "t8", GREEN_GOBLIN_TYPE)
+            c.imm("xori", "t8", "t8", LOWER_GOBLIN_TYPE if lower_floor else GREEN_GOBLIN_TYPE)
             c.branch("bne", "t8", "zero", "normal")
             c.nop()
         require_atlas_action(c, "t9", "t8", walk_ready, "normal")
@@ -76,11 +77,15 @@ DOS_IDLE_DIRECTIONS = bytes((
 ))
 
 
-def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=False, shade_selector=None):
+def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=False,
+         shade_selector=None, overlay_offset=None):
     c=Code(origin)
     shade_return = None
     c.mem("lw","t0",0xe0,"sp")
-    c.imm("ori", "t1", "zero", 10 if walk_ready is None else GREEN_GOBLIN_TYPE)
+    actor_type = 10 if walk_ready is None else GREEN_GOBLIN_TYPE
+    if overlay_offset is not None:
+        actor_type = LOWER_GOBLIN_TYPE
+    c.imm("ori", "t1", "zero", actor_type)
     if walk_ready is None:
         c.mem("lbu","t2",26,"t0")
         c.nop()
@@ -88,7 +93,7 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
         c.mem("lhu", "t2", 0, "t0")
         c.nop()
         c.imm("andi", "t2", "t2", 0x1ff)
-    if wide:
+    if wide and overlay_offset is None:
         require_goblin_type(c, "t2", "t1", "finish")
     else:
         c.branch("bne","t2","t1","finish")
@@ -168,8 +173,18 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
 
     c.imm("lui","t6","zero",0x800d)
     c.mem("lw","t7",-0x6188,"t6") # packet alloc
-    c.mem("lw","v0",-0x6168,"t6") # packet end
-    c.imm("addiu","v1","t7",0x28)
+    if overlay_offset is None:
+        c.mem("lw","v0",-0x6168,"t6") # packet end
+        c.imm("addiu","v1","t7",0x28)
+    else:
+        c.mem("lbu", "v0", overlay_offset + 12, "t0")
+        c.imm("addiu", "v1", "t7", 0x28)
+        c.branch("beq", "v0", "zero", "check_space")
+        c.nop()
+        c.imm("addiu", "v1", "v1", 0x28)
+        c.label("check_space")
+        c.mem("lw", "v0", -0x6168, "t6")
+        c.nop()
     c.alu("sltu","v0","v0","v1")
     c.branch("bne","v0","zero","finish")
     c.nop()
@@ -203,7 +218,9 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
     c.mem("sw","v1",24,"t7")
     c.alu("OR","v1","t2","t3")
     c.mem("sw","v1",32,"t7")
-    if wide:
+    if overlay_offset is not None:
+        layered_quad(c, overlay_offset)
+    elif wide:
         # The 8-bit layout stores four UV corners so rotated frames render upright.
         if shade_selector is None:
             c.mem("lw", "v1", 0xe0, "sp")
@@ -257,3 +274,42 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
     c.jump(0x800757c4)
     c.nop()
     return c.out(), shade_return
+
+
+def write_layer_uv(c, metadata_offset, packet_offset):
+    for uv, packet, parameter, parameter_offset in (
+        (4, 12, "lhu", 14),
+        (6, 20, "lbu", 12),
+    ):
+        c.mem("lhu", "t4", metadata_offset + uv, "t0")
+        c.mem(parameter, "v1", metadata_offset + parameter_offset, "t0")
+        c.nop()
+        c.shift("sll", "v1", "v1", 16)
+        c.alu("OR", "v1", "v1", "t4")
+        c.mem("sw", "v1", packet_offset + packet, "t7")
+    c.mem("lhu", "t4", metadata_offset + 8, "t0")
+    c.mem("lhu", "t5", metadata_offset + 10, "t0")
+    c.mem("sw", "t4", packet_offset + 28, "t7")
+    c.mem("sw", "t5", packet_offset + 36, "t7")
+
+
+def layered_quad(c, overlay_offset):
+    write_layer_uv(c, 0, 0)
+    c.mem("lbu", "v1", overlay_offset + 12, "t0")
+    c.nop()
+    c.branch("beq", "v1", "zero", "finish")
+    c.nop()
+    # Put the second quad after the first, with exactly the same screen vertices.
+    c.mem("lw", "t1", 0, "t7")
+    c.imm("addiu", "v1", "t7", 0x28)
+    c.mem("sw", "t1", 0x28, "t7")
+    c.address("t6", 0x00ffffff)
+    c.alu("AND", "v1", "v1", "t6")
+    c.imm("lui", "t1", "zero", 0x0900)
+    c.alu("OR", "v1", "v1", "t1")
+    c.mem("sw", "v1", 0, "t7")
+    for word in (4, 8, 16, 24, 32):
+        c.mem("lw", "v1", word, "t7")
+        c.nop()
+        c.mem("sw", "v1", word + 0x28, "t7")
+    write_layer_uv(c, overlay_offset, 0x28)

@@ -9,6 +9,7 @@ import struct
 from pathlib import Path
 
 from mipswords import Code, ret
+import lower_atlas
 import preview_lighting
 import renderer
 import variant_atlas
@@ -44,21 +45,32 @@ VARIANT_UPLOAD_RAM = PAYLOAD_RAM + 0xc00
 MENU_RAM = PAYLOAD_RAM + 0xe00
 VRAM_GUARD_RAM = PAYLOAD_RAM + 0xe80
 RESIDENT_BYTES = 0x1000
+LOWER_RESIDENT_BYTES = 0x1800
+MODEL_OWNER_OFFSET = 0x58
 TEXTURE_STAGING_RAM = 0x801F8800
 BAND_BYTES = 0x4000
 
 def jump(address, link=False):
     return struct.pack("<I", ((3 if link else 2) << 26) | ((address >> 2) & 0x3ffffff))
 
-def gate(origin, destination, fallback_register=None, walking=False):
+def gate(origin, destination, fallback_register=None, walking=False, floor_aware=False):
     c = Code(origin)
-    if walking:
-        require_level_one(c, "fallback")
-    c.address("t8", PAYLOAD_RAM)
-    c.mem("lw", "t8", 4, "t8")
-    c.address("t9", READY_MAGIC)
-    c.branch("bne", "t8", "t9", "fallback")
-    c.nop()
+    if floor_aware:
+        c.address("t8", PAYLOAD_RAM)
+        c.mem("lw", "t9", 4, "t8")
+        c.mem("lw", "t8", 0x998, "gp")
+        c.branch("beq", "t9", "zero", "fallback")
+        c.nop()
+        c.branch("bne", "t8", "t9", "fallback")
+        c.nop()
+    else:
+        if walking:
+            require_level_one(c, "fallback")
+        c.address("t8", PAYLOAD_RAM)
+        c.mem("lw", "t8", 4, "t8")
+        c.address("t9", READY_MAGIC)
+        c.branch("bne", "t8", "t9", "fallback")
+        c.nop()
     c.jump(destination)
     c.nop()
     c.label("fallback")
@@ -93,21 +105,32 @@ def menu_gate():
     return c.out()
 
 
-def menu_return(upload_ram=WALK_UPLOAD_RAM):
+def menu_return(upload_ram=WALK_UPLOAD_RAM, floor_aware=False):
     c = Code(MENU_RAM)
     c.imm("addiu", "sp", "sp", -32)
     c.mem("sw", "ra", 28, "sp")
     c.jump(0x8005b368, True)
     c.nop()
     c.mem("sw", "v0", 24, "sp")
-    require_level_one(c, "done")
+    if not floor_aware:
+        require_level_one(c, "done")
     c.address("t0", PAYLOAD_RAM)
     c.mem("lw", "t1", 0, "t0")
     c.address("t2", PAYLOAD_MAGIC)
     c.branch("bne", "t1", "t2", "done")
-    c.mem("lw", "t1", 4, "t0")
-    c.address("t2", READY_MAGIC)
-    c.branch("beq", "t1", "t2", "done")
+    if floor_aware:
+        c.mem("lw", "t1", MODEL_OWNER_OFFSET, "t0")
+        c.mem("lw", "t2", 0x998, "gp")
+        c.branch("beq", "t1", "zero", "done")
+        c.nop()
+        c.branch("bne", "t1", "t2", "done")
+        c.mem("lw", "t1", 4, "t0")
+        c.nop()
+        c.branch("bne", "t1", "zero", "done")
+    else:
+        c.mem("lw", "t1", 4, "t0")
+        c.address("t2", READY_MAGIC)
+        c.branch("beq", "t1", "t2", "done")
     c.nop()
     c.mem("lw", "a0", 12, "t0")
     c.jump(upload_ram, True)
@@ -126,12 +149,16 @@ def resume_native_upload(c):
     c.mem("sw", "s0", 16, "sp")
 
 
-def vram_upload_gate():
+def vram_upload_gate(floor_aware=False):
     c = Code(VRAM_UPLOAD_GATE)
     c.address("t0", PAYLOAD_RAM)
     c.mem("lw", "t1", 4, "t0")
-    c.address("t2", READY_MAGIC)
-    c.branch("bne", "t1", "t2", "upload")
+    if floor_aware:
+        c.nop()
+        c.branch("beq", "t1", "zero", "upload")
+    else:
+        c.address("t2", READY_MAGIC)
+        c.branch("bne", "t1", "t2", "upload")
     c.nop()
     c.jump(VRAM_GUARD_RAM)
     c.nop()
@@ -140,7 +167,7 @@ def vram_upload_gate():
     return c.out()
 
 
-def vram_guard(wide=False):
+def vram_guard(wide=False, lower_floor=False):
     c = Code(VRAM_GUARD_RAM)
     # Native TIM uploads must invalidate sprites before sharing this VRAM region.
     c.mem("lhu", "t0", 0, "a0")
@@ -169,8 +196,9 @@ def vram_guard(wide=False):
     else:
         c.imm("sltiu", "t4", "t0", 512)
         c.branch("beq", "t4", "zero", "upload")
-        c.imm("sltiu", "t4", "t1", 480)
-        c.branch("beq", "t4", "zero", "upload")
+        if not lower_floor:
+            c.imm("sltiu", "t4", "t1", 480)
+            c.branch("beq", "t4", "zero", "upload")
         c.alu("addu", "t2", "t0", "t2")
         c.imm("sltiu", "t4", "t2", 385)
         c.branch("bne", "t4", "zero", "upload")
@@ -220,9 +248,59 @@ def loader(payload_lba=PAYLOAD_LBA, walking=False, wide=False):
     ret(c, lambda: c.imm("addiu", "sp", "sp", 32))
     return c.out()
 
-def mark_idle_ready(c):
+def floor_loader(payload_lba, lower_payload_lba):
+    c = Code(BOOT)
+    c.imm("addiu", "sp", "sp", -32)
+    c.mem("sw", "ra", 28, "sp")
+    c.mem("sw", "a0", 24, "sp")
+    c.address("t2", PAYLOAD_RAM)
+    c.mem("sw", "zero", 4, "t2")
+    c.mem("sw", "zero", MODEL_OWNER_OFFSET, "t2")
+    c.jump(0x80029f50, True)
+    c.nop()
+    c.mem("lw", "t0", 24, "sp")
+    c.imm("ori", "a2", "zero", RESIDENT_BYTES)
+    c.branch("beq", "t0", "zero", "level_one")
+    c.imm("ori", "t1", "zero", 1)
+    c.branch("beq", "t0", "t1", "lower")
+    c.imm("ori", "t1", "zero", 4)
+    c.branch("beq", "t0", "t1", "lower")
+    c.imm("ori", "t1", "zero", 6)
+    c.branch("bne", "t0", "t1", "done")
+    c.nop()
+    c.label("lower")
+    c.address("a0", (lower_payload_lba - AVATAR_LBA) * 2048)
+    c.branch("beq", "zero", "zero", "read")
+    c.imm("ori", "a2", "zero", LOWER_RESIDENT_BYTES)
+    c.label("level_one")
+    c.address("a0", (payload_lba - AVATAR_LBA) * 2048)
+    c.label("read")
+    c.mem("sw", "a0", 20, "sp")
+    c.address("a1", PAYLOAD_RAM)
+    c.jump(0x8003f004, True)
+    c.nop()
+    c.address("t2", PAYLOAD_RAM)
+    c.mem("lw", "t0", 0, "t2")
+    c.address("t1", PAYLOAD_MAGIC)
+    c.branch("bne", "t0", "t1", "done")
+    c.mem("lw", "a0", 20, "sp")
+    c.mem("lw", "t0", 0x998, "gp")
+    c.mem("sw", "a0", 12, "t2")
+    c.jump(VARIANT_UPLOAD_RAM, True)
+    c.mem("sw", "t0", MODEL_OWNER_OFFSET, "t2")
+    c.label("done")
+    c.mem("lw", "ra", 28, "sp")
+    c.nop()
+    ret(c, lambda: c.imm("addiu", "sp", "sp", 32))
+    return c.out()
+
+
+def mark_idle_ready(c, floor_aware=False):
     c.address("t0", PAYLOAD_RAM)
-    c.address("t1", READY_MAGIC)
+    if floor_aware:
+        c.mem("lw", "t1", MODEL_OWNER_OFFSET, "t0")
+    else:
+        c.address("t1", READY_MAGIC)
     c.mem("lw", "ra", 28, "sp")
     c.mem("sw", "t1", 4, "t0")
     ret(c, lambda: c.imm("addiu", "sp", "sp", 32))
@@ -337,8 +415,8 @@ def variant_image_bands(texture_pages=variant_atlas.TEXTURE_PAGES):
             offset += size
 
 
-def variant_uploader(bands, resident_clut=True):
-    c = Code(VARIANT_UPLOAD_RAM)
+def variant_uploader(bands, resident_clut=True, floor_aware=False, origin=VARIANT_UPLOAD_RAM):
+    c = Code(origin)
     c.imm("addiu", "sp", "sp", -32)
     c.mem("sw", "ra", 28, "sp")
     c.mem("sw", "a0", 24, "sp")
@@ -359,7 +437,7 @@ def variant_uploader(bands, resident_clut=True):
     c.address("t0", PAYLOAD_RAM)
     c.imm("ori", "t1", "zero", 1)
     c.mem("sw", "t1", 8, "t0")
-    mark_idle_ready(c)
+    mark_idle_ready(c, floor_aware)
     return c.out()
 
 
@@ -374,7 +452,7 @@ def variant_sources(idle_atlas, walk_atlas, variants):
     return data
 
 
-def variant_payload(idle_atlas, walk_atlas, variants, dos_light_preview=None):
+def variant_payload(idle_atlas, walk_atlas, variants, dos_light_preview=None, floor_aware=False):
     sources = variant_sources(idle_atlas, walk_atlas, variants)
     pages = variant_atlas.TEXTURE_PAGES if dos_light_preview is None else preview_lighting.TEXTURE_PAGES
     images, clut, metadata = variant_atlas.build(sources, pages)
@@ -395,7 +473,7 @@ def variant_payload(idle_atlas, walk_atlas, variants, dos_light_preview=None):
         0x180: renderer.suppress(WALK_SUPPRESS_DELAY_RAM, "a0", WALK_READY_RAM, wide=True),
         0x200: draw_code,
         0x800: metadata,
-        MENU_RAM - PAYLOAD_RAM: menu_return(VARIANT_UPLOAD_RAM),
+        MENU_RAM - PAYLOAD_RAM: menu_return(VARIANT_UPLOAD_RAM, floor_aware),
         VRAM_GUARD_RAM - PAYLOAD_RAM: vram_guard(wide=True),
         RESIDENT_BYTES: b"".join(images),
     }
@@ -415,8 +493,49 @@ def variant_payload(idle_atlas, walk_atlas, variants, dos_light_preview=None):
         )
         rectangles = tuple(rect for rect, _, _ in bands)
     sections[0x10] = b"".join(struct.pack("<4H", *rect) for rect in rectangles)
-    sections[VARIANT_UPLOAD_RAM - PAYLOAD_RAM] = variant_uploader(bands, dos_light_preview is None)
+    sections[VARIANT_UPLOAD_RAM - PAYLOAD_RAM] = variant_uploader(bands, dos_light_preview is None, floor_aware)
     return assemble_payload(sections, atlas_end)
+
+
+def lower_floor_atlas(variants):
+    base = variants / f"type-{renderer.LOWER_GOBLIN_TYPE}"
+    sources = (
+        read_source_atlas(base / "idle", "idle", 192, 0x20, prefix="goblin"),
+        read_source_atlas(base / "walk", "walk", 224, 0x80, prefix="goblin"),
+    )
+    return lower_atlas.build(sources)
+
+
+def lower_floor_payload(variants):
+    images, clut, metadata, overlay = lower_floor_atlas(variants)
+    uploader_ram = PAYLOAD_RAM + 0x1400
+    sections = {
+        0: struct.pack("<I", PAYLOAD_MAGIC),
+        0x90: renderer.DOS_IDLE_DIRECTIONS,
+        0x100: renderer.suppress(SUPPRESS_RAM, walk_ready=WALK_READY_RAM, lower_floor=True),
+        0x180: renderer.suppress(WALK_SUPPRESS_DELAY_RAM, "a0", WALK_READY_RAM, lower_floor=True),
+        0x200: renderer.draw(
+            DRAW_RAM, PAYLOAD_RAM + 0x800, PAYLOAD_RAM + 0x90,
+            walk_ready=WALK_READY_RAM, wide=True, overlay_offset=0x800,
+        )[0],
+        0x800: metadata,
+        0xc00: jump(uploader_ram) + bytes(4),
+        0xe00: menu_return(VARIANT_UPLOAD_RAM, floor_aware=True),
+        0xe80: vram_guard(lower_floor=True),
+        0x1000: overlay,
+    }
+    bands = []
+    offset = LOWER_RESIDENT_BYTES
+    for (x, y), image in zip(lower_atlas.TEXTURE_PAGES, images, strict=True):
+        sections[offset] = image
+        bands.append(((x, y, 64, 128), offset, BAND_BYTES))
+        bands.append(((x, y + 128, 64, lower_atlas.HEIGHT - 128), offset + BAND_BYTES, BAND_BYTES))
+        offset += BAND_BYTES * 2
+    sections[offset] = clut
+    bands.append((lower_atlas.CLUT_RECT, offset, 2048))
+    sections[0x10] = b"".join(struct.pack("<4H", *rect) for rect, _, _ in bands)
+    sections[0x1400] = variant_uploader(bands, False, True, uploader_ram)
+    return assemble_payload(sections, offset + 2048)
 
 
 def payload(directory, walk_atlas=None, goblin_variants=None, dos_light_preview=None):
@@ -523,17 +642,21 @@ def form1_sector(original, data):
     result[12:16] = original[12:16]
     return result
 
-def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False):
+def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False, lower_payload_lba=None):
     target = bytearray(original)
+    floor_aware = lower_payload_lba is not None
     code = {
-        BOOT: loader(payload_lba, walking, wide),
-        SUPPRESS_NORMAL: gate(SUPPRESS_NORMAL, SUPPRESS_RAM, "v1", walking),
-        SUPPRESS_DELAY: gate(SUPPRESS_DELAY, WALK_SUPPRESS_DELAY_RAM if walking else SUPPRESS_DELAY_RAM, "a0", walking),
-        DRAW_GATE: gate(DRAW_GATE, DRAW_RAM, walking=walking),
+        BOOT: floor_loader(payload_lba, lower_payload_lba) if floor_aware else loader(payload_lba, walking, wide),
+        SUPPRESS_NORMAL: gate(SUPPRESS_NORMAL, SUPPRESS_RAM, "v1", walking, floor_aware),
+        SUPPRESS_DELAY: gate(SUPPRESS_DELAY, WALK_SUPPRESS_DELAY_RAM if walking else SUPPRESS_DELAY_RAM, "a0", walking, floor_aware),
+        DRAW_GATE: gate(DRAW_GATE, DRAW_RAM, walking=walking, floor_aware=floor_aware),
     }
     if walking:
         code[MENU_GATE] = menu_gate()
-        code[VRAM_UPLOAD_GATE] = vram_upload_gate()
+        code[VRAM_UPLOAD_GATE] = vram_upload_gate(floor_aware)
+    for (address, blob), next_address in zip(sorted(code.items()), sorted(code)[1:]):
+        if address + len(blob) > next_address:
+            raise ValueError(f"Overlapping executable stubs at 0x{address:08x} and 0x{next_address:08x}.")
     for address, blob in code.items():
         offset = 2048 + address - EXE_LOAD
         if any(target[offset:offset + len(blob)]):

@@ -56,6 +56,14 @@ On DuckStation, crossing the original stairs to Level 2 disabled the sprite atla
 
 The final English data track sets the ISO volume label to `ULTIMA UNDERWORLD ENGLISH PATCH`. For a matching title in DuckStation, add the containing directory to its game list and set **Game Properties → Summary → Title** to `Ultima Underworld: The Stygian Abyss (English Patch - DOS Goblins)`. This property is keyed by image path. The original PSX disc serial remains `SLPS-00742`.
 
+## Type 78 goblins on Levels 2, 5, and 7
+
+Add `--lower-floor-goblins` to the English four-palette build command above. The builder appends a second payload for Levels 2, 5, and 7. The loader selects the atlas after loading the native floor and associates it with that floor’s model table. The normal Level 1 atlas is selected when returning upstairs. Main menu exit restores the current atlas if a native GPU upload has invalidated it.
+
+The lower-floor renderer uses two 4-bit pages at VRAM x=384..511, y=256..505, and a CLUT at y=508..509. This leaves the native texture pages at x=512..639 available. A frame with more than 15 opaque colors uses two consecutive opaque textured quads with shared vertices and mutually exclusive texels. Both layers preserve the DOS RGB555 source palette. The substitution covers idle and walk. Other actor actions use their PSX renderer. When combined with `--dos-light-preview`, the DOS lighting applies only on Level 1.
+
+For a GPU frame captured on Levels 2, 5, or 7, pass both `--lower-floor-goblins` and `--goblin-variants /tmp/goblin-variants` to `verify_vram.py`. On Level 1 pass the existing four-palette arguments. Generate the xdelta against the clean Japanese Rev 1 Track 1 through `build-rev1-patch.sh --allow-expanded-track`. Keep the three original audio tracks and their CUE indexes.
+
 ## DOS lighting preview
 
 To build the separate preview, add `--dos-light-preview DOS_ROOT` to the four-palette `build_english.py` command above. Pass the same argument to `verify_vram.py` with a GPU capture of the preview. The preview packs the normal and monochrome remap tables into 8,192 bytes of PSX CLUTs, with four palette variants per shade. It calculates a shade from signed three-dimensional actor distance before selecting the palette for each quad. The ordinary English DOS Goblins build remains the unshaded reference.

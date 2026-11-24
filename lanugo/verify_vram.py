@@ -4,7 +4,8 @@ import argparse
 from pathlib import Path
 import struct
 
-from build_track import read_atlas, variant_sources
+from build_track import lower_floor_atlas, read_atlas, variant_sources
+import lower_atlas
 import preview_lighting
 import variant_atlas
 
@@ -31,7 +32,17 @@ def read_vram(dump):
     raise ValueError("The capture does not contain an initial VRAM upload.")
 
 
-def expected_rectangles(idle_directory, walk_directory, goblin_variants, dos_light_preview=None):
+def expected_rectangles(idle_directory, walk_directory, goblin_variants, dos_light_preview=None,
+                        lower_floor_goblins=False):
+    if lower_floor_goblins:
+        if goblin_variants is None:
+            raise ValueError("The lower-floor capture needs --goblin-variants.")
+        images, clut, _, _ = lower_floor_atlas(goblin_variants)
+        pages = tuple(
+            (f"4-bit page {index}", x, y, 64, lower_atlas.HEIGHT, image)
+            for index, ((x, y), image) in enumerate(zip(lower_atlas.TEXTURE_PAGES, images, strict=True), start=1)
+        )
+        return (*pages, ("Type 78 CLUTs", *lower_atlas.CLUT_RECT, clut))
     if dos_light_preview is not None and goblin_variants is None:
         raise ValueError("The DOS lighting preview needs the four-palette goblin atlas.")
     if goblin_variants is not None:
@@ -59,9 +70,12 @@ def expected_rectangles(idle_directory, walk_directory, goblin_variants, dos_lig
     )
 
 
-def verify(dump, idle_directory, walk_directory, goblin_variants=None, dos_light_preview=None):
+def verify(dump, idle_directory, walk_directory, goblin_variants=None, dos_light_preview=None,
+           lower_floor_goblins=False):
     vram = read_vram(dump)
-    rectangles = expected_rectangles(idle_directory, walk_directory, goblin_variants, dos_light_preview)
+    rectangles = expected_rectangles(
+        idle_directory, walk_directory, goblin_variants, dos_light_preview, lower_floor_goblins,
+    )
     valid = True
     for name, x, y, width, height, expected in rectangles:
         start = 2 * (y * 1024 + x)
@@ -81,4 +95,5 @@ if __name__ == "__main__":
     parser.add_argument("walk_directory", type=Path)
     parser.add_argument("--goblin-variants", type=Path)
     parser.add_argument("--dos-light-preview", type=Path, metavar="DOS_ROOT")
+    parser.add_argument("--lower-floor-goblins", action="store_true")
     raise SystemExit(0 if verify(**vars(parser.parse_args())) else 1)
