@@ -191,8 +191,10 @@ func readFrame(root: URL, actor: Int, slot: Int, frame: Int, shade: DOSShade? = 
         let wordCount = try page.littleEndian(offset + 5, size: 2)
         var packed = PackedPixels(page: page, start: offset + 7,
                                   wordSize: compression == 6 ? 5 : 4, wordCount: wordCount)
-        // Two headless walking frames in the original CR file end one transparent pixel early.
-        let missingTail = actor == 91 && pageNumber == 1 && [29, 31].contains(frameIndex)
+        // These original CR frames end one transparent pixel early.
+        let missingHeadlessTail = actor == 91 && pageNumber == 1 && [29, 31].contains(frameIndex)
+        let missingDwarfTail = [84, 86].contains(actor) && pageNumber == 1 && frameIndex == 20
+        let missingTail = missingHeadlessTail || missingDwarfTail
         let pixels = try packed.decode(pixelCount: width * height, allowMissingTransparentTail: missingTail)
         let colors = try Bytes(root.appendingPathComponent("DATA/PALS.DAT"))
         guard let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: width, pixelsHigh: height,

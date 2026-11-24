@@ -109,3 +109,9 @@ Use `--level-one-dialogue` to include the Level 1 dialogue NPCs with the cumulat
 The banks switch between frames. Dialogue and inventory return use the active bank's disc address. An actor keeps native rendering when the active bank has no matching art or action. In particular, a camera angle that crosses the boundary between Lanugo's room and the south approach to Vernix can expose the native fallback. The preview leaves the PlayStation's dialogue scripts, portraits, trade, quest logic, and combat behavior in place.
 
 The Level 1 named-NPC profile stores floor starts as little-endian halfword sector offsets relative to its Level 1 payload. Offset 0 selects Level 1, positive offsets through 32766 select later payloads, and 32767 marks an absent payload. Earlier profiles retain their original byte tables for reproducible builds. The extended-table build has Track 1 SHA-1 `d3b370395327bdd630c3d9eade4d73662eb8dd43`.
+
+### Level 2 named NPC preview
+
+Use `--level-two-dialogue` for the cumulative named-NPC preview. Level 2 switches among the existing green goblin art, a full-resolution 8-bit dwarf bank for types 84 and 86, and a fighter bank for Corby (type 98). Corby uses his DOS palette and 15/16 texture resolution with the original on-screen dimensions and hotspots. The local exporter restores one transparent tail pixel in the identified DOS dwarf idle frame. The new banks use sector offsets 652, 703, and 754 relative to the first Level 1 bank. The other floors keep their existing payloads. Unsupported actions use native rendering.
+
+The expected Track 1 SHA-1 is `1886fa383413e53d4dd1756975f5ced8526b187b`.

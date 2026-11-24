@@ -3,6 +3,7 @@ set -euo pipefail
 
 academy_bank=
 level_one_dialogue=0
+level_two_dialogue=0
 expanded_preview=0
 effects_preview=0
 combat_preview=0
@@ -21,13 +22,14 @@ elif [[ ${1:-} == --level-six-casting ]]; then
     spider_preview=1
     casting_preview=1
     shift
-elif [[ ${1:-} == --level-six-combat || ${1:-} == --level-six-effects || ${1:-} == --level-six-expanded || ${1:-} == --academy-wizb || ${1:-} == --academy-wizc || ${1:-} == --academy-runtime || ${1:-} == --level-one-dialogue ]]; then
-    if [[ $1 == --level-six-expanded || $1 == --academy-* || $1 == --level-one-dialogue ]]; then
+elif [[ ${1:-} == --level-six-combat || ${1:-} == --level-six-effects || ${1:-} == --level-six-expanded || ${1:-} == --academy-wizb || ${1:-} == --academy-wizc || ${1:-} == --academy-runtime || ${1:-} == --level-one-dialogue || ${1:-} == --level-two-dialogue ]]; then
+    if [[ $1 == --level-six-expanded || $1 == --academy-* || $1 == --level-one-dialogue || $1 == --level-two-dialogue ]]; then
         expanded_preview=1
     fi
-    if [[ $1 == --level-one-dialogue ]]; then
+    if [[ $1 == --level-one-dialogue || $1 == --level-two-dialogue ]]; then
         academy_bank=runtime
         level_one_dialogue=1
+        if [[ $1 == --level-two-dialogue ]]; then level_two_dialogue=1; fi
     elif [[ $1 == --academy-* ]]; then
         academy_bank=${1#--academy-}
     fi
@@ -48,7 +50,7 @@ if [[ ${1:-} == --english-patch ]]; then
 fi
 
 if [[ $# != 5 ]]; then
-    printf 'Usage: %s [--level-six-wizards|--level-six-spiders|--level-six-casting|--level-six-combat|--level-six-effects|--level-six-expanded|--academy-wizb|--academy-wizc|--academy-runtime|--level-one-dialogue] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
+    printf 'Usage: %s [--level-six-wizards|--level-six-spiders|--level-six-casting|--level-six-combat|--level-six-effects|--level-six-expanded|--academy-wizb|--academy-wizc|--academy-runtime|--level-one-dialogue|--level-two-dialogue] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
     exit 2
 fi
 
@@ -143,6 +145,12 @@ if (( expanded_preview )); then
                 "$exporter" export-creature-atlases "$dos_root" "$actor" "$scratch/wizards/type-$actor"
             done
             wizard_args+=(--level-one-dialogue)
+            if (( level_two_dialogue )); then
+                for actor in 84 86 98; do
+                    "$exporter" export-creature-atlases "$dos_root" "$actor" "$scratch/wizards/type-$actor"
+                done
+                wizard_args+=(--level-two-dialogue)
+            fi
         fi
     elif [[ -n $academy_bank ]]; then
         wizard_args+=(--academy-bank "$academy_bank")

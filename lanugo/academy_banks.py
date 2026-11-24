@@ -43,13 +43,19 @@ LEVEL_ONE_BANKS = (
 )
 LEVEL_ONE_FAMILIES = {name: families for name, families, _ in LEVEL_ONE_BANKS}
 LEVEL_ONE_FORMATS = {"gray-goblins": (4, 16), "fighters": (8, 15)}
-LEVEL_ONE_STRIDE = 0x19800
+LEVEL_TWO_BANKS = (
+    ("dwarves", ((84, 86),), ((60, 3), (40, 5), (37, 7), (9, 8), (9, 14), (12, 28), (19, 36))),
+    ("corby", ((98,),), ((28, 22),)),
+)
+ROOM_FAMILIES = {name: families for name, families, _ in (*LEVEL_ONE_BANKS, *LEVEL_TWO_BANKS)}
+ROOM_FORMATS = {**LEVEL_ONE_FORMATS, "dwarves": (8, 16), "corby": (8, 15)}
+ROOM_STRIDE = 0x19800
 # (texture depth, sixteenths of original size, uses both pages)
 SPECIAL_FORMATS = {"imps": (8, 16, True), "skeletons": (4, 16, True),
                    "ghouls": (8, 14, True), "headless": (8, 16, True)}
 
 
-def room_grid(points=ACADEMY_NPCS, radius=9, *, x_step=4, z_step=4):
+def room_grid(points=ACADEMY_NPCS, radius=9, *, x_step=4, z_step=4, level_one=True):
     banks = []
     for z in range(z_step // 2, 64, z_step):
         for x in range(x_step // 2, 64, x_step):
@@ -59,7 +65,7 @@ def room_grid(points=ACADEMY_NPCS, radius=9, *, x_step=4, z_step=4):
         # The gameplay camera is one tile west of the map's teleport coordinate.
         for camera_x in (x - 1, x):
             banks[(z // z_step) * (64 // x_step) + camera_x // x_step] = bank
-    if x_step == 2:
+    if x_step == 2 and level_one:
         for x, z in ((4, 56), (45, 52), (45, 56)):
             for camera_x in (x - 1, x):
                 banks[(z // z_step) * 32 + camera_x // 2] = 0
@@ -87,7 +93,7 @@ def gates():
     return {GATE: c.out(), GATE_BRANCH: branch.out(), GATE_DISPATCH: dispatch.out()}
 
 
-def sections(base_byte_offset, bank_bytes, bank, *, level_one=False):
+def sections(base_byte_offset, bank_bytes, bank, *, level_one=False, level_two=False):
     """Keep the switch routine below the part of RAM it will replace."""
     c = Code(SELECTOR)
     c.imm("ori", "t8", "t8", PAYLOAD & 0xffff)  # High half remains in t8 from the gate.
@@ -96,12 +102,13 @@ def sections(base_byte_offset, bank_bytes, bank, *, level_one=False):
     c.branch("beq", "t7", "zero", "native")
     c.mem("lhu", "t1", -0x6900, "t0")
     c.mem("lhu", "t2", -0x68FE, "t0")
-    grid_at = 0x1c00 if level_one else GRID
-    c.shift("srl", "t1", "t1", 9 if level_one else 10)
-    c.shift("srl", "t2", "t2", 9 if level_one else 10)
-    c.imm("andi", "t1", "t1", 31 if level_one else 15)
-    c.imm("andi", "t2", "t2", 31 if level_one else 15)
-    c.shift("sll", "t2", "t2", 5 if level_one else 4)
+    room_banks = level_one or level_two
+    grid_at = 0x1c00 if room_banks else GRID
+    c.shift("srl", "t1", "t1", 9 if room_banks else 10)
+    c.shift("srl", "t2", "t2", 9 if room_banks else 10)
+    c.imm("andi", "t1", "t1", 31 if room_banks else 15)
+    c.imm("andi", "t2", "t2", 31 if room_banks else 15)
+    c.shift("sll", "t2", "t2", 5 if room_banks else 4)
     c.alu("addu", "t1", "t1", "t2")
     c.shift("srl", "t2", "t1", 1)
     c.alu("addu", "t2", "t8", "t2")
@@ -131,8 +138,8 @@ def sections(base_byte_offset, bank_bytes, bank, *, level_one=False):
     switch.jump(0x800903AC, True)
     switch.alu("addu", "a0", "zero", "zero")
     # Keep the selector, ownership and return address below the disc read.
-    if level_one:
-        # The Level 1 banks use different draw routines. Each carries identical
+    if room_banks:
+        # These room banks use different draw routines. Each carries identical
         # selector and switch instructions, including the return point below.
         switch.mem("lw", "a0", 24, "sp")
         switch.address("a1", PAYLOAD)
@@ -147,7 +154,7 @@ def sections(base_byte_offset, bank_bytes, bank, *, level_one=False):
     switch.mem("lw", "a0", 24, "sp")
     switch.address("t8", PAYLOAD)
     switch.mem("sw", "a0", 12, "t8")
-    if level_one:
+    if room_banks:
         switch.mem("lw", "t0", 0x998, "gp")
         switch.nop()
         switch.jump(PAYLOAD + 0xC00, True)
@@ -161,12 +168,13 @@ def sections(base_byte_offset, bank_bytes, bank, *, level_one=False):
     switch.nop()
     points = tuple(
         (x, z, index)
-        for index, (_, _, tiles) in enumerate(LEVEL_ONE_BANKS, 1)
+        for index, (_, _, tiles) in enumerate(LEVEL_TWO_BANKS if level_two else LEVEL_ONE_BANKS, 1)
         for x, z in tiles
-    ) if level_one else ACADEMY_NPCS
+    ) if room_banks else ACADEMY_NPCS
     return {
         POINTER: struct.pack("<I", SELECTOR),
-        grid_at: room_grid(points, 6 if level_one else 9, x_step=2 if level_one else 4, z_step=2 if level_one else 4),
+        grid_at: room_grid(points, 6 if room_banks else 9, x_step=2 if room_banks else 4, z_step=2 if room_banks else 4,
+                           level_one=level_one),
         SELECTOR - PAYLOAD: c.out(), SWITCH - PAYLOAD: switch.out(),
         ACTIVE: struct.pack("<I", bank),
     }
