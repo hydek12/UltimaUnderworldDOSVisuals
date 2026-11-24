@@ -35,7 +35,7 @@ DRAW_GATE = 0x800C2440
 VRAM_UPLOAD_GATE = 0x800C2480
 MENU_GATE = 0x800C24B0
 ACTOR_GATE = 0x800C24E0
-DIALOGUE_RETURN = 0x800C2200
+EXPANDED_MENU_GATE = 0x800C24A8
 NATIVE_GP = 0x800C9260
 LEVEL_ONE_MODELS = 0x800AB890
 SUPPRESS_RAM = PAYLOAD_RAM + 0x100
@@ -99,26 +99,44 @@ def require_level_one(c, fallback):
     c.nop()
 
 
-def menu_gate():
-    c = Code(MENU_GATE)
-    c.address("t0", PAYLOAD_RAM)
-    c.mem("lw", "t1", 0, "t0")
+def menu_gate(dialogue=False):
+    c = Code(EXPANDED_MENU_GATE if dialogue else MENU_GATE)
+    if dialogue:
+        c.imm("lui", "t0", "zero", PAYLOAD_RAM >> 16)
+        c.mem("lw", "t1", PAYLOAD_RAM & 0xffff, "t0")
+    else:
+        c.address("t0", PAYLOAD_RAM)
+        c.mem("lw", "t1", 0, "t0")
     c.address("t2", PAYLOAD_MAGIC)
     c.branch("bne", "t1", "t2", "native")
     c.nop()
     c.jump(MENU_RAM)
     c.nop()
     c.label("native")
+    if dialogue:
+        c.branch("beq", "t7", "zero", "inventory")
+        c.nop()
+        c.jump(0x8003ea5c)
+        c.nop()
+        c.label("inventory")
     c.jump(0x8005b368)
     c.nop()
     return c.out()
 
 
-def menu_return(upload_ram=WALK_UPLOAD_RAM, floor_aware=False, origin=MENU_RAM, native=0x8005b368):
-    c = Code(origin)
+def menu_return(upload_ram=WALK_UPLOAD_RAM, floor_aware=False, dialogue=False):
+    c = Code(MENU_RAM)
     c.imm("addiu", "sp", "sp", -32)
     c.mem("sw", "ra", 28, "sp")
-    c.jump(native, True)
+    if dialogue:
+        c.imm("lui", "t9", "zero", 0x8005)
+        c.branch("beq", "t7", "zero", "native_call")
+        c.imm("ori", "t9", "t9", 0xb368)
+        c.address("t9", 0x8003ea5c)
+        c.label("native_call")
+        c.add(0x0320f809)  # jalr ra, t9
+    else:
+        c.jump(0x8005b368, True)
     c.nop()
     c.mem("sw", "v0", 24, "sp")
     if not floor_aware:
@@ -158,10 +176,14 @@ def resume_native_upload(c):
     c.mem("sw", "s0", 16, "sp")
 
 
-def vram_upload_gate(floor_aware=False):
+def vram_upload_gate(floor_aware=False, compact=False):
     c = Code(VRAM_UPLOAD_GATE)
-    c.address("t0", PAYLOAD_RAM)
-    c.mem("lw", "t1", 4, "t0")
+    if compact:
+        c.imm("lui", "t0", "zero", PAYLOAD_RAM >> 16)
+        c.mem("lw", "t1", (PAYLOAD_RAM & 0xffff) + 4, "t0")
+    else:
+        c.address("t0", PAYLOAD_RAM)
+        c.mem("lw", "t1", 4, "t0")
     if floor_aware:
         c.nop()
         c.branch("beq", "t1", "zero", "upload")
@@ -870,12 +892,10 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
         DRAW_GATE: gate(DRAW_GATE, DRAW_RAM, walking=walking, floor_aware=floor_aware),
     }
     if walking:
-        code[MENU_GATE] = menu_gate()
-        code[VRAM_UPLOAD_GATE] = vram_upload_gate(floor_aware)
+        code[EXPANDED_MENU_GATE if expanded_level_six else MENU_GATE] = menu_gate(expanded_level_six)
+        code[VRAM_UPLOAD_GATE] = vram_upload_gate(floor_aware, expanded_level_six)
     if deferred_ordering:
         code[ACTOR_GATE] = actor_gate()
-    if expanded_level_six:
-        code[DIALOGUE_RETURN] = menu_return(VARIANT_UPLOAD_RAM, True, DIALOGUE_RETURN, 0x8003ea5c)
     for (address, blob), next_address in zip(sorted(code.items()), sorted(code)[1:]):
         if address + len(blob) > next_address:
             raise ValueError(f"Overlapping executable stubs at 0x{address:08x} and 0x{next_address:08x}.")
@@ -895,7 +915,9 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
     )
     if walking:
         hooks += (
-            (0x8006f2c8, jump(0x8005b368, True), jump(MENU_GATE, True)),
+            (0x8006f2c8, jump(0x8005b368, True) + bytes(4),
+             jump(EXPANDED_MENU_GATE, True) + struct.pack("<I", 0x340f0000))
+            if expanded_level_six else (0x8006f2c8, jump(0x8005b368, True), jump(MENU_GATE, True)),
             (0x800905d4, bytes.fromhex("e0ffbd271000b0af"), jump(VRAM_UPLOAD_GATE) + bytes(4)),
         )
     if deferred_ordering:
@@ -903,7 +925,8 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
         save_actor = bytes.fromhex("e000a5af")
         hooks += ((0x8002a258, stack_prologue + save_actor, jump(ACTOR_GATE) + stack_prologue),)
     if expanded_level_six:
-        hooks += ((0x800260e4, jump(0x8003ea5c, True), jump(DIALOGUE_RETURN, True)),)
+        hooks += ((0x800260e4, jump(0x8003ea5c, True) + bytes(4),
+                   jump(EXPANDED_MENU_GATE, True) + struct.pack("<I", 0x340f0001)),)
     for address, expect, replace in hooks:
         offset = 2048 + address - EXE_LOAD
         if target[offset:offset + len(expect)] != expect:

@@ -62,6 +62,16 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
                 )
         else:
             payload = lanugo.payload(atlas, walk_atlas, goblin_variants, dos_light_preview)
+        if expanded_level_six:
+            image = bytearray(payload)
+            restore = lanugo.menu_return(lanugo.VARIANT_UPLOAD_RAM, True, dialogue=True)
+            if len(restore) > 0x80:
+                raise ValueError("The dialogue return hook overlaps the VRAM guard.")
+            for lba in (first_lba, lower_payload_lba, lizard_payload_lba, rat_payload_lba, wizard_payload_lba):
+                if lba is not None:
+                    start = (lba - first_lba) * 2048 + 0xe00
+                    image[start:start + len(restore)] = restore
+            payload = image
         sectors = [
             lanugo.read_sector(source, lba)
             for lba in range(lanugo.EXE_LBA, lanugo.EXE_LBA + 761856 // 2048)
