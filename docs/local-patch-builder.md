@@ -115,3 +115,9 @@ The Level 1 named-NPC profile stores floor starts as little-endian halfword sect
 Use `--level-two-dialogue` for the cumulative named-NPC preview. Level 2 switches among the existing green goblin art, a full-resolution 8-bit dwarf bank for types 84 and 86, and a fighter bank for Corby (type 98). Corby uses his DOS palette and 15/16 texture resolution with the original on-screen dimensions and hotspots. The local exporter restores one transparent tail pixel in the identified DOS dwarf idle frame. The new banks use sector offsets 652, 703, and 754 relative to the first Level 1 bank. The other floors keep their existing payloads. Unsupported actions use native rendering.
 
 The expected Track 1 SHA-1 is `1886fa383413e53d4dd1756975f5ced8526b187b`.
+
+### Level 3 named NPC preview
+
+Use `--level-three-dialogue` for the cumulative Level 1–3 and Level 6 preview. Level 3 keeps its standard DOS lizardman bank with combat poses. Three additional room banks cover the bandits, Murgo and nearby lizardmen, and Zak. The bandits and Zak use the local DOS palettes with 15/16 textures. Murgo uses full-resolution 4-bit textures. His room shares VRAM with the three lizard palettes at 12/16 texture resolution for idle and walk. Fixed lizard combat poses there fall back to the native renderer. All sprite screen dimensions and hotspots use the original DOS frames.
+
+The expected Track 1 SHA-1 is `59e4eaa757852bae0c9b1cac0aff28199e6c05b8`.

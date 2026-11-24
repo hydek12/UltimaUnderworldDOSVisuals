@@ -57,9 +57,16 @@ Brawnclan’s English dialogue confirmed his identity. His rescue and passage br
 
 The xdelta decoded from clean Japanese Rev 1 Track 1 to SHA-1 `1886fa383413e53d4dd1756975f5ced8526b187b`. Only the ISO descriptor and executable floor-table sector differ before the appended Level 2 banks. CHD SHA-1 `37e06dc0d910c55c1deded4c0d64bd130f597ad9` verified internally, and all four extracted tracks matched the split BINs.
 
+## Level 3 named NPC preview verification
+
+- DuckStation cold-booted the CHD into English gameplay and displayed the English Patch title. All four initially active bandits, Murgo, Zak, and Sseetharee produced the expected DOS palette packets at their native records. Offline checks compared 448 frame slots and 504,505 texels with the DOS exports. Live checks covered 256 idle and walk calls across the head bandit, Murgo, Sseetharee, and Zak. Six room-bank switches verified resident code, tables, and ownership without a floor load.
+- A shared camera frame submitted both Murgo’s and Sseetharee’s DOS sprites with separate palettes. Murgo responded to the correct name and reached the lizard-language lesson and inventory prompt. The ready shared bank returned after the prompt closed. Sseetharee’s greeting and follow-up ran afterward. The complete rescue and Dr. Owl handoff still need a progressed quest run.
+- A standard lizard bank control exercised 48 combat render calls, including eight fixed pose draws for the type 88 control. Within the shared room, lizard idle and walk use DOS art and fixed combat poses use native fallback. The dormant bandit still needs an activation check.
+- The xdelta round-trip from clean Japanese Rev 1 produced Track 1 SHA-1 `59e4eaa757852bae0c9b1cac0aff28199e6c05b8`. CHD SHA-1 `48a93fcd1ab25df91cb07bf142e7e9dd3721fafd` verified internally, and all four extracted tracks matched the split BINs.
+
 ## Remaining 70% checks
 
 1. Verify the remaining Level 1 dialogue, quest, and trade branches, and check changes to quest or trade state and returning to each encounter.
-2. Verify the remaining Level 2 dialogue, trade, and quest outcomes on the new sprite banks. Plan the Level 3 bank layout for the bandits, Zak, and the prisoner. The prisoner is two tiles from Sseetharee, so test both actors from shared sightlines. The full-resolution 4-bit prisoner fits one page by himself, and the three lizard palettes fit a second 4-bit page at 12/16 texture resolution for directional art. A shared bank still needs a runtime check and a plan for lizard combat frames. The bandits and Zak each fit their own two-page 8-bit bank at 15/16 texture resolution.
-3. Finish the named quest and dialogue encounters on Levels 2–8, including dormant activation and the Warren quest-state check. Record native fallback for unsupported poses and contexts.
+2. Verify the remaining Level 2 trade and quest outcomes, the full Murgo rescue and Dr. Owl handoff, and the dormant Level 3 bandit activation.
+3. Finish the named quest and dialogue encounters on Levels 4–8, including Garamon’s activation and the Warren quest-state check. Level 4 packing fits both fighter families in separate 8-bit pages at 11/16 texture resolution for shared town sightlines. The two troll palettes fit one full-resolution 4-bit page. Record native fallback for unsupported poses and contexts.
 4. Close 70% after all eligible named actors and Level 6 encounters pass their gameplay checks. The 75% scope then covers recurring creature and humanoid families on Levels 1–4 and their floor transitions.

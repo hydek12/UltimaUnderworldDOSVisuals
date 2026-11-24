@@ -47,8 +47,15 @@ LEVEL_TWO_BANKS = (
     ("dwarves", ((84, 86),), ((60, 3), (40, 5), (37, 7), (9, 8), (9, 14), (12, 28), (19, 36))),
     ("corby", ((98,),), ((28, 22),)),
 )
-ROOM_FAMILIES = {name: families for name, families, _ in (*LEVEL_ONE_BANKS, *LEVEL_TWO_BANKS)}
-ROOM_FORMATS = {**LEVEL_ONE_FORMATS, "dwarves": (8, 16), "corby": (8, 15)}
+LEVEL_THREE_BANKS = (
+    ("bandits", ((93, 94),), ((40, 11), (29, 9), (36, 9), (33, 12), (20, 41))),
+    ("prisoner", ((85, 88, 89), (106,)), ((25, 21), (27, 22))),
+    ("zak", ((104,),), ((47, 38),)),
+)
+ROOM_BANKS = {1: LEVEL_ONE_BANKS, 2: LEVEL_TWO_BANKS, 3: LEVEL_THREE_BANKS}
+ROOM_FAMILIES = {name: families for banks in ROOM_BANKS.values() for name, families, _ in banks}
+ROOM_FORMATS = {**LEVEL_ONE_FORMATS, "dwarves": (8, 16), "corby": (8, 15),
+                "bandits": (8, 15), "zak": (8, 15)}
 ROOM_STRIDE = 0x19800
 # (texture depth, sixteenths of original size, uses both pages)
 SPECIAL_FORMATS = {"imps": (8, 16, True), "skeletons": (4, 16, True),
@@ -93,7 +100,7 @@ def gates():
     return {GATE: c.out(), GATE_BRANCH: branch.out(), GATE_DISPATCH: dispatch.out()}
 
 
-def sections(base_byte_offset, bank_bytes, bank, *, level_one=False, level_two=False):
+def sections(base_byte_offset, bank_bytes, bank, *, floor=None):
     """Keep the switch routine below the part of RAM it will replace."""
     c = Code(SELECTOR)
     c.imm("ori", "t8", "t8", PAYLOAD & 0xffff)  # High half remains in t8 from the gate.
@@ -102,7 +109,7 @@ def sections(base_byte_offset, bank_bytes, bank, *, level_one=False, level_two=F
     c.branch("beq", "t7", "zero", "native")
     c.mem("lhu", "t1", -0x6900, "t0")
     c.mem("lhu", "t2", -0x68FE, "t0")
-    room_banks = level_one or level_two
+    room_banks = floor is not None
     grid_at = 0x1c00 if room_banks else GRID
     c.shift("srl", "t1", "t1", 9 if room_banks else 10)
     c.shift("srl", "t2", "t2", 9 if room_banks else 10)
@@ -168,13 +175,13 @@ def sections(base_byte_offset, bank_bytes, bank, *, level_one=False, level_two=F
     switch.nop()
     points = tuple(
         (x, z, index)
-        for index, (_, _, tiles) in enumerate(LEVEL_TWO_BANKS if level_two else LEVEL_ONE_BANKS, 1)
+        for index, (_, _, tiles) in enumerate(ROOM_BANKS[floor], 1)
         for x, z in tiles
     ) if room_banks else ACADEMY_NPCS
     return {
         POINTER: struct.pack("<I", SELECTOR),
         grid_at: room_grid(points, 6 if room_banks else 9, x_step=2 if room_banks else 4, z_step=2 if room_banks else 4,
-                           level_one=level_one),
+                           level_one=floor == 1),
         SELECTOR - PAYLOAD: c.out(), SWITCH - PAYLOAD: switch.out(),
         ACTIVE: struct.pack("<I", bank),
     }
