@@ -42,11 +42,13 @@ Use `--level-six-casting` as the first option to include the Level 6 wizards and
 
 Use `--level-six-combat` as the first option. It includes the wizard casting preview and adds the combat stance, three melee attacks, retreat, and death poses for all seven Level 6 wizards. The three wizard palettes share one texture page, with the spiders on the adjacent page. Front views use the fixed DOS poses. Side and rear views use directional standing sprites, except death uses its fixed pose from all angles. The PlayStation still handles damage, timing, and spell effects. The expected Track 1 SHA-1 is `1a6812c72b0e97f534b3ccc77c8fe23d7f40cd9c`.
 
-### Export DOS spell effects for comparison
+### Build the wizard spell-effects preview
 
-Run `UnderworldVisuals export-dos-spell-effects DOS_ROOT NEW_OUTPUT_DIRECTORY` with the same local DOS installation. The exporter reads the projectile pictures from `OBJECTS.GR` and the impact and flame sequences from `ANIMO.GR`. It reads each sequence's start and length from `OBJECTS.DAT` and applies the original auxiliary and RGB palettes. The output directory contains PNG frames and a CSV listing their dimensions and auxiliary palettes. Keep these generated assets local.
+Use `--level-six-effects` as the first option. It extends the Level 6 combat preview with DOS art for the shared Fireball, Lightning Bolt, and Magic Missile projectiles, the secondary Fireball flames, and the Lightning Bolt impact. The five central Fireball impact frames already match the DOS texels and remain in their original slots. The effect textures are shared across floors. The PlayStation still handles flight, collision, animation timing, and damage.
 
-On the Level 6 test scene, DuckStation confirmed PlayStation projectile IDs `0x14` for Fireball and `0x15` for Lightning Bolt. Clean Rev 1 code maps them to animated object IDs `0x1c2` and `0x1c5` on the collision path. The visual recipe still needs an observed draw-path match for flight and impact before it can use these frames in a disc build.
+DuckStation traced flight at `0x8004dc6c` and impact draws at `0x8004e168`. The projectile and impact packets use the port's existing indexed texture pages. The recipe updates those sheets, assigns the DOS flame rectangles, and recalculates the affected Mode 2 Form 1 sectors. It changes nine sectors compared with the combat preview. The build booted from a separate four-track CHD. All 3,172 texels sampled from live GPU memory matched the 21 DOS source frames selected by the traced packets. The expected Track 1 SHA-1 is `051934d738450cc1424267ed5b15c07db5b10ecf`.
+
+For a local comparison, run `UnderworldVisuals export-dos-spell-effects DOS_ROOT NEW_OUTPUT_DIRECTORY`. The exporter reads `OBJECTS.GR`, `ANIMO.GR`, `OBJECTS.DAT`, `ALLPALS.DAT`, and `PALS.DAT`. It writes PNGs, RGB555 frames for the builder, and a frame manifest. Keep the generated graphics local.
 
 ## Separate release code from game assets
 
@@ -65,7 +67,7 @@ git archive --format=zip --output=/tmp/underworld-builder-source.zip HEAD -- \
   build-local-preview.sh build-rev1-patch.sh main.swift docs/local-patch-builder.md \
   lanugo/build_english.py lanugo/build_track.py lanugo/creature_atlas.py \
   lanugo/lower_atlas.py lanugo/mipswords.py lanugo/preview_lighting.py \
-  lanugo/renderer.py lanugo/variant_atlas.py
+  lanugo/renderer.py lanugo/spell_effects.py lanugo/variant_atlas.py
 unzip -l /tmp/underworld-builder-source.zip
 ```
 

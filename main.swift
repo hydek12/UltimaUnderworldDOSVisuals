@@ -341,17 +341,24 @@ func exportSpellEffects(root: URL, directory: URL) throws {
         ), let destination = bitmap.bitmapData else {
             throw FormatError("Could not allocate DOS spell effect image.")
         }
+        var texels = Data([UInt8(width), UInt8(height)])
         for (position, index) in indices.enumerated() {
             let color = try auxiliary.byte(palette * 16 + index)
+            var texel: UInt16 = color == 0 ? 0 : 0x8000
             for channel in 0..<3 {
-                destination[position * 4 + channel] = UInt8(clamping: try colors.byte(color * 3 + channel) * 255 / 63)
+                let component = try colors.byte(color * 3 + channel)
+                guard component < 64 else { throw FormatError("Invalid DOS RGB component.") }
+                destination[position * 4 + channel] = UInt8(component * 255 / 63)
+                if color != 0 { texel |= UInt16(component >> 1) << (channel * 5) }
             }
+            withUnsafeBytes(of: texel.littleEndian) { texels.append(contentsOf: $0) }
             destination[position * 4 + 3] = color == 0 ? 0 : 255
         }
         guard let png = bitmap.representation(using: .png, properties: [:]) else {
             throw FormatError("Could not encode DOS spell effect image.")
         }
         frames.append(("\(effect)-\(frame).png", png))
+        frames.append(("\(effect)-\(frame).rgb555", texels))
         rows.append("\(effect),\(frame),\(width),\(height),\(palette)")
     }
 

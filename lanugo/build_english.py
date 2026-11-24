@@ -6,6 +6,7 @@ import shutil
 import struct
 
 import build_track as lanugo
+import spell_effects
 
 ENGLISH_SHA1 = "325585c11548538e323e8896c3fb8b1cc5d65521"
 
@@ -14,7 +15,7 @@ def bcd(number):
 
 def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
           dos_light_preview=None, lower_floor_goblins=False, lizardmen=None, lizardman_combat=False, level_eight_rats=None,
-          level_six_wizards=None, level_six_spiders=False, level_six_casting=False, level_six_combat=False):
+          level_six_wizards=None, level_six_spiders=False, level_six_casting=False, level_six_combat=False, dos_spell_effects=None):
     if level_six_combat and not level_six_casting:
         raise ValueError("Wizard combat extends the casting preview.")
     if level_six_casting and not level_six_spiders:
@@ -69,6 +70,8 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
             wizard_payload_lba=wizard_payload_lba,
         )
         updates = {}
+        if dos_spell_effects is not None:
+            edited = spell_effects.apply(source, edited, updates, dos_spell_effects)
         for index, original in enumerate(sectors):
             start = index * 2048
             data = edited[start:start + 2048]
@@ -119,4 +122,5 @@ if __name__ == "__main__":
     parser.add_argument("--level-six-spiders", action="store_true")
     parser.add_argument("--level-six-casting", action="store_true")
     parser.add_argument("--level-six-combat", action="store_true")
+    parser.add_argument("--dos-spell-effects", type=Path, metavar="EXPORTED_EFFECTS")
     build(**vars(parser.parse_args()))
