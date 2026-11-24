@@ -234,7 +234,7 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
         c.address("t0", extra_atlas[1])
         c.label("atlas_selected")
     if combat is not None:
-        select_combat_pose(c, *combat[1:])
+        select_combat_pose(c, *combat[1:], compact_base=metadata if registry is not None else None)
     else:
         c.shift("sll", "t2", "t2", 2)
         c.alu("addu", "t2", "t2", "t6")
@@ -399,7 +399,7 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
     return c.out(), shade_return
 
 
-def select_combat_pose(c, phases, metadata, death):
+def select_combat_pose(c, phases, metadata, death, compact_base=None):
     # For fixed-view DOS actions, use the matching standing pose outside views 3–5.
     c.imm("sltiu", "t3", "t7", 2)
     c.branch("bne", "t3", "zero", "directional_pose")
@@ -413,11 +413,32 @@ def select_combat_pose(c, phases, metadata, death):
     c.label("directional_pose")
     c.shift("srl", "t6", "t6", 1)
     c.imm("andi", "t6", "t6", 3)
-    c.shift("sll", "t7", "t7", 9)
-    c.shift("sll", "t2", "t2", 2)
-    c.alu("addu", "t2", "t2", "t6")
-    c.shift("sll", "t2", "t2", 4)
-    c.alu("addu", "t0", "t0", "t2")
+    if compact_base is None:
+        c.shift("sll", "t7", "t7", 9)
+        c.shift("sll", "t2", "t2", 2)
+        c.alu("addu", "t2", "t2", "t6")
+        c.shift("sll", "t2", "t2", 4)
+        c.alu("addu", "t0", "t0", "t2")
+    else:
+        c.shift("sll", "t7", "t7", 5)
+        c.shift("sll", "t2", "t2", 2)
+        c.alu("addu", "t2", "t2", "t6")
+        c.address("t3", compact_base)
+        c.branch("beq", "t0", "t3", "linear_pose")
+        c.nop()
+        c.alu("addu", "t2", "t2", "t7")
+        c.alu("addu", "t2", "t2", "t0")
+        c.mem("lbu", "t2", 0, "t2")
+        c.imm("addiu", "t0", "t0", 64)
+        c.shift("sll", "t3", "t2", 1)
+        c.shift("sll", "t2", "t2", 4)
+        c.alu("subu", "t2", "t2", "t3")
+        c.branch("beq", "zero", "zero", "pose_selected")
+        c.alu("addu", "t0", "t0", "t2")
+        c.label("linear_pose")
+        c.shift("sll", "t7", "t7", 4)
+        c.shift("sll", "t2", "t2", 4)
+        c.alu("addu", "t0", "t0", "t2")
     c.branch("beq", "zero", "zero", "pose_selected")
     c.alu("addu", "t0", "t0", "t7")
     c.label("combat_pose")

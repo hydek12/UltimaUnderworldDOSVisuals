@@ -49,7 +49,7 @@ MENU_RAM = PAYLOAD_RAM + 0xe00
 VRAM_GUARD_RAM = PAYLOAD_RAM + 0xe80
 RESIDENT_BYTES = 0x1000
 LOWER_RESIDENT_BYTES = 0x1800
-EXPANDED_RESIDENT_BYTES = 0x2800
+EXPANDED_RESIDENT_BYTES = 0x2000
 LEVEL_SIX_DIRECTIONAL = ((92,), (64, 82), (65, 69), (66, 73))
 MODEL_OWNER_OFFSET = 0x58
 ORDER_COUNT_OFFSET = 0x5c
@@ -633,6 +633,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     extra_atlas = None
     extra_sections = {}
     if expanded_level_six:
+        # Keep persistent frame lookups below 0x801f8000, where the native floor load writes.
         if not (casting and combat and extra_type == 92 and texture_pages == creature_atlas.TEXTURE_PAGES[:1]):
             raise ValueError("The expanded Level 6 atlas requires the wizard-combat and spider preview.")
         image, palettes, directional = creature_atlas.build_families(
@@ -650,14 +651,18 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         for row, actor in enumerate(actor_types):
             struct.pack_into("<HH", registry_data, 4 * (actor - 64), 0, creature_atlas.CLUT_BASE + row * 64)
         row = len(actor_types)
-        for types, table, location in zip(LEVEL_SIX_DIRECTIONAL, directional, (0x1000, 0x1800, 0x1c00, 0x2000), strict=True):
-            extra_sections[location] = table
+        table_offsets = (0x1000, 0x1c00, 0x1e00, 0x1200)
+        for types, table, location in zip(LEVEL_SIX_DIRECTIONAL, directional, table_offsets, strict=True):
+            compact = creature_atlas.compact_frame_table(table)
+            if len(compact) > 0x200:
+                raise ValueError("The compact Level 6 frame table exceeds its safe RAM range.")
+            extra_sections[location] = compact
             for actor in types:
                 palette = creature_atlas.CLUT_BASE + (row % 8) * 64 + row // 8
                 struct.pack_into("<HH", registry_data, 4 * (actor - 64), location - 0x800, palette)
                 row += 1
         extra_sections[0xf00] = registry_data
-        order_log = PAYLOAD_RAM + ORDER_COUNT_OFFSET, PAYLOAD_RAM + 0x2400
+        order_log = PAYLOAD_RAM + ORDER_COUNT_OFFSET, PAYLOAD_RAM + LOWER_RESIDENT_BYTES
     elif extra_type is not None:
         if (combat and not casting) or texture_pages != creature_atlas.TEXTURE_PAGES[:1]:
             raise ValueError("The extra atlas requires one primary wizard or directional page.")

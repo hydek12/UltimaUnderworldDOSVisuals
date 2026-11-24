@@ -147,3 +147,15 @@ def build_families(families, page):
             ))
     image = bytes(lo | hi << 4 for lo, hi in zip(pixels[::2], pixels[1::2], strict=True))
     return image, palettes, tables
+
+
+def compact_frame_table(table):
+    """Index unique directional entries and omit their final two padding bytes."""
+    keys = {}
+    indices = bytearray()
+    for offset in range(0, len(table), 16):
+        entry = bytes(table[offset:offset + 14])
+        indices.append(keys.setdefault(entry, len(keys)))
+    if len(indices) != 64:
+        raise ValueError("Expected four phases in each idle and walking direction.")
+    return bytes(indices) + b"".join(keys)
