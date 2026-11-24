@@ -42,6 +42,12 @@ Use `--level-six-casting` as the first option to include the Level 6 wizards and
 
 Use `--level-six-combat` as the first option. It includes the wizard casting preview and adds the combat stance, three melee attacks, retreat, and death poses for all seven Level 6 wizards. The three wizard palettes share one texture page, with the spiders on the adjacent page. Front views use the fixed DOS poses. Side and rear views use directional standing sprites, except death uses its fixed pose from all angles. The PlayStation still handles damage, timing, and spell effects. The expected Track 1 SHA-1 is `1a6812c72b0e97f534b3ccc77c8fe23d7f40cd9c`.
 
+### Export DOS spell effects for comparison
+
+Run `UnderworldVisuals export-dos-spell-effects DOS_ROOT NEW_OUTPUT_DIRECTORY` with the same local DOS installation. The exporter reads the projectile pictures from `OBJECTS.GR` and the impact and flame sequences from `ANIMO.GR`. It reads each sequence's start and length from `OBJECTS.DAT` and applies the original auxiliary and RGB palettes. The output directory contains PNG frames and a CSV listing their dimensions and auxiliary palettes. Keep these generated assets local.
+
+On the Level 6 test scene, DuckStation confirmed PlayStation projectile IDs `0x14` for Fireball and `0x15` for Lightning Bolt. Clean Rev 1 code maps them to animated object IDs `0x1c2` and `0x1c5` on the collision path. The visual recipe still needs an observed draw-path match for flight and impact before it can use these frames in a disc build.
+
 ## Separate release code from game assets
 
 1. Freeze a tested build and record the Japanese and English baseline hashes, the final Track 1 hash, the exporter and builder revisions, and the supported DOS source versions. Record individual input signatures for the DOS files the exporter consumes, so unsupported releases fail with actionable errors.

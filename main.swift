@@ -305,6 +305,80 @@ func exportAtlas(root: URL, directory: URL, actor: Int, name: String,
         .write(to: directory.appendingPathComponent("\(name).csv"), options: .withoutOverwriting)
 }
 
+func exportSpellEffects(root: URL, directory: URL) throws {
+    let source = root.appendingPathComponent("DATA")
+    let objects = try Bytes(source.appendingPathComponent("OBJECTS.GR"))
+    let animations = try Bytes(source.appendingPathComponent("ANIMO.GR"))
+    let classes = try Bytes(source.appendingPathComponent("OBJECTS.DAT"))
+    let auxiliary = try Bytes(source.appendingPathComponent("ALLPALS.DAT"))
+    let colors = try Bytes(source.appendingPathComponent("PALS.DAT"))
+    var rows = ["effect,frame,width,height,auxiliary_palette"]
+    var frames: [(String, Data)] = []
+
+    func decode(_ archive: Bytes, picture: Int, effect: String, frame: Int) throws {
+        guard try archive.byte(0) == 1,
+              picture < (try archive.littleEndian(1, size: 2)) else {
+            throw FormatError("Missing DOS picture \(picture) for \(effect).")
+        }
+        let offset = try archive.littleEndian(3 + 4 * picture, size: 4)
+        let width = try archive.byte(offset + 1)
+        let height = try archive.byte(offset + 2)
+        let palette = try archive.byte(offset + 3)
+        guard try archive.byte(offset) == 8, width > 0, height > 0, palette < 32 else {
+            throw FormatError("Unsupported DOS picture \(picture) for \(effect).")
+        }
+        let words = try archive.littleEndian(offset + 4, size: 2)
+        guard offset + 6 + (words + 1) / 2 <= archive.data.count else {
+            throw FormatError("Truncated DOS picture \(picture) for \(effect).")
+        }
+        var pixels = PackedPixels(page: archive, start: offset + 6, wordSize: 4, wordCount: words)
+        let indices = try pixels.decode(pixelCount: width * height)
+        guard let bitmap = NSBitmapImageRep(
+            bitmapDataPlanes: nil, pixelsWide: width, pixelsHigh: height,
+            bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
+            colorSpaceName: .deviceRGB, bitmapFormat: .alphaNonpremultiplied,
+            bytesPerRow: width * 4, bitsPerPixel: 32
+        ), let destination = bitmap.bitmapData else {
+            throw FormatError("Could not allocate DOS spell effect image.")
+        }
+        for (position, index) in indices.enumerated() {
+            let color = try auxiliary.byte(palette * 16 + index)
+            for channel in 0..<3 {
+                destination[position * 4 + channel] = UInt8(clamping: try colors.byte(color * 3 + channel) * 255 / 63)
+            }
+            destination[position * 4 + 3] = color == 0 ? 0 : 255
+        }
+        guard let png = bitmap.representation(using: .png, properties: [:]) else {
+            throw FormatError("Could not encode DOS spell effect image.")
+        }
+        frames.append(("\(effect)-\(frame).png", png))
+        rows.append("\(effect),\(frame),\(width),\(height),\(palette)")
+    }
+
+    for (effect, picture) in [("fireball", 0x14), ("lightning-bolt", 0x15), ("magic-missile", 0x17)] {
+        try decode(objects, picture: picture, effect: effect, frame: 0)
+    }
+    for (effect, animation) in [("fireball-impact", 2), ("fireball-flame-1", 3),
+                                ("fireball-flame-2", 4), ("lightning-impact", 5)] {
+        let record = classes.data.count - 64 + 4 * animation
+        let start = try classes.byte(record + 2)
+        let count = try classes.byte(record + 3)
+        guard count > 0 else {
+            throw FormatError("DOS animation \(animation) has no frames.")
+        }
+        for frame in 0..<count {
+            try decode(animations, picture: start + frame, effect: effect, frame: frame)
+        }
+    }
+
+    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false)
+    for (name, png) in frames {
+        try png.write(to: directory.appendingPathComponent(name), options: .withoutOverwriting)
+    }
+    try Data((rows.joined(separator: "\n") + "\n").utf8)
+        .write(to: directory.appendingPathComponent("spell-effects.csv"), options: .withoutOverwriting)
+}
+
 let idlePoses = (0x20...0x27).map { ($0, 4) }
 let walkPoses = (0x80...0x87).map { ($0, 4) }
 let arguments = Array(CommandLine.arguments.dropFirst())
@@ -312,6 +386,9 @@ do {
     switch arguments.first {
     case "inspect-psx" where arguments.count == 2:
         try inspectArchive(Bytes(URL(fileURLWithPath: arguments[1])))
+    case "export-dos-spell-effects" where arguments.count == 3:
+        try exportSpellEffects(root: URL(fileURLWithPath: arguments[1]),
+                               directory: URL(fileURLWithPath: arguments[2]))
     case "export-lanugo-tim" where arguments.count == 3:
         try exportAtlas(root: URL(fileURLWithPath: arguments[1]),
                               directory: URL(fileURLWithPath: arguments[2]),
@@ -390,6 +467,7 @@ do {
         throw FormatError("""
         Usage
           UnderworldVisuals inspect-psx AVATAR
+          UnderworldVisuals export-dos-spell-effects DOS_ROOT NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-lanugo-tim DOS_ROOT NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-lanugo-walk-tim DOS_ROOT NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-goblin-atlases DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY
