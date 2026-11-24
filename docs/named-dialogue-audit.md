@@ -8,7 +8,7 @@ Generate the inventory with `audit-npcs.py --dialogue-inventory` as shown in the
 
 - The PSX inventory has 90 records with a personal dialogue ID in the DOS name-table range. All 90 mobile records matched byte for byte in English v2.0 after accounting for the object table's relocation by 1 MiB.
 - Of the 82 initially linked records, 80 have both a DOS displayed name and a DOS conversation archive entry. Those 80 records represent 72 conversation IDs. There are 72 exact actor matches, seven spawn-tile matches, and one conversation-ID match that needs an in-game identity check. Eight other records are initially unlinked.
-- Hewstone on Level 2 is the initially linked conversation-ID-only match. The dormant Level 3 bandit and Garamon records still need activation checks. The linked type 102 record with ID 110 has an exact actor match but no DOS displayed name or script.
+- Hewstone on Level 2 was the initially linked conversation-ID-only match. The runtime check below confirms his identity. The dormant Level 3 bandit and Garamon records still need activation checks. The linked type 102 record with ID 110 has an exact actor match but no DOS displayed name or script.
 - Warren's Level 6 record has an exact DOS counterpart and a displayed name. The local DOS archive has no script for his ID. The earlier DuckStation attempt produced the English no-response message. Quest-state behavior still needs checking before resolving his disposition.
 
 | Level | Initially linked records with a DOS name and script |
@@ -31,9 +31,16 @@ These totals include shared labels such as guards and bandits and records alread
 - Vernix’s English conversation opened on the final preview. Inventory returned to the same conversation and farewell restored the sprites. Bragit’s English rescue choice and return to the fighter bank passed on the preceding preview. The final build changes the Level 1 bank map and renderer constants from that preview.
 - The local xdelta decoded against clean Japanese Rev 1 Track 1 (SHA-1 `937ae8cf9a65526f2622c39d34205941f22c10cb`) to patched Track 1 (SHA-1 `6c2619accc59f4a6b8c89b4f5784655f00c34c43`). CHD verification passed and all four extracted tracks matched byte for byte. The CHD SHA-1 is `e7d886d55bf0522711394617380c3619308c443a`.
 
+## Extended floor-bank preview verification
+
+- DuckStation cold-booted the new CHD through the English menu and character creation into Level 1. The native floor loader passed Level 1 → 3 → 6 → 1 → 2, including the expected Level 6 bank and palette. A debugger-only override of the Level 6 table entry selected its second bank at sector offset 282 and reached the game’s disc-read routine with the expected address and resident length. The original table entry was restored before resuming. Older profile loaders compared byte for byte with the previous recipe.
+- On Level 2 the linked type 84 actor at `0x80113d08` dispatched conversation 89. His English dialogue identified him as Hewstone. His mining and mine-monster branches opened, barter offered items and accepted appraisal, and farewell returned to the dungeon. A completed exchange, the mine-monster outcome, and the DOS dwarf sprite conversion remain open.
+- Bragit’s type 90 encounter on Level 1 dispatched conversation 67. His English rescue response and follow-up pages displayed, and return to the dungeon restored the ready fighter bank.
+- The local xdelta decoded against the same clean Japanese Rev 1 Track 1 to SHA-1 `d3b370395327bdd630c3d9eade4d73662eb8dd43`. The CHD passed its internal SHA-1 verification and all four tracks matched after readback. The CHD logical SHA-1 is `d2ea85da96e0499cd6a0d18bc5e3b7824b47c353`.
+
 ## Remaining 70% checks
 
-1. Verify the remaining Level 1 dialogue, quest, and trade branches, including Bragit’s rescue on the final candidate. Check changes to quest or trade state and returning to each encounter.
-2. Verify Hewstone’s ambiguous match in his native Level 2 encounter. Plan the dwarf bank for Shak, Goldthirst, Steeltoe, Brawnclan, and Ironwit, and reuse the fighter art for Corby. Brawnclan has a spawn-tile match and still needs an encounter check. The floor-start table currently uses one unsigned byte per floor, reserves 255 for absent payloads, and already uses offset 245 for Level 6. Expand or relocate that table before appending more floor payloads.
+1. Verify the remaining Level 1 dialogue, quest, and trade branches, and check changes to quest or trade state and returning to each encounter.
+2. Build the dwarf bank for Hewstone, Shak, Goldthirst, Steeltoe, Brawnclan, and Ironwit, and reuse the fighter art for Corby. Brawnclan has a spawn-tile match and still needs an encounter check.
 3. Finish the named quest and dialogue encounters on Levels 2–8, including dormant activation and the Warren quest-state check. Recheck Gralwart, Dominus, and Louvnon on the same release candidate. Record native fallback for unsupported poses and contexts.
 4. Close 70% after all eligible named actors and Level 6 encounters pass their gameplay checks. The 75% scope then covers recurring creature and humanoid families on Levels 1–4 and their floor transitions.

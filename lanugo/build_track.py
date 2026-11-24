@@ -326,37 +326,39 @@ def floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba=None, rat_pa
         c.address("a0", (payload_lba - AVATAR_LBA) * 2048)
         c.label("read")
     else:
-        # One byte per native floor index, measured in sectors from the Level 1 payload.
-        floor_table_ram = BOOT + 0xb4
-        payload_levels = (None, lower_payload_lba, lizard_payload_lba, lizard_payload_lba,
+        # The named-NPC profile uses halfword sector offsets. Older profiles
+        # retain the identical byte table and executable for reproducible builds.
+        missing = 0x7fff if level_one_dialogue else 0xff
+        floor_table_ram = BOOT + (0xac if level_one_dialogue else 0xb4)
+        payload_levels = (payload_lba, lower_payload_lba, lizard_payload_lba, lizard_payload_lba,
                           lower_payload_lba, wizard_payload_lba, lower_payload_lba, rat_payload_lba, None)
-        floor_offsets = [255 if lba is None else lba - payload_lba for lba in payload_levels]
-        floor_offsets[0] = 0
-        if any(not 0 <= offset <= 255 for offset in floor_offsets):
-            raise ValueError("The resident floor table requires payload starts within 254 sectors.")
-        if any(lba is not None and not 0 < offset < 255
-               for lba, offset in zip(payload_levels, floor_offsets, strict=True)):
-            raise ValueError("Additional floor payloads must follow Level 1 in the resident floor table.")
-        floor_table = bytes(floor_offsets)
+        floor_offsets = [missing if lba is None else lba - payload_lba for lba in payload_levels]
+        if any(lba is not None and not 0 < offset < missing
+               for lba, offset in zip(payload_levels[1:], floor_offsets[1:], strict=True)):
+            raise ValueError(f"The resident floor table requires additional payload starts within 1–{missing - 1} sectors.")
+        floor_table = struct.pack(f"<{len(floor_offsets)}{'H' if level_one_dialogue else 'B'}", *floor_offsets)
         offset = (payload_lba - AVATAR_LBA) * 2048
         c.mem("lw", "t0", 24, "sp")
         c.imm("ori", "a2", "zero", EXPANDED_RESIDENT_BYTES if level_one_dialogue else RESIDENT_BYTES)
-        c.imm("sltiu", "t2", "t0", len(floor_table))
+        c.imm("sltiu", "t2", "t0", len(floor_offsets))
         c.branch("beq", "t2", "zero", "done")
+        if level_one_dialogue:
+            c.shift("sll", "t0", "t0", 1)
         c.alu("addu", "t1", "gp", "t0")
-        c.mem("lbu", "t1", floor_table_ram - NATIVE_GP, "t1")
+        c.mem("lhu" if level_one_dialogue else "lbu", "t1", floor_table_ram - NATIVE_GP, "t1")
         c.imm("lui", "t3", "zero", offset >> 16)
-        c.imm("sltiu", "t2", "t1", 255)
+        c.imm("sltiu", "t2", "t1", missing)
         c.branch("beq", "t2", "zero", "done")
         c.shift("sll", "a0", "t1", 11)
-        c.alu("sltu", "t2", "zero", "t1")
-        if expanded_level_six:
-            c.alu("subu", "t2", "zero", "t2")
-            c.imm("andi", "t2", "t2", 0 if level_one_dialogue else EXPANDED_RESIDENT_BYTES - RESIDENT_BYTES)
-            c.alu("addu", "a2", "a2", "t2")
-        else:
-            c.shift("sll", "t2", "t2", 11)
-            c.alu("OR", "a2", "a2", "t2")  # Level 1 uses 0x1000, other atlases use 0x1800.
+        if not level_one_dialogue:
+            c.alu("sltu", "t2", "zero", "t1")
+            if expanded_level_six:
+                c.alu("subu", "t2", "zero", "t2")
+                c.imm("andi", "t2", "t2", EXPANDED_RESIDENT_BYTES - RESIDENT_BYTES)
+                c.alu("addu", "a2", "a2", "t2")
+            else:
+                c.shift("sll", "t2", "t2", 11)
+                c.alu("OR", "a2", "a2", "t2")  # Level 1 uses 0x1000, other atlases use 0x1800.
         c.imm("ori", "t3", "t3", offset)
         c.alu("addu", "a0", "a0", "t3")
     c.mem("sw", "a0", 20, "sp")
