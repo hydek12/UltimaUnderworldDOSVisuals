@@ -292,7 +292,7 @@ def actor_gate():
 
 def floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba=None, rat_payload_lba=None,
                  wizard_payload_lba=None, expanded_level_six=False, academy_runtime=False, level_one_dialogue=False,
-                 level_two_payload_lba=None, level_three_payload_lba=None, level_four_payload_lba=None):
+                 room_payload_lbas=None):
     c = Code(BOOT)
     c.imm("addiu", "sp", "sp", -32)
     c.mem("sw", "ra", 28, "sp")
@@ -331,9 +331,10 @@ def floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba=None, rat_pa
         # retain the identical byte table and executable for reproducible builds.
         missing = 0x7fff if level_one_dialogue else 0xff
         floor_table_ram = BOOT + (0xac if level_one_dialogue else 0xb4)
-        payload_levels = (payload_lba, level_two_payload_lba or lower_payload_lba,
-                          level_three_payload_lba or lizard_payload_lba, level_four_payload_lba or lizard_payload_lba,
-                          lower_payload_lba, wizard_payload_lba, lower_payload_lba, rat_payload_lba, None)
+        payload_levels = [payload_lba, lower_payload_lba, lizard_payload_lba, lizard_payload_lba,
+                          lower_payload_lba, wizard_payload_lba, lower_payload_lba, rat_payload_lba, None]
+        for floor, lba in (room_payload_lbas or {}).items():
+            payload_levels[floor - 1] = lba
         floor_offsets = [missing if lba is None else lba - payload_lba for lba in payload_levels]
         if any(lba is not None and not 0 < offset < missing
                for lba, offset in zip(payload_levels[1:], floor_offsets[1:], strict=True)):
@@ -666,15 +667,16 @@ def lizard_sources(variants, combat=False):
 
 def lizard_payload(variants, combat=False, bank_sections=None):
     return creature_payload(variants, creature_atlas.LIZARD_TYPES, creature_atlas.TEXTURE_PAGES, combat,
-                            academy_sections=bank_sections, lizard_room_default=bank_sections is not None)
+                            academy_sections=bank_sections, room_default=bank_sections is not None)
 
 
-def rat_payload(variants):
-    return creature_payload(variants, creature_atlas.LEVEL_EIGHT_RAT_TYPES, creature_atlas.RAT_TEXTURE_PAGES)
+def rat_payload(variants, bank_sections=None):
+    return creature_payload(variants, creature_atlas.LEVEL_EIGHT_RAT_TYPES, creature_atlas.RAT_TEXTURE_PAGES,
+                            academy_sections=bank_sections, room_default=bank_sections is not None)
 
 
 def creature_payload(variants, actor_types, texture_pages, combat=False, extra_type=None, casting=False,
-                     expanded_level_six=False, academy_bank=None, academy_sections=None, room_bank=None, lizard_room_default=False):
+                     expanded_level_six=False, academy_bank=None, academy_sections=None, room_bank=None, room_default=False):
     sources = creature_sources(variants, actor_types, combat, casting)
     images, clut, metadata = creature_atlas.build(sources, texture_pages)
     base = actor_types[0]
@@ -689,6 +691,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     extra_sections = {}
     bank_combat_slots = None
     split_format = academy_banks.SPLIT_ROOM_FORMATS.get(room_bank)
+    prison = room_bank == "prison-seven"
     if expanded_level_six:
         # Keep persistent frame lookups below 0x801f8000, where the native floor load writes.
         if not (casting and combat and extra_type == 92 and texture_pages == creature_atlas.TEXTURE_PAGES[:1]):
@@ -698,7 +701,9 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         families = academy_banks.BANK_FAMILIES[academy_bank] if academy_bank else LEVEL_SIX_DIRECTIONAL
         if room_bank:
             families = academy_banks.ROOM_FAMILIES[room_bank]
-        if split_format:
+        if prison:
+            table_slots = ((0x804, 0x3fc), (0x1000, 0x400), (0x1800, 0x400))
+        elif split_format:
             # The shared room needs two compact tables below the order log at 0x1800.
             table_slots = ((0x804, 0x3fc), (0x1000, 0x400))
         elif room_bank:
@@ -712,7 +717,20 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         texture_pages = creature_atlas.TEXTURE_PAGES
         format_override = academy_banks.SPECIAL_FORMATS.get(academy_bank)
         primary_types = actor_types
-        if split_format:
+        if prison:
+            wizard_image, wizard_palettes, wizard_tables = creature_atlas.build_families(
+                [creature_sources(variants, families[0])], texture_pages[0],
+            )
+            prison_image, prison_palettes, prison_tables = creature_atlas.build_families(
+                [creature_sources(variants, types) for types in families[1:]], texture_pages[1],
+                bits=8, scales=(9, 8),
+            )
+            images = wizard_image, prison_image
+            palette_stride = 64
+            palettes = [p.ljust(64, b"\0") for p in wizard_palettes] + prison_palettes
+            directional = (*wizard_tables, *prison_tables)
+            primary_types = ()
+        elif split_format:
             bits, scales = split_format
             palette_stride = 64 if bits == 8 else 32
             packed = [
@@ -797,7 +815,8 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
                 struct.pack_into("<HH", registry_data, 4 * (actor - 64), location - 0x800, palette)
                 row += 1
         extra_sections[0xf00] = registry_data
-        order_log = PAYLOAD_RAM + ORDER_COUNT_OFFSET, PAYLOAD_RAM + LOWER_RESIDENT_BYTES
+        log_offset = EXPANDED_RESIDENT_BYTES if prison else LOWER_RESIDENT_BYTES
+        order_log = PAYLOAD_RAM + ORDER_COUNT_OFFSET, PAYLOAD_RAM + log_offset
     elif extra_type is not None:
         if (combat and not casting) or texture_pages != creature_atlas.TEXTURE_PAGES[:1]:
             raise ValueError("The extra atlas requires one primary wizard or directional page.")
@@ -843,7 +862,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     registry = PAYLOAD_RAM + 0xf00 if expanded_level_six else None
     suppress_addr = SUPPRESS_RAM if extra_type is None else PAYLOAD_RAM + 0x700
     delay_addr = WALK_SUPPRESS_DELAY_RAM if extra_type is None else PAYLOAD_RAM + 0xd00
-    if lizard_room_default:
+    if room_default:
         suppress_addr = PAYLOAD_RAM + 0x1800
         delay_addr = PAYLOAD_RAM + 0x1900
     sections = {
@@ -867,14 +886,14 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             palette_types=palette_types, order_log=order_log, combat=action_addresses, extra_atlas=extra_atlas, wizard_combat=casting and combat, registry=registry,
         )[0],
         ORDER_WRITER_RAM - PAYLOAD_RAM: renderer.log_native_order(ORDER_WRITER_RAM, *order_log),
-        0x800: b"" if split_format else metadata,
+        0x800: b"" if split_format or prison else metadata,
         0xc00: jump(PAYLOAD_RAM + 0x1400) + bytes(4),
         0xe00: menu_return(VARIANT_UPLOAD_RAM, floor_aware=True),
         0xe80: vram_guard(lower_floor=True, right_edge=texture_pages[-1][0] + 64),
     }
     if extra_type is None:
         sections[ORDER_LOG_RAM - PAYLOAD_RAM] = bytes(8 * renderer.ORDER_LOG_ENTRIES)
-    if extra_type is not None or lizard_room_default:
+    if extra_type is not None or room_default:
         sections[SUPPRESS_RAM - PAYLOAD_RAM] = jump(suppress_addr) + bytes(4)
         sections[WALK_SUPPRESS_DELAY_RAM - PAYLOAD_RAM] = jump(delay_addr) + bytes(4)
     sections.update(extra_sections)
@@ -883,8 +902,8 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         sections.update(academy_sections)
     pages = tuple((x, y) for x, y, _ in texture_pages)
     blob = compact_payload(sections, images, clut, pages, texture_pages[0][2], clut_rect,
-                           EXPANDED_RESIDENT_BYTES if expanded_level_six or lizard_room_default else LOWER_RESIDENT_BYTES)
-    return blob.ljust(academy_banks.ROOM_STRIDE, b"\0") if room_bank or lizard_room_default else blob
+                           EXPANDED_RESIDENT_BYTES if expanded_level_six or room_default else LOWER_RESIDENT_BYTES)
+    return blob.ljust(academy_banks.ROOM_STRIDE, b"\0") if room_bank or room_default else blob
 
 
 def compact_payload(sections, images, clut, pages, texture_height, clut_rect, resident_bytes=LOWER_RESIDENT_BYTES):
@@ -1009,7 +1028,7 @@ def form1_sector(original, data):
 def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False,
                     lower_payload_lba=None, lizard_payload_lba=None, rat_payload_lba=None,
                     wizard_payload_lba=None, expanded_level_six=False, academy_runtime=False, level_one_dialogue=False,
-                    level_two_payload_lba=None, level_three_payload_lba=None, level_four_payload_lba=None):
+                    room_payload_lbas=None):
     target = bytearray(original)
     deferred_ordering = any(
         lba is not None for lba in (lizard_payload_lba, rat_payload_lba, wizard_payload_lba)
@@ -1018,8 +1037,7 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
     code = {
         BOOT: (
             floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba, rat_payload_lba, wizard_payload_lba,
-                         expanded_level_six, academy_runtime, level_one_dialogue, level_two_payload_lba, level_three_payload_lba,
-                         level_four_payload_lba)
+                         expanded_level_six, academy_runtime, level_one_dialogue, room_payload_lbas)
             if floor_aware else loader(payload_lba, walking, wide)
         ),
         SUPPRESS_NORMAL: gate(SUPPRESS_NORMAL, SUPPRESS_RAM, "v1", walking, floor_aware),

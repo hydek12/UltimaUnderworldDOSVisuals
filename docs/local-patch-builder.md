@@ -127,3 +127,12 @@ The expected Track 1 SHA-1 is `59e4eaa757852bae0c9b1cac0aff28199e6c05b8`.
 Use `--level-four-dialogue` to include the Level 4 named actors. The town bank fits both DOS fighter families on separate 8-bit pages at 11/16 texture resolution. Dedicated fighter rooms use 15/16 textures. Rawstag, Lakshi Longtooth, and Sethar Strongarm share a full-resolution 4-bit troll bank with the matching DOS palettes. The standard lizard bank remains available outside those areas.
 
 The expected Track 1 SHA-1 is `eab1814243f110e993076762d590ed86a4aaae24`.
+
+### Levels 5 and 8 named NPC preview
+
+Use `--late-dialogue` to add Judy, Anjor, and the four named ghouls on Level 5, and Carasso on Level 8. Judy and Anjor use full-resolution 4-bit art. The ghouls use 14/16 textures, and Carasso shares a bank with full-resolution rats using 11/16 fighter textures. The standard goblin and rat banks remain available elsewhere on their respective floors. Garamon’s initially dormant record retains native rendering pending activation and DOS identity checks.
+
+The same option adds Level 7 banks for Tyball, Cardon, the gray guards, the prison corridor, the troll guard, and the dormant imp. The prison bank shares two pages across wizards, dwarves, and fighters. The wizard page runs at full 4-bit resolution. The shared 8-bit page uses 9/16 textures for dwarves and 8/16 textures for fighters and retains the original sprite dimensions and anchors. Cardon’s separate 8-bit bank uses 15/16 textures. These additions supply directional idle and walk frames. Other actions use the existing native fallback. Dormant actors still require their original gameplay triggers.
+
+
+The expected Track 1 SHA-1 is `ebf725124a10e9c61bffd240cbd1acc4c48d19c6`.

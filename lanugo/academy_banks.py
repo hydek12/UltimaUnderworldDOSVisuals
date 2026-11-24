@@ -58,11 +58,32 @@ LEVEL_FOUR_BANKS = (
     ("fighters-four", ((90, 95, 98, 104),), ((40, 19), (20, 43), (32, 61))),
     ("trolls-four", ((96, 112),), ((58, 9), (58, 15), (49, 22))),
 )
-ROOM_BANKS = {1: LEVEL_ONE_BANKS, 2: LEVEL_TWO_BANKS, 3: LEVEL_THREE_BANKS, 4: LEVEL_FOUR_BANKS}
+LEVEL_FIVE_BANKS = (
+    ("judy", ((107,),), ((34, 8),)),
+    ("ghouls-five", ((99,),), ((54, 20), (49, 22), (34, 23), (58, 26))),
+    ("anjor", ((106,),), ((17, 36),)),
+)
+LEVEL_SEVEN_BANKS = (
+    ("tyball", ((123,),), ((54, 10),)),
+    ("cardon", ((104,),), ((19, 14),)),
+    ("gray-guards-seven", ((80,),), ((27, 22), (27, 24), (29, 24), (30, 24))),
+    ("prison-seven", ((108, 109), (86,), (90, 98, 104)),
+     ((13, 47), (10, 51), (1, 52), (12, 53), (2, 55), (6, 55), (7, 57), (20, 58))),
+    ("troll-seven", ((111,),), ((26, 56),)),
+    ("imp-seven", ((75,),), ((35, 37),)),
+)
+LEVEL_EIGHT_BANKS = (
+    ("carasso", ((72,), (104,)), ((47, 44),)),
+)
+ROOM_BANKS = {1: LEVEL_ONE_BANKS, 2: LEVEL_TWO_BANKS, 3: LEVEL_THREE_BANKS, 4: LEVEL_FOUR_BANKS,
+              5: LEVEL_FIVE_BANKS, 7: LEVEL_SEVEN_BANKS, 8: LEVEL_EIGHT_BANKS}
 ROOM_FAMILIES = {name: families for banks in ROOM_BANKS.values() for name, families, _ in banks}
 ROOM_FORMATS = {**LEVEL_ONE_FORMATS, "dwarves": (8, 16), "corby": (8, 15),
-                "bandits": (8, 15), "zak": (8, 15), "fighters-four": (8, 15), "trolls-four": (4, 16)}
-SPLIT_ROOM_FORMATS = {"prisoner": (4, (12, 16)), "town": (8, (11, 11))}
+                "bandits": (8, 15), "zak": (8, 15), "fighters-four": (8, 15), "trolls-four": (4, 16),
+                "judy": (4, 16), "ghouls-five": (8, 14), "anjor": (4, 16),
+                "tyball": (4, 16), "cardon": (8, 15), "gray-guards-seven": (4, 16),
+                "troll-seven": (4, 16), "imp-seven": (8, 16)}
+SPLIT_ROOM_FORMATS = {"prisoner": (4, (12, 16)), "town": (8, (11, 11)), "carasso": (8, (16, 11))}
 ROOM_STRIDE = 0x19800
 # (texture depth, sixteenths of original size, uses both pages)
 SPECIAL_FORMATS = {"imps": (8, 16, True), "skeletons": (4, 16, True),
@@ -185,10 +206,17 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None):
         for index, (_, _, tiles) in enumerate(ROOM_BANKS[floor], 1)
         for x, z in tiles
     ) if room_banks else ACADEMY_NPCS
+    grid = room_grid(points, 6 if room_banks else 9, x_step=2 if room_banks else 4,
+                     z_step=2 if room_banks else 4, level_one=floor == 1)
+    if floor == 7:
+        grid = bytearray(grid)
+        for x, z in ((28, 57), (27, 55), (25, 55)):
+            index = z // 2 * 32 + x // 2
+            grid[index // 2] &= ~(15 << (4 * (index & 1)))
+        grid = bytes(grid)
     return {
         POINTER: struct.pack("<I", SELECTOR),
-        grid_at: room_grid(points, 6 if room_banks else 9, x_step=2 if room_banks else 4, z_step=2 if room_banks else 4,
-                           level_one=floor == 1),
+        grid_at: grid,
         SELECTOR - PAYLOAD: c.out(), SWITCH - PAYLOAD: switch.out(),
         ACTIVE: struct.pack("<I", bank),
     }

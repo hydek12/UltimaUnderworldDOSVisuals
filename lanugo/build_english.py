@@ -16,7 +16,9 @@ def bcd(number):
 def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
           dos_light_preview=None, lower_floor_goblins=False, lizardmen=None, lizardman_combat=False, level_eight_rats=None,
           level_six_wizards=None, level_six_spiders=False, level_six_casting=False, level_six_combat=False,
-          dos_spell_effects=None, expanded_level_six=False, academy_bank=None, academy_runtime=False, level_one_dialogue=False, level_two_dialogue=False, level_three_dialogue=False, level_four_dialogue=False):
+          dos_spell_effects=None, expanded_level_six=False, academy_bank=None, academy_runtime=False, level_one_dialogue=False, level_two_dialogue=False, level_three_dialogue=False, level_four_dialogue=False, late_dialogue=False):
+    if late_dialogue and not (level_four_dialogue and level_eight_rats is not None):
+        raise ValueError("The Level 5 and 8 dialogue banks require the Level 4 preview and rat art.")
     if level_four_dialogue and not level_three_dialogue:
         raise ValueError("Level 4 dialogue banks require the Level 3 preview.")
     if level_three_dialogue and not (level_two_dialogue and lizardman_combat):
@@ -46,9 +48,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
         first_lba, remainder = divmod(source.tell(), lanugo.SECTOR_SIZE)
         if remainder:
             raise ValueError("Incomplete raw data sector.")
-        level_two_lbas = []
-        level_three_lbas = []
-        level_four_lbas = []
+        room_lbas = {}
         lower_payload_lba = None
         lizard_payload_lba = None
         rat_payload_lba = None
@@ -103,18 +103,20 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
                     if academy_runtime and len(bank_payload) != bank_size:
                         raise ValueError("The runtime Academy banks must have the same disc stride.")
                     payload += bank_payload
-            for floor, enabled, lbas in ((2, level_two_dialogue, level_two_lbas),
-                                         (3, level_three_dialogue, level_three_lbas),
-                                         (4, level_four_dialogue, level_four_lbas)):
+            for floor, enabled in ((2, level_two_dialogue), (3, level_three_dialogue),
+                                   (4, level_four_dialogue), (5, late_dialogue), (8, late_dialogue), (7, late_dialogue)):
                 if not enabled:
                     continue
+                lbas = room_lbas.setdefault(floor, [])
                 byte_offset = (first_lba + len(payload) // 2048 - lanugo.AVATAR_LBA) * 2048
                 bank_names = (name for name, _, _ in lanugo.academy_banks.ROOM_BANKS[floor])
                 for bank_id, bank in enumerate((None, *bank_names)):
                     lbas.append(first_lba + len(payload) // 2048)
                     bank_sections = lanugo.academy_banks.sections(byte_offset, stride, bank_id, floor=floor)
-                    if bank is None and floor == 2:
+                    if bank is None and floor in (2, 5, 7):
                         bank_payload = lanugo.lower_floor_payload(goblin_variants, bank_sections)
+                    elif bank is None and floor == 8:
+                        bank_payload = lanugo.rat_payload(level_eight_rats, bank_sections)
                     elif bank is None:
                         bank_payload = lanugo.lizard_payload(lizardmen, lizardman_combat, bank_sections)
                     else:
@@ -133,7 +135,8 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
             restore = lanugo.menu_return(lanugo.VARIANT_UPLOAD_RAM, True, dialogue=True)
             if len(restore) > 0x80:
                 raise ValueError("The dialogue return hook overlaps the VRAM guard.")
-            restore_lbas = [*level_one_lbas, *level_two_lbas, *level_three_lbas, *level_four_lbas, lower_payload_lba, lizard_payload_lba, rat_payload_lba, wizard_payload_lba]
+            restore_lbas = [*level_one_lbas, lower_payload_lba, lizard_payload_lba, rat_payload_lba, wizard_payload_lba]
+            restore_lbas.extend(lba for lbas in room_lbas.values() for lba in lbas)
             if academy_runtime:
                 restore_lbas.extend(wizard_payload_lba + i * (bank_size // 2048) for i in range(1, len(banks)))
             for lba in restore_lbas:
@@ -151,9 +154,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
             lower_payload_lba=lower_payload_lba, lizard_payload_lba=lizard_payload_lba, rat_payload_lba=rat_payload_lba,
             wizard_payload_lba=wizard_payload_lba, expanded_level_six=expanded_level_six,
             academy_runtime=academy_runtime, level_one_dialogue=level_one_dialogue,
-            level_two_payload_lba=level_two_lbas[0] if level_two_lbas else None,
-            level_three_payload_lba=level_three_lbas[0] if level_three_lbas else None,
-            level_four_payload_lba=level_four_lbas[0] if level_four_lbas else None,
+            room_payload_lbas={floor: lbas[0] for floor, lbas in room_lbas.items()},
         )
         updates = {}
         if dos_spell_effects is not None:
@@ -216,4 +217,5 @@ if __name__ == "__main__":
     parser.add_argument("--level-two-dialogue", action="store_true")
     parser.add_argument("--level-three-dialogue", action="store_true")
     parser.add_argument("--level-four-dialogue", action="store_true")
+    parser.add_argument("--late-dialogue", action="store_true")
     build(**vars(parser.parse_args()))

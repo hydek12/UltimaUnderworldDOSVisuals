@@ -68,11 +68,43 @@ The xdelta decoded from clean Japanese Rev 1 Track 1 to SHA-1 `1886fa383413e53d4
 
 DuckStation cold-booted the Level 4 preview with its English Patch title. All 16 initially linked named encounters submitted their expected DOS palette at their native records. The town bank uses both fighter families with 11/16 textures in shared sightlines. Separate fighter rooms use 15/16 textures, and the two troll palettes retain full resolution. Offline verification compared 768 idle and walk frame slots and 664,802 texels. Six in-place bank switches checked resident code, frame tables, and ownership across the standard lizard, town, fighter, and troll banks.
 
+Representative live probes passed 576 idle and walking render calls across the new palettes and room layouts. Dorna Ironfist’s Order admission response displayed. His English name overlaps the greeting area and is tracked for the UI pass.
+
 The xdelta decoded from clean Japanese Rev 1 to Track 1 SHA-1 `eab1814243f110e993076762d590ed86a4aaae24`. CHD SHA-1 `c2fd1893e27b1e6127f1c4fed33001efddc3f306` verified internally. All four extracted tracks matched the split BINs.
+
+## Levels 5 and 8 local preview verification
+
+- Judy, Anjor, all four named Level 5 ghouls, and Carasso submitted their expected DOS palette packets at the native encounters. Offline comparison covered 320 idle and walk slots and 281,348 texels. Carasso also passed 64 directional render calls, opened his English wizard-bones branch, and returned to the ready shared bank. Anjor’s English alchemy explanation opened. Judy’s live all-facing probe ended when the disposable character died, so only the offline full-slot comparison and a staged encounter draw are recorded for her.
+- The latest preview cold-booted under its English Patch title. The xdelta round-trip from clean Japanese Rev 1 produced Track 1 SHA-1 `ebf725124a10e9c61bffd240cbd1acc4c48d19c6`. CHD SHA-1 `e133459a0eb84ecb661c59fa3c03c2cb1b2b261f` verified internally and all four extracted tracks matched the split BINs.
+
+## Level 7 local preview verification
+
+- The prison corridor uses two texture pages in a single room bank. Wizards retain full-resolution 4-bit art. Dwarves and fighters share an 8-bit page using 9/16 and 8/16 textures respectively. Cardon uses a separate 15/16 8-bit page.
+- Offline comparison covered 704 directional idle and walk slots across the six custom banks. DuckStation submitted the expected DOS palette for all 12 initially active records assigned to those banks, including Tyball, Cardon, the four gray guards, Naruto, Kallistan, Gurstang, Smonden, the troll guard, and Fintor.
+- Seven in-place room switches verified resident code, tables, and ownership against the disc. Cardon’s English conversation reached his no-port, prison directions, and guard advice branches. The ready Level 7 bank returned after dialogue. A follow-up live all-facing probe timed out, so directional coverage for these banks is the offline comparison. Prison actors drew with their own palettes in individual probes.
+- The cumulative CHD cold-booted through the English title menu into Level 1. The xdelta applied to clean Japanese Rev 1 and decoded to Track 1 SHA-1 `84268556b9fc05f26bb076388961cfe3adb99892`. CHD SHA-1 `de0a7954fef78668d45817b0ca4654bdffecfd28` verified internally. All four extracted tracks matched byte for byte. The Level 5 and Level 8 bank sectors also matched the preceding preview.
+
+## 70% cumulative DuckStation verification
+
+- On Level 1, Hagbard and Bragit reached their English dialogue branches. Lanugo accepted a gift of 30 gold and handed over the stew recipe. The scroll was present in the live map after the handoff.
+- On Level 2, the Gazer’s native death animation set quest bit 4. Goldthirst recognized the kill, remembered it on return, and accepted a large gold nugget through the original offer. The empty-handed response was also exercised.
+- The original create-object trap at (35, 6) on Level 3 inserted a new bandit (ID 112, type 93) into the live tile chain. The spawned actor submitted its DOS sprite with CLUT `0x7e18` in bank 1 on the final CHD.
+- On Level 5, using Garamon’s bones on the original grave ran his English conversation. The native handler set burial bits `0xc00` and updated the grave link. This scene uses a temporary dialogue actor. The serialized spectre records retained their original bytes.
+- Sseetharee accepted six fish and opened the release branch. Murgo thanked the Avatar and reached the departure dialogue. After the Level 6 transition, Dr. Owl acknowledged the rescue and gave the Wine of Compassion directions.
+- After the rescue, Warren displayed the English no-response message. His ID 207 is absent from the original 92-entry PSX conversation table. The runtime table matched clean Japanese Rev 1 byte for byte and the selector returned -1 before dispatch.
+- On Level 7, the live tile chains already contained Dantes, Bolinard, Griffle, the imp, and both green guards. The serialized initialization byte alone did not identify whether these records were live. All six submitted their expected DOS palettes. Dantes, Bolinard, and Griffle opened their English prison dialogue.
+- Both Level 7 shared views passed in bank 4. Naruto (4-bit, CLUT `0x7e18`) and Kallistan (8-bit, CLUT `0x7e98`) drew in the same frame. In a second view, Griffle (8-bit, CLUT `0x7ed8`) and Kallistan drew in the same frame.
+- The final Level 7 room-map adjustment assigns (25, 55) to the default green goblin bank. Both green guards drew with CLUT `0x7f1b` on the final CHD. The four gray guards and the troll also drew with their expected bank and palette after the adjustment.
+
+The debugger positioned the camera, staged input items in a disposable run, started the Gazer’s dying animation, and invoked the original trap and grave handlers. Gameplay code performed the transactions, spawned the bandit, and advanced the quest flags. Directional coverage for Level 7 is the 704 idle and walk slot comparison described above. The live probes cover encounter rendering, palette selection, and the cited shared views.
+
+### Release verification
+
+The cumulative CHD cold-booted in DuckStation through the English title menu and into a fresh Level 1 game. The builder decoded the local xdelta from clean Japanese Rev 1 Track 1 (SHA-1 `937ae8cf9a65526f2622c39d34205941f22c10cb`) and matched the built track (SHA-1 `f315e6d74f32a0c66c87e01096b1cbc39c04eae1`). The CHD verified with internal SHA-1 `9e45166475c0128c42d01a168bf6cae6c8d0c29b` and all four extracted tracks matched byte for byte. Generate the CHD and xdelta locally using the builder and the source files listed in the [local build guide](local-patch-builder.md).
 
 ## Milestone progress in one-percent increments
 
-These percentages track the project checklist. They are estimates based on verified deliverables.
+These percentages track the project checklist. They are estimates based on verified deliverables. Report progress in Slack when a one-point gate passes. Commit and push the verified batch at each completed five-point milestone.
 
 | Progress | Status | Verification gate |
 | --- | --- | --- |
@@ -81,11 +113,8 @@ These percentages track the project checklist. They are estimates based on verif
 | 67% | Verified | Level 1 named actors, room-bank switching, and representative dialogue |
 | 68% | Verified | Wider floor addressing, Hewstone’s identity, and Level 2 named sprites |
 | 69% | Verified | Level 3 and Level 4 encounter draws, shared rooms, and fresh-disc verification |
-| 70% | Open | Remaining named actors, dormant activation, quest and trade outcomes, and cumulative release verification |
+| 70% | Verified | Named encounters, dormant activation, quest and trade outcomes, shared views, and cumulative release verification |
 
-## Remaining 70% checks
+## Next milestone
 
-1. Verify the remaining Level 1 dialogue, quest, and trade branches, and check changes to quest or trade state and returning to each encounter.
-2. Verify the remaining Level 2 trade and quest outcomes, the full Murgo rescue and Dr. Owl handoff, and the dormant Level 3 bandit activation.
-3. Finish the named quest and dialogue encounters on Levels 4–8, including Garamon’s activation and the Warren quest-state check. Level 4 packing fits both fighter families in separate 8-bit pages at 11/16 texture resolution for shared town sightlines. The two troll palettes fit one full-resolution 4-bit page. Record native fallback for unsupported poses and contexts.
-4. Close 70% after all eligible named actors and Level 6 encounters pass their gameplay checks. The 75% scope then covers recurring creature and humanoid families on Levels 1–4 and their floor transitions.
+The 75% scope covers recurring creature and humanoid families on Levels 1–4 and their floor transitions.
