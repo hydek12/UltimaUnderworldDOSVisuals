@@ -4,7 +4,7 @@ This audit uses all nine mobile-object tables from the clean Japanese Rev 1 Play
 
 [Record-by-record audit](ultima-underworld-npc-conversion-backlog.csv) · [Atlas feasibility by DOS family](ultima-underworld-npc-atlas-feasibility.csv)
 
-Of 657 PSX records, 550 are initially linked. The cumulative preview has verified DOS idle and walk for 70 linked records. **480 initially linked records still use native PSX idle and walk.** Another 100 unlinked records have no enabled substitution. 7 dormant records meet the renderer’s floor and type rules, with activation unverified.
+Of 657 PSX records, 550 are initially linked. The original goblin, lizardman, and rat preview verified DOS idle and walk for 70 linked records. At that checkpoint, 480 initially linked records used native PSX idle and walk, 100 other records had no enabled substitution, and seven qualified pending activation. The inventory and counts below describe that checkpoint. For the current early-floor coverage, see the [Levels 1–4 verification](named-dialogue-audit.md#levels-14-recurring-creature-preview).
 
 The optional lizardman combat preview adds DOS stance, melee, retreat and death poses for 18 records. Other creature families retain native combat.
 

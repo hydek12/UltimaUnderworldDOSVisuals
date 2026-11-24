@@ -22,7 +22,7 @@ swiftc -O main.swift -o /tmp/underworld-tools/UnderworldVisuals
   "/tmp/underworld-tools/UnderworldVisuals" "/path/to/english-dos-preview.xdelta"
 ```
 
-To supply the separately obtained English v2.0 xdelta instead of a translated BIN, add `--english-patch` before the DOS folder argument and use the upstream xdelta as the English input. The builder decodes it locally and validates the resulting English track.
+To supply the separately obtained English v2.0 xdelta instead of a translated BIN, add `--english-patch` before the DOS folder argument and use the upstream xdelta as the English input. The builder decodes it locally and validates the resulting English track. Use an xdelta3 build with LZMA support to decode the upstream translation. The already-translated BIN input can also be used with an xdelta3 build that lacks LZMA.
 
 The script exports sprites and palettes into temporary storage, applies the renderer changes, and builds the English preview data track. It uses the existing packager to encode the delta against the Japanese BIN, decodes it, and compares every output byte before publishing the local file. It cleans up the generated atlases and working BIN on exit. To use the result, decode it against the original Japanese BIN and point Track 1 in a copy of the original split-BIN CUE at the new BIN. Keep the three audio tracks and all original indexes. The current preview target SHA-1 is `18c839eec5fdbc311f6c0c5cd5c69d085279762c`.
 
@@ -128,11 +128,10 @@ Use `--level-four-dialogue` to include the Level 4 named actors. The town bank f
 
 The expected Track 1 SHA-1 is `eab1814243f110e993076762d590ed86a4aaae24`.
 
-### Levels 5 and 8 named NPC preview
+### Cumulative named NPC and recurring creature preview
 
-Use `--late-dialogue` to add Judy, Anjor, and the four named ghouls on Level 5, and Carasso on Level 8. Judy and Anjor use full-resolution 4-bit art. The ghouls use 14/16 textures, and Carasso shares a bank with full-resolution rats using 11/16 fighter textures. The standard goblin and rat banks remain available elsewhere on their respective floors. Garamon’s initially dormant record retains native rendering pending activation and DOS identity checks.
+Use `--late-dialogue` as the first argument for the cumulative build. This includes the recurring creature and humanoid banks for Levels 1–4, then adds Judy, Anjor, and the four named ghouls on Level 5, and Carasso on Level 8. Judy and Anjor use full-resolution 4-bit art. The ghouls use 14/16 textures, and Carasso shares a bank with full-resolution rats using 11/16 fighter textures. The standard goblin and rat banks remain available elsewhere on their respective floors. Garamon’s initially dormant record retains native rendering pending activation and DOS identity checks.
 
 The same option adds Level 7 banks for Tyball, Cardon, the gray guards, the prison corridor, the troll guard, and the dormant imp. The prison bank shares two pages across wizards, dwarves, and fighters. The wizard page runs at full 4-bit resolution. The shared 8-bit page uses 9/16 textures for dwarves and 8/16 textures for fighters and retains the original sprite dimensions and anchors. Cardon’s separate 8-bit bank uses 15/16 textures. These additions supply directional idle and walk frames. Other actions use the existing native fallback. Dormant actors still require their original gameplay triggers.
 
-
-The expected Track 1 SHA-1 is `ebf725124a10e9c61bffd240cbd1acc4c48d19c6`.
+The early-floor room selector selects a bank from the camera’s two-tile cell. Shared banks retain independent DOS palettes for nearby families. Level 4 packs bats and grubs on one page and rats on the other so their rooms can overlap without displacing the grub. The eight idle and walk facings retain their frame rectangles and anchor points. The expected cumulative Track 1 SHA-1 is `11e712449846d8ecad84a148cbdc0f365bdc0e2c`. The renderer falls back to native art when the selected room lacks the actor’s entry or when an action has no supported DOS pose.

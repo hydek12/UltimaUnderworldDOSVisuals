@@ -692,6 +692,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     bank_combat_slots = None
     split_format = academy_banks.SPLIT_ROOM_FORMATS.get(room_bank)
     prison = room_bank == "prison-seven"
+    bats_grubs_rats = room_bank == "bats-grubs-rats"
     if expanded_level_six:
         # Keep persistent frame lookups below 0x801f8000, where the native floor load writes.
         if not (casting and combat and extra_type == 92 and texture_pages == creature_atlas.TEXTURE_PAGES[:1]):
@@ -701,7 +702,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         families = academy_banks.BANK_FAMILIES[academy_bank] if academy_bank else LEVEL_SIX_DIRECTIONAL
         if room_bank:
             families = academy_banks.ROOM_FAMILIES[room_bank]
-        if prison:
+        if prison or bats_grubs_rats:
             table_slots = ((0x804, 0x3fc), (0x1000, 0x400), (0x1800, 0x400))
         elif split_format:
             # The shared room needs two compact tables below the order log at 0x1800.
@@ -729,6 +730,18 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             palette_stride = 64
             palettes = [p.ljust(64, b"\0") for p in wizard_palettes] + prison_palettes
             directional = (*wizard_tables, *prison_tables)
+            primary_types = ()
+        elif bats_grubs_rats:
+            left, left_palettes, left_tables = creature_atlas.build_families(
+                [creature_sources(variants, types) for types in families[:2]], texture_pages[0],
+            )
+            right, right_palettes, right_tables = creature_atlas.build_families(
+                [creature_sources(variants, families[2])], texture_pages[1],
+            )
+            images = left, right
+            palette_stride = 32
+            palettes = left_palettes + right_palettes
+            directional = (*left_tables, *right_tables)
             primary_types = ()
         elif split_format:
             bits, scales = split_format
@@ -815,7 +828,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
                 struct.pack_into("<HH", registry_data, 4 * (actor - 64), location - 0x800, palette)
                 row += 1
         extra_sections[0xf00] = registry_data
-        log_offset = EXPANDED_RESIDENT_BYTES if prison else LOWER_RESIDENT_BYTES
+        log_offset = EXPANDED_RESIDENT_BYTES if prison or bats_grubs_rats else LOWER_RESIDENT_BYTES
         order_log = PAYLOAD_RAM + ORDER_COUNT_OFFSET, PAYLOAD_RAM + log_offset
     elif extra_type is not None:
         if (combat and not casting) or texture_pages != creature_atlas.TEXTURE_PAGES[:1]:
@@ -886,7 +899,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             palette_types=palette_types, order_log=order_log, combat=action_addresses, extra_atlas=extra_atlas, wizard_combat=casting and combat, registry=registry,
         )[0],
         ORDER_WRITER_RAM - PAYLOAD_RAM: renderer.log_native_order(ORDER_WRITER_RAM, *order_log),
-        0x800: b"" if split_format or prison else metadata,
+        0x800: b"" if split_format or prison or bats_grubs_rats else metadata,
         0xc00: jump(PAYLOAD_RAM + 0x1400) + bytes(4),
         0xe00: menu_return(VARIANT_UPLOAD_RAM, floor_aware=True),
         0xe80: vram_guard(lower_floor=True, right_edge=texture_pages[-1][0] + 64),

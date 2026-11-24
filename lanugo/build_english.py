@@ -62,14 +62,15 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
             if level_one_dialogue:
                 byte_offset = (first_lba - lanugo.AVATAR_LBA) * 2048
                 stride = lanugo.academy_banks.ROOM_STRIDE
-                level_one_sections = lanugo.academy_banks.sections(byte_offset, stride, 0, floor=1)
+                level_one_sections = lanugo.academy_banks.sections(byte_offset, stride, 0, floor=1, recurring=late_dialogue)
             payload = lanugo.variant_payload(
                 atlas, walk_atlas, goblin_variants, dos_light_preview, floor_aware=True, bank_sections=level_one_sections,
             )
             if level_one_dialogue:
-                for bank_id, bank in enumerate(lanugo.academy_banks.LEVEL_ONE_FAMILIES, 1):
+                room_banks = lanugo.academy_banks.room_banks(1, late_dialogue)
+                for bank_id, (bank, _, _) in enumerate(room_banks, 1):
                     level_one_lbas.append(first_lba + len(payload) // 2048)
-                    bank_sections = lanugo.academy_banks.sections(byte_offset, stride, bank_id, floor=1)
+                    bank_sections = lanugo.academy_banks.sections(byte_offset, stride, bank_id, floor=1, recurring=late_dialogue)
                     payload += lanugo.creature_payload(
                         level_six_wizards, lanugo.creature_atlas.LEVEL_SIX_WIZARD_TYPES,
                         lanugo.creature_atlas.TEXTURE_PAGES[:1], extra_type=92, combat=True,
@@ -109,10 +110,10 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
                     continue
                 lbas = room_lbas.setdefault(floor, [])
                 byte_offset = (first_lba + len(payload) // 2048 - lanugo.AVATAR_LBA) * 2048
-                bank_names = (name for name, _, _ in lanugo.academy_banks.ROOM_BANKS[floor])
+                bank_names = (name for name, _, _ in lanugo.academy_banks.room_banks(floor, late_dialogue))
                 for bank_id, bank in enumerate((None, *bank_names)):
                     lbas.append(first_lba + len(payload) // 2048)
-                    bank_sections = lanugo.academy_banks.sections(byte_offset, stride, bank_id, floor=floor)
+                    bank_sections = lanugo.academy_banks.sections(byte_offset, stride, bank_id, floor=floor, recurring=late_dialogue)
                     if bank is None and floor in (2, 5, 7):
                         bank_payload = lanugo.lower_floor_payload(goblin_variants, bank_sections)
                     elif bank is None and floor == 8:

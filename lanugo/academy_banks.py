@@ -41,7 +41,6 @@ LEVEL_ONE_BANKS = (
     ("gray-goblins", ((71, 80),), ((15, 35), (2, 57), (60, 51), (57, 55))),
     ("fighters", ((90,),), ((17, 7), (22, 19), (33, 20))),
 )
-LEVEL_ONE_FAMILIES = {name: families for name, families, _ in LEVEL_ONE_BANKS}
 LEVEL_ONE_FORMATS = {"gray-goblins": (4, 16), "fighters": (8, 15)}
 LEVEL_TWO_BANKS = (
     ("dwarves", ((84, 86),), ((60, 3), (40, 5), (37, 7), (9, 8), (9, 14), (12, 28), (19, 36))),
@@ -77,13 +76,97 @@ LEVEL_EIGHT_BANKS = (
 )
 ROOM_BANKS = {1: LEVEL_ONE_BANKS, 2: LEVEL_TWO_BANKS, 3: LEVEL_THREE_BANKS, 4: LEVEL_FOUR_BANKS,
               5: LEVEL_FIVE_BANKS, 7: LEVEL_SEVEN_BANKS, 8: LEVEL_EIGHT_BANKS}
-ROOM_FAMILIES = {name: families for banks in ROOM_BANKS.values() for name, families, _ in banks}
+# Additional banks for recurring encounters in the cumulative preview.
+RECURRING_BANKS = {
+    1: (
+        ("grubs-slugs", ((64, 82), (65, 69)), ((58, 2), (55, 4), (5, 6), (59, 14), (26, 33), (37, 60))),
+        ("bats-rats", ((66, 73), (67, 72)),
+         ((45, 6), (50, 6), (22, 8), (18, 12), (2, 15), (12, 16), (2, 17), (2, 19), (2, 22),
+          (31, 23), (23, 43), (24, 43))),
+        ("spiders", ((68, 83, 92),), ((29, 26), (27, 46), (37, 54), (19, 54))),
+        ("skeletons", ((74,),), ((54, 35),)),
+        ("lurkers", ((87, 116),), ((14, 23), (26, 38), (51, 55))),
+    ),
+    2: (
+        ("grubs-slugs", ((64, 82), (65, 69)),
+         ((27, 11), (50, 21), (8, 34), (10, 34), (15, 34), (8, 36), (10, 36), (2, 37), (10, 38),
+          (4, 44), (26, 58), (27, 58), (26, 59))),
+        ("rats-spiders", ((67, 72), (68, 83, 92)),
+         ((58, 14), (36, 22), (34, 38), (35, 38), (37, 44), (35, 54), (36, 55))),
+        ("skeletons", ((74,),), ((22, 4), (51, 53), (59, 53))),
+        ("lurkers", ((87, 116),), ((60, 26), (49, 54))),
+        ("headless", ((91,),), ((28, 42), (21, 52))),
+        ("gazers-golems", ((102,), (114, 121)), ((48, 23), (5, 23))),
+        ("gray-goblins", ((71, 80),), ((56, 60),)),
+    ),
+    3: (
+        ("grubs-slugs", ((64, 82), (65, 69)), ((47, 55), (51, 56), (53, 61))),
+        ("bats-rats", ((66, 73), (67, 72)), ((21, 2), (21, 3), (23, 7), (1, 20), (2, 21), (40, 40))),
+        ("spiders", ((68, 83, 92),), ((47, 4), (13, 23), (35, 39), (35, 40))),
+        ("skeletons", ((74,),), ((10, 26), (12, 26), (49, 53))),
+        ("lurkers", ((87, 116),), ((20, 7), (7, 17), (35, 17), (52, 22), (1, 26), (7, 34), (51, 37), (19, 49), (35, 51), (52, 50), (3, 52), (11, 52), (11, 59), (55, 61))),
+        ("headless", ((91,),), ((43, 38),)),
+        ("imps", ((81,),), ((29, 57),)),
+        ("gazers-golems", ((102,), (114, 121)), ((24, 44), (12, 55))),
+        ("ghosts-shadows", ((97, 113), (117,)), ((57, 8), (2, 55), (2, 56), (3, 56))),
+        ("reapers", ((118,),), ((7, 55),)),
+    ),
+    4: (
+        ("grubs-slugs", ((64, 82), (65, 69)), ((26, 40), (36, 51))),
+        ("bats-grubs-rats", ((66, 73), (82,), (67, 72)),
+         ((36, 51), (33, 44), (32, 45), (18, 49), (36, 50), (31, 52), (12, 53), (20, 55))),
+        ("spiders", ((68, 83, 92),), ((60, 22), (59, 24), (3, 44), (4, 44), (2, 45), (4, 45), (5, 45), (3, 46), (32, 48), (29, 58))),
+        ("skeletons", ((74,),), ((38, 2), (61, 30), (59, 32), (60, 34))),
+        ("lurkers", ((87, 116),), ((20, 23), (23, 33))),
+        ("imps", ((81,),), ((32, 50), (28, 53), (35, 53))),
+        ("headless", ((91,),), ((60, 38), (60, 39), (59, 41), (60, 41), (5, 59))),
+        ("gazers-wisps", ((102,), (122,)), ((8, 47), (3, 50))),
+        ("reapers", ((118,),), ((4, 40),)),
+        ("wizards", ((106,),), ((8, 55), (8, 56))),
+    ),
+}
+
+RECURRING_FORMATS = {
+    "grubs-slugs": (4, (16, 16)),
+    "bats-rats": (4, (16, 16)),
+    "rats-spiders": (4, (16, 16)),
+    "gazers-golems": (4, (16, 16)),
+    "ghosts-shadows": (4, (16, 16)),
+    "gazers-wisps": (4, (16, 16)),
+}
+RECURRING_SINGLE_FORMATS = {
+    "spiders": (4, 16), "skeletons": (4, 16), "lurkers": (8, 16),
+    "headless": (8, 16), "imps": (8, 16), "reapers": (4, 16), "wizards": (4, 16),
+}
+
+
+def room_banks(floor, recurring=False):
+    banks = ROOM_BANKS[floor]
+    if recurring and floor == 1:
+        banks = (
+            ("gray-goblins", ((71, 80),), (*banks[0][2], (4, 47), (52, 59))),
+            ("fighters", ((90,),), (*banks[1][2], (33, 12), (33, 15))),
+        )
+    if recurring and floor == 2:
+        dwarves, corby = banks
+        banks = ((dwarves[0], dwarves[1], (*dwarves[2], (12, 6), (14, 6), (18, 6),
+                 (12, 10), (14, 10), (18, 10), (29, 17), (20, 23))), corby)
+    if recurring and floor == 4:
+        troll_spawns = (*banks[2][2], (54, 9), (53, 14), (47, 23), (43, 33), (47, 38))
+        banks = (*banks[:2], ("trolls-four-recurring", ((96, 111, 112),), troll_spawns))
+    return banks + (RECURRING_BANKS.get(floor, ()) if recurring else ())
+
+
+ROOM_FAMILIES = {name: families for banks in (*ROOM_BANKS.values(), *RECURRING_BANKS.values())
+                 for name, families, _ in banks}
+ROOM_FAMILIES["trolls-four-recurring"] = ((96, 111, 112),)
 ROOM_FORMATS = {**LEVEL_ONE_FORMATS, "dwarves": (8, 16), "corby": (8, 15),
-                "bandits": (8, 15), "zak": (8, 15), "fighters-four": (8, 15), "trolls-four": (4, 16),
+                "bandits": (8, 15), "zak": (8, 15), "fighters-four": (8, 15), "trolls-four": (4, 16), "trolls-four-recurring": (4, 16),
                 "judy": (4, 16), "ghouls-five": (8, 14), "anjor": (4, 16),
                 "tyball": (4, 16), "cardon": (8, 15), "gray-guards-seven": (4, 16),
-                "troll-seven": (4, 16), "imp-seven": (8, 16)}
-SPLIT_ROOM_FORMATS = {"prisoner": (4, (12, 16)), "town": (8, (11, 11)), "carasso": (8, (16, 11))}
+                "troll-seven": (4, 16), "imp-seven": (8, 16), **RECURRING_SINGLE_FORMATS}
+SPLIT_ROOM_FORMATS = {"prisoner": (4, (12, 16)), "town": (8, (11, 11)), "carasso": (8, (16, 11)),
+                      **RECURRING_FORMATS}
 ROOM_STRIDE = 0x19800
 # (texture depth, sixteenths of original size, uses both pages)
 SPECIAL_FORMATS = {"imps": (8, 16, True), "skeletons": (4, 16, True),
@@ -128,7 +211,7 @@ def gates():
     return {GATE: c.out(), GATE_BRANCH: branch.out(), GATE_DISPATCH: dispatch.out()}
 
 
-def sections(base_byte_offset, bank_bytes, bank, *, floor=None):
+def sections(base_byte_offset, bank_bytes, bank, *, floor=None, recurring=False):
     """Keep the switch routine below the part of RAM it will replace."""
     c = Code(SELECTOR)
     c.imm("ori", "t8", "t8", PAYLOAD & 0xffff)  # High half remains in t8 from the gate.
@@ -137,13 +220,13 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None):
     c.branch("beq", "t7", "zero", "native")
     c.mem("lhu", "t1", -0x6900, "t0")
     c.mem("lhu", "t2", -0x68FE, "t0")
-    room_banks = floor is not None
-    grid_at = 0x1c00 if room_banks else GRID
-    c.shift("srl", "t1", "t1", 9 if room_banks else 10)
-    c.shift("srl", "t2", "t2", 9 if room_banks else 10)
-    c.imm("andi", "t1", "t1", 31 if room_banks else 15)
-    c.imm("andi", "t2", "t2", 31 if room_banks else 15)
-    c.shift("sll", "t2", "t2", 5 if room_banks else 4)
+    has_rooms = floor is not None
+    grid_at = 0x1c00 if has_rooms else GRID
+    c.shift("srl", "t1", "t1", 9 if has_rooms else 10)
+    c.shift("srl", "t2", "t2", 9 if has_rooms else 10)
+    c.imm("andi", "t1", "t1", 31 if has_rooms else 15)
+    c.imm("andi", "t2", "t2", 31 if has_rooms else 15)
+    c.shift("sll", "t2", "t2", 5 if has_rooms else 4)
     c.alu("addu", "t1", "t1", "t2")
     c.shift("srl", "t2", "t1", 1)
     c.alu("addu", "t2", "t8", "t2")
@@ -173,7 +256,7 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None):
     switch.jump(0x800903AC, True)
     switch.alu("addu", "a0", "zero", "zero")
     # Keep the selector, ownership and return address below the disc read.
-    if room_banks:
+    if has_rooms:
         # These room banks use different draw routines. Each carries identical
         # selector and switch instructions, including the return point below.
         switch.mem("lw", "a0", 24, "sp")
@@ -189,7 +272,7 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None):
     switch.mem("lw", "a0", 24, "sp")
     switch.address("t8", PAYLOAD)
     switch.mem("sw", "a0", 12, "t8")
-    if room_banks:
+    if has_rooms:
         switch.mem("lw", "t0", 0x998, "gp")
         switch.nop()
         switch.jump(PAYLOAD + 0xC00, True)
@@ -203,14 +286,24 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None):
     switch.nop()
     points = tuple(
         (x, z, index)
-        for index, (_, _, tiles) in enumerate(ROOM_BANKS[floor], 1)
+        for index, (_, _, tiles) in enumerate(room_banks(floor, recurring), 1)
         for x, z in tiles
-    ) if room_banks else ACADEMY_NPCS
-    grid = room_grid(points, 6 if room_banks else 9, x_step=2 if room_banks else 4,
-                     z_step=2 if room_banks else 4, level_one=floor == 1)
-    if floor == 7:
+    ) if has_rooms else ACADEMY_NPCS
+    grid = room_grid(points, 6 if has_rooms else 9, x_step=2 if has_rooms else 4,
+                     z_step=2 if has_rooms else 4, level_one=floor == 1)
+    if floor == 7 or recurring and floor in (1, 2, 3, 4):
+        fallback_cells = {
+            1: ((8, 43), (10, 43), (36, 28), (3, 38), (11, 38), (54, 38),
+                (45, 52), (52, 52), (46, 55), (45, 56), (47, 56), (51, 58)),
+            2: ((54, 55), (60, 55), (55, 60), (55, 61)),
+            3: ((29, 21), (23, 28), (29, 28), (33, 28), (36, 31), (38, 31), (11, 33),
+                (41, 23), (34, 24), (57, 24), (41, 29), (44, 29), (37, 32),
+                (11, 7), (17, 7), (10, 10)),
+            4: ((31, 44),),
+            7: ((28, 57), (27, 55), (25, 55)),
+        }
         grid = bytearray(grid)
-        for x, z in ((28, 57), (27, 55), (25, 55)):
+        for x, z in fallback_cells[floor]:
             index = z // 2 * 32 + x // 2
             grid[index // 2] &= ~(15 << (4 * (index & 1)))
         grid = bytes(grid)

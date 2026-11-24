@@ -114,7 +114,28 @@ These percentages track the project checklist. They are estimates based on verif
 | 68% | Verified | Wider floor addressing, Hewstone’s identity, and Level 2 named sprites |
 | 69% | Verified | Level 3 and Level 4 encounter draws, shared rooms, and fresh-disc verification |
 | 70% | Verified | Named encounters, dormant activation, quest and trade outcomes, shared views, and cumulative release verification |
+| 71% | Verified | Levels 1–4 record and DOS palette inventory |
+| 72% | Verified | Recurring room banks packed with eight idle and walk facings |
+| 73% | Verified | Native encounter palette probes and directed floor transition matrix |
+| 74% | Verified | Revised Level 4 mixed bank, disc readback, and reproducible xdelta |
+| 75% | Verified | Final English CHD cold boot, directional render probes, and shared palette submission |
+
+## Levels 1–4 recurring creature preview
+
+The cumulative build adds DOS idle and walking art for grubs, slugs, bats, rats, spiders, skeletons, lurkers, headless, imps, gazers, golems, ghosts, shadows, reapers, and wisps. The existing gray goblin, fighter, dwarf, troll, and wizard palettes cover additional rooms. The Level 4 mixed bank keeps bats, grubs, and rats available within the same room. Original fallback banks remain available for the green goblins and lizardmen.
+
+The floor audit checked 221 initially linked and 36 other serialized records. The bank selected at the original spawn contains the actor’s entry for 220 initially linked records. Vernix uses the adjacent south view to preserve Lanugo’s bank. The noninitial records have 16 spawn assignments, five adjacent assignments, and 15 without a local assignment. These counts describe the parsed records and bank coverage. Activation of the other serialized records remains separate from the spawn audit.
+
+The final disc’s 42 custom banks on Levels 1–4 matched 6,528 directional frame slots and 5,688,303 displayed texels against the local DOS exports. The comparison checked frame rectangles, hotspots, texture depth, palette indices, and colors. The new creature banks retain full-size textures. Original PlayStation combat and special actions remain available where no DOS pose is registered.
+
+DuckStation exercised all 12 directed floor pairs on Levels 1–4. The loader selected a bank with the correct owner, disc offset, resident renderer, and palette registry after each entry. The final build changed 37 sectors within Level 4 bank 5. The banks used in the transition matrix matched the final disc byte for byte.
+
+DuckStation confirmed DOS sprite packets at original encounters for 82 combinations of floor and actor type, including the fallback lizardman palette on Levels 3 and 4. Controlled staging checked 1,664 live idle and walk packets across 26 sets of eight facings with four animation phases each. The probes checked frame selection, UVs, texture page, and CLUT. Native action or projection changes interrupted the full live sweeps for the Gazer and the Level 4 grub. Their actual sprite packets and offline frame and palette data passed. With the camera at `(0x2380, 0x32c0, 0x2000)` and idle poses staged, the Level 4 grub (CLUT `0x7e98`) and rat (CLUT `0x7f18`) submitted separate packets in the same frame in bank 5.
+
+### Local release
+
+The final CHD cold-booted through the English title and character creation into fresh gameplay. The Xcode-built exporter reproduced the combined xdelta byte for byte. Decoding against clean Japanese Rev 1 Track 1 (SHA-1 `937ae8cf9a65526f2622c39d34205941f22c10cb`) yielded the patched data track (SHA-1 `11e712449846d8ecad84a148cbdc0f365bdc0e2c`). The CHD verified with internal SHA-1 `673809e6ec4fe18b921f65a3e6e01aad87adae2f`, and all four extracted tracks matched. Use `--late-dialogue` from the [local build guide](local-patch-builder.md) to reproduce it using your own source files.
 
 ## Next milestone
 
-The 75% scope covers recurring creature and humanoid families on Levels 1–4 and their floor transitions.
+The 80% gate covers the remaining recurring encounters on Levels 5–9, special models, and dormant activations. Verify the native fallback wherever room visibility or DOS pose coverage prevents a replacement.
