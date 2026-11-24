@@ -291,7 +291,7 @@ def actor_gate():
 
 
 def floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba=None, rat_payload_lba=None,
-                 wizard_payload_lba=None, expanded_level_six=False, academy_runtime=False):
+                 wizard_payload_lba=None, expanded_level_six=False, academy_runtime=False, level_one_dialogue=False):
     c = Code(BOOT)
     c.imm("addiu", "sp", "sp", -32)
     c.mem("sw", "ra", 28, "sp")
@@ -340,7 +340,7 @@ def floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba=None, rat_pa
         floor_table = bytes(floor_offsets)
         offset = (payload_lba - AVATAR_LBA) * 2048
         c.mem("lw", "t0", 24, "sp")
-        c.imm("ori", "a2", "zero", RESIDENT_BYTES)
+        c.imm("ori", "a2", "zero", EXPANDED_RESIDENT_BYTES if level_one_dialogue else RESIDENT_BYTES)
         c.imm("sltiu", "t2", "t0", len(floor_table))
         c.branch("beq", "t2", "zero", "done")
         c.alu("addu", "t1", "gp", "t0")
@@ -352,7 +352,7 @@ def floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba=None, rat_pa
         c.alu("sltu", "t2", "zero", "t1")
         if expanded_level_six:
             c.alu("subu", "t2", "zero", "t2")
-            c.imm("andi", "t2", "t2", EXPANDED_RESIDENT_BYTES - RESIDENT_BYTES)
+            c.imm("andi", "t2", "t2", 0 if level_one_dialogue else EXPANDED_RESIDENT_BYTES - RESIDENT_BYTES)
             c.alu("addu", "a2", "a2", "t2")
         else:
             c.shift("sll", "t2", "t2", 11)
@@ -496,8 +496,7 @@ def read_atlas(directory, name, height, first_slot, texture_page=0):
     return colors, image, metadata
 
 
-def variant_image_bands(texture_pages=variant_atlas.TEXTURE_PAGES):
-    offset = RESIDENT_BYTES
+def variant_image_bands(texture_pages=variant_atlas.TEXTURE_PAGES, offset=RESIDENT_BYTES):
     for x, y, height in texture_pages:
         for start in range(0, height, 64):
             rows = min(64, height - start)
@@ -543,12 +542,13 @@ def variant_sources(idle_atlas, walk_atlas, variants):
     return data
 
 
-def variant_payload(idle_atlas, walk_atlas, variants, dos_light_preview=None, floor_aware=False):
+def variant_payload(idle_atlas, walk_atlas, variants, dos_light_preview=None, floor_aware=False, bank_sections=None):
     sources = variant_sources(idle_atlas, walk_atlas, variants)
     pages = variant_atlas.TEXTURE_PAGES if dos_light_preview is None else preview_lighting.TEXTURE_PAGES
     images, clut, metadata = variant_atlas.build(sources, pages)
-    bands = tuple(variant_image_bands(pages))
-    atlas_end = RESIDENT_BYTES + sum(map(len, images))
+    resident = EXPANDED_RESIDENT_BYTES if bank_sections is not None else RESIDENT_BYTES
+    bands = tuple(variant_image_bands(pages, resident))
+    atlas_end = resident + sum(map(len, images))
     clut_rect = variant_atlas.CLUT_RECT if dos_light_preview is None else preview_lighting.CLUT_RECT
     x, y, _, _ = clut_rect
     clut_id = (y << 6) | (x >> 4)
@@ -566,7 +566,7 @@ def variant_payload(idle_atlas, walk_atlas, variants, dos_light_preview=None, fl
         0x800: metadata,
         MENU_RAM - PAYLOAD_RAM: menu_return(VARIANT_UPLOAD_RAM, floor_aware),
         VRAM_GUARD_RAM - PAYLOAD_RAM: vram_guard(wide=True),
-        RESIDENT_BYTES: b"".join(images),
+        resident: b"".join(images),
     }
     if dos_light_preview is None:
         sections[0xf00] = clut
@@ -584,7 +584,19 @@ def variant_payload(idle_atlas, walk_atlas, variants, dos_light_preview=None, fl
         )
         rectangles = tuple(rect for rect, _, _ in bands)
     sections[0x10] = b"".join(struct.pack("<4H", *rect) for rect in rectangles)
-    sections[VARIANT_UPLOAD_RAM - PAYLOAD_RAM] = variant_uploader(bands, dos_light_preview is None, floor_aware)
+    if bank_sections is None:
+        sections[VARIANT_UPLOAD_RAM - PAYLOAD_RAM] = variant_uploader(bands, dos_light_preview is None, floor_aware)
+    else:
+        if dos_light_preview is not None:
+            raise ValueError("Room banks require the standard Level 1 palette layout.")
+        sections[0x100] = jump(PAYLOAD_RAM + 0x700) + bytes(4)
+        sections[0x180] = jump(PAYLOAD_RAM + 0xd00) + bytes(4)
+        sections[0x700] = renderer.suppress(PAYLOAD_RAM + 0x700, walk_ready=WALK_READY_RAM, wide=True)
+        sections[0xd00] = renderer.suppress(PAYLOAD_RAM + 0xd00, "a0", WALK_READY_RAM, wide=True)
+        sections[0xc00] = jump(PAYLOAD_RAM + 0x1400) + bytes(4)
+        sections[0x1400] = variant_uploader(bands, True, floor_aware, PAYLOAD_RAM + 0x1400)
+        sections.update(bank_sections)
+        atlas_end = academy_banks.LEVEL_ONE_STRIDE
     return assemble_payload(sections, atlas_end)
 
 
@@ -647,7 +659,7 @@ def rat_payload(variants):
 
 
 def creature_payload(variants, actor_types, texture_pages, combat=False, extra_type=None, casting=False,
-                     expanded_level_six=False, academy_bank=None, academy_sections=None):
+                     expanded_level_six=False, academy_bank=None, academy_sections=None, level_one_bank=None):
     sources = creature_sources(variants, actor_types, combat, casting)
     images, clut, metadata = creature_atlas.build(sources, texture_pages)
     base = actor_types[0]
@@ -668,7 +680,11 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         # Both Academy families fit individually with all facing frames intact.
         # One table can occupy the two adjacent upper resident slots.
         families = academy_banks.BANK_FAMILIES[academy_bank] if academy_bank else LEVEL_SIX_DIRECTIONAL
-        if academy_bank:
+        if level_one_bank:
+            families = academy_banks.LEVEL_ONE_FAMILIES[level_one_bank]
+        if level_one_bank:
+            table_slots = ((0x1000, 0x400),)
+        elif academy_bank:
             table_slots = ((0x1c00, 0x400), (0x1000, 0x200))[:len(families)]
         else:
             table_slots = (
@@ -677,7 +693,16 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         texture_pages = creature_atlas.TEXTURE_PAGES
         format_override = academy_banks.SPECIAL_FORMATS.get(academy_bank)
         primary_types = actor_types
-        if format_override:
+        if level_one_bank:
+            bits, scale = academy_banks.LEVEL_ONE_FORMATS[level_one_bank]
+            images, palette_data, table = creature_atlas.build(
+                creature_sources(variants, families[0]), texture_pages, bits=bits, scale=scale,
+            )
+            primary_types = ()
+            palette_stride = 64 if bits == 8 else 32
+            palettes = [palette_data[i:i + palette_stride] for i in range(0, len(palette_data), palette_stride)]
+            directional = (table,)
+        elif format_override:
             bits, scale, _ = format_override
             if academy_bank == "imps":
                 bank_combat_slots = creature_atlas.COMBAT_SLOTS + ((13, 4),)
@@ -823,8 +848,9 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     if academy_sections is not None:
         sections.update(academy_sections)
     pages = tuple((x, y) for x, y, _ in texture_pages)
-    return compact_payload(sections, images, clut, pages, texture_pages[0][2], clut_rect,
+    blob = compact_payload(sections, images, clut, pages, texture_pages[0][2], clut_rect,
                            EXPANDED_RESIDENT_BYTES if expanded_level_six else LOWER_RESIDENT_BYTES)
+    return blob.ljust(academy_banks.LEVEL_ONE_STRIDE, b"\0") if level_one_bank else blob
 
 
 def compact_payload(sections, images, clut, pages, texture_height, clut_rect, resident_bytes=LOWER_RESIDENT_BYTES):
@@ -948,7 +974,7 @@ def form1_sector(original, data):
 
 def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False,
                     lower_payload_lba=None, lizard_payload_lba=None, rat_payload_lba=None,
-                    wizard_payload_lba=None, expanded_level_six=False, academy_runtime=False):
+                    wizard_payload_lba=None, expanded_level_six=False, academy_runtime=False, level_one_dialogue=False):
     target = bytearray(original)
     deferred_ordering = any(
         lba is not None for lba in (lizard_payload_lba, rat_payload_lba, wizard_payload_lba)
@@ -957,7 +983,7 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
     code = {
         BOOT: (
             floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba, rat_payload_lba, wizard_payload_lba,
-                         expanded_level_six, academy_runtime)
+                         expanded_level_six, academy_runtime, level_one_dialogue)
             if floor_aware else loader(payload_lba, walking, wide)
         ),
         SUPPRESS_NORMAL: gate(SUPPRESS_NORMAL, SUPPRESS_RAM, "v1", walking, floor_aware),

@@ -101,3 +101,9 @@ The runtime build includes all five Level 6 types that were still using native i
 The Japanese Rev 1 source track remains the input for every generated xdelta. Earlier non-runtime profiles still use their existing layouts. Named quest NPCs beyond Level 6 remain tracked separately.
 
 The creature combat build uses the DOS stance, three melee sequences, retreat, and death for the imps, skeleton, and headless. The imps also use four DOS casting frames. Their last frame is held through the remaining PSX casting phases. The ghoul uses DOS stance and retreat at its existing texture resolution. Its attack and death poses use the native renderer. Action timing and damage still come from the PlayStation release. Side and rear combat views use the DOS directional standing sprites, with the DOS death pose visible from all directions where enabled.
+
+### Level 1 named NPC preview
+
+Use `--level-one-dialogue` to include the Level 1 dialogue NPCs with the cumulative Level 6 combat build. DuckStation selects one Level 1 bank for the current camera cell. The original green goblin textures, palette, and frame tables remain in their default bank. Drog, Vernix, Ketchaval, and Retichall use two full-resolution 4-bit pages. Bragit, Gulik, and Hagbard use two 8-bit pages with textures at 15/16 of the original resolution. Their on-screen dimensions and hotspots come from the unscaled DOS frames.
+
+The banks switch between frames. Dialogue and inventory return use the active bank's disc address. An actor keeps native rendering when the active bank has no matching art or action. In particular, a camera angle that crosses the boundary between Lanugo's room and the south approach to Vernix can expose the native fallback. The preview leaves the PlayStation's dialogue scripts, portraits, trade, quest logic, and combat behavior in place.

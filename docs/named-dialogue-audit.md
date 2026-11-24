@@ -24,12 +24,16 @@ Generate the inventory with `audit-npcs.py --dialogue-inventory` as shown in the
 
 These totals include shared labels such as guards and bandits and records already covered by the sprite patch. They measure the identity audit. A quest or interaction passes only after gameplay verification.
 
+## Level 1 preview verification
+
+- DuckStation booted the English preview. The native encounter records for Drog, Vernix, Ketchaval, Retichall, Bragit, Gulik, and Hagbard each submitted the expected DOS palette in their own rooms. Representative records for both gray goblin palettes and the fighter each passed 64 instrumented render calls across idle and walk directions. Some encounters used a staged idle pose to verify the record and palette.
+- Offline checks compared 128 gray goblin frame slots and 64 fighter frame slots with the DOS inputs. Both gray palettes retain full-resolution art. Fighter textures use 15/16 resolution and keep their original dimensions on screen. Level 1 retained the green goblin art and passed six live bank transitions. Native transitions followed Level 1 → 3 → 6 → 1, with active bank and palette checks on Levels 1 and 6.
+- Vernix’s English conversation opened on the final preview. Inventory returned to the same conversation and farewell restored the sprites. Bragit’s English rescue choice and return to the fighter bank passed on the preceding preview. The final build changes the Level 1 bank map and renderer constants from that preview.
+- The local xdelta decoded against clean Japanese Rev 1 Track 1 (SHA-1 `937ae8cf9a65526f2622c39d34205941f22c10cb`) to patched Track 1 (SHA-1 `6c2619accc59f4a6b8c89b4f5784655f00c34c43`). CHD verification passed and all four extracted tracks matched byte for byte. The CHD SHA-1 is `e7d886d55bf0522711394617380c3619308c443a`.
+
 ## Remaining 70% checks
 
-1. Start with the seven Level 1 actors whose art still uses the native renderer. Drog, Vernix, Ketchaval, and Retichall share the gray goblin animation family at two DOS palettes. Bragit, Gulik, and Hagbard use the fighter family. Eb, Jaacar, and Lanugo are the existing Level 1 controls.
-2. Keep the existing green goblin art during Level 1 bank transitions. The full-resolution gray goblin variants fit two 4-bit pages together. The tested single-page fit required 13/16 texture resolution. The fighter has more than 16 converted colors and exceeded both tested 8-bit pages at full resolution. A dedicated layout or streamed frames are candidates for preserving the original art.
-3. Confirm each named actor in its original PSX encounter. Check the English name and dialogue ID, the available quest and trade choices, behavior when leaving and returning, and sprite restoration after dialogue and inventory. Recheck the earlier Level 6 discussion captures for Gralwart, Dominus, and Louvnon on the same release candidate as the remaining quest actors.
-4. Include dormant or ambiguous matches only when their activation and identity are verified. Record native fallback for unsupported poses and contexts.
-5. Close 70% after the remaining named quest and dialogue checks pass. The 75% scope then covers recurring creature and humanoid families on Levels 1–4 and their floor transitions.
-
-No new CHD was needed for the archive identity checks. The last boot-verified candidate remains the [Level 6 combat preview](level-six-combat-verification.md).
+1. Verify the remaining Level 1 dialogue, quest, and trade branches, including Bragit’s rescue on the final candidate. Check changes to quest or trade state and returning to each encounter.
+2. Verify Hewstone’s ambiguous match in his native Level 2 encounter. Plan the dwarf bank for Shak, Goldthirst, Steeltoe, Brawnclan, and Ironwit, and reuse the fighter art for Corby. Brawnclan has a spawn-tile match and still needs an encounter check. The floor-start table currently uses one unsigned byte per floor, reserves 255 for absent payloads, and already uses offset 245 for Level 6. Expand or relocate that table before appending more floor payloads.
+3. Finish the named quest and dialogue encounters on Levels 2–8, including dormant activation and the Warren quest-state check. Recheck Gralwart, Dominus, and Louvnon on the same release candidate. Record native fallback for unsupported poses and contexts.
+4. Close 70% after all eligible named actors and Level 6 encounters pass their gameplay checks. The 75% scope then covers recurring creature and humanoid families on Levels 1–4 and their floor transitions.
