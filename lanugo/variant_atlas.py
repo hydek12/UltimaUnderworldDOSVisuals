@@ -40,8 +40,8 @@ def subtract(free, placed):
     ]
 
 
-def pack(frames):
-    free = [(page, 0, 0, WIDTH, rows) for page, (_, _, rows) in enumerate(TEXTURE_PAGES)]
+def pack(frames, texture_pages):
+    free = [(page, 0, 0, WIDTH, rows) for page, (_, _, rows) in enumerate(texture_pages)]
     for frame in sorted(frames, key=lambda item: (-item[4], -item[3], item)):
         _, _, _, width, height = frame
         choices = (
@@ -57,8 +57,8 @@ def pack(frames):
         free = subtract(free, (page, x, y, w, h))
 
 
-def frame_metadata(texture, width, height, hotspot_x, hotspot_y):
-    page_x, page_y, _ = TEXTURE_PAGES[texture.page]
+def frame_metadata(texture, texture_pages, width, height, hotspot_x, hotspot_y):
+    page_x, page_y, _ = texture_pages[texture.page]
     u = texture.u
     v = texture.v + page_y - 256
     right, bottom = u + texture.width - 1, v + texture.height - 1
@@ -71,7 +71,7 @@ def frame_metadata(texture, width, height, hotspot_x, hotspot_y):
     return struct.pack("<4B4HB3x", width, height, hotspot_x, hotspot_y, *uv, page_command)
 
 
-def build(sources):
+def build(sources, texture_pages=TEXTURE_PAGES):
     # The four exported atlases have identical rectangles and hotspots.
     palettes_by_mode = []
     metadata_by_mode = []
@@ -86,13 +86,13 @@ def build(sources):
     if not patterns or patterns[0] != transparent or len(patterns) > CLUT_RECT[2]:
         raise ValueError("The joint DOS palette does not fit the reserved CLUT rows.")
     indices = {colors: index for index, colors in enumerate(patterns)}
-    pages = [bytearray(WIDTH * rows) for _, _, rows in TEXTURE_PAGES]
+    pages = [bytearray(WIDTH * rows) for _, _, rows in texture_pages]
     frames = {
         (mode, u, v, width, height)
         for mode, rows in enumerate(metadata_by_mode)
         for u, v, width, height, _, _ in rows
     }
-    textures = dict(pack(frames))
+    textures = dict(pack(frames, texture_pages))
     for (mode, src_u, src_v, width, height), texture in textures.items():
         dest = pages[texture.page]
         source = palettes_by_mode[mode]
@@ -102,7 +102,7 @@ def build(sources):
                 index = (texture.v + v) * WIDTH + texture.u + u
                 dest[index] = indices[source[(src_v + y) * WIDTH + src_u + x]]
     metadata = b"".join(
-        frame_metadata(textures[mode, u, v, w, h], w, h, hx, hy)
+        frame_metadata(textures[mode, u, v, w, h], texture_pages, w, h, hx, hy)
         for mode, rows in enumerate(metadata_by_mode)
         for u, v, w, h, hx, hy in rows
     )

@@ -5,6 +5,7 @@ from pathlib import Path
 import struct
 
 from build_track import read_atlas, variant_sources
+import preview_lighting
 import variant_atlas
 
 DUMP_HEADER = b"PSXGPUDUMPv1\0\0"
@@ -30,16 +31,22 @@ def read_vram(dump):
     raise ValueError("The capture does not contain an initial VRAM upload.")
 
 
-def expected_rectangles(idle_directory, walk_directory, goblin_variants):
+def expected_rectangles(idle_directory, walk_directory, goblin_variants, dos_light_preview=None):
+    if dos_light_preview is not None and goblin_variants is None:
+        raise ValueError("The DOS lighting preview needs the four-palette goblin atlas.")
     if goblin_variants is not None:
         sources = variant_sources(idle_directory, walk_directory, goblin_variants)
-        images, clut, _ = variant_atlas.build(sources)
+        rectangles = variant_atlas.TEXTURE_PAGES if dos_light_preview is None else preview_lighting.TEXTURE_PAGES
+        images, clut, _ = variant_atlas.build(sources, rectangles)
         pages = tuple(
             (f"8-bit page {index}", x, y, variant_atlas.WIDTH // 2, rows, image)
             for index, ((x, y, rows), image) in enumerate(
-                zip(variant_atlas.TEXTURE_PAGES, images, strict=True), start=1
+                zip(rectangles, images, strict=True), start=1
             )
         )
+        if dos_light_preview is not None:
+            return (*pages, ("DOS shade CLUTs", *preview_lighting.CLUT_RECT,
+                             preview_lighting.palette_banks(dos_light_preview, clut)))
         return (*pages, ("Four CLUTs", *variant_atlas.CLUT_RECT, clut))
     colors, idle, _ = read_atlas(idle_directory, "idle", 192, 0x20)
     walk_colors, walk, _ = read_atlas(walk_directory, "walk", 224, 0x80)
@@ -52,9 +59,9 @@ def expected_rectangles(idle_directory, walk_directory, goblin_variants):
     )
 
 
-def verify(dump, idle_directory, walk_directory, goblin_variants=None):
+def verify(dump, idle_directory, walk_directory, goblin_variants=None, dos_light_preview=None):
     vram = read_vram(dump)
-    rectangles = expected_rectangles(idle_directory, walk_directory, goblin_variants)
+    rectangles = expected_rectangles(idle_directory, walk_directory, goblin_variants, dos_light_preview)
     valid = True
     for name, x, y, width, height, expected in rectangles:
         start = 2 * (y * 1024 + x)
@@ -73,4 +80,5 @@ if __name__ == "__main__":
     parser.add_argument("idle_directory", type=Path)
     parser.add_argument("walk_directory", type=Path)
     parser.add_argument("--goblin-variants", type=Path)
+    parser.add_argument("--dos-light-preview", type=Path, metavar="DOS_ROOT")
     raise SystemExit(0 if verify(**vars(parser.parse_args())) else 1)

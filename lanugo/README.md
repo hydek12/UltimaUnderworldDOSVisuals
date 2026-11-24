@@ -56,6 +56,14 @@ On DuckStation, crossing the original stairs to Level 2 disabled the sprite atla
 
 The final English data track sets the ISO volume label to `ULTIMA UNDERWORLD ENGLISH PATCH`. For a matching title in DuckStation, add the containing directory to its game list and set **Game Properties → Summary → Title** to `Ultima Underworld: The Stygian Abyss (English Patch - DOS Goblins)`. This property is keyed by image path. The original PSX disc serial remains `SLPS-00742`.
 
+## DOS lighting preview
+
+To build the separate preview, add `--dos-light-preview DOS_ROOT` to the four-palette `build_english.py` command above. Pass the same argument to `verify_vram.py` with a GPU capture of the preview. The preview packs the normal and monochrome remap tables into 8,192 bytes of PSX CLUTs, with four palette variants per shade. It calculates a shade from signed three-dimensional actor distance before selecting the palette for each quad. The ordinary English DOS Goblins build remains the unshaded reference.
+
+The preview starts at light level 0 to show the DOS game's no-light scene. In a DuckStation debug session, the resident byte at `0x801f6060` selects DOS levels 0–7, including monochrome level 5. The byte is reinitialized on a new Level 1 load. In-game torches, spells, and mushroom effects still need to be connected to this selector. The preview applies to the Level 1 goblin idle and walk sprites. The dungeon and all remaining art use their native lighting.
+
+DuckStation emitted the expected CLUT in 288 controlled draws across the four palettes, all eight light levels, several horizontal distances, and nonzero vertical and lateral offsets. After opening and closing Select, its live VRAM matched both atlas pages and every palette byte.
+
 ## English v2.0 and DOS Lanugo
 
 Use the same DOS atlas exported by the Xcode scheme. Extract the raw Track 1 BIN from the English v2.0 CHD or obtain it by applying Gertius's v2.0 fan translation to clean Japanese Rev 1. The combined builder expects the English Track 1 SHA-1 `325585c11548538e323e8896c3fb8b1cc5d65521`.

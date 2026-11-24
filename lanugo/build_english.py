@@ -12,7 +12,7 @@ ENGLISH_SHA1 = "325585c11548538e323e8896c3fb8b1cc5d65521"
 def bcd(number):
     return ((number // 10) << 4) | (number % 10)
 
-def build(english, atlas, output, walk_atlas=None, goblin_variants=None):
+def build(english, atlas, output, walk_atlas=None, goblin_variants=None, dos_light_preview=None):
     with english.open("rb") as source:
         if hashlib.file_digest(source, "sha1").hexdigest() != ENGLISH_SHA1:
             raise ValueError("Expected the verified English v2.0 raw data track.")
@@ -20,7 +20,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None):
         first_lba, remainder = divmod(source.tell(), lanugo.SECTOR_SIZE)
         if remainder:
             raise ValueError("Incomplete raw data sector.")
-        payload = lanugo.payload(atlas, walk_atlas, goblin_variants)
+        payload = lanugo.payload(atlas, walk_atlas, goblin_variants, dos_light_preview)
         sectors = [
             lanugo.read_sector(source, lba)
             for lba in range(lanugo.EXE_LBA, lanugo.EXE_LBA + 761856 // 2048)
@@ -71,4 +71,5 @@ if __name__ == "__main__":
     parser.add_argument("output", type=Path)
     parser.add_argument("--walk-atlas", type=Path)
     parser.add_argument("--goblin-variants", type=Path)
+    parser.add_argument("--dos-light-preview", type=Path, metavar="DOS_ROOT")
     build(**vars(parser.parse_args()))

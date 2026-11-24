@@ -76,8 +76,9 @@ DOS_IDLE_DIRECTIONS = bytes((
 ))
 
 
-def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=False):
+def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=False, shade_selector=None):
     c=Code(origin)
+    shade_return = None
     c.mem("lw","t0",0xe0,"sp")
     c.imm("ori", "t1", "zero", 10 if walk_ready is None else GREEN_GOBLIN_TYPE)
     if walk_ready is None:
@@ -204,17 +205,22 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
     c.mem("sw","v1",32,"t7")
     if wide:
         # The 8-bit layout stores four UV corners so rotated frames render upright.
-        c.mem("lw", "v1", 0xe0, "sp")
-        c.nop()
-        c.mem("lhu", "v1", 0, "v1")
-        c.imm("ori", "t6", "zero", GREEN_GOBLIN_TYPE)
-        c.imm("andi", "v1", "v1", 0x1ff)
-        c.branch("beq", "v1", "t6", "base_clut")
-        c.imm("lui", "t6", "zero", clut)
-        c.imm("addiu", "v1", "v1", -75)
-        c.shift("sll", "v1", "v1", 22)  # Select the CLUT row above the first.
-        c.alu("addu", "t6", "t6", "v1")
-        c.label("base_clut")
+        if shade_selector is None:
+            c.mem("lw", "v1", 0xe0, "sp")
+            c.nop()
+            c.mem("lhu", "v1", 0, "v1")
+            c.imm("ori", "t6", "zero", GREEN_GOBLIN_TYPE)
+            c.imm("andi", "v1", "v1", 0x1ff)
+            c.branch("beq", "v1", "t6", "base_clut")
+            c.imm("lui", "t6", "zero", clut)
+            c.imm("addiu", "v1", "v1", -75)
+            c.shift("sll", "v1", "v1", 22)  # Select the CLUT row above the first.
+            c.alu("addu", "t6", "t6", "v1")
+            c.label("base_clut")
+        else:
+            c.jump(shade_selector)
+            c.nop()
+            shade_return = origin + 4 * len(c.words)
         c.alu("OR", "v1", "t6", "t4")
         c.mem("sw", "v1", 12, "t7")
         c.mem("lbu", "v1", 12, "t0")
@@ -250,4 +256,4 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
     c.label("finish")
     c.jump(0x800757c4)
     c.nop()
-    return c.out()
+    return c.out(), shade_return

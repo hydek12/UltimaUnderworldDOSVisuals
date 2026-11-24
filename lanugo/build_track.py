@@ -9,6 +9,7 @@ import struct
 from pathlib import Path
 
 from mipswords import Code, ret
+import preview_lighting
 import renderer
 import variant_atlas
 
@@ -326,9 +327,9 @@ def read_atlas(directory, name, height, first_slot, texture_page=0):
     return colors, image, metadata
 
 
-def variant_image_bands():
+def variant_image_bands(texture_pages=variant_atlas.TEXTURE_PAGES):
     offset = RESIDENT_BYTES
-    for x, y, height in variant_atlas.TEXTURE_PAGES:
+    for x, y, height in texture_pages:
         for start in range(0, height, 64):
             rows = min(64, height - start)
             size = variant_atlas.WIDTH * rows
@@ -336,7 +337,7 @@ def variant_image_bands():
             offset += size
 
 
-def variant_uploader(bands):
+def variant_uploader(bands, resident_clut=True):
     c = Code(VARIANT_UPLOAD_RAM)
     c.imm("addiu", "sp", "sp", -32)
     c.mem("sw", "ra", 28, "sp")
@@ -351,9 +352,10 @@ def variant_uploader(bands):
         upload_rectangle(c, 0x10 + 8 * index, TEXTURE_STAGING_RAM)
         c.jump(0x800903ac, True)
         c.imm("ori", "a0", "zero", 0)
-    upload_rectangle(c, 0x10 + 8 * len(bands), PAYLOAD_RAM + 0xf00)
-    c.jump(0x800903ac, True)
-    c.imm("ori", "a0", "zero", 0)
+    if resident_clut:
+        upload_rectangle(c, 0x10 + 8 * len(bands), PAYLOAD_RAM + 0xf00)
+        c.jump(0x800903ac, True)
+        c.imm("ori", "a0", "zero", 0)
     c.address("t0", PAYLOAD_RAM)
     c.imm("ori", "t1", "zero", 1)
     c.mem("sw", "t1", 8, "t0")
@@ -372,36 +374,58 @@ def variant_sources(idle_atlas, walk_atlas, variants):
     return data
 
 
-def variant_payload(idle_atlas, walk_atlas, variants):
+def variant_payload(idle_atlas, walk_atlas, variants, dos_light_preview=None):
     sources = variant_sources(idle_atlas, walk_atlas, variants)
-    images, clut, metadata = variant_atlas.build(sources)
-    bands = tuple(variant_image_bands())
-    x, y, _, _ = variant_atlas.CLUT_RECT
+    pages = variant_atlas.TEXTURE_PAGES if dos_light_preview is None else preview_lighting.TEXTURE_PAGES
+    images, clut, metadata = variant_atlas.build(sources, pages)
+    bands = tuple(variant_image_bands(pages))
+    atlas_end = RESIDENT_BYTES + sum(map(len, images))
+    clut_rect = variant_atlas.CLUT_RECT if dos_light_preview is None else preview_lighting.CLUT_RECT
+    x, y, _, _ = clut_rect
     clut_id = (y << 6) | (x >> 4)
-    rectangles = b"".join(struct.pack("<4H", *rect) for rect, _, _ in bands)
-    rectangles += struct.pack("<4H", *variant_atlas.CLUT_RECT)
+    shade_selector = None if dos_light_preview is None else PAYLOAD_RAM + preview_lighting.SELECTOR_OFFSET
+    draw_code, shade_return = renderer.draw(
+        DRAW_RAM, PAYLOAD_RAM + 0x800, PAYLOAD_RAM + 0x90, clut_id, WALK_READY_RAM,
+        wide=True, shade_selector=shade_selector,
+    )
     sections = {
         0: struct.pack("<I", PAYLOAD_MAGIC),
-        0x10: rectangles,
         0x90: renderer.DOS_IDLE_DIRECTIONS,
         0x100: renderer.suppress(SUPPRESS_RAM, walk_ready=WALK_READY_RAM, wide=True),
         0x180: renderer.suppress(WALK_SUPPRESS_DELAY_RAM, "a0", WALK_READY_RAM, wide=True),
-        0x200: renderer.draw(DRAW_RAM, PAYLOAD_RAM + 0x800, PAYLOAD_RAM + 0x90, clut_id, WALK_READY_RAM, wide=True),
+        0x200: draw_code,
         0x800: metadata,
-        VARIANT_UPLOAD_RAM - PAYLOAD_RAM: variant_uploader(bands),
         MENU_RAM - PAYLOAD_RAM: menu_return(VARIANT_UPLOAD_RAM),
         VRAM_GUARD_RAM - PAYLOAD_RAM: vram_guard(wide=True),
-        0xf00: clut,
         RESIDENT_BYTES: b"".join(images),
     }
-    return assemble_payload(sections, RESIDENT_BYTES + sum(map(len, images)))
+    if dos_light_preview is None:
+        sections[0xf00] = clut
+        rectangles = tuple(rect for rect, _, _ in bands) + (clut_rect,)
+    else:
+        palettes = preview_lighting.palette_banks(dos_light_preview, clut)
+        bands += ((clut_rect, atlas_end, len(palettes)),)
+        sections[atlas_end] = palettes
+        atlas_end += len(palettes)
+        light = PAYLOAD_RAM + preview_lighting.LIGHT_LEVEL_OFFSET
+        sections[preview_lighting.LIGHT_LEVEL_OFFSET] = bytes(1)
+        sections[preview_lighting.SETTINGS_OFFSET] = preview_lighting.light_settings(dos_light_preview)
+        sections[preview_lighting.SELECTOR_OFFSET] = preview_lighting.select_clut(
+            shade_selector, light, shade_return, clut_id,
+        )
+        rectangles = tuple(rect for rect, _, _ in bands)
+    sections[0x10] = b"".join(struct.pack("<4H", *rect) for rect in rectangles)
+    sections[VARIANT_UPLOAD_RAM - PAYLOAD_RAM] = variant_uploader(bands, dos_light_preview is None)
+    return assemble_payload(sections, atlas_end)
 
 
-def payload(directory, walk_atlas=None, goblin_variants=None):
+def payload(directory, walk_atlas=None, goblin_variants=None, dos_light_preview=None):
+    if dos_light_preview is not None and goblin_variants is None:
+        raise ValueError("The DOS lighting preview needs the four-palette goblin atlas.")
     if goblin_variants is not None:
         if walk_atlas is None:
             raise ValueError("The green goblin variants need the idle and walk atlases for type 70.")
-        return variant_payload(directory, walk_atlas, goblin_variants)
+        return variant_payload(directory, walk_atlas, goblin_variants, dos_light_preview)
     walking = walk_atlas is not None
     colors, image, metadata = read_atlas(directory, "idle", 192, 0x20, 0x16 if walking else 0)
     walk_ready = WALK_READY_RAM if walking else None
@@ -419,7 +443,7 @@ def payload(directory, walk_atlas=None, goblin_variants=None):
         0x90: renderer.DOS_IDLE_DIRECTIONS,
         0x100: renderer.suppress(SUPPRESS_RAM, walk_ready=walk_ready),
         delay_ram - PAYLOAD_RAM: renderer.suppress(delay_ram, "a0", walk_ready),
-        0x200: renderer.draw(DRAW_RAM, PAYLOAD_RAM + 0x800, PAYLOAD_RAM + 0x90, clut, walk_ready),
+        0x200: renderer.draw(DRAW_RAM, PAYLOAD_RAM + 0x800, PAYLOAD_RAM + 0x90, clut, walk_ready)[0],
         0x800: metadata,
         0x1000: image,
     }
