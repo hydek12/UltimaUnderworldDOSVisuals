@@ -20,7 +20,7 @@ elif [[ ${1:-} == --level-six-casting ]]; then
     spider_preview=1
     casting_preview=1
     shift
-elif [[ ${1:-} == --level-six-combat || ${1:-} == --level-six-effects || ${1:-} == --level-six-expanded || ${1:-} == --academy-wizb || ${1:-} == --academy-wizc ]]; then
+elif [[ ${1:-} == --level-six-combat || ${1:-} == --level-six-effects || ${1:-} == --level-six-expanded || ${1:-} == --academy-wizb || ${1:-} == --academy-wizc || ${1:-} == --academy-runtime ]]; then
     if [[ $1 == --level-six-expanded || $1 == --academy-* ]]; then
         expanded_preview=1
     fi
@@ -44,7 +44,7 @@ if [[ ${1:-} == --english-patch ]]; then
 fi
 
 if [[ $# != 5 ]]; then
-    printf 'Usage: %s [--level-six-wizards|--level-six-spiders|--level-six-casting|--level-six-combat|--level-six-effects|--level-six-expanded|--academy-wizb|--academy-wizc] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
+    printf 'Usage: %s [--level-six-wizards|--level-six-spiders|--level-six-casting|--level-six-combat|--level-six-effects|--level-six-expanded|--academy-wizb|--academy-wizc|--academy-runtime] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
     exit 2
 fi
 
@@ -122,13 +122,16 @@ if (( expanded_preview )); then
     case $academy_bank in
         wizb) directional_actors=(106 115) ;;
         wizc) directional_actors=(107) ;;
+        runtime) directional_actors=(64 65 66 69 73 82 97 102 106 107 111 112 115 119 120) ;;
         *) directional_actors=(64 65 66 69 73 82) ;;
     esac
     for actor in "${directional_actors[@]}"; do
         "$exporter" export-creature-atlases "$dos_root" "$actor" "$scratch/wizards/type-$actor"
     done
     wizard_args+=(--expanded-level-six)
-    if [[ -n $academy_bank ]]; then
+    if [[ $academy_bank == runtime ]]; then
+        wizard_args+=(--academy-runtime)
+    elif [[ -n $academy_bank ]]; then
         wizard_args+=(--academy-bank "$academy_bank")
     fi
 fi

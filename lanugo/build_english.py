@@ -16,9 +16,11 @@ def bcd(number):
 def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
           dos_light_preview=None, lower_floor_goblins=False, lizardmen=None, lizardman_combat=False, level_eight_rats=None,
           level_six_wizards=None, level_six_spiders=False, level_six_casting=False, level_six_combat=False,
-          dos_spell_effects=None, expanded_level_six=False, academy_bank=None):
-    if academy_bank and (not expanded_level_six or level_six_wizards is None):
+          dos_spell_effects=None, expanded_level_six=False, academy_bank=None, academy_runtime=False):
+    if (academy_bank or academy_runtime) and (not expanded_level_six or level_six_wizards is None):
         raise ValueError("An Academy bank requires the expanded Level 6 atlas.")
+    if academy_bank and academy_runtime:
+        raise ValueError("Choose a single Academy bank or runtime switching.")
     if expanded_level_six and not level_six_combat:
         raise ValueError("The expanded Level 6 atlas requires the wizard combat preview.")
     if level_six_combat and not level_six_casting:
@@ -56,13 +58,23 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
                 payload += lanugo.rat_payload(level_eight_rats)
             if level_six_wizards is not None:
                 wizard_payload_lba = first_lba + len(payload) // 2048
-                payload += lanugo.creature_payload(
-                    level_six_wizards, lanugo.creature_atlas.LEVEL_SIX_WIZARD_TYPES,
-                    lanugo.creature_atlas.TEXTURE_PAGES[:1],
-                    extra_type=lanugo.creature_atlas.LEVEL_SIX_SPIDER_TYPE if level_six_spiders else None,
-                    casting=level_six_casting, combat=level_six_combat, expanded_level_six=expanded_level_six,
-                    academy_bank=academy_bank,
-                )
+                banks = (None, *lanugo.academy_banks.BANK_FAMILIES) if academy_runtime else (academy_bank,)
+                bank_size = 0x12800
+                for bank_id, bank in enumerate(banks):
+                    bank_sections = None
+                    if academy_runtime:
+                        byte_offset = (wizard_payload_lba - lanugo.AVATAR_LBA) * 2048
+                        bank_sections = lanugo.academy_banks.sections(byte_offset, bank_size, bank_id)
+                    bank_payload = lanugo.creature_payload(
+                        level_six_wizards, lanugo.creature_atlas.LEVEL_SIX_WIZARD_TYPES,
+                        lanugo.creature_atlas.TEXTURE_PAGES[:1],
+                        extra_type=lanugo.creature_atlas.LEVEL_SIX_SPIDER_TYPE if level_six_spiders else None,
+                        casting=level_six_casting, combat=level_six_combat, expanded_level_six=expanded_level_six,
+                        academy_bank=bank, academy_sections=bank_sections,
+                    )
+                    if academy_runtime and len(bank_payload) != bank_size:
+                        raise ValueError("The runtime Academy banks must have the same disc stride.")
+                    payload += bank_payload
         else:
             payload = lanugo.payload(atlas, walk_atlas, goblin_variants, dos_light_preview)
         if expanded_level_six:
@@ -70,7 +82,10 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
             restore = lanugo.menu_return(lanugo.VARIANT_UPLOAD_RAM, True, dialogue=True)
             if len(restore) > 0x80:
                 raise ValueError("The dialogue return hook overlaps the VRAM guard.")
-            for lba in (first_lba, lower_payload_lba, lizard_payload_lba, rat_payload_lba, wizard_payload_lba):
+            restore_lbas = [first_lba, lower_payload_lba, lizard_payload_lba, rat_payload_lba, wizard_payload_lba]
+            if academy_runtime:
+                restore_lbas.extend(wizard_payload_lba + i * (bank_size // 2048) for i in range(1, len(banks)))
+            for lba in restore_lbas:
                 if lba is not None:
                     start = (lba - first_lba) * 2048 + 0xe00
                     image[start:start + len(restore)] = restore
@@ -84,6 +99,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
             executable, first_lba, walking=walk_atlas is not None, wide=goblin_variants is not None,
             lower_payload_lba=lower_payload_lba, lizard_payload_lba=lizard_payload_lba, rat_payload_lba=rat_payload_lba,
             wizard_payload_lba=wizard_payload_lba, expanded_level_six=expanded_level_six,
+            academy_runtime=academy_runtime,
         )
         updates = {}
         if dos_spell_effects is not None:
@@ -141,4 +157,5 @@ if __name__ == "__main__":
     parser.add_argument("--dos-spell-effects", type=Path, metavar="EXPORTED_EFFECTS")
     parser.add_argument("--expanded-level-six", action="store_true")
     parser.add_argument("--academy-bank", choices=lanugo.LEVEL_SIX_ACADEMY)
+    parser.add_argument("--academy-runtime", action="store_true")
     build(**vars(parser.parse_args()))

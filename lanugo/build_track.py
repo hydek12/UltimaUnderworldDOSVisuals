@@ -9,6 +9,7 @@ import struct
 from pathlib import Path
 
 from mipswords import Code, ret
+import academy_banks
 import creature_atlas
 import lower_atlas
 import preview_lighting
@@ -51,7 +52,7 @@ VRAM_GUARD_RAM = PAYLOAD_RAM + 0xe80
 RESIDENT_BYTES = 0x1000
 LOWER_RESIDENT_BYTES = 0x1800
 EXPANDED_RESIDENT_BYTES = 0x2000
-LEVEL_SIX_ACADEMY = {"wizb": (106, 115), "wizc": (107,)}
+LEVEL_SIX_ACADEMY = {name: academy_banks.BANK_FAMILIES[name][0] for name in ("wizb", "wizc")}
 LEVEL_SIX_DIRECTIONAL = ((92,), (64, 82), (65, 69), (66, 73))
 MODEL_OWNER_OFFSET = 0x58
 ORDER_COUNT_OFFSET = 0x5c
@@ -290,7 +291,7 @@ def actor_gate():
 
 
 def floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba=None, rat_payload_lba=None,
-                 wizard_payload_lba=None, expanded_level_six=False):
+                 wizard_payload_lba=None, expanded_level_six=False, academy_runtime=False):
     c = Code(BOOT)
     c.imm("addiu", "sp", "sp", -32)
     c.mem("sw", "ra", 28, "sp")
@@ -299,7 +300,10 @@ def floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba=None, rat_pa
     c.mem("sw", "zero", 4, "t2")
     c.mem("sw", "zero", MODEL_OWNER_OFFSET, "t2")
     c.jump(0x80029f50, True)
-    c.nop()
+    if academy_runtime:
+        c.mem("sw", "zero", academy_banks.POINTER, "t2")
+    else:
+        c.nop()
     has_creature_atlas = any(
         lba is not None for lba in (lizard_payload_lba, rat_payload_lba, wizard_payload_lba)
     )
@@ -643,7 +647,7 @@ def rat_payload(variants):
 
 
 def creature_payload(variants, actor_types, texture_pages, combat=False, extra_type=None, casting=False,
-                     expanded_level_six=False, academy_bank=None):
+                     expanded_level_six=False, academy_bank=None, academy_sections=None):
     sources = creature_sources(variants, actor_types, combat, casting)
     images, clut, metadata = creature_atlas.build(sources, texture_pages)
     base = actor_types[0]
@@ -662,10 +666,13 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             raise ValueError("The expanded Level 6 atlas requires the wizard-combat and spider preview.")
         # Both Academy families fit individually with all facing frames intact.
         # One table can occupy the two adjacent upper resident slots.
-        families = (LEVEL_SIX_ACADEMY[academy_bank],) if academy_bank else LEVEL_SIX_DIRECTIONAL
-        table_slots = ((0x1c00, 0x400),) if academy_bank else (
-            (0x1000, 0x200), (0x1c00, 0x200), (0x1e00, 0x200), (0x1200, 0x200),
-        )
+        families = academy_banks.BANK_FAMILIES[academy_bank] if academy_bank else LEVEL_SIX_DIRECTIONAL
+        if academy_bank:
+            table_slots = ((0x1c00, 0x400), (0x1000, 0x200))[:len(families)]
+        else:
+            table_slots = (
+                (0x1000, 0x200), (0x1c00, 0x200), (0x1e00, 0x200), (0x1200, 0x200),
+            )
         image, palettes, directional = creature_atlas.build_families(
             [creature_sources(variants, types) for types in families],
             creature_atlas.TEXTURE_PAGES[1],
@@ -755,6 +762,8 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         sections[WALK_SUPPRESS_DELAY_RAM - PAYLOAD_RAM] = jump(delay_addr) + bytes(4)
     sections.update(extra_sections)
     sections.update(combat_sections)
+    if academy_sections is not None:
+        sections.update(academy_sections)
     pages = tuple((x, y) for x, y, _ in texture_pages)
     return compact_payload(sections, images, clut, pages, texture_pages[0][2], clut_rect,
                            EXPANDED_RESIDENT_BYTES if expanded_level_six else LOWER_RESIDENT_BYTES)
@@ -823,7 +832,7 @@ def assemble_payload(sections, size):
     end = 0
     for offset, content in sorted(sections.items()):
         if offset < end or offset + len(content) > len(result):
-            raise ValueError("Payload sections overlap or exceed the reserved RAM.")
+            raise ValueError(f"Payload section {offset:#x}..{offset + len(content):#x} overlaps {end:#x} or exceeds {size:#x}.")
         end = offset + len(content)
         result[offset:end] = content
     return bytes(result)
@@ -881,7 +890,7 @@ def form1_sector(original, data):
 
 def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False,
                     lower_payload_lba=None, lizard_payload_lba=None, rat_payload_lba=None,
-                    wizard_payload_lba=None, expanded_level_six=False):
+                    wizard_payload_lba=None, expanded_level_six=False, academy_runtime=False):
     target = bytearray(original)
     deferred_ordering = any(
         lba is not None for lba in (lizard_payload_lba, rat_payload_lba, wizard_payload_lba)
@@ -890,13 +899,15 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
     code = {
         BOOT: (
             floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba, rat_payload_lba, wizard_payload_lba,
-                         expanded_level_six)
+                         expanded_level_six, academy_runtime)
             if floor_aware else loader(payload_lba, walking, wide)
         ),
         SUPPRESS_NORMAL: gate(SUPPRESS_NORMAL, SUPPRESS_RAM, "v1", walking, floor_aware),
         SUPPRESS_DELAY: gate(SUPPRESS_DELAY, WALK_SUPPRESS_DELAY_RAM if walking else SUPPRESS_DELAY_RAM, "a0", walking, floor_aware),
         DRAW_GATE: gate(DRAW_GATE, DRAW_RAM, walking=walking, floor_aware=floor_aware),
     }
+    if academy_runtime:
+        code.update(academy_banks.gates())
     if walking:
         code[EXPANDED_MENU_GATE if expanded_level_six else MENU_GATE] = menu_gate(expanded_level_six)
         code[VRAM_UPLOAD_GATE] = vram_upload_gate(floor_aware, expanded_level_six)
@@ -933,6 +944,9 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
     if expanded_level_six:
         hooks += ((0x800260e4, jump(0x8003ea5c, True) + bytes(4),
                    jump(EXPANDED_MENU_GATE, True) + struct.pack("<I", 0x340f0001)),)
+    if academy_runtime:
+        hooks += ((academy_banks.FRAME_HOOK, bytes.fromhex("a0048397e8ffbd27"),
+                   jump(academy_banks.GATE) + bytes(4)),)
     for address, expect, replace in hooks:
         offset = 2048 + address - EXE_LOAD
         if target[offset:offset + len(expect)] != expect:
