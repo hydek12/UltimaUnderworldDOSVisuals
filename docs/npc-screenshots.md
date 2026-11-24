@@ -55,3 +55,9 @@ The native model raises both arms during the staged cast. The next capture uses 
 ![The same wizard in a gold DOS robe with one hand forward](screenshots/ultima-underworld-wizard-casting-dos-sprite.png)
 
 The DOS animation uses a smaller hand gesture and the original gold palette. The PlayStation still controls when the spell fires.
+
+## Level 6 wizard melee, DOS sprite preview
+
+![A gold-robed DOS wizard with a blue arc between its raised hands](screenshots/ultima-underworld-wizard-melee-dos-sprite.png)
+
+This staged melee pose shows the gold DOS palette and the blue arc drawn into the sprite itself. PlayStation combat logic still controls when attacks land.
