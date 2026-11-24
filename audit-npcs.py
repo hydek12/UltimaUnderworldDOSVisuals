@@ -80,10 +80,10 @@ def asset_coverage(crit):
         yield actor, (animation, label, palette, idle, walk)
 
 
-def psx_creatures(avatar):
+def psx_creatures(avatar, object_range=(0x9a4000, 0x9b3000)):
     base, end = struct.unpack_from("<II", avatar, 4 * PSX_OBJECT_ENTRY)
-    if (base, end) != (0x9a4000, 0x9b3000) or end > len(avatar):
-        raise ValueError("Expected the clean Japanese Rev 1 AVATAR object entry.")
+    if (base, end) != object_range or end > len(avatar):
+        raise ValueError("Unexpected AVATAR object entry for this disc revision.")
     previous_end = base + 9 * 8
     for level in range(1, 10):
         # Loader 0x8004b034 takes the low halfword count and shifts word +4 by ten.
@@ -133,6 +133,100 @@ def asset_columns(assets, actor):
     return animation, label, palette, " ".join(map(str, idle)), " ".join(map(str, walk))
 
 
+def dos_personal_names(strings, identities):
+    """Read only the personal-name entries in DOS string block 7."""
+    node_count = word(strings, 0)
+    directory = 2 + 4 * node_count
+    if not 1 <= node_count <= 256:
+        raise ValueError("Unexpected DOS string tree size.")
+    blocks = dict(struct.iter_unpack("<HI", strings[directory + 2:directory + 2 + 6 * word(strings, directory)]))
+    block = blocks[7]
+    count = word(strings, block)
+    offsets = block + 2
+    text = offsets + 2 * count
+    end = min((offset for offset in blocks.values() if offset > block), default=len(strings))
+    for identity in sorted(identities):
+        index = identity + 16
+        if index >= count:
+            continue
+        start = text + word(strings, offsets + 2 * index)
+        node = node_count - 1
+        name = bytearray()
+        for value in strings[start:end]:
+            for bit in range(7, -1, -1):
+                node = strings[2 + 4 * node + 2 + ((value >> bit) & 1)]
+                if node >= node_count:
+                    raise ValueError("Invalid DOS string tree child.")
+                char, _, left, _ = strings[2 + 4 * node:6 + 4 * node]
+                if left != 255:
+                    continue
+                if char in (ord("|"), 255):
+                    break
+                name.append(char)
+                if len(name) >= 512:
+                    raise ValueError("DOS personal name exceeds the string limit.")
+                node = node_count - 1
+            else:
+                continue
+            break
+        else:
+            raise ValueError("DOS personal name is unterminated.")
+        personal_name = name.decode("cp437").strip()
+        if personal_name:
+            yield identity, personal_name
+
+
+def dialogue_inventory(dos_root, psx_avatar, english_avatar=None):
+    data_root = dos_root / "DATA"
+    dos_records = list(dos_actors((data_root / "LEV.ARK").read_bytes()))
+    psx_records = list(psx_creatures(psx_avatar.read_bytes()))
+    english_records = {}
+    english_shift = 0x100000
+    if english_avatar is not None:
+        english_records = {
+            (level, address - english_shift): record
+            for level, address, _, record in psx_creatures(english_avatar.read_bytes(), (0xaa4000, 0xab3000))
+        }
+    matched = crosswalk(dos_records, psx_records)
+    identities = {record[26] for _, _, _, record in psx_records if 0 < record[26] < 0xf0}
+    names = dict(dos_personal_names((data_root / "STRINGS.PAK").read_bytes(), identities))
+    archive = (data_root / "CNV.ARK").read_bytes()
+    offsets = struct.unpack_from(f"<{word(archive, 0)}I", archive, 2)
+    assets = dict(asset_coverage(dos_root / "CRIT"))
+    by_identity = defaultdict(list)
+    for level, x, y, _, actor, address, record in dos_records:
+        by_identity[record[26]].append((level, x, y, actor, address))
+    writer = csv.writer(sys.stdout)
+    writer.writerow(("level", "psx_record_offset", "psx_type", "conversation_id", "initially_linked",
+                     "spawn_x", "spawn_y", "dos_name", "dos_script", "dos_level", "dos_spawn_x",
+                     "dos_spawn_y", "dos_type", "dos_record_offset", "match_evidence", "dos_asset",
+                     "dos_palette", "idle_frames_by_direction", "walk_frames_by_direction", "english_record_match"))
+    for level, address, actor, record in psx_records:
+        identity = record[26]
+        if identity not in identities:
+            continue
+        script = identity < len(offsets) and 2 + 4 * len(offsets) <= offsets[identity] < len(archive)
+        peers = by_identity[identity]
+        strict = [(peer, matched[peer[-1]][0]) for peer in peers
+                  if peer[-1] in matched and address in matched[peer[-1]][1]]
+        if len(strict) == 1:
+            candidate, evidence = strict[0]
+        elif not strict and len(peers) == 1:
+            candidate, evidence = peers[0], "unique DOS identity; verify in PSX dialogue"
+        else:
+            candidate, evidence = None, "ambiguous match" if peers else "no linked DOS record"
+        if candidate:
+            dos_level, dos_x, dos_y, dos_type, dos_offset = candidate
+            _, asset, palette, idle, walk = asset_columns(assets, dos_type)
+            detail = dos_level, dos_x, dos_y, dos_type, f"{dos_offset:#08x}", evidence, asset, palette, idle, walk
+        else:
+            detail = "", "", "", "", "", evidence, "", "", "", ""
+        writer.writerow((level, f"{address:#08x}", actor, identity, int(bool(record[27])),
+                         word(record, 4) & 63, word(record, 6) & 63,
+                         names.get(identity, ""), int(script), *detail,
+                         "" if english_avatar is None else int(english_records.get((level, address)) == record)))
+
+
 def audit(dos_root, psx_avatar, psx_inventory=False):
     levels = (dos_root / "DATA" / "LEV.ARK").read_bytes()
     assets = dict(asset_coverage(dos_root / "CRIT"))
@@ -176,5 +270,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("dos_root", type=Path)
     parser.add_argument("psx_avatar", type=Path)
-    parser.add_argument("--psx-inventory", action="store_true", help="List every PSX creature record.")
-    audit(**vars(parser.parse_args()))
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument("--psx-inventory", action="store_true", help="List every PSX creature record.")
+    modes.add_argument("--dialogue-inventory", action="store_true", help="Match PSX dialogue records to local DOS names.")
+    parser.add_argument("--english-avatar", type=Path, help="Compare relocated records in the English v2.0 AVATAR.")
+    args = parser.parse_args()
+    if args.english_avatar and not args.dialogue_inventory:
+        parser.error("--english-avatar requires --dialogue-inventory")
+    if args.dialogue_inventory:
+        dialogue_inventory(args.dos_root, args.psx_avatar, args.english_avatar)
+    else:
+        audit(args.dos_root, args.psx_avatar, args.psx_inventory)

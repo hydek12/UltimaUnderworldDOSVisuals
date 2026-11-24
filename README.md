@@ -43,9 +43,11 @@ The command creates a fresh comparison folder and prints its path. It contains e
 ```sh
 python3 audit-npcs.py /path/to/ultimaunderworld/uu /path/to/japanese-rev1/AVATAR > npc-records.csv
 python3 audit-npcs.py /path/to/ultimaunderworld/uu /path/to/japanese-rev1/AVATAR --psx-inventory > psx-npc-records.csv
+python3 audit-npcs.py /path/to/ultimaunderworld/uu /path/to/japanese-rev1/AVATAR \
+  --dialogue-inventory --english-avatar /path/to/english-v2/AVATAR > local-dialogue-inventory.csv
 ```
 
-The audit walks the linked objects in the nine DOS tile maps and parses each PSX floor’s 28-byte creature records using the native loader’s table offsets. It checks the type, conversation ID, first six bytes, and packed home tile for full matches. For changed records it looks for an unmatched PSX candidate on the same spawn tile, then for a unique named candidate with the same conversation ID. Each row lists the evidence and the number of idle and walk phases per facing. The PSX inventory includes records the level loader leaves unlinked.
+The audit walks the linked objects in the nine DOS tile maps and parses each PSX floor’s 28-byte creature records using the native loader’s table offsets. It checks the type, conversation ID, first six bytes, and packed home tile for full matches. For changed records it looks for an unmatched PSX candidate on the same spawn tile, then for a unique named candidate with the same conversation ID. Each row lists the evidence and the number of idle and walk phases per facing. The PSX inventory includes records the level loader leaves unlinked. The [named dialogue audit](docs/named-dialogue-audit.md) explains how to use the local dialogue inventory for the 70% milestone.
 
 ## Build a patch for the original Japanese release
 
