@@ -7,6 +7,7 @@ from variant_atlas import WIDTH, pack
 LIZARD_TYPES = (85, 88, 89)
 LEVEL_EIGHT_RAT_TYPES = (72,)
 LEVEL_SIX_WIZARD_TYPES = (103, 108, 109)
+LEVEL_SIX_SPIDER_TYPE = 92
 COMBAT_SLOTS = ((0, 4), (1, 5), (2, 5), (3, 5), (7, 4), (0x0c, 4))
 DEATH_SLOT = 0x0c
 SOURCE_HEIGHT = 512

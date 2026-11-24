@@ -10,8 +10,12 @@ GOBLIN_PALETTE_TYPES = (70, 76, 3)
 ORDER_LOG_ENTRIES = 128
 
 
-def require_palette_type(c, actor, scratch, fallback, palette_types):
+def require_palette_type(c, actor, scratch, fallback, palette_types, extra_type=None):
     base, first_variant, variant_count = palette_types
+    if extra_type is not None:
+        c.imm("ori", scratch, "zero", extra_type)
+        c.branch("beq", actor, scratch, "palette_type")
+        c.nop()
     c.imm("addiu", scratch, actor, -first_variant)
     c.imm("sltiu", scratch, scratch, variant_count)
     c.branch("bne", scratch, "zero", "palette_type")
@@ -46,7 +50,7 @@ def atlas_action_index(c, table, action, result, scratch, fallback):
 
 # Keep actor projection and hit testing when substituting a sprite.
 def suppress(origin, order_table_register="v1", walk_ready=None, wide=False, lower_floor=False,
-             palette_types=GOBLIN_PALETTE_TYPES, order_writer=None, action_map=None):
+             palette_types=GOBLIN_PALETTE_TYPES, order_writer=None, action_map=None, extra_type=None):
     c=Code(origin)
     c.mem("lw","t8",0x74,"sp")
     c.address("t9",0x8002a5d8)
@@ -70,7 +74,7 @@ def suppress(origin, order_table_register="v1", walk_ready=None, wide=False, low
     else:
         c.imm("andi", "t8", "t8", 0x1ff)
         if wide:
-            require_palette_type(c, "t8", "t7", "normal", palette_types)
+            require_palette_type(c, "t8", "t7", "normal", palette_types, extra_type)
         else:
             c.imm("xori", "t8", "t8", LOWER_GOBLIN_TYPE if lower_floor else GREEN_GOBLIN_TYPE)
             c.branch("bne", "t8", "zero", "normal")
@@ -100,9 +104,10 @@ DOS_IDLE_DIRECTIONS = bytes((
 
 def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=False,
          shade_selector=None, overlay_offset=None, palette_types=GOBLIN_PALETTE_TYPES,
-         order_log=None, combat=None):
+         order_log=None, combat=None, extra_atlas=None):
     c=Code(origin)
     shade_return = None
+    extra_type = extra_atlas[0] if extra_atlas else None
     c.mem("lw","t0",0xe0,"sp")
     actor_type = 10 if walk_ready is None else GREEN_GOBLIN_TYPE
     if overlay_offset is not None:
@@ -116,7 +121,7 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
         c.nop()
         c.imm("andi", "t2", "t2", 0x1ff)
     if wide and overlay_offset is None:
-        require_palette_type(c, "t2", "t1", "finish", palette_types)
+        require_palette_type(c, "t2", "t1", "finish", palette_types, extra_type)
     else:
         c.branch("bne","t2","t1","finish")
     c.mem("lbu","t4",23,"t0")
@@ -157,6 +162,16 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
     c.alu("addu", "t0", "t0", "t2")
     c.mem("lbu", "t2", 0, "t0")
     c.address("t0", metadata)
+    if extra_atlas:
+        c.mem("lw", "t3", 0xe0, "sp")
+        c.imm("ori", "t4", "zero", extra_type)
+        c.mem("lhu", "t3", 0, "t3")
+        c.nop()
+        c.imm("andi", "t3", "t3", 0x1ff)
+        c.branch("bne", "t3", "t4", "atlas_selected")
+        c.nop()
+        c.address("t0", extra_atlas[1])
+        c.label("atlas_selected")
     if combat is not None:
         select_combat_pose(c, *combat[1:])
     else:
@@ -261,6 +276,13 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
             c.imm("andi", "v1", "v1", 0x1ff)
             c.branch("beq", "v1", "t6", "base_clut")
             c.imm("lui", "t6", "zero", clut)
+            if extra_atlas:
+                c.imm("ori", "t3", "zero", extra_type)
+                c.branch("bne", "v1", "t3", "normal_clut")
+                c.nop()
+                c.branch("beq", "zero", "zero", "base_clut")
+                c.imm("lui", "t6", "zero", extra_atlas[2])
+                c.label("normal_clut")
             c.imm("addiu", "v1", "v1", 1 - palette_types[1])
             c.shift("sll", "v1", "v1", 22)  # Select the CLUT row above the first.
             c.alu("addu", "t6", "t6", "v1")

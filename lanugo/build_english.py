@@ -14,7 +14,9 @@ def bcd(number):
 
 def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
           dos_light_preview=None, lower_floor_goblins=False, lizardmen=None, lizardman_combat=False, level_eight_rats=None,
-          level_six_wizards=None):
+          level_six_wizards=None, level_six_spiders=False):
+    if level_six_spiders and level_six_wizards is None:
+        raise ValueError("Level 6 spiders share the Level 6 wizard payload.")
     if lizardman_combat and lizardmen is None:
         raise ValueError("Lizardman combat requires --lizardmen.")
     with english.open("rb") as source:
@@ -47,6 +49,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
                 payload += lanugo.creature_payload(
                     level_six_wizards, lanugo.creature_atlas.LEVEL_SIX_WIZARD_TYPES,
                     lanugo.creature_atlas.TEXTURE_PAGES[:1],
+                    extra_type=lanugo.creature_atlas.LEVEL_SIX_SPIDER_TYPE if level_six_spiders else None,
                 )
         else:
             payload = lanugo.payload(atlas, walk_atlas, goblin_variants, dos_light_preview)
@@ -108,4 +111,5 @@ if __name__ == "__main__":
     parser.add_argument("--lizardman-combat", action="store_true")
     parser.add_argument("--level-eight-rats", type=Path, metavar="EXPORTED_ATLASES")
     parser.add_argument("--level-six-wizards", type=Path, metavar="EXPORTED_ATLASES")
+    parser.add_argument("--level-six-spiders", action="store_true")
     build(**vars(parser.parse_args()))

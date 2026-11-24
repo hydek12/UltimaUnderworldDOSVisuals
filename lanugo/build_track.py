@@ -608,7 +608,7 @@ def rat_payload(variants):
     return creature_payload(variants, creature_atlas.LEVEL_EIGHT_RAT_TYPES, creature_atlas.RAT_TEXTURE_PAGES)
 
 
-def creature_payload(variants, actor_types, texture_pages, combat=False):
+def creature_payload(variants, actor_types, texture_pages, combat=False, extra_type=None):
     images, clut, metadata = creature_atlas.build(creature_sources(variants, actor_types, combat), texture_pages)
     base = actor_types[0]
     if len(actor_types) == 1:
@@ -618,6 +618,24 @@ def creature_payload(variants, actor_types, texture_pages, combat=False):
     x, y, width, _ = creature_atlas.CLUT_RECT
     clut_rect = x, y, width, len(actor_types)
     order_log = PAYLOAD_RAM + ORDER_COUNT_OFFSET, ORDER_LOG_RAM
+    extra_atlas = None
+    extra_sections = {}
+    if extra_type is not None:
+        if combat or texture_pages != creature_atlas.TEXTURE_PAGES[:1]:
+            raise ValueError("The extra atlas requires one primary idle and walk page.")
+        extra_page = creature_atlas.TEXTURE_PAGES[1:]
+        extra_images, extra_clut, extra_metadata = creature_atlas.build(
+            creature_sources(variants, (extra_type,)), extra_page,
+        )
+        images += extra_images
+        texture_pages += extra_page
+        clut += extra_clut
+        clut_rect = x, y, width, len(actor_types) + 1
+        extra_atlas = extra_type, PAYLOAD_RAM + 0x1000, creature_atlas.CLUT_BASE + 64 * len(actor_types)
+        extra_sections[0x1000] = extra_metadata
+        # The logger writes each entry before use. Keep it beyond the resident read
+        # and below the texture DMA staging buffer.
+        order_log = PAYLOAD_RAM + ORDER_COUNT_OFFSET, PAYLOAD_RAM + LOWER_RESIDENT_BYTES
     action_addresses = None
     combat_sections = {}
     if combat:
@@ -628,31 +646,38 @@ def creature_payload(variants, actor_types, texture_pages, combat=False):
             PAYLOAD_RAM + 0xb0, PAYLOAD_RAM + 0x700, PAYLOAD_RAM + 0x1600,
             actions[creature_atlas.DEATH_SLOT],
         )
+    suppress_addr = SUPPRESS_RAM if extra_type is None else PAYLOAD_RAM + 0x700
+    delay_addr = WALK_SUPPRESS_DELAY_RAM if extra_type is None else PAYLOAD_RAM + 0xd00
     sections = {
         0: struct.pack("<I", PAYLOAD_MAGIC),
         0x90: renderer.DOS_IDLE_DIRECTIONS,
-        0x100: renderer.suppress(
-            SUPPRESS_RAM, walk_ready=WALK_READY_RAM, wide=True,
+        suppress_addr - PAYLOAD_RAM: renderer.suppress(
+            suppress_addr, walk_ready=WALK_READY_RAM, wide=True,
             palette_types=palette_types, order_writer=ORDER_WRITER_RAM,
-            action_map=None if action_addresses is None else action_addresses[0],
+            action_map=None if action_addresses is None else action_addresses[0], extra_type=extra_type,
         ),
-        0x180: renderer.suppress(
-            WALK_SUPPRESS_DELAY_RAM, "a0", WALK_READY_RAM, wide=True,
+        delay_addr - PAYLOAD_RAM: renderer.suppress(
+            delay_addr, "a0", WALK_READY_RAM, wide=True,
             palette_types=palette_types, order_writer=ORDER_WRITER_RAM,
-            action_map=None if action_addresses is None else action_addresses[0],
+            action_map=None if action_addresses is None else action_addresses[0], extra_type=extra_type,
         ),
         0x200: renderer.draw(
             DRAW_RAM, PAYLOAD_RAM + 0x800, PAYLOAD_RAM + 0x90,
             clut=creature_atlas.CLUT_BASE, walk_ready=WALK_READY_RAM, wide=True,
-            palette_types=palette_types, order_log=order_log, combat=action_addresses,
+            palette_types=palette_types, order_log=order_log, combat=action_addresses, extra_atlas=extra_atlas,
         )[0],
         ORDER_WRITER_RAM - PAYLOAD_RAM: renderer.log_native_order(ORDER_WRITER_RAM, *order_log),
-        ORDER_LOG_RAM - PAYLOAD_RAM: bytes(8 * renderer.ORDER_LOG_ENTRIES),
         0x800: metadata,
         0xc00: jump(PAYLOAD_RAM + 0x1400) + bytes(4),
         0xe00: menu_return(VARIANT_UPLOAD_RAM, floor_aware=True),
         0xe80: vram_guard(lower_floor=True, right_edge=texture_pages[-1][0] + 64),
     }
+    if extra_type is None:
+        sections[ORDER_LOG_RAM - PAYLOAD_RAM] = bytes(8 * renderer.ORDER_LOG_ENTRIES)
+    else:
+        sections[SUPPRESS_RAM - PAYLOAD_RAM] = jump(suppress_addr) + bytes(4)
+        sections[WALK_SUPPRESS_DELAY_RAM - PAYLOAD_RAM] = jump(delay_addr) + bytes(4)
+    sections.update(extra_sections)
     sections.update(combat_sections)
     pages = tuple((x, y) for x, y, _ in texture_pages)
     return compact_payload(sections, images, clut, pages, texture_pages[0][2], clut_rect)

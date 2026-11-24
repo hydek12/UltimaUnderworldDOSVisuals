@@ -1,9 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
+spider_preview=0
 wizard_preview=0
 if [[ ${1:-} == --level-six-wizards ]]; then
     wizard_preview=1
+    shift
+elif [[ ${1:-} == --level-six-spiders ]]; then
+    wizard_preview=1
+    spider_preview=1
     shift
 fi
 
@@ -14,7 +19,7 @@ if [[ ${1:-} == --english-patch ]]; then
 fi
 
 if [[ $# != 5 ]]; then
-    printf 'Usage: %s [--level-six-wizards] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
+    printf 'Usage: %s [--level-six-wizards|--level-six-spiders] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
     exit 2
 fi
 
@@ -71,6 +76,10 @@ if (( wizard_preview )); then
         "$exporter" export-creature-atlases "$dos_root" "$actor" "$scratch/wizards/type-$actor"
     done
     wizard_args=(--level-six-wizards "$scratch/wizards")
+    if (( spider_preview )); then
+        "$exporter" export-creature-atlases "$dos_root" 92 "$scratch/wizards/type-92"
+        wizard_args+=(--level-six-spiders)
+    fi
 fi
 
 printf 'Building the English preview data track…\n'
