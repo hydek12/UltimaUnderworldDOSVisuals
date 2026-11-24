@@ -2,6 +2,23 @@
 
 The combined xdelta is a local output. Its source dictionary is the clean Japanese PlayStation data track, so the delta can carry DOS sprite pixels, palettes, and English translation bytes that are absent from that source. Compressing or repacking the delta would still distribute those bytes. Generate a new delta from the original inputs instead of trying to strip the existing one.
 
+## Build the verified local release
+
+Use Python 3.11 or later, the Xcode-built `UnderworldVisuals` exporter, `xdelta3` with LZMA support when supplying an upstream translation patch, and a `chdman` build that supports split-track extraction. Set `XDELTA3` or `CHDMAN` to the executable path when needed.
+
+```sh
+python3 build-local-release.py --english-patch \
+  "/path/to/DOS/uu" "/path/to/clean Japanese Rev 1.cue" \
+  "/path/to/UU_patch_v2_0.xdelta" "/path/to/UnderworldVisuals" \
+  "/path/to/new-local-output"
+```
+
+Omit `--english-patch` and supply the already translated English v2.0 Track 1 BIN if you have it. Use the original split four-track Japanese Rev 1 CUE. Its `FILE` entries must point to the accompanying raw BINs.
+
+The release command verifies the hashes of all four original tracks and the CUE indexes before building. It runs the cumulative renderer recipe, decodes the combined xdelta against the original Japanese Track 1, and verifies the patched track SHA-1 `039e4a79a468c1dda7e8617b0eb463e867891ee7`. It verifies the CHD and checks the indexes and bytes of all four tracks on extraction. The new output directory contains `english-dos-visuals.xdelta` and `Ultima Underworld (English Patch - DOS Visuals).chd`. Both files contain locally supplied game data and belong on the user's machine.
+
+The release reproduces the qualified 80% visuals build. The [encounter audit](named-dialogue-audit.md#levels-59-recurring-creatures-and-special-models) records the remaining gameplay and art coverage. Delta bytes can vary with the xdelta3 version. The patched track hash identifies the reproduced data track.
+
 ## Run the current preview builder
 
 On macOS, install the Xcode command-line tools, Python 3.11 or later, and xdelta3. If xdelta3 is outside your PATH, set `XDELTA3` to its executable path. Compile the exporter from this checkout into a local build directory.

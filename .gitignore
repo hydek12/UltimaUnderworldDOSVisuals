@@ -1,0 +1,7 @@
+__pycache__/
+*.bin
+*.chd
+*.cue
+*.sav
+*.tim
+*.xdelta
