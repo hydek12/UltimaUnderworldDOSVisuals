@@ -13,7 +13,8 @@ def bcd(number):
     return ((number // 10) << 4) | (number % 10)
 
 def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
-          dos_light_preview=None, lower_floor_goblins=False, lizardmen=None, lizardman_combat=False, level_eight_rats=None):
+          dos_light_preview=None, lower_floor_goblins=False, lizardmen=None, lizardman_combat=False, level_eight_rats=None,
+          level_six_wizards=None):
     if lizardman_combat and lizardmen is None:
         raise ValueError("Lizardman combat requires --lizardmen.")
     with english.open("rb") as source:
@@ -26,7 +27,9 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
         lower_payload_lba = None
         lizard_payload_lba = None
         rat_payload_lba = None
-        if lower_floor_goblins or lizardmen is not None or level_eight_rats is not None:
+        wizard_payload_lba = None
+        creature_atlases = (lizardmen, level_eight_rats, level_six_wizards)
+        if lower_floor_goblins or any(atlases is not None for atlases in creature_atlases):
             if walk_atlas is None or goblin_variants is None:
                 raise ValueError("Floor-specific atlases require both --walk-atlas and --goblin-variants.")
             payload = lanugo.variant_payload(atlas, walk_atlas, goblin_variants, dos_light_preview, floor_aware=True)
@@ -39,6 +42,12 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
             if level_eight_rats is not None:
                 rat_payload_lba = first_lba + len(payload) // 2048
                 payload += lanugo.rat_payload(level_eight_rats)
+            if level_six_wizards is not None:
+                wizard_payload_lba = first_lba + len(payload) // 2048
+                payload += lanugo.creature_payload(
+                    level_six_wizards, lanugo.creature_atlas.LEVEL_SIX_WIZARD_TYPES,
+                    lanugo.creature_atlas.TEXTURE_PAGES[:1],
+                )
         else:
             payload = lanugo.payload(atlas, walk_atlas, goblin_variants, dos_light_preview)
         sectors = [
@@ -49,6 +58,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
         edited = lanugo.edit_executable(
             executable, first_lba, walking=walk_atlas is not None, wide=goblin_variants is not None,
             lower_payload_lba=lower_payload_lba, lizard_payload_lba=lizard_payload_lba, rat_payload_lba=rat_payload_lba,
+            wizard_payload_lba=wizard_payload_lba,
         )
         updates = {}
         for index, original in enumerate(sectors):
@@ -97,4 +107,5 @@ if __name__ == "__main__":
     parser.add_argument("--lizardmen", type=Path, metavar="EXPORTED_ATLASES")
     parser.add_argument("--lizardman-combat", action="store_true")
     parser.add_argument("--level-eight-rats", type=Path, metavar="EXPORTED_ATLASES")
+    parser.add_argument("--level-six-wizards", type=Path, metavar="EXPORTED_ATLASES")
     build(**vars(parser.parse_args()))

@@ -263,7 +263,8 @@ def actor_gate():
     return c.out()
 
 
-def floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba=None, rat_payload_lba=None):
+def floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba=None, rat_payload_lba=None,
+                 wizard_payload_lba=None):
     c = Code(BOOT)
     c.imm("addiu", "sp", "sp", -32)
     c.mem("sw", "ra", 28, "sp")
@@ -273,7 +274,10 @@ def floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba=None, rat_pa
     c.mem("sw", "zero", MODEL_OWNER_OFFSET, "t2")
     c.jump(0x80029f50, True)
     c.nop()
-    if lizard_payload_lba is None and rat_payload_lba is None:
+    has_creature_atlas = any(
+        lba is not None for lba in (lizard_payload_lba, rat_payload_lba, wizard_payload_lba)
+    )
+    if not has_creature_atlas:
         c.mem("lw", "t0", 24, "sp")
         c.imm("ori", "a2", "zero", RESIDENT_BYTES)
         c.branch("beq", "t0", "zero", "level_one")
@@ -295,7 +299,7 @@ def floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba=None, rat_pa
         # One byte per native floor index, measured in sectors from the Level 1 payload.
         floor_table_ram = BOOT + 0xb4
         payload_levels = (None, lower_payload_lba, lizard_payload_lba, lizard_payload_lba,
-                          lower_payload_lba, None, lower_payload_lba, rat_payload_lba, None)
+                          lower_payload_lba, wizard_payload_lba, lower_payload_lba, rat_payload_lba, None)
         floor_offsets = [255 if lba is None else lba - payload_lba for lba in payload_levels]
         floor_offsets[0] = 0
         if any(not 0 <= offset <= 255 for offset in floor_offsets):
@@ -338,7 +342,7 @@ def floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba=None, rat_pa
     c.nop()
     ret(c, lambda: c.imm("addiu", "sp", "sp", 32))
     blob = c.out()
-    if lizard_payload_lba is None and rat_payload_lba is None:
+    if not has_creature_atlas:
         return blob
     gap = floor_table_ram - BOOT - len(blob)
     if gap < 0:
@@ -774,12 +778,18 @@ def form1_sector(original, data):
     return result
 
 def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False,
-                    lower_payload_lba=None, lizard_payload_lba=None, rat_payload_lba=None):
+                    lower_payload_lba=None, lizard_payload_lba=None, rat_payload_lba=None,
+                    wizard_payload_lba=None):
     target = bytearray(original)
-    deferred_ordering = lizard_payload_lba is not None or rat_payload_lba is not None
+    deferred_ordering = any(
+        lba is not None for lba in (lizard_payload_lba, rat_payload_lba, wizard_payload_lba)
+    )
     floor_aware = lower_payload_lba is not None or deferred_ordering
     code = {
-        BOOT: floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba, rat_payload_lba) if floor_aware else loader(payload_lba, walking, wide),
+        BOOT: (
+            floor_loader(payload_lba, lower_payload_lba, lizard_payload_lba, rat_payload_lba, wizard_payload_lba)
+            if floor_aware else loader(payload_lba, walking, wide)
+        ),
         SUPPRESS_NORMAL: gate(SUPPRESS_NORMAL, SUPPRESS_RAM, "v1", walking, floor_aware),
         SUPPRESS_DELAY: gate(SUPPRESS_DELAY, WALK_SUPPRESS_DELAY_RAM if walking else SUPPRESS_DELAY_RAM, "a0", walking, floor_aware),
         DRAW_GATE: gate(DRAW_GATE, DRAW_RAM, walking=walking, floor_aware=floor_aware),

@@ -1,6 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
+wizard_preview=0
+if [[ ${1:-} == --level-six-wizards ]]; then
+    wizard_preview=1
+    shift
+fi
+
 translation_patch=0
 if [[ ${1:-} == --english-patch ]]; then
     translation_patch=1
@@ -8,7 +14,7 @@ if [[ ${1:-} == --english-patch ]]; then
 fi
 
 if [[ $# != 5 ]]; then
-    printf 'Usage: %s [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
+    printf 'Usage: %s [--level-six-wizards] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
     exit 2
 fi
 
@@ -58,10 +64,19 @@ for actor in 85 88 89; do
 done
 "$exporter" export-creature-atlases "$dos_root" 72 "$scratch/rats/type-72"
 
+wizard_args=()
+if (( wizard_preview )); then
+    mkdir "$scratch/wizards"
+    for actor in 103 108 109; do
+        "$exporter" export-creature-atlases "$dos_root" "$actor" "$scratch/wizards/type-$actor"
+    done
+    wizard_args=(--level-six-wizards "$scratch/wizards")
+fi
+
 printf 'Building the English preview data track…\n'
 PYTHONDONTWRITEBYTECODE=1 python3 "$project/lanugo/build_english.py" "$english_track" "$scratch/idle" "$scratch/preview.bin" \
     --walk-atlas "$scratch/walk" --goblin-variants "$scratch/goblins" --lower-floor-goblins \
-    --lizardmen "$scratch/lizardmen" --lizardman-combat --level-eight-rats "$scratch/rats"
+    --lizardmen "$scratch/lizardmen" --lizardman-combat --level-eight-rats "$scratch/rats" ${wizard_args[@]+"${wizard_args[@]}"}
 
 printf 'Encoding and verifying the local xdelta…\n'
 "$project/build-rev1-patch.sh" --allow-expanded-track "$japanese_track" "$scratch/preview.bin" "$output"

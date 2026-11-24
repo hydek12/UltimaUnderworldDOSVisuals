@@ -26,6 +26,10 @@ To supply the separately obtained English v2.0 xdelta instead of a translated BI
 
 The script exports sprites and palettes into temporary storage, applies the renderer changes, and builds the English preview data track. It uses the existing packager to encode the delta against the Japanese BIN, decodes it, and compares every output byte before publishing the local file. It cleans up the generated atlases and working BIN on exit. To use the result, decode it against the original Japanese BIN and point Track 1 in a copy of the original split-BIN CUE at the new BIN. Keep the three audio tracks and all original indexes. The current preview target SHA-1 is `18c839eec5fdbc311f6c0c5cd5c69d085279762c`.
 
+### Build the Level 6 wizard preview
+
+Add `--level-six-wizards` as the first argument. It adds the seven initially linked Level 6 wizards of types 103, 108, and 109. They draw DOS idle and walk sprites in their three original palettes. Other wizard actions retain the native renderer. The expected Track 1 SHA-1 for this optional build is `f3e72a895004cc695ecc6b71a149962530382ae2`.
+
 ## Separate release code from game assets
 
 1. Freeze a tested build and record the Japanese and English baseline hashes, the final Track 1 hash, the exporter and builder revisions, and the supported DOS source versions. Record individual input signatures for the DOS files the exporter consumes, so unsupported releases fail with actionable errors.
@@ -47,7 +51,7 @@ git archive --format=zip --output=/tmp/underworld-builder-source.zip HEAD -- \
 unzip -l /tmp/underworld-builder-source.zip
 ```
 
-Review the archive contents before uploading. Users generate the combined xdelta on their own machines.
+Review the archive contents before uploading. Users generate the combined xdelta on their own machines. After verifying a new preview, keep only the latest verified test disc image. Remove superseded test CHDs and temporary test BIN/CUE copies. Preserve the original disc dumps and audio tracks.
 
 ## Develop the macOS application
 
