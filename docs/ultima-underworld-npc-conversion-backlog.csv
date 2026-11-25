@@ -452,7 +452,7 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 7,0x9ae594,109,217,1,1,52,1,52,0x033c8d,4,wiza,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prison-seven,prison-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9ae5b0,90,218,0,12,53,12,53,0x034440,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prison-seven,prison-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
 7,0x9ae5cc,120,0,1,34,53,34,53,0x033d14,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
-7,0x9ae5e8,113,0,0,51,54,51,54,,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+7,0x9ae5e8,113,0,0,51,54,51,54,,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Normal controller movement triggered native create trap 625
 7,0x9ae604,86,215,1,2,55,2,55,0x0343b9,27,dwarf32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prison-seven,prison-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9ae620,104,214,0,6,55,6,55,0x034425,26,fight32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prison-seven,prison-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
 7,0x9ae63c,78,220,0,25,55,25,55,0x03445b,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Linked on floor load
