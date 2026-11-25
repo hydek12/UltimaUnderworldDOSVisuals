@@ -19,6 +19,20 @@ The release command verifies the hashes of all four original tracks and the CUE 
 
 The release includes the Slasher of Veils combat poses, mixed and dedicated room combat and casting, native sprite lighting, and gameplay-driven DOS normal and monochrome shade maps. The [encounter audit](named-dialogue-audit.md#levels-59-recurring-creatures-and-special-models) records the remaining gameplay and art coverage. Delta bytes can vary with the xdelta3 version. The patched track hash identifies the reproduced data track.
 
+## Update Batocera after each local preview
+
+Set the following local Git configuration in the checkout that builds your previews:
+
+```sh
+git config --local uw.batoceraCue "/path/to/clean Japanese Rev 1.cue"
+git config --local uw.batoceraShare "/Volumes/share"
+```
+
+Every successful `build-local-preview.sh` run then packages the patched track with the three original audio tracks, verifies the CHD, and checks all extracted tracks and CUE indexes. It stages the CHD on the mounted share and replaces `roms/psx/Ultima Underworld (English Patch - DOS Visuals).chd` at the existing path after comparing the staged file. Launch the game from a fresh boot to use the new image.
+
+Set `CHDMAN` or local Git config `uw.batoceraChdman` if `chdman` is outside your PATH. Use `UW_SKIP_BATOCERA=1` for a local-only preview. If the share is unavailable, the build reports the deployment failure and keeps the verified local xdelta. The offline release command builds its separate release image locally.
+
+
 ## Run the current preview builder
 
 On macOS, install the Xcode command-line tools, Python 3.11 or later, and xdelta3. If xdelta3 is outside your PATH, set `XDELTA3` to its executable path. Compile the exporter from this checkout into a local build directory.

@@ -2,59 +2,15 @@
 """Build the English DOS-visual recipe and a verified split-track CHD locally."""
 
 import argparse
-import filecmp
-import hashlib
 import os
 from pathlib import Path
-import re
 import subprocess
 import tempfile
 
+from lanugo.disc_image import DISC_NAME, JAPANESE_SHA1, package_chd, read_cue, sha1
 
-JAPANESE_SHA1 = (
-    "937ae8cf9a65526f2622c39d34205941f22c10cb",
-    "f20f391b0c33e22621cd1c2a13d4171046da1219",
-    "635416f6871854ead90c9a6cab2cc4afbe2e0615",
-    "04786e51a431ac37910f7b2e3fc5294e44b3664f",
-)
+
 PATCHED_SHA1 = "78427bb7dea91c18fc2ca345865983a2ad6cc642"
-DISC_NAME = "Ultima Underworld (English Patch - DOS Visuals).chd"
-FILE_LINE = re.compile(r'FILE\s+"([^"]+)"\s+BINARY', re.IGNORECASE)
-
-
-def sha1(path):
-    with path.open("rb") as source:
-        return hashlib.file_digest(source, "sha1").hexdigest()
-
-
-def read_cue(path):
-    """Accept the supported Rev 1 split BIN layout and preserve its index lines."""
-    tracks = []
-    commands = []
-    for line in path.read_text(encoding="utf-8-sig").splitlines():
-        stripped = line.strip()
-        if not stripped or stripped.upper().startswith("REM "):
-            commands.append(line)
-            continue
-        match = FILE_LINE.fullmatch(stripped)
-        if match:
-            track = (path.parent / match[1]).resolve()
-            tracks.append(track)
-            commands.append(f'FILE "track-{len(tracks)}.bin" BINARY')
-            continue
-        commands.append(line)
-    layout = [" ".join(line.upper().split()) for line in commands
-              if line.strip() and not line.strip().upper().startswith("REM ")]
-    expected = ['FILE "TRACK-1.BIN" BINARY', "TRACK 01 MODE2/2352", "INDEX 01 00:00:00"]
-    for index in (2, 3, 4):
-        expected.extend([f'FILE "TRACK-{index}.BIN" BINARY', f"TRACK {index:02} AUDIO",
-                         "INDEX 00 00:00:00", "INDEX 01 00:03:00"])
-    if layout != expected or len(set(tracks)) != 4:
-        raise ValueError("Expected the Japanese Rev 1 split four-track CUE and its original indexes.")
-    for track in tracks:
-        if not track.is_file() or not track.stat().st_size or track.stat().st_size % 2352:
-            raise ValueError(f"Expected a complete 2352-byte-sector BIN: {track}")
-    return tracks, "\n".join(commands) + "\n"
 
 
 def build(args):
@@ -68,6 +24,7 @@ def build(args):
     builder = Path(__file__).resolve().with_name("build-local-preview.sh")
     env = os.environ.copy()
     env.pop("XDELTA", None)
+    env["UW_SKIP_BATOCERA"] = "1"
     with tempfile.TemporaryDirectory(prefix=".underworld-release-", dir=destination.parent) as directory:
         scratch = Path(directory)
         patch = scratch / "english-dos-visuals.xdelta"
@@ -83,20 +40,8 @@ def build(args):
         patched_sha1 = sha1(data_track)
         if patched_sha1 != PATCHED_SHA1:
             raise ValueError(f"Patched Track 1 differs from the qualified recipe: {patched_sha1}")
-        for index, track in enumerate(tracks[1:], 2):
-            (scratch / f"track-{index}.bin").symlink_to(track)
-        cue_path = scratch / "patched.cue"
-        cue_path.write_text(cue, encoding="utf-8")
         chd = scratch / DISC_NAME
-        chdman = env.get("CHDMAN", "chdman")
-        subprocess.run([chdman, "createcd", "-i", cue_path, "-o", chd], check=True)
-        subprocess.run([chdman, "verify", "-i", chd], check=True)
-        subprocess.run([chdman, "extractcd", "-i", chd, "-o", scratch / "readback.cue",
-                        "-ob", scratch / "readback-%t.bin", "-sb"], check=True)
-        extracted, _ = read_cue(scratch / "readback.cue")
-        for index, (track, copy) in enumerate(zip((data_track, *tracks[1:]), extracted, strict=True), 1):
-            if not filecmp.cmp(track, copy, shallow=False):
-                raise ValueError(f"CHD readback differs on track {index}.")
+        package_chd(tracks, cue, data_track, scratch, chd, env.get("CHDMAN", "chdman"))
 
         destination.mkdir(mode=0o700)
         published = []

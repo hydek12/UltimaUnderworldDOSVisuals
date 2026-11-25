@@ -238,3 +238,17 @@ PYTHONDONTWRITEBYTECODE=1 python3 "$project/lanugo/build_english.py" "$english_t
 
 printf 'Encoding and verifying the local xdelta…\n'
 "$project/build-rev1-patch.sh" --allow-expanded-track "$japanese_track" "$scratch/preview.bin" "$output"
+
+if [[ ${UW_SKIP_BATOCERA:-0} != 1 ]]; then
+    batocera_share=$(git -C "$project" config --local --get uw.batoceraShare 2>/dev/null || true)
+    if [[ -n $batocera_share ]]; then
+        batocera_cue=$(git -C "$project" config --local --get uw.batoceraCue 2>/dev/null || true)
+        if [[ -z $batocera_cue ]]; then
+            printf 'Batocera deployment needs the clean split CUE in Git config uw.batoceraCue. The local preview xdelta is available.\n' >&2
+            exit 1
+        fi
+        batocera_chdman=$(git -C "$project" config --local --get uw.batoceraChdman 2>/dev/null || true)
+        python3 "$project/lanugo/deploy_preview.py" "$batocera_share" "$batocera_cue" \
+            "$japanese_track" "$scratch/preview.bin" "${CHDMAN:-${batocera_chdman:-chdman}}"
+    fi
+fi
