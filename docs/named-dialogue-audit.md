@@ -393,3 +393,16 @@ DuckStation captured live actor projections and replayed ten action values from 
 | Total | 13 actor encounters across 10 banks | 636 | 144 |
 
 The Academy switched back to the primary bank with the correct floor owner. Tyball's verified draw used 37 unique ordering buckets after the original per-polygon log exceeded 128 entries. The combat xdelta round-trip and all four CHD track readbacks passed. Track 1 matched `619b7b76837d008690679e3c9812a0510991154b`. Both lighting recipes passed their xdelta round-trips. The default `--late-dialogue` recipe reproduced `e3e2845b85d665a1240c5c89fab828b8703850b2`.
+
+#### Game-selected dedicated combat actions
+
+DuckStation ran the combat preview with Track 1 `619b7b76837d008690679e3c9812a0510991154b`. The probe entered the encounter from a disposable checkpoint and assigned the creature a player target. The game chose the action and advanced its phases. The debugger adjusted the camera or forward-view selection for packet capture. The probe compared the Gazer and wizard texture page, palette, and four UV corners against the dedicated DOS tables. The ghoul check compared its palette and four UV corners.
+
+| Encounter | Native action | Result |
+| --- | --- | --- |
+| Level 6 bank 9, Academy ghoul (105) | Melee (`0x02`) | All five DOS phases matched. The same actor reached the native damage handler with the player as target. |
+| Level 6 bank 3, Academy Gazer (102) | Cast (`0x0d`) | All five DOS phases matched. The native dispatcher ran and the Gazer returned to stance. |
+| Level 4 bank 13, wizard (106) | Cast (`0x0d`) | All five DOS phases matched. The native dispatcher ran and the wizard returned to stance. |
+| Level 7 bank 1, Tyball (123) | Cast (`0x0d`) | All five DOS phases matched. The native dispatcher ran and Tyball returned to stance. |
+
+The Gazer cast after the probe entered the warren at tile (52, 52). Native AI selected the Gazer and Tyball casts at `0x800330a8` and the Level 4 wizard cast at `0x80032ec0`. The spell dispatcher confirmed the same actor in all three cases.
