@@ -163,7 +163,7 @@ The cumulative build uses additional room banks on Levels 5, 7, and 8, and exten
 
 Use `--slasher-combat` as the first argument to build the cumulative preview with the Slasher’s seven DOS combat sequences. The Level 9 bank fits all 31 combat frames at 9/16 texture resolution for the Slasher, with the original DOS frame rectangles and hotspots. Fixed combat poses use the forward three views. The other views use directional standing sprites, and the death pose uses all eight views. Action values without a mapped pose keep the PlayStation renderer.
 
-The expected Track 1 SHA-1 is `0ecbe059a548a7c765d8377e29cd9bcc4bf31cfd`. The preview also enables full-resolution combat art for imps, skeletons, and headless in their dedicated room banks. The imps have DOS casting sprites. See the [encounter audit](named-dialogue-audit.md#level-9-slasher-combat-preview) for the verified cases.
+The expected Track 1 SHA-1 is `2dbf1674c89160d7449d1d84c317270ea23d6605`. The preview also enables full-resolution combat art for imps, skeletons, and headless in their dedicated room banks. The imps have DOS casting sprites. See the [encounter audit](named-dialogue-audit.md#level-9-slasher-combat-preview) for the verified cases.
 
 The combat preview also selects DOS action frames per actor family in 24 mixed room layouts (32 banks) on Levels 1–5, 7, and 8. The two lighting previews inherit these tables. Room pages may use a lower common texture scale to fit the extra frames. Actions without a usable DOS source keep the native sprite. See the [mixed room audit](named-dialogue-audit.md#mixed-room-combat-and-casting).
 
@@ -171,7 +171,7 @@ The combat preview also selects DOS action frames per actor family in 24 mixed r
 
 Use `--native-sprite-lighting` as the first argument to the preview builder. It includes the Slasher combat preview and enables PlayStation depth-based lighting on DOS sprites in the Level 3 bandit bank and the Level 4 bat, grub, and rat bank. The lighting uses the same depth table as the native polygons and preserves the existing sprite geometry, palette, and combat fallbacks in those rooms.
 
-The expected Track 1 SHA-1 is `38a8db3138b077a4dd6f3f842420f96acaf007f3`. The [90% audit](named-dialogue-audit.md#90-native-sprite-lighting-preview) records the runtime and build checks.
+The expected Track 1 SHA-1 is `81824c49d52dd52f917a6e8ddb6805f0c3891935`. The [90% audit](named-dialogue-audit.md#90-native-sprite-lighting-preview) records the runtime and build checks.
 
 ### DOS shade maps and monochrome preview
 
@@ -179,4 +179,4 @@ Use `--dos-shade-maps` as the first argument to the preview builder. It includes
 
 In the cumulative preview, the game resolves equipped lights and active spells into one effective light level. The DOS renderer reads that level for each supported goblin draw. Level 5 (Night Vision) selects the monochrome map. The other levels use the normal map. Room bank loads leave the effective level under the game's control.
 
-The expected Track 1 SHA-1 is `7c152280e8c9d11802deab3ae77de827b47ab401`. The [gameplay audit](named-dialogue-audit.md#100-gameplay-driven-dos-lighting) records the torch and spell transitions, disc checks, and default recipe regression.
+The expected Track 1 SHA-1 is `d1f4ca6a6f8cdbb469e58a81a0fd52265a88eaec`. The [gameplay audit](named-dialogue-audit.md#100-gameplay-driven-dos-lighting) records the torch and spell transitions, disc checks, and default recipe regression.
