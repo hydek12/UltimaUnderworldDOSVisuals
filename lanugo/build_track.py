@@ -734,9 +734,12 @@ def pack_mixed_page(families, page, bits, scales):
                 raise
 
 
-def mixed_table_locations(tables, room_bank, academy_default=False):
+def mixed_table_locations(tables, room_bank, academy_default=False, uploader_offset=0x1400):
     # Gaps between renderer stubs, uploader, and camera grid.
     windows = [(0x804, 0xc00), (0x1000, 0x1400), (0x1600, 0x1c00), (0x1e00, 0x2000)]
+    if uploader_offset == 0x1e00:
+        windows[1] = (0x1000, academy_banks.COMBAT_ACTIONS)
+        windows.pop()
     if academy_default:
         # The Academy camera grid lives at 0xc80.
         windows[-1] = (0x1c00, 0x2000)
@@ -777,6 +780,10 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     academy_default_combat = room_combat and academy_bank is None and room_bank is None
     mixed_combat = (dedicated_combat or academy_default_combat
                     or room_combat and room_bank in academy_banks.MIXED_COMBAT_BANKS)
+    # These shared banks need two full frame tables. Keep the uploader past the room grid.
+    uploader_offset = 0x1e00 if mixed_combat and room_bank in (
+        "gray-green-goblins", "gray-green-goblins-two", "lurkers-goblins-seven",
+    ) else 0x1400
     if expanded_level_six:
         # Keep persistent frame lookups below 0x801f8000, where the native floor load writes.
         if not (casting and combat and extra_type == 92 and texture_pages == creature_atlas.TEXTURE_PAGES[:1]):
@@ -805,8 +812,6 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             directional_only = {
                 "warren": (97,),
                 "imps": (66, 73),
-                # Leave room for the goblin combat table and retain native lurker combat.
-                "lurkers-goblins-seven": (87, 116),
             }.get(room_bank or academy_bank)
             mixed_sources, family_actions = zip(*(
                 (creature_sources(variants, types), ())
@@ -967,7 +972,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         if mixed_combat:
             tables = tuple(creature_atlas.compact_frame_table(table, slots)
                            for table, slots in zip(directional, family_actions, strict=True))
-            locations = mixed_table_locations(tables, room_bank, academy_default_combat)
+            locations = mixed_table_locations(tables, room_bank, academy_default_combat, uploader_offset)
         else:
             tables = tuple(creature_atlas.compact_frame_table(table) for table in directional)
             locations = []
@@ -1062,7 +1067,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             ORDER_WRITER_RAM, *order_log, unique_buckets=unique_order_buckets,
         ),
         0x800: b"" if mixed_combat or split_format or (shared_format and not slasher_combat) else metadata,
-        0xc00: jump(PAYLOAD_RAM + 0x1400) + bytes(4),
+        0xc00: jump(PAYLOAD_RAM + uploader_offset) + bytes(4),
         0xe00: menu_return(VARIANT_UPLOAD_RAM, floor_aware=True),
         0xe80: vram_guard(lower_floor=True, right_edge=texture_pages[-1][0] + 64),
     }
@@ -1077,11 +1082,13 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         sections.update(academy_sections)
     pages = tuple((x, y) for x, y, _ in texture_pages)
     blob = compact_payload(sections, images, clut, pages, texture_pages[0][2], clut_rect,
-                           EXPANDED_RESIDENT_BYTES if expanded_level_six or room_default else LOWER_RESIDENT_BYTES)
+                           EXPANDED_RESIDENT_BYTES if expanded_level_six or room_default else LOWER_RESIDENT_BYTES,
+                           uploader_offset=uploader_offset)
     return blob.ljust(academy_banks.ROOM_STRIDE, b"\0") if room_bank or room_default else blob
 
 
-def compact_payload(sections, images, clut, pages, texture_height, clut_rect, resident_bytes=LOWER_RESIDENT_BYTES):
+def compact_payload(sections, images, clut, pages, texture_height, clut_rect, resident_bytes=LOWER_RESIDENT_BYTES,
+                    *, uploader_offset=0x1400):
     bands = []
     offset = resident_bytes
     for (x, y), image in zip(pages, images, strict=True):
@@ -1092,7 +1099,7 @@ def compact_payload(sections, images, clut, pages, texture_height, clut_rect, re
     sections[offset] = clut
     bands.append((clut_rect, offset, 2048))
     sections[0x10] = b"".join(struct.pack("<4H", *rect) for rect, _, _ in bands)
-    sections[0x1400] = variant_uploader(bands, False, True, PAYLOAD_RAM + 0x1400)
+    sections[uploader_offset] = variant_uploader(bands, False, True, PAYLOAD_RAM + uploader_offset)
     return assemble_payload(sections, offset + 2048)
 
 

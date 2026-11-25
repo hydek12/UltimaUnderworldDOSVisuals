@@ -1,11 +1,11 @@
 level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_y,home_x,home_y,dos_candidate_offsets,dos_animation,dos_asset,dos_palette,idle_frames_by_direction,walk_frames_by_direction,spawn_bank,west_bank,preview_directional_views,release_directional_views,preview_spawn_dos_actions,preview_west_dos_actions,dos_source_actions,preview_missing_actions,activation_evidence
 1,0x9a4048,64,0,1,58,2,58,2,0x005988,22,rotgrub,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
-1,0x9a4064,66,0,0,47,4,47,4,,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+1,0x9a4064,66,0,0,47,4,47,4,,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Normal controller rest spawned actor from trap 983
 1,0x9a4080,69,0,1,55,4,55,4,0x005a0f,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 1,0x9a409c,64,0,1,5,6,5,6,0x005cb2,22,rotgrub,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
 1,0x9a40b8,66,0,1,45,6,45,6,0x005a45,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 1,0x9a40d4,66,0,1,50,6,50,6,0x005a2a,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
-1,0x9a40f0,68,0,0,14,7,14,7,,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+1,0x9a40f0,68,0,0,14,7,14,7,,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Normal controller rest spawned actor from trap 954
 1,0x9a410c,90,67,1,17,7,17,7,0x005b6e,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fighters,fighters,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 1,0x9a4128,67,0,1,22,8,22,8,0x005ce8,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 1,0x9a4144,67,0,1,18,12,18,12,0x0058b0,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
@@ -15,7 +15,7 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 1,0x9a41b4,90,0,1,33,15,33,15,0x005b53,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fighters,fighters,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 1,0x9a41d0,66,0,1,12,16,12,16,0x00585f,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 1,0x9a41ec,72,0,1,2,17,2,17,0x0058cb,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
-1,0x9a4208,67,0,0,3,17,3,17,,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+1,0x9a4208,67,0,0,3,17,3,17,,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Normal controller rest spawned actor from trap 863
 1,0x9a4224,67,0,1,2,19,2,19,0x005901,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 1,0x9a4240,90,20,1,22,19,22,19,0x005ba4,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fighters,fighters,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 1,0x9a425c,75,0,0,12,20,12,20,0x005895,18,imp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,entrance-imp,entrance-imp,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
@@ -28,7 +28,7 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 1,0x9a4320,77,0,0,3,33,3,33,,0,gngob32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Normal controller movement triggered native create trap 811
 1,0x9a433c,65,0,1,26,33,26,33,0x0057f3,9,slug,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 1,0x9a4358,65,0,0,27,34,27,34,,9,slug,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
-1,0x9a4374,71,66,1,15,35,15,35,0x005952,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a4374,71,66,1,15,35,15,35,0x005952,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 1,0x9a4390,74,0,1,54,35,54,35,0x0057a2,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 1,0x9a43ac,77,0,1,3,38,3,38,0x005937,0,gngob32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 1,0x9a43c8,77,0,1,11,38,11,38,0x00591c,0,gngob32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
@@ -39,21 +39,21 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 1,0x9a4454,66,0,1,23,43,23,43,0x005844,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 1,0x9a4470,66,0,1,24,43,24,43,0x00580e,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 1,0x9a448c,68,0,1,27,46,27,46,0x005c2b,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
-1,0x9a44a8,71,255,1,4,47,4,47,0x005736,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-1,0x9a44c4,80,7,1,60,51,60,51,0x005b38,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a44a8,71,255,1,4,47,4,47,0x005736,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+1,0x9a44c4,80,7,1,60,51,60,51,0x005b38,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 1,0x9a44e0,76,65,1,45,52,45,52,0x005ab1,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 1,0x9a44fc,76,0,1,52,52,52,52,0x005acc,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 1,0x9a4518,68,0,1,37,54,37,54,0x005c46,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 1,0x9a4534,83,0,1,19,54,19,55,0x005c10,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 1,0x9a4550,76,0,1,46,55,46,55,0x005b02,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 1,0x9a456c,87,0,1,51,55,51,55,0x0057d8,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
-1,0x9a4588,80,8,1,57,55,57,55,0x005c61,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-1,0x9a45a4,70,10,1,4,56,4,56,0x005a60,0,gngob32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,gray-green-goblins,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a4588,80,8,1,57,55,57,55,0x005c61,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+1,0x9a45a4,70,10,1,4,56,4,56,0x005a60,0,gngob32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,gray-green-goblins,2,2,,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 1,0x9a45c0,76,64,1,45,56,45,56,0x005b1d,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 1,0x9a45dc,76,0,1,47,56,47,56,0x005ae7,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
-1,0x9a45f8,71,9,1,2,57,2,57,0x005a7b,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-1,0x9a4614,76,0,1,51,58,51,58,0x005787,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
-1,0x9a4630,80,0,1,52,59,52,59,0x00576c,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a45f8,71,9,1,2,57,2,57,0x005a7b,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+1,0x9a4614,76,0,1,51,58,51,58,0x005787,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,,Initially linked
+1,0x9a4630,80,0,1,52,59,52,59,0x00576c,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 1,0x9a464c,65,0,1,37,60,37,60,0x00596d,9,slug,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 2,0x9a596c,84,2,1,60,3,60,3,0x00d8f0,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,dwarves,dwarves,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 2,0x9a5988,74,0,1,22,4,22,4,0x00d3fb,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
@@ -90,11 +90,11 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 2,0x9a5cec,72,0,1,34,38,34,38,0x00d5ab,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 2,0x9a5d08,72,0,1,35,38,35,38,0x00d590,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 2,0x9a5d24,91,0,1,28,42,28,42,0x00d7ac,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
-2,0x9a5d40,91,0,0,29,42,29,42,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+2,0x9a5d40,91,0,0,29,42,29,42,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Normal controller rest spawned actor from trap 703
 2,0x9a5d5c,69,0,1,4,44,4,44,0x00d668,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 2,0x9a5d78,91,0,0,9,44,9,44,0x00d776,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Linked on floor load
 2,0x9a5d94,83,0,1,37,44,37,44,0x00d5c6,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
-2,0x9a5db0,83,0,0,43,48,43,48,,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+2,0x9a5db0,83,0,0,43,48,43,48,,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Normal controller rest spawned actor from trap 684
 2,0x9a5dcc,91,0,1,21,52,21,52,0x00d791,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 2,0x9a5de8,74,0,1,51,53,51,53,0x00d64d,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 2,0x9a5e04,74,0,1,59,53,59,53,0x00d632,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
@@ -109,9 +109,9 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 2,0x9a5f00,82,0,1,27,58,27,58,0x00d7c7,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
 2,0x9a5f1c,82,0,1,26,59,26,59,0x00d7fd,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
 2,0x9a5f38,82,0,0,27,59,27,59,0x00d818,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Linked on floor load
-2,0x9a5f54,78,0,1,55,60,55,60,0x00d431,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins-two,gray-green-goblins-two,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
-2,0x9a5f70,80,0,1,56,60,56,60,0x00d359,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins-two,gray-green-goblins-two,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-2,0x9a5f8c,78,0,1,55,61,55,61,0x00d416,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins-two,gray-green-goblins-two,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+2,0x9a5f54,78,0,1,55,60,55,60,0x00d431,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins-two,gray-green-goblins-two,2,2,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,,Initially linked
+2,0x9a5f70,80,0,1,56,60,56,60,0x00d359,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins-two,gray-green-goblins-two,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+2,0x9a5f8c,78,0,1,55,61,55,61,0x00d416,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins-two,gray-green-goblins-two,2,2,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,,Initially linked
 3,0x9a7248,67,0,1,21,2,21,2,0x01523a,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 3,0x9a7264,72,0,1,21,3,21,3,0x015162,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 3,0x9a7280,73,0,0,32,3,32,3,,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
@@ -375,8 +375,8 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 6,0x9acb78,82,0,1,43,59,43,59,0x02c328,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Initially linked
 6,0x9acb94,91,0,1,46,60,46,60,0x02c30d,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 6,0x9acbb0,82,0,1,41,61,41,61,0x02c343,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Initially linked
-7,0x9add7c,116,0,1,7,1,7,1,0x03439e,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-7,0x9add98,116,0,1,9,2,9,2,0x034368,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9add7c,116,0,1,7,1,7,1,0x03439e,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+7,0x9add98,116,0,1,9,2,9,2,0x034368,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 7,0x9addb4,78,209,1,21,2,21,2,0x0341d3,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 7,0x9addd0,111,0,1,24,2,24,2,0x0342ab,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9addec,102,0,1,39,2,39,2,0x033e8e,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
@@ -384,15 +384,15 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 7,0x9ade24,118,0,1,27,3,27,3,0x033efa,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 7,0x9ade40,111,255,1,20,5,20,5,0x034224,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9ade5c,78,209,1,22,5,22,5,0x033f66,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,troll-seven-recurring,2,2,,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,Initially linked
-7,0x9ade78,116,0,1,2,6,2,6,0x0342e1,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-7,0x9ade94,87,0,1,4,7,4,7,0x034317,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9ade78,116,0,1,2,6,2,6,0x0342e1,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+7,0x9ade94,87,0,1,4,7,4,7,0x034317,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 7,0x9adeb0,78,255,1,19,7,19,7,0x03419d,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 7,0x9adecc,78,209,1,20,7,20,7,0x0341b8,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 7,0x9adee8,66,0,1,3,8,3,8,0x033b7f,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-lurkers,bats-lurkers,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 7,0x9adf04,78,255,1,18,8,18,8,0x034167,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,lurkers-goblins-seven,2,2,,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 7,0x9adf20,118,0,0,33,8,33,8,,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Normal controller movement triggered native create trap 969
-7,0x9adf3c,116,0,1,2,9,2,9,0x0342fc,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-lurkers,lurkers-goblins-seven,2,2,00 01 02 03 07 0c,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-7,0x9adf58,116,0,1,15,9,15,9,0x0341ee,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9adf3c,116,0,1,2,9,2,9,0x0342fc,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-lurkers,lurkers-goblins-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+7,0x9adf58,116,0,1,15,9,15,9,0x0341ee,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 7,0x9adf74,102,0,1,30,10,30,10,0x034209,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9adf90,123,231,1,54,10,54,10,0x033fb7,29,tybal,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,tyball,tyball,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9adfac,104,208,1,19,14,19,14,0x034533,26,fight32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,cardon,cardon,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
@@ -401,9 +401,9 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 7,0x9ae000,66,0,1,10,22,12,22,0x033b9a,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats-seven,bats-rats-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 7,0x9ae01c,80,222,1,27,22,27,22,0x033ca8,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-guards-seven,gray-guards-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 7,0x9ae038,66,0,1,37,22,37,22,0x033c57,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats-seven,bats-rats-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
-7,0x9ae054,116,0,1,6,23,6,23,0x0342c6,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,bats-lurkers,2,2,,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9ae054,116,0,1,6,23,6,23,0x0342c6,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,bats-lurkers,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 7,0x9ae070,66,0,1,4,23,7,23,0x033b49,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-lurkers,bats-lurkers,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
-7,0x9ae08c,116,0,1,23,23,23,23,0x034290,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9ae08c,116,0,1,23,23,23,23,0x034290,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 7,0x9ae0a8,80,222,1,27,24,27,24,0x033edf,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-guards-seven,gray-guards-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 7,0x9ae0c4,80,222,1,29,24,29,24,0x033cde,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-guards-seven,gray-guards-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 7,0x9ae0e0,80,222,1,30,24,30,24,0x033e07,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-guards-seven,gray-guards-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked

@@ -305,7 +305,7 @@ ROOM_FORMATS = {**LEVEL_ONE_FORMATS, "dwarves": (8, 16), "corby": (8, 15),
 SPLIT_ROOM_FORMATS = {"prisoner": (4, (12, 16)), "town": (8, (11, 11)), "carasso": (8, (16, 11)),
                       **RECURRING_FORMATS}
 MIXED_COMBAT_BANKS = (SHARED_PAGE_FORMATS.keys() | SPLIT_ROOM_FORMATS.keys()) - {
-    "hazards-nine", "gray-green-goblins", "gray-green-goblins-two",
+    "hazards-nine",
 }
 DEDICATED_ROOM_COMBAT_BANKS = frozenset((
     "wizards", "judy", "anjor", "tyball", "ghouls-five", "ghouls-five-recurring", "ghouls-eight", "fire", "spiders",
