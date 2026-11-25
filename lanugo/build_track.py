@@ -39,6 +39,8 @@ OPTIONS_DRAW_ITEMS = 0x8005BEA0
 OPTIONS_DRAW_CALL = 0x8005C3C0
 INVENTORY_HELP = MENU_CODE_RAM + 0x160
 RUNE_HELP = MENU_CODE_RAM + 0x500
+MAP_HELP = MENU_CODE_RAM + 0x600
+MAP_SUBMIT_CALL = 0x80013A34
 RUNE_SUBMIT_CALL = 0x800445A0
 SPELL_SUBMIT_CALL = 0x8004A204
 DIALOGUE_HELP = MENU_CODE_RAM + 0xc0
@@ -1454,6 +1456,41 @@ def dialogue_help(submit_help):
     return code.ljust(text - DIALOGUE_HELP, b"\0") + advance + replies
 
 
+def map_help():
+    """Offer the marker toggle only where the native cursor can mark a tile."""
+    exit_label = menu_label("× Exit")
+    mark_label = menu_label("○ Toggle marker  × Exit")
+    labels = MAP_HELP + 0x80
+    c = Code(MAP_HELP)
+    c.imm("addiu", "sp", "sp", -24)
+    c.mem("sw", "ra", 20, "sp")
+    # The map renderer passes the current cursor packet as a physical RAM address.
+    c.imm("lui", "t0", "zero", 0x8000)
+    c.alu("OR", "t0", "t0", "a2")
+    c.mem("lh", "t1", 8, "t0")  # Cursor X.
+    c.mem("lh", "t2", 0x1a, "t0")  # Cursor Y.
+    c.imm("addiu", "t1", "t1", -20)
+    # The native tile conversion truncates (y - 27) / 3 toward zero.
+    c.imm("addiu", "t2", "t2", -25)
+    c.imm("sltiu", "t1", "t1", 64 * 3)
+    c.imm("sltiu", "t2", "t2", 64 * 3 + 2)
+    c.alu("AND", "t1", "t1", "t2")
+    c.address("a0", labels)
+    c.branch("beq", "t1", "zero", "draw")
+    c.nop()
+    c.address("a0", labels + len(exit_label))
+    c.label("draw")
+    draw_menu_legend(c, y=217)
+    c.mem("lw", "ra", 20, "sp")
+    c.nop()
+    c.jump(SUBMIT_MENU_FRAME)
+    c.imm("addiu", "sp", "sp", 24)
+    code = c.out()
+    if len(code) > labels - MAP_HELP:
+        raise ValueError("Map controls routine overlaps its labels.")
+    return code.ljust(labels - MAP_HELP, b"\0") + exit_label + mark_label
+
+
 def menu_startup(spell_code, submit_help):
     """Copy the menu code above the lowered stack before native heap setup."""
     sections = {
@@ -1461,8 +1498,9 @@ def menu_startup(spell_code, submit_help):
         DIALOGUE_HELP - MENU_CODE_RAM: dialogue_help(submit_help),
         INVENTORY_HELP - MENU_CODE_RAM: inventory_help(),
         RUNE_HELP - MENU_CODE_RAM: spell_code,
+        MAP_HELP - MENU_CODE_RAM: map_help(),
     }
-    cleanup_offset = 0x600
+    cleanup_offset = 0x6b0
     length = cleanup_offset + 0x40
     source = MENU_STARTUP + 0x40
 
@@ -1571,6 +1609,12 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
             (OPTIONS_DRAW_CALL, jump(OPTIONS_DRAW_ITEMS, True), jump(OPTIONS_HELP, True)),
             (INVENTORY_SUBMIT_CALL, jump(SUBMIT_MENU_FRAME, True), jump(INVENTORY_HELP, True)),
             (RUNE_SUBMIT_CALL, jump(SUBMIT_MENU_FRAME, True), jump(RUNE_HELP, True)),
+            (MAP_SUBMIT_CALL, jump(SUBMIT_MENU_FRAME, True), jump(MAP_HELP, True)),
+            # Keep the map and cursor uploads beyond the font texture. Move the
+            # map CLUT past the font's palettes on the shared last VRAM row.
+            (0x8001367C, struct.pack("<I", 0x34070140), struct.pack("<I", 0x34070180)),
+            (0x800136EC, struct.pack("<I", 0x340701E0), struct.pack("<I", 0x34070220)),
+            (0x80013718, struct.pack("<I", 0x00002821), struct.pack("<I", 0x34050100)),
             (SPELL_SUBMIT_CALL, jump(SUBMIT_MENU_FRAME, True), jump(spell_help, True)),
             (DIALOGUE_SUBMIT_CALL, jump(SUBMIT_MENU_FRAME, True), jump(DIALOGUE_HELP, True)),
         )
