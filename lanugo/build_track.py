@@ -37,7 +37,7 @@ NATIVE_STACK_TABLE_ENTRY = 0x8001243C
 OPTIONS_HELP = MENU_CODE_RAM
 OPTIONS_DRAW_ITEMS = 0x8005BEA0
 OPTIONS_DRAW_CALL = 0x8005C3C0
-INVENTORY_HELP = MENU_CODE_RAM + 0x160
+INVENTORY_HELP = MENU_CODE_RAM + 0x1a0
 RUNE_HELP = MENU_CODE_RAM + 0x500
 MAP_HELP = MENU_CODE_RAM + 0x600
 MAP_SUBMIT_CALL = 0x80013A34
@@ -1224,19 +1224,16 @@ def menu_font_sector(track):
     return lba, form1_sector(original, texture)
 
 
-def draw_menu_legend(c, y=210, right_edge=None):
+def draw_menu_legend(c, y=210, right_edge=None, align_right=False):
     c.mem("sw", "a0", 16, "sp")
-    if y is None:
-        c.mem("sw", "a1", 12, "sp")
     c.jump(MENU_TEXT_WIDTH, True)
     c.nop()
     c.mem("lw", "a2", 16, "sp")
-    c.imm("ori", "a0", "zero", 320)
+    c.imm("ori", "a0", "zero", right_edge if align_right else 320)
     c.alu("subu", "a0", "a0", "v0")
-    if y is None:
-        c.mem("lw", "a1", 12, "sp")
-    c.shift("sra", "a0", "a0", 1)
-    if right_edge is not None:
+    if not align_right:
+        c.shift("sra", "a0", "a0", 1)
+    if right_edge is not None and not align_right:
         c.imm("ori", "t0", "zero", right_edge)
         c.alu("subu", "t0", "t0", "v0")
         c.alu("slt", "t1", "a0", "t0")
@@ -1245,10 +1242,7 @@ def draw_menu_legend(c, y=210, right_edge=None):
         c.alu("addu", "a0", "t0", "zero")
         c.label("legend_fits")
     c.jump(MENU_TEXT_DRAW, True)
-    if y is None:
-        c.nop()
-    else:
-        c.imm("ori", "a1", "zero", y)
+    c.imm("ori", "a1", "zero", y)
 
 
 def options_help():
@@ -1397,11 +1391,9 @@ def rune_spell_help():
     c.nop()
     c.address("a0", label_address + len(labels[0]) + len(labels[1]))
     c.label("draw")
-    c.imm("ori", "a1", "zero", 215)
-    submit_help = c.origin + 4 * len(c.words)
     c.imm("addiu", "sp", "sp", -24)
     c.mem("sw", "ra", 20, "sp")
-    draw_menu_legend(c, y=None)
+    draw_menu_legend(c, y=215)
     c.mem("lw", "ra", 20, "sp")
     c.nop()
     c.jump(SUBMIT_MENU_FRAME)
@@ -1409,19 +1401,18 @@ def rune_spell_help():
     code = c.out()
     if len(code) > label_address - RUNE_HELP:
         raise ValueError("Rune and spell controls routine overlaps its labels.")
-    return spell_help, submit_help, code.ljust(label_address - RUNE_HELP, b"\0") + b"".join(labels)
+    return spell_help, code.ljust(label_address - RUNE_HELP, b"\0") + b"".join(labels)
 
 
-def dialogue_help(submit_help):
+def dialogue_help():
     """Show controls only when the conversation loop is waiting for input."""
     advance = menu_label("○ Continue")
     replies = menu_label("○ Reply")
-    text = DIALOGUE_HELP + 0x68
+    text = DIALOGUE_HELP + 0xc0
     c = Code(DIALOGUE_HELP)
     # The shared frame routine saves its caller at sp+16. The callers below
     # are all in 0x8002xxxx, so their low half identifies the dialogue state.
     c.mem("lw", "t0", 16, "sp")
-    c.imm("ori", "a1", "zero", 128)  # Between the two text panels.
     c.imm("ori", "t1", "zero", 0x6f9c)  # Reply selection.
     c.imm("andi", "t0", "t0", 0xffff)
     c.branch("beq", "t0", "t1", "replies")
@@ -1443,13 +1434,20 @@ def dialogue_help(submit_help):
     c.nop()
     c.label("advance")
     c.imm("lui", "a0", "zero", text >> 16)
-    c.jump(submit_help)
+    c.branch("beq", "zero", "zero", "draw")
     c.imm("ori", "a0", "a0", text)
     c.label("replies")
     c.branch("beq", "s0", "zero", "native")  # The reply was just confirmed.
     c.imm("lui", "a0", "zero", text >> 16)
-    c.jump(submit_help)
     c.imm("ori", "a0", "a0", text + len(advance))
+    c.label("draw")
+    c.imm("addiu", "sp", "sp", -24)
+    c.mem("sw", "ra", 20, "sp")
+    draw_menu_legend(c, y=217, right_edge=304, align_right=True)
+    c.mem("lw", "ra", 20, "sp")
+    c.nop()
+    c.jump(SUBMIT_MENU_FRAME)
+    c.imm("addiu", "sp", "sp", 24)
     code = c.out()
     if len(code) > text - DIALOGUE_HELP:
         raise ValueError("Dialogue controls routine overlaps its labels.")
@@ -1491,11 +1489,11 @@ def map_help():
     return code.ljust(labels - MAP_HELP, b"\0") + exit_label + mark_label
 
 
-def menu_startup(spell_code, submit_help):
+def menu_startup(spell_code):
     """Copy the menu code above the lowered stack before native heap setup."""
     sections = {
         OPTIONS_HELP - MENU_CODE_RAM: options_help(),
-        DIALOGUE_HELP - MENU_CODE_RAM: dialogue_help(submit_help),
+        DIALOGUE_HELP - MENU_CODE_RAM: dialogue_help(),
         INVENTORY_HELP - MENU_CODE_RAM: inventory_help(),
         RUNE_HELP - MENU_CODE_RAM: spell_code,
         MAP_HELP - MENU_CODE_RAM: map_help(),
@@ -1557,8 +1555,8 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
         DRAW_GATE: gate(DRAW_GATE, DRAW_RAM, walking=walking, floor_aware=floor_aware),
     }
     if menu_controls:
-        spell_help, submit_help, spell_code = rune_spell_help()
-        code[MENU_STARTUP] = menu_startup(spell_code, submit_help)
+        spell_help, spell_code = rune_spell_help()
+        code[MENU_STARTUP] = menu_startup(spell_code)
     if academy_runtime:
         code.update(academy_banks.gates())
     if walking:
@@ -1617,6 +1615,8 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
             (0x80013718, struct.pack("<I", 0x00002821), struct.pack("<I", 0x34050100)),
             (SPELL_SUBMIT_CALL, jump(SUBMIT_MENU_FRAME, True), jump(spell_help, True)),
             (DIALOGUE_SUBMIT_CALL, jump(SUBMIT_MENU_FRAME, True), jump(DIALOGUE_HELP, True)),
+            # Raise the lower panel's reply rows six pixels to clear the footer.
+            (0x80028AB8, struct.pack("<I", 0x34110090), struct.pack("<I", 0x3411008A)),
         )
     for address, expect, replace in hooks:
         offset = 2048 + address - EXE_LOAD
