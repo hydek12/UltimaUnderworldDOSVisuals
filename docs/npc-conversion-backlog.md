@@ -134,10 +134,14 @@ For the final Level 7 spider, the debugger staged the player at (11, 40), facing
 
 On the Academy Spider Combat CHD in DuckStation, the debugger staged the player by the movement trigger at (40, 55). With forward controller input, the native dispatcher followed move trigger 589 to create trap 588. The target tile (42, 57) did not contain a Gazer before the handler call. On return, it contained a live type-102 Gazer in slot 161, created from template 173.
 
+## Level 7 Reaper movement trigger
+
+On the Academy Spider Combat CHD in DuckStation, the debugger staged the player at (37, 9), facing west. Forward controller input reached move trigger 960 at (36, 9), which dispatched create trap 969. The handler used template 240 and linked a live type-118 Reaper in slot 161 at (33, 8). The target tile held no Reaper before the call.
+
 ## Remaining checks
 
 - **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 409 records, including slot `0d` for 208. There are 190 records across 34 types with one or more decodable source slots missing from a view that already registers their directional art. Slot `0d` appears in the source for 76 of the candidates. Check whether the original PSX AI can select the corresponding action before mapping it. The Level 6 warren Ghost is an intentional exception and uses native combat. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
-- **Native activation.** Both sampled views already register DOS directional art for all 107 records marked noninitial by the archive heuristic. Of those, 58 have observed floor-load or controller activation and 49 have a create trap identified with the ordinary trigger chain still open. The Level 3 green goblin and the three Level 6 spiders were spawned by controller-driven rest. The Level 5 fire elemental and five Level 7 spiders and one Gazer were spawned by controller-driven movement. All three Level 7 fire elemental activation records have been verified.
+- **Native activation.** Both sampled views already register DOS directional art for all 107 records marked noninitial by the archive heuristic. Of those, 59 have observed floor-load or controller activation and 48 have a create trap identified with the ordinary trigger chain still open. The Level 3 green goblin and the three Level 6 spiders were spawned by controller-driven rest. The Level 5 fire elemental and the five Level 7 spiders, Gazer, and Reaper were spawned by controller-driven movement. All three Level 7 fire elemental activation records have been verified.
 
 ## Regenerate the inventory
 

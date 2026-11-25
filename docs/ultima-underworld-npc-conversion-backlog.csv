@@ -390,7 +390,7 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 7,0x9adecc,78,209,1,20,7,20,7,0x0341b8,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 7,0x9adee8,66,0,1,3,8,3,8,0x033b7f,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-lurkers,bats-lurkers,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 7,0x9adf04,78,255,1,18,8,18,8,0x034167,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,lurkers-goblins-seven,2,2,,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,Initially linked
-7,0x9adf20,118,0,0,33,8,33,8,,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Create trap identified
+7,0x9adf20,118,0,0,33,8,33,8,,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Normal controller movement triggered native create trap 969
 7,0x9adf3c,116,0,1,2,9,2,9,0x0342fc,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-lurkers,lurkers-goblins-seven,2,2,00 01 02 03 07 0c,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 7,0x9adf58,116,0,1,15,9,15,9,0x0341ee,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 7,0x9adf74,102,0,1,30,10,30,10,0x034209,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
