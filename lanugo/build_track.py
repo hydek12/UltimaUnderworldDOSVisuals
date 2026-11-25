@@ -38,7 +38,7 @@ OPTIONS_HELP = MENU_CODE_RAM
 OPTIONS_DRAW_ITEMS = 0x8005BEA0
 OPTIONS_DRAW_CALL = 0x8005C3C0
 INVENTORY_HELP = MENU_CODE_RAM + 0x160
-RUNE_HELP = MENU_CODE_RAM + 0x300
+RUNE_HELP = MENU_CODE_RAM + 0x500
 RUNE_SUBMIT_CALL = 0x800445A0
 SPELL_SUBMIT_CALL = 0x8004A204
 DIALOGUE_HELP = MENU_CODE_RAM + 0xc0
@@ -1238,67 +1238,101 @@ def options_help():
 
 
 def inventory_help():
-    """Select a legend using the native inventory cursor, selection and container."""
+    """Show the actions for the focused slot and the current inventory state."""
     labels = (
-        b"D-Pad: Move  X:Exit\x1f",
-        b"D-Pad: Move  X:Back\x1f",
-        b"D-Pad O: Take X:Exit\x1f",
-        b"D-Pad O: Take X:Back\x1f",
-        b"D-Pad: Move  X:Cancel\x1f",
-        b"D-Pad O:Place X:Cancel\x1f",
+        b"Square: Drop\x1f",
+        b"Circle: Pick up\x1f",
+        b"Circle: Pick up  Square: Drop\x1f",
+        b"Circle: Place\x1f",
+        b"Circle: Place  Square: Drop\x1f",
+        b"Triangle: Use\x1f",
+        b"Triangle: Open\x1f",
+        b"D-Pad: Move   Cross: Exit\x1f",
+        b"D-Pad: Move   Cross: Back\x1f",
+        b"D-Pad: Move   Cross: Cancel\x1f",
     )
-    table_offset = 0xd0
-    table_address = INVENTORY_HELP + table_offset
-    address = table_address + 4 * len(labels)
+    labels_offset = 0x250
     pointers = []
+    address = INVENTORY_HELP + labels_offset
     for label in labels:
         pointers.append(address)
         address += len(label)
 
     c = Code(INVENTORY_HELP)
-    c.imm("addiu", "sp", "sp", -24)
-    c.mem("sw", "ra", 20, "sp")
-    c.mem("lw", "t0", 0x31c, "gp")  # Container pointer.
-    c.branch("bne", "s3", "zero", "held")  # The inventory loop has a selected source.
-    c.nop()
+    c.imm("addiu", "sp", "sp", -32)
+    c.mem("sw", "ra", 28, "sp")
+    c.shift("sll", "t0", "s1", 1)
+    c.alu("addu", "t0", "s6", "t0")
+    c.mem("lh", "a0", 0, "t0")
+    c.jump(0x80045380, True)  # Same read-only item lookup as native Triangle.
+    c.imm("ori", "a1", "zero", 2)
+    c.mem("sw", "v0", 20, "sp")
+    c.imm("ori", "t0", "zero", 0x13)  # Native Square excludes this cursor.
+    c.alu("XOR", "t0", "s1", "t0")
     c.alu("sltu", "t0", "zero", "t0")
-    # Use the same cursor-to-inventory-slot lookup as the native Circle handler.
-    c.shift("sll", "t1", "s1", 1)
-    c.alu("addu", "t1", "s6", "t1")
-    c.mem("lh", "t1", 0, "t1")
-    c.address("t2", 0x800AE9A8)
-    c.alu("addu", "t1", "t2", "t1")
-    c.mem("lb", "t1", 0, "t1")
-    c.address("t2", 0x801D5E54)
-    c.shift("sll", "t1", "t1", 1)
-    c.alu("addu", "t1", "t2", "t1")
-    c.mem("lhu", "t1", 0, "t1")
+    c.alu("sltu", "t1", "zero", "v0")
+    c.alu("AND", "t0", "t0", "t1")  # Square is available on occupied drop slots.
+    c.branch("beq", "s3", "zero", "unheld")
     c.nop()
-    c.imm("andi", "t1", "t1", 0xffc0)
-    c.alu("sltu", "t1", "zero", "t1")
-    c.shift("sll", "t1", "t1", 1)
-    c.branch("beq", "zero", "zero", "select")
-    c.alu("addu", "t0", "t0", "t1")
-    c.label("held")
-    c.alu("XOR", "t0", "s1", "s7")
-    c.alu("sltu", "t0", "zero", "t0")  # Circle does nothing on the source slot.
-    c.imm("addiu", "t0", "t0", 4)
-    c.label("select")
-    c.address("a0", table_address)
-    c.shift("sll", "t0", "t0", 2)
-    c.alu("addu", "a0", "a0", "t0")
-    c.mem("lw", "a0", 0, "a0")
+    c.branch("beq", "s1", "s7", "drop_only")
     c.nop()
+    c.address("a0", pointers[3])
+    c.branch("beq", "t0", "zero", "draw_actions")
+    c.nop()
+    c.address("a0", pointers[4])
+    c.branch("beq", "zero", "zero", "draw_actions")
+    c.nop()
+    c.label("unheld")
+    c.branch("beq", "t1", "zero", "triangle")
+    c.nop()
+    c.address("a0", pointers[1])
+    c.branch("beq", "t0", "zero", "draw_actions")
+    c.nop()
+    c.address("a0", pointers[2])
+    c.branch("beq", "zero", "zero", "draw_actions")
+    c.nop()
+    c.label("drop_only")
+    c.branch("beq", "t0", "zero", "triangle")
+    c.nop()
+    c.address("a0", pointers[0])
+    c.label("draw_actions")
+    draw_menu_legend(c, y=8)
+
+    c.label("triangle")
+    c.mem("lw", "t0", 20, "sp")
+    c.nop()
+    c.branch("beq", "t0", "zero", "footer")
+    c.nop()
+    c.mem("lhu", "t0", 0, "t0")
+    c.address("a0", pointers[5])
+    c.imm("andi", "t0", "t0", 0x1ff)
+    c.imm("addiu", "t0", "t0", -0x80)
+    c.imm("sltiu", "t0", "t0", 0x10)  # Containers, including the Rune Bag.
+    c.branch("beq", "t0", "zero", "draw_triangle")
+    c.nop()
+    c.address("a0", pointers[6])
+    c.label("draw_triangle")
+    draw_menu_legend(c, y=24)
+
+    c.label("footer")
+    c.address("a0", pointers[9])
+    c.branch("bne", "s3", "zero", "draw_footer")
+    c.mem("lw", "t0", 0x31c, "gp")  # Container pointer.
+    c.address("a0", pointers[7])
+    c.branch("beq", "t0", "zero", "draw_footer")
+    c.nop()
+    c.address("a0", pointers[8])
+    c.label("draw_footer")
     draw_menu_legend(c)
-    c.mem("lw", "ra", 20, "sp")
+    c.mem("lw", "ra", 28, "sp")
     c.nop()
     c.jump(SUBMIT_MENU_FRAME)
-    c.imm("addiu", "sp", "sp", 24)
+    c.imm("addiu", "sp", "sp", 32)
 
     code = c.out()
-    if len(code) > table_offset:
+    if len(code) > labels_offset:
         raise ValueError("Inventory controls routine overlaps its labels.")
-    return code.ljust(table_offset, b"\0") + struct.pack("<6I", *pointers) + b"".join(labels)
+    return code.ljust(labels_offset, b"\0") + b"".join(labels)
 
 
 def rune_spell_help():
@@ -1387,7 +1421,7 @@ def menu_startup(spell_code, submit_help):
         INVENTORY_HELP - MENU_CODE_RAM: inventory_help(),
         RUNE_HELP - MENU_CODE_RAM: spell_code,
     }
-    cleanup_offset = 0x400
+    cleanup_offset = 0x600
     length = cleanup_offset + 0x40
     source = MENU_STARTUP + 0x40
 
