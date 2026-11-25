@@ -9,7 +9,7 @@ Generate the inventory with `audit-npcs.py --dialogue-inventory` as shown in the
 - The PSX inventory has 90 records with a personal dialogue ID in the DOS name-table range. All 90 mobile records matched byte for byte in English v2.0 after accounting for the object table's relocation by 1 MiB.
 - Of the 82 initially linked records, 80 have both a DOS displayed name and a DOS conversation archive entry. Those 80 records represent 72 conversation IDs. There are 72 exact actor matches, seven spawn-tile matches, and one conversation-ID match that needs an in-game identity check. Eight other records are initially unlinked.
 - Hewstone on Level 2 was the initially linked conversation-ID-only match. The runtime check below confirms his identity. The dormant Level 3 bandit and Garamon records still need activation checks. The linked type 102 record with ID 110 has an exact actor match but no DOS displayed name or script.
-- Warren's Level 6 record has an exact DOS counterpart and a displayed name. The local DOS archive has no script for his ID. The earlier DuckStation attempt produced the English no-response message. Quest-state behavior still needs checking before resolving his disposition.
+- Warren’s Level 6 record has an exact DOS counterpart and a displayed name. Both local originals lack a conversation for his ID. See the [follow-up proposal](#warren-dialogue-follow-up) for the progressed-save check and the scope of a potential addition.
 
 | Level | Initially linked records with a DOS name and script |
 | --- | ---: |
@@ -36,7 +36,7 @@ These totals include shared labels such as guards and bandits and records alread
 - DuckStation cold-booted the new CHD through the English menu and character creation into Level 1. The native floor loader passed Level 1 → 3 → 6 → 1 → 2, including the expected Level 6 bank and palette. A debugger-only override of the Level 6 table entry selected its second bank at sector offset 282 and reached the game’s disc-read routine with the expected address and resident length. The original table entry was restored before resuming. Older profile loaders compared byte for byte with the previous recipe.
 - On Level 2 the linked type 84 actor at `0x80113d08` dispatched conversation 89. His English dialogue identified him as Hewstone. His mining and mine-monster branches opened, barter offered items and accepted appraisal, and farewell returned to the dungeon. A completed exchange, the mine-monster outcome, and the DOS dwarf sprite conversion remain open.
 - Bragit’s type 90 encounter on Level 1 dispatched conversation 67. His English rescue response and follow-up pages displayed, and return to the dungeon restored the ready fighter bank.
-- The Level 6 recheck reached Gralwart’s emerald instructions (ID 188), Dominus’s no-item identification response (ID 194), and Louvnon’s mantra research (ID 193). Louvnon returned to the ready bank. Warren (ID 207) still gave the English no-response message on a fresh character. Completing the associated puzzles, testing an item and payment with Dominus, and checking Warren in a progressed quest state remain open.
+- The Level 6 recheck reached Gralwart’s emerald instructions (ID 188), Dominus’s no-item identification response (ID 194), and Louvnon’s mantra research (ID 193). Louvnon returned to the ready bank. Warren (ID 207) gave the English no-response message on a fresh character. Completing the associated puzzles and testing an item and payment with Dominus remain open. Warren’s progressed-save result is recorded below.
 - The local xdelta decoded against the same clean Japanese Rev 1 Track 1 to SHA-1 `d3b370395327bdd630c3d9eade4d73662eb8dd43`. The CHD passed its internal SHA-1 verification and all four tracks matched after readback. The CHD logical SHA-1 is `d2ea85da96e0499cd6a0d18bc5e3b7824b47c353`.
 
 ## Level 2 named NPC preview verification
@@ -374,7 +374,20 @@ The Level 5 Gazer (type 102) initiated a cast in mixed room bank 10 on combat pr
 Each of the five phases submitted one DOS quad with the expected Gazer palette (`0x7e18`), texture page, and four UV corners. The compact atlas indices for phases 0–4 were 31, 24, 25, 24, and 13. DOS uses the same artwork at phases 1 and 3. The native spell dispatcher ran for that Gazer, and the Gazer returned to stance. This closes the remaining AI-initiated cast check for the mixed-room combat milestone.
 
 
-### Dedicated ghoul, Gazer, and wizard banks
+### Warren dialogue follow-up
+
+Warren is the Level 6 type-97 ghost at archived tile (4, 5), with identity 207. In the local DOS install, his personal name is present, `CNV.ARK` slot 207 has a zero offset, and `STRINGS.PAK` has no matching conversation block (`0x0ecf`). Clean Japanese Rev 1 has 92 unique conversation IDs in its native PSX table, including the Academy controls Gralwart (188), Louvnon (193), and Dominus (194). The table excludes 207. Earlier DuckStation checks showed the English no-response message on a fresh character and after the Murgo rescue and Dr. Owl handoff. The progressed-save trace returned `-1` at the conversation selector before dispatch, which explains why translation text alone cannot change the result.
+
+A short, original, opt-in Warren interaction is feasible in principle. First prototype an identity-specific branch at the failed conversation lookup and establish how to enter and close the existing English dialogue UI safely. Keep the original actor record and native conversation table intact. Use a neutral line and ordinary dismiss input. Treat this as a new interaction. A restoration would require a verified original script and text from another legitimate source. This proposal adds no runtime code.
+
+Acceptance criteria for an implementation PR:
+
+- Confirm the branch matches only Warren’s original Level 6 record after native talk eligibility checks. With the preview flag disabled, reproduce the existing no-response behavior.
+- Use normal controller input to open and close the dialogue on fresh and progressed saves. Check hostile and unavailable states, and confirm Warren returns to the expected DOS sprite and palette after dismissing the dialogue.
+- Compare quest flags, inventory, and actor state before and after the interaction. Confirm no change to the Murgo rescue and Dr. Owl handoff. Verify nearby Academy conversations and the dialogue footer controls.
+- Build from clean Japanese Rev 1. Verify the xdelta and all four CHD tracks, cold-boot in DuckStation, and record the build hash and evidence. Keep the proposal independent of the Warren combat-art change.
+
+## Dedicated ghoul, Gazer, and wizard banks
 
 The combat preview extends the compact action tables to the Level 4 wizard bank, the Level 5 Judy, Anjor, and ghoul banks, Level 7 Tyball, and the Level 8 ghoul bank. On Level 6 it adds the remaining actions to the Academy ghoul bank and adds combat and casting in both secondary wizard banks and the Gazer warren. The warren also keeps its Ghost family on DOS directional sprites and native combat poses. The secondary wizard banks and warren keep the primary wizard palette variants available.
 
