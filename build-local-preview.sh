@@ -192,10 +192,10 @@ if (( expanded_preview )); then
                                 "$exporter" export-creature-atlases "$dos_root" "$actor" "$scratch/wizards/type-$actor"
                             done
                             if (( slasher_combat )); then
-                                mixed_actors=$(python3 "$project/lanugo/academy_banks.py")
+                                combat_actors=$(python3 "$project/lanugo/academy_banks.py")
                                 while IFS= read -r actor; do
                                     "$exporter" export-mixed-combat "$dos_root" "$actor" "$scratch/wizards/type-$actor/mixed-combat"
-                                done <<< "$mixed_actors"
+                                done <<< "$combat_actors"
                                 "$exporter" export-creature-combat "$dos_root" 124 "$scratch/wizards/type-124/combat"
                                 wizard_args+=(--slasher-combat)
                             fi

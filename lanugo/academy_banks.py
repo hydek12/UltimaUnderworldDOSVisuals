@@ -284,6 +284,11 @@ ROOM_FORMATS = {**LEVEL_ONE_FORMATS, "dwarves": (8, 16), "corby": (8, 15),
 SPLIT_ROOM_FORMATS = {"prisoner": (4, (12, 16)), "town": (8, (11, 11)), "carasso": (8, (16, 11)),
                       **RECURRING_FORMATS}
 MIXED_COMBAT_BANKS = (SHARED_PAGE_FORMATS.keys() | SPLIT_ROOM_FORMATS.keys()) - {"hazards-nine"}
+DEDICATED_ROOM_COMBAT_BANKS = frozenset((
+    "wizards", "judy", "anjor", "tyball", "ghouls-five", "ghouls-five-recurring", "ghouls-eight",
+))
+ACADEMY_COMBAT_BANKS = frozenset(("wizb", "wizc", "warren", "ghouls"))
+
 ROOM_STRIDE = 0x19800
 # (texture depth, sixteenths of original size, uses both pages)
 SPECIAL_FORMATS = {"imps": (8, 16, True), "skeletons": (4, 16, True),
@@ -333,8 +338,8 @@ def gates():
     return {GATE: c.out(), GATE_BRANCH: branch.out(), GATE_DISPATCH: dispatch.out()}
 
 
-def sections(base_byte_offset, bank_bytes, bank, *, floor=None, recurring=False):
-    """Keep the switch routine below the part of RAM it will replace."""
+def sections(base_byte_offset, bank_bytes, bank, *, floor=None, recurring=False, full_resident=False):
+    """Build the selector and switch shared by every bank on this floor."""
     c = Code(SELECTOR)
     c.imm("ori", "t8", "t8", PAYLOAD & 0xffff)  # High half remains in t8 from the gate.
     c.mem("lw", "t7", 4, "t8")
@@ -343,6 +348,7 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None, recurring=False)
     c.mem("lhu", "t1", -0x6900, "t0")
     c.mem("lhu", "t2", -0x68FE, "t0")
     has_rooms = floor is not None
+    load_full_bank = has_rooms or full_resident
     grid_at = 0x1c00 if has_rooms else GRID
     c.shift("srl", "t1", "t1", 9 if has_rooms else 10)
     c.shift("srl", "t2", "t2", 9 if has_rooms else 10)
@@ -377,9 +383,9 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None, recurring=False)
     switch.mem("sw", "zero", 4, "t8")
     switch.jump(0x800903AC, True)
     switch.alu("addu", "a0", "zero", "zero")
-    # Keep the selector, ownership and return address below the disc read.
-    if has_rooms:
-        # These room banks use different draw routines. Each carries identical
+    # A full read replaces the renderer and preserves the shared return code.
+    if load_full_bank:
+        # These banks use different draw routines. Each carries identical
         # selector and switch instructions, including the return point below.
         switch.mem("lw", "a0", 24, "sp")
         switch.address("a1", PAYLOAD)
@@ -394,7 +400,7 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None, recurring=False)
     switch.mem("lw", "a0", 24, "sp")
     switch.address("t8", PAYLOAD)
     switch.mem("sw", "a0", 12, "t8")
-    if has_rooms:
+    if load_full_bank:
         switch.mem("lw", "t0", 0x998, "gp")
         switch.nop()
         switch.jump(PAYLOAD + 0xC00, True)
@@ -471,5 +477,9 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None, recurring=False)
     }
 
 if __name__ == "__main__":
-    for actor in sorted({actor for bank in MIXED_COMBAT_BANKS for family in ROOM_FAMILIES[bank] for actor in family}):
-        print(actor)
+    from creature_atlas import LEVEL_SIX_WIZARD_TYPES
+
+    families = [ROOM_FAMILIES[bank] for bank in MIXED_COMBAT_BANKS | DEDICATED_ROOM_COMBAT_BANKS]
+    families += [BANK_FAMILIES[bank] for bank in ACADEMY_COMBAT_BANKS]
+    actors = {actor for bank in families for family in bank for actor in family}
+    print("\n".join(map(str, sorted(actors.union(LEVEL_SIX_WIZARD_TYPES)))))

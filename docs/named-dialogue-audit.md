@@ -340,7 +340,7 @@ The release builder reproduced the tested CHD byte for byte. All four tracks and
 
 The cumulative `--slasher-combat` preview now gives imps (75 and 81), skeletons (74), and headless (91) full-resolution DOS combat textures in their dedicated room banks. These banks share the Academy renderer's fixed-pose path. Stance, three attacks, retreat, and death use the original DOS sequences. Imps also use their four-frame spell sequence. Existing view and timing rules still apply, including directional standing art for side and rear combat views and the death pose from all views.
 
-DuckStation replayed seven action values from native actor projections in 15 dedicated room-bank encounters on Levels 1–5, 7, and 8. The Level 5 imp first spawned through the debugger-invoked original trap. The 105 action checks produced 95 DOS sprite packets and ten expected native fallbacks for skeleton and headless casting. The fallback checks preserved each captured GPU packet and ordering-table head. The fixed-pose path has one action and phase table per bank. The later mixed-room preview adds per-family pose lookup for actors that share a bank. Other dedicated families, including ghouls, gazers, and wizards outside the existing Academy preview, still need pose mapping and live checks.
+DuckStation replayed seven action values from native actor projections in 15 dedicated room-bank encounters on Levels 1–5, 7, and 8. The Level 5 imp first spawned through the debugger-invoked original trap. The 105 action checks produced 95 DOS sprite packets and ten expected native fallbacks for skeleton and headless casting. The fallback checks preserved each captured GPU packet and ordering-table head. The fixed-pose path has one action and phase table per bank. The later mixed-room preview adds per-family pose lookup for actors that share a bank. The [dedicated ghoul, Gazer, and wizard audit](#dedicated-ghoul-gazer-and-wizard-banks) records the follow-up work.
 
 The preview xdelta decoded against clean Japanese Rev 1 and all four CHD tracks passed readback. Track 1 matched `e55251f4d53020fcace419823e2466a04831dab8`. The default `--late-dialogue` build reproduced `e3e2845b85d665a1240c5c89fab828b8703850b2`.
 
@@ -372,3 +372,24 @@ The fixes changed six sectors of the combat preview's Track 1. The xdelta decode
 The Level 5 Gazer (type 102) initiated a cast in mixed room bank 10 on combat preview Track 1 `2dbf1674c89160d7449d1d84c317270ea23d6605`. DuckStation entered the floor at tile (4, 45) from a disposable checkpoint. The probe stopped at the native AI instruction at `0x800330a8` and observed it change the Gazer's action from stance (`0x00`) to cast (`0x0d`). The debugger repositioned the camera after the AI selected the cast and selected the forward view for the draw checks. It left the Gazer's target, action, and animation phase under game control.
 
 Each of the five phases submitted one DOS quad with the expected Gazer palette (`0x7e18`), texture page, and four UV corners. The compact atlas indices for phases 0–4 were 31, 24, 25, 24, and 13. DOS uses the same artwork at phases 1 and 3. The native spell dispatcher ran for that Gazer, and the Gazer returned to stance. This closes the remaining AI-initiated cast check for the mixed-room combat milestone.
+
+
+### Dedicated ghoul, Gazer, and wizard banks
+
+The combat preview extends the compact action tables to the Level 4 wizard bank, the Level 5 Judy, Anjor, and ghoul banks, Level 7 Tyball, and the Level 8 ghoul bank. On Level 6 it adds the remaining actions to the Academy ghoul bank and adds combat and casting in both secondary wizard banks and the Gazer warren. The warren also keeps its Ghost family on DOS directional sprites and native combat poses. The secondary wizard banks and warren keep the primary wizard palette variants available.
+
+The ghoul source supplies stance, ready, melee, hit, and death poses. Its cast action preserves the native renderer. The Gazer and wizard families also have DOS casting phases. The Academy preview reloads the resident renderer with each bank and restores the floor owner before uploading textures. Tyball and the Gazer warren record one ordering-table head per depth bucket, so repeated polygon submissions do not exhaust the log.
+
+
+DuckStation captured live actor projections and replayed ten action values from front and rear views at native phases 0, 3, and 15. The probe compared each DOS packet's texture page, palette, and four UVs against the actor's frame record. Each expected native fallback preserved the packet and ordering heads. A separate control draw confirmed the actor's palette in the loaded bank.
+
+| Level | Bank and actor type IDs | DOS packets | Native fallbacks |
+| --- | --- | ---: | ---: |
+| 4 | 13 (106) | 54 | 6 |
+| 5 | 1 (107), 2 (99, 110), 3 (106) | 204 | 36 |
+| 6 | 1 (106, 115), 2 (107), 3 (97, 102), 9 (105) | 276 | 84 |
+| 7 | 1 (123) | 54 | 6 |
+| 8 | 8 (110) | 48 | 12 |
+| Total | 13 actor encounters across 10 banks | 636 | 144 |
+
+The Academy switched back to the primary bank with the correct floor owner. Tyball's verified draw used 37 unique ordering buckets after the original per-polygon log exceeded 128 entries. The combat xdelta round-trip and all four CHD track readbacks passed. Track 1 matched `619b7b76837d008690679e3c9812a0510991154b`. Both lighting recipes passed their xdelta round-trips. The default `--late-dialogue` recipe reproduced `e3e2845b85d665a1240c5c89fab828b8703850b2`.

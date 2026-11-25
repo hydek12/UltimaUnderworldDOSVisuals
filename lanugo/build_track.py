@@ -748,7 +748,10 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     bank_combat_slots = None
     split_format = academy_banks.SPLIT_ROOM_FORMATS.get(room_bank)
     shared_format = academy_banks.SHARED_PAGE_FORMATS.get(room_bank)
-    mixed_combat = room_combat and room_bank in academy_banks.MIXED_COMBAT_BANKS
+    dedicated_combat = room_combat and (
+        room_bank in academy_banks.DEDICATED_ROOM_COMBAT_BANKS or academy_bank in academy_banks.ACADEMY_COMBAT_BANKS
+    )
+    mixed_combat = dedicated_combat or (room_combat and room_bank in academy_banks.MIXED_COMBAT_BANKS)
     if expanded_level_six:
         # Keep persistent frame lookups below 0x801f8000, where the native floor load writes.
         if not (casting and combat and extra_type == 92 and texture_pages == creature_atlas.TEXTURE_PAGES[:1]):
@@ -760,13 +763,21 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             families = ((96, 111, 112),)
         if room_bank:
             families = academy_banks.ROOM_FAMILIES[room_bank]
+        if dedicated_combat and academy_bank in ("wizb", "wizc", "warren"):
+            # Preserve the primary wizard family carried by these Academy banks.
+            families = (actor_types, *families)
+            shared_format = ((4, (16,)), (4, (16,) * (len(families) - 1)))
         if mixed_combat:
             # The grub's DOS combat frames use colors absent from its directional atlas.
             if room_bank in ("grubs-slugs", "rats-grubs-five", "rats-grubs-eight"):
                 split_format = 8, split_format[1]
             if room_bank in ("bats-grubs-rats", "grub-imp"):
                 shared_format = ((8, shared_format[0][1]), shared_format[1])
-            mixed_sources, family_actions = zip(*(mixed_combat_sources(variants, types) for types in families))
+            mixed_sources, family_actions = zip(*(
+                (creature_sources(variants, types), ()) if academy_bank == "warren" and types == (97,)
+                else mixed_combat_sources(variants, types)
+                for types in families
+            ))
         if slasher_combat:
             table_slots = ((0x1000, 0x400), (0x1800, 0x200), (0x1a00, 0x200))
         elif room_bank == "hazards-nine":
@@ -842,6 +853,21 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
                             for i in range(0, len(clut), palette_stride)]
                 directional = tuple(table for _, _, table in packed)
             primary_types = ()
+        elif dedicated_combat:
+            bits, scale = academy_banks.ROOM_FORMATS[room_bank] if room_bank else (8, 14)
+            for frame_scale in range(scale, 0, -1):
+                try:
+                    images, palette_data, table = creature_atlas.build(
+                        mixed_sources[0], texture_pages, bits=bits, scale=frame_scale,
+                    )
+                    break
+                except variant_atlas.AtlasDoesNotFit:
+                    if frame_scale == 1:
+                        raise
+            primary_types = ()
+            palette_stride = 64 if bits == 8 else 32
+            palettes = [palette_data[i:i + palette_stride] for i in range(0, len(palette_data), palette_stride)]
+            directional = (table,)
         elif room_bank and format_override is None:
             bits, scale = academy_banks.ROOM_FORMATS[room_bank]
             images, palette_data, table = creature_atlas.build(
@@ -972,9 +998,9 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     if room_default:
         suppress_addr = PAYLOAD_RAM + 0x1800
         delay_addr = PAYLOAD_RAM + 0x1900
-    # The Gazer can submit more than 128 polygons. Save one original head per bucket.
-    gazer_bank = mixed_combat and any(102 in family for family in academy_banks.ROOM_FAMILIES[room_bank])
-    unique_order_buckets = room_bank == "hazards-nine" or gazer_bank
+    # Gazers and Tyball can exceed the polygon log limit. Keep one head per depth bucket.
+    dense_models = mixed_combat and any(102 in family or 123 in family for family in families)
+    unique_order_buckets = room_bank == "hazards-nine" or dense_models
     sections = {
         0: struct.pack("<I", PAYLOAD_MAGIC),
         0x90: renderer.DOS_IDLE_DIRECTIONS,
@@ -999,7 +1025,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         ORDER_WRITER_RAM - PAYLOAD_RAM: renderer.log_native_order(
             ORDER_WRITER_RAM, *order_log, unique_buckets=unique_order_buckets,
         ),
-        0x800: b"" if split_format or (shared_format and not slasher_combat) else metadata,
+        0x800: b"" if mixed_combat or split_format or (shared_format and not slasher_combat) else metadata,
         0xc00: jump(PAYLOAD_RAM + 0x1400) + bytes(4),
         0xe00: menu_return(VARIANT_UPLOAD_RAM, floor_aware=True),
         0xe80: vram_guard(lower_floor=True, right_edge=texture_pages[-1][0] + 64),

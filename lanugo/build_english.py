@@ -110,13 +110,16 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
                     bank_sections = None
                     if academy_runtime:
                         byte_offset = (wizard_payload_lba - lanugo.AVATAR_LBA) * 2048
-                        bank_sections = lanugo.academy_banks.sections(byte_offset, bank_size, bank_id, recurring=late_dialogue)
+                        bank_sections = lanugo.academy_banks.sections(
+                            byte_offset, bank_size, bank_id, recurring=late_dialogue, full_resident=slasher_combat,
+                        )
                     bank_payload = lanugo.creature_payload(
                         level_six_wizards, lanugo.creature_atlas.LEVEL_SIX_WIZARD_TYPES,
                         lanugo.creature_atlas.TEXTURE_PAGES[:1],
                         extra_type=lanugo.creature_atlas.LEVEL_SIX_SPIDER_TYPE if level_six_spiders else None,
                         casting=level_six_casting, combat=level_six_combat, expanded_level_six=expanded_level_six,
                         academy_bank=bank, academy_sections=bank_sections, recurring_academy=late_dialogue,
+                        room_combat=slasher_combat,
                     )
                     if academy_runtime and len(bank_payload) != bank_size:
                         raise ValueError("The runtime Academy banks must have the same disc stride.")
