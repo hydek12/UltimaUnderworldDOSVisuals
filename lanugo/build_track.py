@@ -49,6 +49,7 @@ INVENTORY_SUBMIT_CALL = 0x800210F0
 SUBMIT_MENU_FRAME = 0x80072264
 MENU_TEXT_WIDTH = 0x8007F478
 MENU_TEXT_DRAW = 0x8007DA90
+WARREN_TALK = 0x800C2200
 BOOT = 0x800C2300
 SUPPRESS_NORMAL = 0x800C23C0
 SUPPRESS_DELAY = 0x800C2400
@@ -1551,10 +1552,46 @@ def menu_startup(spell_code):
     return boot.ljust(source - MENU_STARTUP, b"\0") + assemble_payload(sections, length)
 
 
+def warren_talk():
+    # This entry replaces the native branch after the conversation lookup.
+    # The stock Talk action has already checked the actor's eligibility.
+    c = Code(WARREN_TALK)
+    c.branches.append((len(c.words), "check_failure"))
+    c.add(0x04400000)  # bltz v0, check_failure
+    c.imm("ori", "a0", "zero", 0xe01)
+    c.jump(0x80025fb4)
+    c.nop()
+    c.label("check_failure")
+    c.mem("lhu", "t0", 0x1f0, "gp")
+    c.imm("ori", "t1", "zero", 207)
+    c.branch("bne", "t0", "t1", "no_response")
+    c.mem("lw", "t0", 0x998, "gp")
+    c.address("t1", LEVEL_ONE_MODELS + 5 * 0x380)
+    c.branch("bne", "t0", "t1", "no_response")
+    c.mem("lw", "t0", 0xd28, "gp")
+    c.nop()
+    c.mem("lhu", "t0", 0, "t0")
+    c.nop()
+    c.imm("andi", "t0", "t0", 0x1ff)
+    c.imm("ori", "t1", "zero", 97)
+    c.branch("bne", "t0", "t1", "no_response")
+    c.nop()
+    # Submit original English text through the same native message path.
+    c.address("v0", WARREN_TALK + 0x80)
+    c.jump(0x80026000)
+    c.nop()
+    c.label("no_response")
+    c.jump(0x80025ff8)
+    c.nop()
+    code = c.out()
+    assert len(code) <= 0x80
+    return code.ljust(0x80, b"\0") + menu_label("Warren: I remember the sun.")
+
+
 def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False,
                     lower_payload_lba=None, lizard_payload_lba=None, rat_payload_lba=None,
                     wizard_payload_lba=None, expanded_level_six=False, academy_runtime=False, level_one_dialogue=False,
-                    room_payload_lbas=None, menu_controls=False):
+                    room_payload_lbas=None, menu_controls=False, warren_dialogue=False):
     target = bytearray(original)
     deferred_ordering = any(
         lba is not None for lba in (lizard_payload_lba, rat_payload_lba, wizard_payload_lba)
@@ -1570,6 +1607,8 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
         SUPPRESS_DELAY: gate(SUPPRESS_DELAY, WALK_SUPPRESS_DELAY_RAM if walking else SUPPRESS_DELAY_RAM, "a0", walking, floor_aware),
         DRAW_GATE: gate(DRAW_GATE, DRAW_RAM, walking=walking, floor_aware=floor_aware),
     }
+    if warren_dialogue:
+        code[WARREN_TALK] = warren_talk()
     if menu_controls:
         spell_help, spell_code = rune_spell_help()
         code[MENU_STARTUP] = menu_startup(spell_code)
@@ -1634,6 +1673,8 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
             # Raise the lower panel's reply rows six pixels to clear the footer.
             (0x80028AB8, struct.pack("<I", 0x34110090), struct.pack("<I", 0x3411008A)),
         )
+    if warren_dialogue:
+        hooks += ((0x80025fac, bytes.fromhex("12004004"), jump(WARREN_TALK)),)
     for address, expect, replace in hooks:
         offset = 2048 + address - EXE_LOAD
         if target[offset:offset + len(expect)] != expect:
