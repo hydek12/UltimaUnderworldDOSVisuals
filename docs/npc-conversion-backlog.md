@@ -1,6 +1,6 @@
 # Ultima Underworld critter inventory
 
-The [record-by-record inventory](ultima-underworld-npc-conversion-backlog.csv) covers all 657 mobile creature and NPC records in the clean Japanese Rev 1 archive. It compares the default release Track 1 (`72fed1544044659fc323ab86219be2b7eaba8cbf`) with the dedicated-bank combat preview (`33cd305aa51163dac94792697280282af599b061`). The inventory reads the resident bank grids, palette registrations, and combat tables from the built tracks.
+The [record-by-record inventory](ultima-underworld-npc-conversion-backlog.csv) covers all 657 mobile creature and NPC records in the clean Japanese Rev 1 archive. It compares the default release Track 1 (`72fed1544044659fc323ab86219be2b7eaba8cbf`) with the cumulative Warren Ghost Actions Preview (`46636f21942be670a96f910c9b147bbb0b302bfb`). The inventory reads the resident bank grids, palette registrations, and combat tables from the built tracks.
 
 Each record is checked at two camera cells, the archived spawn tile and one tile west. Directional coverage is identical in the two builds. Both cells register DOS art for **all 657 records**. The two-cell check measures configured coverage near the spawn. It leaves camera visibility, reachable viewpoints, actors that move, and actual gameplay draws to the [encounter audit](named-dialogue-audit.md).
 
@@ -11,11 +11,11 @@ Each record is checked at two camera cells, the archived spawn tile and one tile
 | 3 | 74 | 12 | 74 | 0 | 0 |
 | 4 | 70 | 10 | 70 | 0 | 0 |
 | 5 | 59 | 9 | 59 | 0 | 0 |
-| 6 | 60 | 11 | 60 | 0 | 1 |
+| 6 | 60 | 11 | 60 | 0 | 0 |
 | 7 | 94 | 24 | 94 | 0 | 0 |
 | 8 | 115 | 25 | 115 | 0 | 0 |
 | 9 | 72 | 2 | 72 | 0 | 0 |
-| Total | 657 | 107 | 657 | 0 | 1 |
+| Total | 657 | 107 | 657 | 0 | 0 |
 
 ## Level 8 boundary coverage
 
@@ -277,7 +277,7 @@ The debugger staged the player and bedroll at (27, 36) on the Shared Goblin Lurk
 
 On Level 8, a controller-confirmed rest from the debugger-staged tile (48, 32) triggered trap 649 for the type-72 rat at (28, 49). The roll of 52 exceeded its threshold of 47, and the original handler linked mobile slot 140.
 
-The cumulative candidate covers 1,331 of 1,350 applicable checks (98.6%), with 657 directional, 585 fixed-action, and 89 activation checks.
+The rest-activation candidate covered 1,331 of 1,350 applicable checks at this stage.
 
 ## Level 5 ghost movement trigger
 
@@ -299,9 +299,17 @@ The live PSX tile lists distinguish linked trigger objects from serialized recor
 | 5 | (54, 53) | Move trigger 608 at (54, 52) → create trap 607 | Forward input from (54, 51) met a wall and did not dispatch the trap. |
 | 8 | (56, 26) | Object 346 → create trap 821 | Object 346 has no live tile link in the staged floor. |
 
+## Level 6 Warren Ghost combat poses
+
+Warren (type 97, conversation ID 207, archived at (4, 5)) used DOS idle and walk sprites in the shared warren bank. Its earlier combat preview deliberately left its action table empty, so the native renderer supplied combat poses while the Gazer and wizards used their DOS actions. The DOS Ghost export has all seven slots, `00 01 02 03 07 0c 0d`. The existing atlas packer and resident table layout accommodate those slots. The built-track audit changes only Warren’s row and retains directional and action registrations for all neighbors.
+
+DuckStation had an older warren bank in memory after loading the test state. The probe invalidated its cached bank ID to load the new candidate’s bank from disc. With the player assigned as the target in a debugger-staged encounter, Warren’s native AI selected action `01`, drew all five DOS phases in the original facing with palette `0x7ed8`, and reached the native damage dispatcher. Controlled replay on Warren also matched 54 DOS sprite packets and six expected native fallbacks, comparing texture coordinates, page and palette. The clean Rev 1 xdelta round-trip and all four CHD track readbacks passed.
+
 ## Remaining checks
 
-- **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 585 records, including slot `0d` for 281. The Level 6 Warren Ghost is the one remaining fixed-action candidate. It is an intentional native combat exception. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
+The preview covers 1,332 of 1,350 tracked critter checks (98.7%), with 657 directional, 586 fixed-action, and 89 activation checks.
+
+- **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 586 records, including slot `0d` for 282. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
 - **Native activation.** Both sampled views already register DOS directional art for all 107 records marked noninitial by the archive heuristic. Of those, 89 have observed floor-load or controller activation and 18 have a create trap identified with the ordinary trigger chain still open. The Level 3 green goblin and the three Level 6 spiders were spawned by controller-driven rest. The Level 5 fire elemental and the five Level 7 spiders, Gazer, Reaper, shadow, type-113 ghost, and troll were spawned by controller-driven movement. All three Level 7 fire elemental activation records have been verified.
 
 ## Regenerate the inventory
