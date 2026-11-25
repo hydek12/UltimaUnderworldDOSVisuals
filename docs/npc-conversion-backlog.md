@@ -89,15 +89,17 @@ Controlled replay checked all seven slots against live projections of all nine s
 
 #### Dormant spider activation
 
-The Academy Spider Combat CHD cold-booted in DuckStation. A fresh character entered Level 6 through debugger staging. The subsequent movement and interactions used the mapped controller buttons while the debugger watched the native trap dispatcher and checked the destination tile for a live spider.
+The original PSX wandering-monster routine at `0x80089e4c` scans the floor for zero-flag create traps with mobile templates. The ordinary time update calls it with an eight-tile proximity check on both axes. The rest path calls it without that check. The create handler rejects rolls below the trap's own threshold. This path explains why earlier tile-entry and nearby book tests produced no spawn.
 
-| Spawn tile | PSX create trap | Controller test | Static link audit |
-| --- | --- | --- | --- |
-| (45, 45) | 778 | Tested forward and backward movement from the spawn tile. The player was on (45, 45) at the start and finish, with no observed trap call or spider. The alternate staging attempt failed before the controller crossing could be tested. | No static object links to the create trap. |
-| (4, 53) | 679 | Approached the book at (8, 46) and tried the face buttons. The run did not confirm that the book was read. No create call or spider was observed. | Book 773 has the same numeric value in its link field. Its text record has bit 15 set, which the native object-use trap traversal skips. |
-| (47, 56) | 639 | Walked north from (47, 55) onto (47, 56). The player tile trace confirmed entry, with no create call or spider. | No static object links to the create trap. |
+The Academy Spider Combat CHD cold-booted in DuckStation. The debugger staged a fresh character and a bedroll at Level 6 tile (10, 5). The player then used the original R2 + Triangle shortcut and confirmed the rest prompt with Circle. The trace confirmed all three tiles started without a live spider. During rest the game called the wandering routine from return address `0x80077134` and entered the original create handler at `0x80088e44` for each trap. The debugger observed the rolls and tile chains without calling the traps or changing their rolls.
 
-The DOS Level 6 archive also contains a create trap at each spawn tile, with no static object links to those three DOS trap records. The PSX audit found no ordinary activation chain for the three spiders. Scripted activation remains open. The preview continues to use the existing spawn rules and DOS combat mappings.
+| Spawn tile | PSX create trap | First successful rest | Roll / threshold | Live type-92 slot |
+| --- | --- | --- | --- | --- |
+| (45, 45) | 778 | 2 | 52 / 42 | 195 |
+| (4, 53) | 679 | 1 | 58 / 52 | 195 |
+| (47, 56) | 639 | 2 | 49 / 48 | 194 |
+
+Each successful call put a live spider in the target tile's object chain before the handler returned. The slot numbers are runtime allocations. Slot 195 was reused on the second rest.
 
 ## Remaining checks
 
@@ -114,7 +116,7 @@ python3 audit-critter-banks.py records.csv release-track-1.bin combat-track-1.bi
   > docs/ultima-underworld-npc-conversion-backlog.csv
 ```
 
-The optional dormant audit input is the earlier local DuckStation tile-chain log with `ACTOR` lines. Without it the inventory reports the archive marker and the documented controller-rest result. Action values in the CSV are hexadecimal. A blank action mapping means the sampled bank has no mapped fixed action for that actor. Source action candidates list decodable slots absent from at least one sampled view with a DOS palette. They exclude the directional registration gaps.
+The optional dormant audit input is the earlier local DuckStation tile-chain log with `ACTOR` lines. Without it the inventory reports archive markers and the documented controller activation results. Action values in the CSV are hexadecimal. A blank action mapping means the sampled bank has no mapped fixed action for that actor. Source action candidates list decodable slots absent from at least one sampled view with a DOS palette. They exclude the directional registration gaps.
 
 ## Earlier atlas feasibility measurements
 

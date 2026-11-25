@@ -21,6 +21,9 @@ ARCHIVE_ONLY = "Archive marker only"
 NORMAL_ACTIVATIONS = {
     (3, 78, 35, 62): "Normal controller rest spawned actor",
     (5, 120, 19, 50): "Normal controller movement triggered native create trap",
+    (6, 92, 45, 45): "Normal controller rest spawned actor",
+    (6, 92, 4, 53): "Normal controller rest spawned actor",
+    (6, 92, 47, 56): "Normal controller rest spawned actor",
 }
 
 

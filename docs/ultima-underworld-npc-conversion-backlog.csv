@@ -338,7 +338,7 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 6,0x9ac76c,111,0,1,58,42,58,42,0x02c55f,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,trolls,trolls,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
 6,0x9ac788,92,0,1,42,43,42,43,0x02c394,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 6,0x9ac7a4,92,0,1,43,45,43,45,0x02c379,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
-6,0x9ac7c0,92,0,0,45,45,45,45,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+6,0x9ac7c0,92,0,0,45,45,45,45,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Normal controller rest spawned actor
 6,0x9ac7dc,92,0,1,16,46,16,46,0x02c6d9,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 6,0x9ac7f8,92,0,1,18,46,18,46,0x02c6be,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 6,0x9ac814,91,0,0,50,46,50,46,0x02c436,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Linked on floor load
@@ -354,7 +354,7 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 6,0x9ac92c,64,0,0,18,51,18,51,0x02c652,22,rotgrub,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Linked on floor load
 6,0x9ac948,81,0,1,36,52,36,52,0x02c81d,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,imps,imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 6,0x9ac964,73,0,1,40,52,40,52,0x02c7e7,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,imps,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-6,0x9ac980,92,0,0,4,53,4,53,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+6,0x9ac980,92,0,0,4,53,4,53,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Normal controller rest spawned actor
 6,0x9ac99c,69,0,1,17,53,17,53,0x02c5b0,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
 6,0x9ac9b8,82,0,1,18,53,18,53,0x02c688,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Initially linked
 6,0x9ac9d4,91,0,1,27,53,27,53,0x02c72a,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
@@ -366,7 +366,7 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 6,0x9aca7c,91,0,1,26,55,26,55,0x02c745,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 6,0x9aca98,64,0,1,18,56,18,56,0x02c61c,22,rotgrub,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Initially linked
 6,0x9acab4,102,0,0,35,56,35,56,0x02c50e,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,warren,warren,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
-6,0x9acad0,92,0,0,47,56,47,56,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+6,0x9acad0,92,0,0,47,56,47,56,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Normal controller rest spawned actor
 6,0x9acaec,120,0,0,57,56,57,56,,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire-elemental,fire-elemental,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
 6,0x9acb08,96,0,0,8,57,8,57,0x02c77b,7,troll,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,trolls,trolls,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Linked on floor load
 6,0x9acb24,112,0,1,13,57,13,57,0x02c595,7,troll,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,trolls,trolls,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
