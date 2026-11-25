@@ -250,7 +250,7 @@ def room_banks(floor, recurring=False):
         troll = banks[4]
         troll_spawns = (*troll[2], (24, 2), (23, 3), (20, 5), (6, 29),
                         (4, 31), (3, 33), (7, 34), (25, 57), (52, 59))
-        banks = (*banks[:4], ("troll-seven-recurring", ((111, 112),), troll_spawns), *banks[5:])
+        banks = (*banks[:4], ("troll-seven-recurring", ((111, 112), (78,)), troll_spawns), *banks[5:])
     if recurring and floor == 4:
         troll_spawns = (*banks[2][2], (54, 9), (53, 14), (47, 23), (43, 33), (47, 38))
         banks = (*banks[:2], ("trolls-four-recurring", ((96, 111, 112),), troll_spawns))
@@ -261,13 +261,14 @@ ROOM_FAMILIES = {name: families for banks in (*ROOM_BANKS.values(), *RECURRING_B
                  for name, families, _ in banks}
 ROOM_FAMILIES.update({
     "trolls-four-recurring": ((96, 111, 112),),
-    "troll-seven-recurring": ((111, 112),),
+    "troll-seven-recurring": ((111, 112), (78,)),
     "ghouls-five-recurring": ((99, 110),),
     "hazards-nine": ((124,), (126,), (79,), (125,)),
 })
 # Each entry gives one texture page's bit depth and scales for its families.
 SHARED_PAGE_FORMATS = {
     "prison-seven": ((4, (16,)), (8, (9, 8))),
+    "troll-seven-recurring": ((4, (16,)), (8, (9,))),
     "bats-grubs-rats": ((4, (16, 16)), (4, (16,))),
     "hazards-nine": ((8, (10, 10)), (8, (10, 10))),
     "gazers-wisps-rats": ((4, (16, 16)), (4, (16,))),
@@ -281,7 +282,7 @@ ROOM_FORMATS = {**LEVEL_ONE_FORMATS, "dwarves": (8, 16), "corby": (8, 15),
                 "bandits": (8, 15), "zak": (8, 15), "fighters-four": (8, 15), "trolls-four": (4, 16), "trolls-four-recurring": (4, 16),
                 "judy": (4, 16), "ghouls-five": (8, 14), "anjor": (4, 16),
                 "tyball": (4, 16), "cardon": (8, 15), "gray-guards-seven": (4, 16),
-                "troll-seven": (4, 16), "troll-seven-recurring": (4, 16), "imp-seven": (8, 16), **RECURRING_SINGLE_FORMATS}
+                "troll-seven": (4, 16), "imp-seven": (8, 16), **RECURRING_SINGLE_FORMATS}
 SPLIT_ROOM_FORMATS = {"prisoner": (4, (12, 16)), "town": (8, (11, 11)), "carasso": (8, (16, 11)),
                       **RECURRING_FORMATS}
 MIXED_COMBAT_BANKS = (SHARED_PAGE_FORMATS.keys() | SPLIT_ROOM_FORMATS.keys()) - {"hazards-nine"}

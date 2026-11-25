@@ -378,12 +378,12 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 7,0x9add7c,116,0,1,7,1,7,1,0x03439e,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 7,0x9add98,116,0,1,9,2,9,2,0x034368,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 7,0x9addb4,78,209,1,21,2,21,2,0x0341d3,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
-7,0x9addd0,111,0,1,24,2,24,2,0x0342ab,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9addd0,111,0,1,24,2,24,2,0x0342ab,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9addec,102,0,1,39,2,39,2,0x033e8e,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
-7,0x9ade08,111,0,1,23,3,23,3,0x034182,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ade08,111,0,1,23,3,23,3,0x034182,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9ade24,118,0,1,27,3,27,3,0x033efa,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-7,0x9ade40,111,255,1,20,5,20,5,0x034224,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
-7,0x9ade5c,78,209,1,22,5,22,5,0x033f66,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,troll-seven-recurring,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+7,0x9ade40,111,255,1,20,5,20,5,0x034224,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+7,0x9ade5c,78,209,1,22,5,22,5,0x033f66,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,troll-seven-recurring,2,2,,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 7,0x9ade78,116,0,1,2,6,2,6,0x0342e1,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 7,0x9ade94,87,0,1,4,7,4,7,0x034317,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 7,0x9adeb0,78,255,1,19,7,19,7,0x03419d,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
@@ -411,16 +411,16 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 7,0x9ae118,97,0,1,16,26,16,26,0x033c3c,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9ae134,66,0,1,38,26,38,26,0x033b2e,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats-seven,bats-rats-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 7,0x9ae150,78,219,1,5,29,5,29,0x033f9c,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
-7,0x9ae16c,111,255,1,6,29,6,29,0x03414c,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,default,1,1,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae16c,111,255,1,6,29,6,29,0x03414c,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,default,1,1,00 01 02 03 07 0c 0d,,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9ae188,78,255,1,9,28,9,29,0x0340e0,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 7,0x9ae1a4,78,255,1,11,28,11,29,0x0340fb,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
-7,0x9ae1c0,78,219,1,8,30,8,30,0x034116,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,troll-seven-recurring,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+7,0x9ae1c0,78,219,1,8,30,8,30,0x034116,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,troll-seven-recurring,2,2,,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 7,0x9ae1dc,66,0,1,38,30,38,30,0x033b64,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats-seven,bats-rats-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
-7,0x9ae1f8,111,255,1,4,31,4,31,0x034131,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
-7,0x9ae214,111,255,1,3,33,3,33,0x033d80,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
-7,0x9ae230,111,255,1,7,34,7,34,0x033f30,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae1f8,111,255,1,4,31,4,31,0x034131,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+7,0x9ae214,111,255,1,3,33,3,33,0x033d80,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+7,0x9ae230,111,255,1,7,34,7,34,0x033f30,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9ae24c,97,0,0,19,34,19,34,,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
-7,0x9ae268,78,255,1,2,34,2,35,0x034491,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,troll-seven-recurring,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+7,0x9ae268,78,255,1,2,34,2,35,0x034491,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,troll-seven-recurring,2,2,,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 7,0x9ae284,78,255,1,3,35,3,35,0x0344ac,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 7,0x9ae2a0,97,0,0,19,35,19,35,,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
 7,0x9ae2bc,75,255,0,34,35,34,35,0x033d65,18,imp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,imp-seven,imp-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
@@ -458,15 +458,15 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 7,0x9ae63c,78,220,0,25,55,25,55,0x03445b,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Linked on floor load
 7,0x9ae658,78,220,0,27,55,27,55,0x033f15,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Linked on floor load
 7,0x9ae674,102,0,0,42,57,42,57,,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
-7,0x9ae690,111,216,1,26,56,26,56,0x0344c7,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae690,111,216,1,26,56,26,56,0x0344c7,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9ae6ac,120,0,0,35,56,35,56,,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
 7,0x9ae6c8,98,211,0,7,57,7,57,0x0343d4,26,fight32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prison-seven,prison-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
-7,0x9ae6e4,111,255,1,25,57,25,57,0x0344e2,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
-7,0x9ae700,78,220,1,28,57,28,57,0x034476,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,troll-seven-recurring,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+7,0x9ae6e4,111,255,1,25,57,25,57,0x0344e2,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+7,0x9ae700,78,220,1,28,57,28,57,0x034476,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,troll-seven-recurring,2,2,,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 7,0x9ae71c,114,0,1,61,57,61,57,0x033f81,19,golem,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 7,0x9ae738,108,213,1,20,58,20,58,0x033cc3,4,wiza,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prison-seven,prison-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9ae754,120,0,1,35,59,35,59,0x03408f,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
-7,0x9ae770,112,0,0,52,59,52,59,,7,troll,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+7,0x9ae770,112,0,0,52,59,52,59,,7,troll,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
 7,0x9ae78c,120,0,1,32,61,33,61,0x034275,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
 7,0x9ae7a8,72,0,1,44,61,44,61,0x033e3d,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats-seven,bats-rats-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 8,0x9afc44,113,0,1,31,1,31,1,0x03b6af,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-eight,ghosts-eight,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
