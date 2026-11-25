@@ -972,6 +972,8 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     if room_default:
         suppress_addr = PAYLOAD_RAM + 0x1800
         delay_addr = PAYLOAD_RAM + 0x1900
+    # The Gazer can submit more than 128 polygons. Save one original head per bucket.
+    unique_order_buckets = room_bank == "hazards-nine" or (mixed_combat and room_bank == "gazers-goblins")
     sections = {
         0: struct.pack("<I", PAYLOAD_MAGIC),
         0x90: renderer.DOS_IDLE_DIRECTIONS,
@@ -994,7 +996,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             native_sprite_lighting=native_sprite_lighting, mixed_combat=mixed_combat,
         )[0],
         ORDER_WRITER_RAM - PAYLOAD_RAM: renderer.log_native_order(
-            ORDER_WRITER_RAM, *order_log, unique_buckets=room_bank == "hazards-nine",
+            ORDER_WRITER_RAM, *order_log, unique_buckets=unique_order_buckets,
         ),
         0x800: b"" if split_format or (shared_format and not slasher_combat) else metadata,
         0xc00: jump(PAYLOAD_RAM + 0x1400) + bytes(4),
