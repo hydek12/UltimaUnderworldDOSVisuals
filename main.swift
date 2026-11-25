@@ -450,11 +450,11 @@ do {
                             actor: actor, name: "creature-combat", poses: combatPoses, height: 512)
         }
     case "export-creature-combat" where arguments.count == 4:
-        guard let actor = Int(arguments[2]), [74, 75, 81, 91, 105].contains(actor) else {
-            throw FormatError("Choose a Level 6 creature type with a verified combat slot map.")
+        guard let actor = Int(arguments[2]), [74, 75, 81, 91, 105, 124].contains(actor) else {
+            throw FormatError("Choose a creature type with a supported combat slot map.")
         }
         let melee = [(0, 4), (1, 5), (2, 5), (3, 5), (7, 4), (12, 4)]
-        let poses = [75, 81].contains(actor) ? melee + [(13, 4)] : melee
+        let poses = [75, 81, 124].contains(actor) ? melee + [(13, 4)] : melee
         try exportAtlas(root: URL(fileURLWithPath: arguments[1]),
                         directory: URL(fileURLWithPath: arguments[3]), actor: actor,
                         name: "creature-combat", poses: poses, height: 512)

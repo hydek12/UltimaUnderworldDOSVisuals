@@ -1,6 +1,13 @@
 #!/bin/bash
 set -euo pipefail
 
+slasher_combat=0
+if [[ ${1:-} == --slasher-combat ]]; then
+    slasher_combat=1
+    shift
+    set -- --late-dialogue "$@"
+fi
+
 academy_bank=
 level_one_dialogue=0
 level_two_dialogue=0
@@ -56,7 +63,7 @@ if [[ ${1:-} == --english-patch ]]; then
 fi
 
 if [[ $# != 5 ]]; then
-    printf 'Usage: %s [--level-six-wizards|--level-six-spiders|--level-six-casting|--level-six-combat|--level-six-effects|--level-six-expanded|--academy-wizb|--academy-wizc|--academy-runtime|--level-one-dialogue|--level-two-dialogue|--level-three-dialogue|--level-four-dialogue|--late-dialogue] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
+    printf 'Usage: %s [--level-six-wizards|--level-six-spiders|--level-six-casting|--level-six-combat|--level-six-effects|--level-six-expanded|--academy-wizb|--academy-wizc|--academy-runtime|--level-one-dialogue|--level-two-dialogue|--level-three-dialogue|--level-four-dialogue|--late-dialogue|--slasher-combat] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
     exit 2
 fi
 
@@ -170,6 +177,10 @@ if (( expanded_preview )); then
                             for actor in 67 68 72 83 79 87 99 100 101 110 113 114 116 117 118 121 122 123 124 125 126; do
                                 "$exporter" export-creature-atlases "$dos_root" "$actor" "$scratch/wizards/type-$actor"
                             done
+                            if (( slasher_combat )); then
+                                "$exporter" export-creature-combat "$dos_root" 124 "$scratch/wizards/type-124/combat"
+                                wizard_args+=(--slasher-combat)
+                            fi
                             wizard_args+=(--late-dialogue)
                         fi
                     fi

@@ -124,6 +124,11 @@ These percentages track the project checklist. They are estimates based on verif
 | 78% | Verified | Native dormant activation probes and Level 6 and 7 spawned palette checks |
 | 79% | Verified | Level 8 directional draws and Level 9 special-model renderer checks |
 | 80% | Verified | Cumulative English CHD boot and clean Japanese Rev 1 xdelta round-trip |
+| 81% | Verified | Slasher combat frames, action mapping, and native render fallbacks |
+| 82% | Verified | Level 4 mixed-bank draw and solid-wall occlusion control |
+| 83% | Verified | Native torch toggle and matched environment lighting captures in the Level 4 mixed room |
+| 84% | Verified | Level 4 partial wall cover, reversed depth order, and overlapping sprite bounds during native movement |
+| 85% | Verified | Representative creature and humanoid combat rendering across all nine floors, native bandit strikes, and controller-driven grub damage |
 
 ## Levels 1–4 recurring creature preview
 
@@ -155,6 +160,92 @@ The final CHD cold-booted to the English menu. In Level 9, the eye and lightning
 
 The live facing sweeps checked 256 idle and walk packets on Level 8 and 64 idle packets across the eight eye and lightning facings on Level 9. The Level 7 and 9 tested banks matched the final disc’s resident renderer, palette registry, and room grid in DuckStation.
 
-## Next milestone
+## Level 9 Slasher renderer follow-up
 
-Check the Slasher’s unstaged encounter, remaining conditional triggers, and special actions beyond the currently supported DOS poses before expanding combat coverage.
+The Slasher rendered at its own Level 9 encounter using its native idle action (`0x20`) and projected bounds. The previous ordering log overflowed at 128 entries. The Level 9 bank now saves each touched ordering-table bucket's original head once, so it can restore the table before submitting the DOS quad. The rebuilt CHD logged 69 buckets and submitted the Slasher's DOS palette (`0x7e18`) with no pose or projection override. The Slasher's native draw was replayed with eight facings, four animation phases, and both idle and walk, checking 64 GPU packets against the frame UVs and palette. The eye and lightning regression sweeps submitted another 64 idle packets across all eight facings. The local release rebuilt from the upstream translation and clean Japanese Rev 1, decoded Track 1 to `b824482c3b13b607aa039aba59effa4bd0cbac24`, and matched the boot-tested CHD byte for byte. Its CHD SHA-1 is `34a62d053a0db670b3db68b1db997a9aec8a2d13`.
+
+The native create-object trap samples a roll from 0 through 62 before linking an actor. Its handler can return `2` on both a rejected roll and a successful spawn. The debugger audit retries the original handler and verifies the actor's membership in the destination tile chain. Of the 15 earlier misses, 13 created an actor in the requested tile. The Level 8 skeleton linked in the adjacent tile at (46, 7). The Level 7 fire elemental was already linked at (60, 43) on fresh entry and drew with its DOS palette in its native idle action. The create-handler checks start after dispatch. Ordinary gameplay trigger chains and the remaining special-action sprites still need encounter coverage.
+
+## Level 9 Slasher combat preview
+
+The opt-in preview’s disc readback matched 287 frame slots and 414,498 sampled texels across the Slasher, bat skull, lightning, and eye. The Slasher’s action table maps seven combat actions to 31 frames through 112 phase entries. A raw-sector comparison against cumulative release Track 1 found 17 changed sectors within the Level 9 bank, at LBAs 153562–153579. The preview’s xdelta decoded from clean Japanese Rev 1 Track 1 to SHA-1 `711e19c5623334a842f9c591d4ae1028d0ea97d6`. DuckStation cold-booted the preview CHD, and all four extracted tracks matched byte for byte.
+
+A DuckStation replay used the Slasher’s own native projection at its Level 9 encounter. Controlled inputs covered 1,152 GPU packets across eight facings and all 16 tick values for the nine supported actions, including idle and walk. The checks covered frame selection, UVs, texture page, and CLUT. A separate replay enumerated all 55 unsupported action values and verified that the renderer preserved the captured ordering-table heads and GPU packet arena. At that encounter, the Slasher’s native idle action (`0x20`) submitted the expected DOS sprite with CLUT `0x7e18`; the test positioned the camera.
+
+The combat sweep below covers representative creature and humanoid encounters across all nine floors. The Level 4 checks cover player damage, lighting, and occlusion in a mixed encounter.
+
+## Level 4 mixed-encounter lighting and occlusion
+
+The bat, grub, and rat bank loaded after a debugger-assisted floor entry from a disposable checkpoint. The test positioned the player and camera and let the original actor AI choose actions. The grub (type 82) and rat (type 72) submitted sprites in the same frame with palettes `0x7e98` and `0x7f18`. The trace captured native idle and walk transitions. Player-driven hits and damage through the mixed encounter remain unverified.
+
+In the open view at `(0x2380, 0x32c0)`, the grub was visible against the dark floor. In the wall control at `(0x2380, 0x2f80)`, a solid tile at (35, 48) lay between the camera and the grub. The framebuffer showed the foreground wall with no creature sprite showing through. The renderer submitted both creature packets in that view, so packet presence alone does not establish visibility. This control covers one solid wall. Partial-cover and moving-overlap cases remain open.
+
+Both creature packets used GPU command `0x2d`, which draws the texture in raw color. The palettes reached the GPU as expected, but the sprites did not receive per-polygon color modulation. Torch-on versus torch-off fidelity remains open.
+
+### Native torch and controller combat follow-up
+
+The disposable checkpoint started with empty inventory. The test added a native torch and dagger, then used the original inventory controls to ignite and extinguish the torch. The same equipped object changed from type 149 while lit to type 145 when extinguished. Both environment captures used camera coordinates `(0x2380, 0x32c0, 0x0200)` and heading `0x2000`. The torch illuminated the floor and right-hand wall. At framebuffer pixel (810, 900) the captured color changed from RGB (17, 11, 5) with the torch off to (56, 44, 21) with it on. This verifies the room lighting response. The two captures do not show a matched creature pose under both torch states.
+
+In a separate unarmed run, the native controller switched battle mode and exercised R2 attacks while the grub and rat moved around the player. The health flask fell during the live encounter. The attempt did not establish a successful player hit or damage to either creature.
+
+Two oblique wall-edge views produced screen-space intersections between the walking grub and idle rat quads in five captured frames. Their projected bounds overlapped by 24 and 6 pixels at the two positions, respectively. The rat occupied the nearer depth bucket in both views (489 versus 704, then 499 versus 728). Captures showed the rat in front of the visible portion of the grub. The capture verified this actor pair. The wall-edge views did not isolate a wall clipping only part of a single sprite, and a passing depth-swap test remains open.
+
+### Matched torch pose and reversed depth controls
+
+The matched torch check used the same two actor records, fixed idle action, facing, and phase after the original inventory toggled the equipped torch from item type 145 to 149. The grub and rat retained identical UV coordinates, texture pages, and palette selectors across the two draws. Both used the raw texture command `0x2d`. This confirms that these actor draws bypass per-polygon color modulation with the torch lit as well as unlit. The room lighting still responded to the native torch.
+
+The reverse depth probe found four frames in which the grub's depth bucket was nearer than the rat's. The first such pair measured 175 for the grub and 205 for the rat, reversing the earlier 704 and 489 order. The two sprite rectangles did not overlap on-screen in those reversed frames. This establishes the ordering-table reversal and leaves the reversed-overlap framebuffer case open.
+
+The native damage trace watched the creature health store while controller input attempted repeat attacks and charged melee. Neither run recorded a health decrease with the player identified as the source. An outgoing hit remains unverified.
+
+A wall-edge height sweep captured the rat and grub at four camera heights from `0xc0` through `0x180`. At `0x140`, the walking grub's overlap with the nearer rat expanded from 20 to 32 pixels while the rat stayed in depth bucket 489. The inspected frames did not isolate partial foreground wall cover.
+
+### Level 4 native lighting prototype
+
+A separate local preview changes only raw Track 1 sector 150909, which contains the bat, grub, and rat bank's sprite renderer. The prototype reads the original PlayStation distance-light table at the sprite's ordering-table depth. It sends an opaque modulated texture command (`0x2c`) with equal RGB channels. For a neutral base color, each channel is the native table byte rounded down to even, matching the original polygon calculation. The existing frame, texture page, palette, and ordering-table paths still supply the sprite geometry.
+
+DuckStation held the grub and rat at the same idle facing and phase at depth 256. Toggling the original inventory torch changed the native table value from 33 to 71 and the sprite RGB multiplier from 32 to 70 for both creatures. The matched UVs and CLUTs agreed. With the torch lit and native projected depths restored, a rat at depth 511 used multiplier 30 and the grub at depth 676 used multiplier 4. These checks compare the native game lighting response on one bank. DOS shade-map and monochrome behavior require separate validation.
+
+The prototype CHD cold-booted in DuckStation. CHD verification passed and all four extracted tracks matched their inputs. The xdelta applied to clean Japanese Rev 1 Track 1 produced SHA-1 `5e4b2a2f9e40cca27cd6cb6d6e92df8fd47ca8e0` and matched the prototype track byte for byte.
+
+### Staged depth reversal
+
+In the local lighting preview, a debugger probe held the rat and grub idle, shifted their positions within their original tiles, and kept the camera fixed. Three frames per setup showed intersecting sprite bounds and opposite native depth orders. With the rat nearer, the grub and rat used buckets 233 and 150 and their bounds shared 637 pixels. With the grub nearer, they used buckets 133 and 249 and their bounds shared 672 pixels. The captures show the rat covering the grub in the first setup and both silhouettes visible in the second. The measured intersections include transparent texels, so the reverse capture leaves opaque-pixel overlap and overlap in motion open.
+
+A second run brought the actors closer to the same depth and lowered the test camera. At buckets 188 and 193 (rat and grub), the rat covered part of the grub. At buckets 208 and 173, the framebuffer showed the grub crossing in front of the rat's body. Both setups produced three frames with intersecting sprite bounds. This closes visible occlusion in both depth orders for the staged pair. Player-dealt damage, partial wall cover, and overlap during ordinary actor movement remain open.
+
+The next controller trial mapped native Triangle and Down to one test key in the disposable DuckStation profile. The player entered battle mode, charged the power gem, and visibly threw an unarmed punch. The fist shows that staging a dagger in inventory did not equip it for this attack. The camera ended up facing a wall during the trial, and the health-store trace captured no player-dealt health decrease. The test runner now rewrites the media path in its disposable save copy to use the selected local CHD.
+
+### Partial cover at the Level 4 doorway
+
+A foreground doorway wall hid the rat's body and tail while leaving its nose and front leg visible at camera coordinates `(0x20f8, 0x30fe, 0x0200)` and heading `0x2fae`. The open-side control at `(0x20f8, 0x3118, 0x0200)` showed the entire rat. The debugger kept the mixed creature bank active at the doorway in the disposable session. The wall geometry and renderer were unchanged. The rat submitted its native idle action in both views, and the partial cover capture also shows the grub.
+
+### Overlap during native movement
+
+With the camera at `(0x23f0, 0x2f80, 0x0140)` and heading `0x0600`, the rat stayed in walk action `0x2c` and moved from sub-tile coordinates (293, 405) to (294, 406) between sampled frames 1 and 4. The idle grub stayed at (294, 414). In both frames their projected sprite bounds intersected by 40 square pixels, with the rat in depth bucket 481 and the grub in bucket 723. The probe moved only the camera and left the original AI to drive both actors. This trace measures sprite bounds during movement. The staged depth reversal above supplies the visible overlap check.
+
+### Player damage trace
+
+Early trials missed the Level 4 grub or selected static object index 849 in the Level 3 encounter. Sseetharee began and ended that trial at 30 health.
+
+A controller-driven melee strike on the Level 4 lighting preview selected the grub (type 82, object index 200). The native damage routine received the player at `0x801121e8` as the attacker and the grub at `0x801137ac` as the target. Reading the same health byte at routine entry and on return showed 10 becoming 0 in a single call. The debugger adjusted the player object's melee origin and facing in a disposable save. The native game selected the target, calculated damage, and updated health. The result verifies player-dealt damage in this Level 4 encounter.
+
+## Cross-family combat rendering sweep
+
+DuckStation replayed seven combat action values (`0x00`, `0x01`, `0x02`, `0x03`, `0x07`, `0x0c`, and `0x0d`) from captured native actor projections in the Slasher combat preview. The test staged the action byte and restored the saved draw state between replays. All 217 native fallbacks preserved the GPU packet arena and the captured ordering-table heads. The Level 6 wizard submitted a DOS packet with its assigned palette for each of its seven staged combat states. The capture for each of the 32 encounters also produced a control sprite with the expected palette.
+
+| Level | Encounter records checked |
+| --- | --- |
+| 1 | Slug 65, bat 66, spider 68, gray goblin 71, skeleton 74, lurker 87, fighter 90 |
+| 2 | Dwarf 84, headless 91, gazer 102, golem 114 |
+| 3 | Imp 81, lizardman 85, bandit 93, ghost 97, wizard 106, shadow 117, reaper 118 |
+| 4 | Troll 112, wisp 122 |
+| 5 | Ghoul 99, female wizard 107 |
+| 6 | Wizard 103, fire elemental 120 |
+| 7 | Green goblin 78, Tyball 123 |
+| 8 | Rat 72, fighter 104, golem 119 |
+| 9 | Bat skull 79, lightning 125, eye 126 |
+
+The gazer and Tyball reached the ordering-log overflow guard from some camera positions. A valid alternate view completed each palette control. The Slasher's 31-frame combat sweep is recorded above. The default release CHD, Slasher combat CHD, and local lighting prototype passed a fresh CHD integrity check.
+
+For the humanoid gameplay check, the debugger assigned a Level 3 bandit (type 93) the attack goal for the player in a disposable save. The original AI drove movement, retreat, and swing actions `0x01`, `0x02`, and `0x03`. The native damage dispatcher received the bandit at `0x80113c98` as source and the player at `0x801121e8` as target on multiple attacks. The humanoid trace confirms attacker and target selection. The Level 4 grub trace supplies the measured health change.

@@ -682,7 +682,7 @@ def rat_payload(variants, bank_sections=None):
 
 
 def creature_payload(variants, actor_types, texture_pages, combat=False, extra_type=None, casting=False,
-                     expanded_level_six=False, academy_bank=None, academy_sections=None, room_bank=None, room_default=False,
+                     expanded_level_six=False, academy_bank=None, academy_sections=None, room_bank=None, room_default=False, slasher_combat=False,
                      recurring_academy=False):
     sources = creature_sources(variants, actor_types, combat, casting)
     images, clut, metadata = creature_atlas.build(sources, texture_pages)
@@ -710,7 +710,9 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             families = ((96, 111, 112),)
         if room_bank:
             families = academy_banks.ROOM_FAMILIES[room_bank]
-        if room_bank == "hazards-nine":
+        if slasher_combat:
+            table_slots = ((0x1000, 0x400), (0x1800, 0x200), (0x1a00, 0x200))
+        elif room_bank == "hazards-nine":
             table_slots = ((0x804, 0x3fc), (0x1000, 0x400), (0x1800, 0x200), (0x1a00, 0x200))
         elif shared_format:
             table_slots = ((0x804, 0x3fc), (0x1000, 0x400), (0x1800, 0x400))
@@ -736,12 +738,25 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             for page, (bits, scales) in zip(texture_pages, shared_format, strict=True):
                 end = next_family + len(scales)
                 page_families = [creature_sources(variants, types) for types in families[next_family:end]]
+                if slasher_combat and next_family == 0:
+                    bank_combat_slots = (*creature_atlas.COMBAT_SLOTS, (13, 4))
+                    combat_source = read_source_atlas(
+                        variants / "type-124" / "combat", "combat", creature_atlas.SOURCE_HEIGHT, 0,
+                        prefix="creature", poses=bank_combat_slots,
+                    )
+                    page_families[0] += ((combat_source,),)
+                    # The extra 31 combat frames fit with the eye at this resolution.
+                    scales = (9, *scales[1:])
                 art, colors, tables = creature_atlas.build_families(page_families, page, bits=bits, scales=scales)
                 images.append(art)
                 palettes.extend(clut.ljust(palette_stride, b"\0") for clut in colors)
                 directional.extend(tables)
                 next_family = end
             primary_types = ()
+            if slasher_combat:
+                primary_types = (124,)
+                metadata, *directional = directional
+                families = families[1:]
         elif split_format:
             bits, scales = split_format
             palette_stride = 64 if bits == 8 else 32
@@ -800,7 +815,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             images += (image,)
             palette_stride = 32
         primary_palettes = (
-            [] if bank_combat_slots else [clut[i:i + 32] for i in range(0, len(primary_types) * 32, 32)]
+            [] if bank_combat_slots or slasher_combat else [clut[i:i + 32] for i in range(0, len(primary_types) * 32, 32)]
         )
         if palette_stride == 64:
             # Each 8-bit sprite uses only the first 32 entries in its own CLUT row.
@@ -897,8 +912,10 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             clut=creature_atlas.CLUT_BASE, walk_ready=WALK_READY_RAM, wide=True,
             palette_types=palette_types, order_log=order_log, combat=action_addresses, extra_atlas=extra_atlas, wizard_combat=casting and combat, registry=registry,
         )[0],
-        ORDER_WRITER_RAM - PAYLOAD_RAM: renderer.log_native_order(ORDER_WRITER_RAM, *order_log),
-        0x800: b"" if split_format or shared_format else metadata,
+        ORDER_WRITER_RAM - PAYLOAD_RAM: renderer.log_native_order(
+            ORDER_WRITER_RAM, *order_log, unique_buckets=room_bank == "hazards-nine",
+        ),
+        0x800: b"" if split_format or (shared_format and not slasher_combat) else metadata,
         0xc00: jump(PAYLOAD_RAM + 0x1400) + bytes(4),
         0xe00: menu_return(VARIANT_UPLOAD_RAM, floor_aware=True),
         0xe80: vram_guard(lower_floor=True, right_edge=texture_pages[-1][0] + 64),

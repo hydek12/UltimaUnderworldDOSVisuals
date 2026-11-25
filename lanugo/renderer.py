@@ -493,17 +493,39 @@ def layered_quad(c, overlay_offset):
     write_layer_uv(c, overlay_offset, 0x28)
 
 
-def log_native_order(origin, count, buffer):
+def log_native_order(origin, count, buffer, *, unique_buckets=False):
     """Record the old bucket head before committing an ordinary native draw."""
     c = Code(origin)
     c.address("t9", count)
     c.mem("lw", "t7", 0, "t9")
     c.address("t6", buffer)
-    c.imm("sltiu", "t4", "t7", ORDER_LOG_ENTRIES)
-    c.branch("beq", "t4", "zero", "overflow")
-    c.shift("sll", "t5", "t7", 3)
-    c.mem("lw", "t4", 0, "t8")
-    c.alu("addu", "t6", "t6", "t5")
+    if unique_buckets:
+        # Save the head from the first write to each bucket. Repeated polygon
+        # submissions to that bucket need no additional rewind entry.
+        c.imm("sltiu", "t4", "t7", ORDER_LOG_ENTRIES + 1)
+        c.branch("beq", "t4", "zero", "overflow")
+        c.shift("sll", "t5", "t7", 3)
+        c.alu("addu", "t5", "t5", "t6")
+        c.label("find_bucket")
+        c.branch("beq", "t6", "t5", "checked_buckets")
+        c.nop()
+        c.mem("lw", "t4", 0, "t6")
+        c.imm("addiu", "t6", "t6", 8)
+        c.branch("beq", "t4", "t8", "submit")
+        c.nop()
+        c.branch("beq", "zero", "zero", "find_bucket")
+        c.nop()
+        c.label("checked_buckets")
+        c.imm("sltiu", "t4", "t7", ORDER_LOG_ENTRIES)
+        c.branch("beq", "t4", "zero", "overflow")
+        c.mem("lw", "t4", 0, "t8")
+        c.nop()
+    else:
+        c.imm("sltiu", "t4", "t7", ORDER_LOG_ENTRIES)
+        c.branch("beq", "t4", "zero", "overflow")
+        c.shift("sll", "t5", "t7", 3)
+        c.mem("lw", "t4", 0, "t8")
+        c.alu("addu", "t6", "t6", "t5")
     c.mem("sw", "t8", 0, "t6")
     c.mem("sw", "t4", 4, "t6")
     c.imm("addiu", "t7", "t7", 1)
