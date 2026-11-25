@@ -1222,18 +1222,26 @@ def menu_font_sector(track):
     return lba, form1_sector(original, texture)
 
 
-def draw_menu_legend(c, y=210, width=320):
+def draw_menu_legend(c, y=210, right_edge=None):
     c.mem("sw", "a0", 16, "sp")
     if y is None:
         c.mem("sw", "a1", 12, "sp")
     c.jump(MENU_TEXT_WIDTH, True)
     c.nop()
     c.mem("lw", "a2", 16, "sp")
-    c.imm("ori", "a0", "zero", width)
+    c.imm("ori", "a0", "zero", 320)
     c.alu("subu", "a0", "a0", "v0")
     if y is None:
         c.mem("lw", "a1", 12, "sp")
     c.shift("sra", "a0", "a0", 1)
+    if right_edge is not None:
+        c.imm("ori", "t0", "zero", right_edge)
+        c.alu("subu", "t0", "t0", "v0")
+        c.alu("slt", "t1", "a0", "t0")
+        c.branch("bne", "t1", "zero", "legend_fits")
+        c.nop()
+        c.alu("addu", "a0", "t0", "zero")
+        c.label("legend_fits")
     c.jump(MENU_TEXT_DRAW, True)
     if y is None:
         c.nop()
@@ -1280,7 +1288,7 @@ def options_help():
 def inventory_help():
     """Build the current item actions and Cross prompt into one footer."""
     actions = [
-        menu_label("".join(action + " " for action in (circle, square, triangle) if action))
+        menu_label("".join(action + " " for action in (square, circle, triangle) if action))
         for circle in ("", "○ Pick up", "○ Place")
         for square in ("", "□ Drop")
         for triangle in ("", "△ Use", "△ Open")
@@ -1356,7 +1364,7 @@ def inventory_help():
     c.jump(0x8007F698, True)  # Native encoded string copy.
     c.nop()
     c.imm("addiu", "a0", "sp", 20)
-    draw_menu_legend(c, width=264)  # Center within the space left of the HUD.
+    draw_menu_legend(c, right_edge=264)  # Shift left only when the text would reach the HUD.
     c.mem("lw", "ra", 60, "sp")
     c.nop()
     c.jump(SUBMIT_MENU_FRAME)
