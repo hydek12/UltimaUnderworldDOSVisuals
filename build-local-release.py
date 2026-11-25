@@ -10,7 +10,7 @@ import tempfile
 from lanugo.disc_image import DISC_NAME, JAPANESE_SHA1, package_chd, read_cue, sha1
 
 
-PATCHED_SHA1 = "7287ef0175dbf1b06fdc8ab196c0fe4f6929f56d"
+PATCHED_SHA1 = "16d09f832ab39f01baaae93ebd4c5dce7ebdb5da"
 
 
 def build(args):

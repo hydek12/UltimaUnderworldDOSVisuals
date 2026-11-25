@@ -28,32 +28,32 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 1,0x9a4320,77,0,0,3,33,3,33,,0,gngob32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Create trap identified
 1,0x9a433c,65,0,1,26,33,26,33,0x0057f3,9,slug,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 1,0x9a4358,65,0,0,27,34,27,34,,9,slug,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
-1,0x9a4374,71,66,1,15,35,15,35,0x005952,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-goblins,gray-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a4374,71,66,1,15,35,15,35,0x005952,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 1,0x9a4390,74,0,1,54,35,54,35,0x0057a2,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 1,0x9a43ac,77,0,1,3,38,3,38,0x005937,0,gngob32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 1,0x9a43c8,77,0,1,11,38,11,38,0x00591c,0,gngob32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 1,0x9a43e4,87,0,1,26,38,26,38,0x0059a3,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-1,0x9a4400,78,0,1,54,38,54,38,0x0059be,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,skeletons,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a4400,78,0,1,54,38,54,38,0x0059be,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 1,0x9a441c,70,0,1,8,43,8,43,0x005bda,0,gngob32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 1,0x9a4438,70,0,1,10,43,10,43,0x005bf5,0,gngob32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 1,0x9a4454,66,0,1,23,43,23,43,0x005844,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 1,0x9a4470,66,0,1,24,43,24,43,0x00580e,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 1,0x9a448c,68,0,1,27,46,27,46,0x005c2b,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
-1,0x9a44a8,71,255,1,4,47,4,47,0x005736,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-goblins,gray-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-1,0x9a44c4,80,7,1,60,51,60,51,0x005b38,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-goblins,gray-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a44a8,71,255,1,4,47,4,47,0x005736,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a44c4,80,7,1,60,51,60,51,0x005b38,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 1,0x9a44e0,76,65,1,45,52,45,52,0x005ab1,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
-1,0x9a44fc,76,0,1,52,52,52,52,0x005acc,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,lurkers,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a44fc,76,0,1,52,52,52,52,0x005acc,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 1,0x9a4518,68,0,1,37,54,37,54,0x005c46,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
 1,0x9a4534,83,0,1,19,54,19,55,0x005c10,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
-1,0x9a4550,76,0,1,46,55,46,55,0x005b02,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,lurkers,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a4550,76,0,1,46,55,46,55,0x005b02,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 1,0x9a456c,87,0,1,51,55,51,55,0x0057d8,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-1,0x9a4588,80,8,1,57,55,57,55,0x005c61,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-goblins,gray-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-1,0x9a45a4,70,10,1,4,56,4,56,0x005a60,0,gngob32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a4588,80,8,1,57,55,57,55,0x005c61,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a45a4,70,10,1,4,56,4,56,0x005a60,0,gngob32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,gray-green-goblins,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 1,0x9a45c0,76,64,1,45,56,45,56,0x005b1d,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 1,0x9a45dc,76,0,1,47,56,47,56,0x005ae7,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
-1,0x9a45f8,71,9,1,2,57,2,57,0x005a7b,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,gray-goblins,1,1,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-1,0x9a4614,76,0,1,51,58,51,58,0x005787,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
-1,0x9a4630,80,0,1,52,59,52,59,0x00576c,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-goblins,default,1,1,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a45f8,71,9,1,2,57,2,57,0x005a7b,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a4614,76,0,1,51,58,51,58,0x005787,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a4630,80,0,1,52,59,52,59,0x00576c,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins,gray-green-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 1,0x9a464c,65,0,1,37,60,37,60,0x00596d,9,slug,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 2,0x9a596c,84,2,1,60,3,60,3,0x00d8f0,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,dwarves,dwarves,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
 2,0x9a5988,74,0,1,22,4,22,4,0x00d3fb,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked

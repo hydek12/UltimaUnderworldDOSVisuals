@@ -180,7 +180,11 @@ RECURRING_BANKS = {
 # Override the nearest-spawn grid around these encounters.
 # Keys name the bank that owns the two-tile cells, with None selecting bank zero.
 ROOM_CELL_OVERRIDES = {
-    1: {"spiders": ((13, 7), (14, 7))},
+    1: {
+        "spiders": ((13, 7), (14, 7)),
+        "gray-green-goblins": ((2, 57), (51, 59)),
+        None: ((53, 38), (51, 52), (45, 55)),
+    },
     2: {
         "headless": ((9, 44),),
         "rats-spiders": ((43, 48),),
@@ -241,7 +245,7 @@ def room_banks(floor, recurring=False):
     banks = ROOM_BANKS[floor]
     if recurring and floor == 1:
         banks = (
-            ("gray-goblins", ((71, 80),), (*banks[0][2], (4, 47), (52, 59))),
+            ("gray-green-goblins", ((71, 80), (70, 76)), (*banks[0][2], (4, 47), (52, 59))),
             ("fighters", ((90,),), (*banks[1][2], (33, 12), (33, 15))),
         )
     if recurring and floor == 2:
@@ -265,6 +269,7 @@ def room_banks(floor, recurring=False):
 ROOM_FAMILIES = {name: families for banks in (*ROOM_BANKS.values(), *RECURRING_BANKS.values())
                  for name, families, _ in banks}
 ROOM_FAMILIES.update({
+    "gray-green-goblins": ((71, 80), (70, 76)),
     "trolls-four-recurring": ((96, 111, 112),),
     "troll-seven-recurring": ((111, 112), (78,)),
     "ghouls-five-recurring": ((99, 110),),
@@ -272,6 +277,7 @@ ROOM_FAMILIES.update({
 })
 # Each entry gives one texture page's bit depth and scales for its families.
 SHARED_PAGE_FORMATS = {
+    "gray-green-goblins": ((4, (13,)), (8, (9,))),
     "prison-seven": ((4, (16,)), (8, (9, 8))),
     "troll-seven-recurring": ((4, (16,)), (8, (9,))),
     "lurkers-goblins-seven": ((8, (16,)), (8, (9,))),
@@ -293,7 +299,7 @@ ROOM_FORMATS = {**LEVEL_ONE_FORMATS, "dwarves": (8, 16), "corby": (8, 15),
                 "troll-seven": (4, 16), "imp-seven": (8, 16), **RECURRING_SINGLE_FORMATS}
 SPLIT_ROOM_FORMATS = {"prisoner": (4, (12, 16)), "town": (8, (11, 11)), "carasso": (8, (16, 11)),
                       **RECURRING_FORMATS}
-MIXED_COMBAT_BANKS = (SHARED_PAGE_FORMATS.keys() | SPLIT_ROOM_FORMATS.keys()) - {"hazards-nine"}
+MIXED_COMBAT_BANKS = (SHARED_PAGE_FORMATS.keys() | SPLIT_ROOM_FORMATS.keys()) - {"hazards-nine", "gray-green-goblins"}
 DEDICATED_ROOM_COMBAT_BANKS = frozenset((
     "wizards", "judy", "anjor", "tyball", "ghouls-five", "ghouls-five-recurring", "ghouls-eight",
 ))

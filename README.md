@@ -62,9 +62,23 @@ xdelta3 -d -s japanese-rev1-track1.bin dos-visuals.xdelta patched-track1.bin
 
 Use `build-local-release.py` to generate the cumulative xdelta and verify a local CHD in one command. The release includes DOS combat and casting poses in mixed and dedicated rooms, native sprite lighting, and gameplay-driven DOS shade maps. It reads the original split CUE and preserves the three audio tracks and indexes. The [local patch builder guide](docs/local-patch-builder.md) gives the command, source requirements, and manual preview workflow.
 
-Add `--menu-controls` to a local preview build for context-sensitive PlayStation button legends, including the inventory and map footers and the right-aligned dialogue footer. The current creature coverage and remaining checks are tracked in the [critter inventory](docs/npc-conversion-backlog.md).
+The current creature coverage and remaining checks are tracked in the [critter inventory](docs/npc-conversion-backlog.md).
 
 Start the visual work with one camera-facing goblin using the original DOS frames, anchor and eight viewing angles. Trace the retail renderer on the original Japanese Rev 1 before porting any executable change found on the English build. Extend actor coverage after palette, lighting, wall occlusion, facing and animation work on the first actor. Restore DOS materials and color response next. The viewport and HUD need a separate pass to fit the console menus and any chosen language. The patch builder is packaging infrastructure and does not implement these visual changes.
+
+## PlayStation button legends
+
+Build a local preview with `build-local-preview.sh --menu-controls --dos-shade-maps` and the usual source arguments. The footer shows only the available actions, in □, ○, △, × order. The four symbols use the native menu font. Directional prompts are omitted.
+
+| Screen | Prompts |
+| --- | --- |
+| Options | × Exit on the main page and × Back in submenus |
+| Inventory | □ Drop, ○ Pick up or Place, △ Open or Use, and × Exit, Back, or Cancel as appropriate |
+| Map | ○ Toggle marker over a valid tile and × Exit |
+| Rune Bag and spells | × Back in the Rune Bag, ○ Pick in the spell menu, and × Exit or Back |
+| Dialogue | ○ Reply during selection and ○ Continue when dialogue waits for input, right-aligned in the footer |
+
+Most footers are centered. The inventory text shifts left when needed to clear the HUD, and dialogue uses a 16-pixel right margin. Save and load screens use the original prompts. [Build instructions and verification history](docs/local-patch-builder.md#context-sensitive-menu-controls-development-preview)
 
 ## Clean Japanese baseline and Lanugo texture
 
