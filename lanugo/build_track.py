@@ -1556,6 +1556,8 @@ def warren_talk():
     # This entry replaces the native branch after the conversation lookup.
     # The stock Talk action has already checked the actor's eligibility.
     c = Code(WARREN_TALK)
+    line = menu_label("I remember the sun.")
+    text = WARREN_TALK + 0xa0
     c.branches.append((len(c.words), "check_failure"))
     c.add(0x04400000)  # bltz v0, check_failure
     c.imm("ori", "a0", "zero", 0xe01)
@@ -1576,16 +1578,31 @@ def warren_talk():
     c.imm("ori", "t1", "zero", 97)
     c.branch("bne", "t0", "t1", "no_response")
     c.nop()
-    # Submit original English text through the same native message path.
-    c.address("v0", WARREN_TALK + 0x80)
-    c.jump(0x80026000)
+    # Open the native portrait panel, display Warren's line, and let the
+    # standard input-enabled wait handle Circle and the dialogue footer.
+    # Talk and the stock conversation wrapper share the same frame layout.
+    c.jump(0x800260fc, True)
+    c.nop()
+    # For this actor the stock name builder returns a long description.
+    # Fit the panel's nameplate with the personal name.
+    c.address("a0", 0x800ca3a4)
+    c.address("a1", text + len(line))
+    c.jump(0x8007f698, True)
+    c.nop()
+    c.address("a0", text)
+    c.jump(0x80027180, True)
+    c.mem("sh", "zero", 0x928, "gp")  # No reply choices on this page.
+    c.imm("ori", "a1", "zero", 1)
+    c.jump(0x80028c28, True)
+    c.imm("ori", "a0", "zero", 0)
+    c.jump(0x800260cc)  # Native panel cleanup and return to the dungeon.
     c.nop()
     c.label("no_response")
     c.jump(0x80025ff8)
     c.nop()
     code = c.out()
-    assert len(code) <= 0x80
-    return code.ljust(0x80, b"\0") + menu_label("Warren: I remember the sun.")
+    assert len(code) <= 0xa0
+    return code.ljust(text - WARREN_TALK, b"\0") + line + menu_label("Warren")
 
 
 def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False,
