@@ -1,5 +1,7 @@
 # Pull request workflow
 
+Follow the [project rules](project-rules.md) for release, validation, and reporting.
+
 The merged pull requests against `main` are the cumulative change log. Each PR should describe a coherent change that can be reviewed and rolled back on its own.
 
 1. Start a topic branch from current `main`, then commit and push the branch. Open a PR against `main` before integrating changes.

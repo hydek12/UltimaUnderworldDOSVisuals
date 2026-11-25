@@ -6,7 +6,7 @@ This macOS Xcode command-line project uses the local DOS release as the visual r
 
 ## Project changes
 
-Use the [pull request workflow](docs/pull-request-workflow.md) for all changes to `main`. See the [historical change log](docs/change-history.md) for changes made before PRs were adopted.
+Use the [pull request workflow](docs/pull-request-workflow.md) for all changes to `main`. Follow the [project rules](docs/project-rules.md) for builds, verification, and milestones. See the [historical change log](docs/change-history.md) for changes made before PRs were adopted.
 
 ## Reproduce the asset checks
 

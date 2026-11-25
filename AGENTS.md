@@ -5,3 +5,4 @@
 - Update the affected project documentation in the same PR. Use a merge commit to preserve the PR as a discrete change that can be audited or reverted. Retain the GitHub PR and its verification evidence.
 - Review and merge when authorized and the acceptance criteria are met. Follow GitHub's reviewer and merge permissions.
 - Follow [the pull request workflow](docs/pull-request-workflow.md). For work that predates it, use [the historical commit log](docs/change-history.md).
+- Follow the [project rules](docs/project-rules.md) for baselines, source-only releases, emulator verification, milestone criteria, and Slack reporting.
