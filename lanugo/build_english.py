@@ -184,6 +184,9 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
             room_payload_lbas={floor: lbas[0] for floor, lbas in room_lbas.items()}, menu_controls=menu_controls,
         )
         updates = {}
+        if menu_controls:
+            lba, sector = lanugo.menu_font_sector(source)
+            updates[lba] = sector
         if dos_spell_effects is not None:
             edited = spell_effects.apply(source, edited, updates, dos_spell_effects)
         for index, original in enumerate(sectors):

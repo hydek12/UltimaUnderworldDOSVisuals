@@ -1182,14 +1182,54 @@ def form1_sector(original, data):
     result[12:16] = original[12:16]
     return result
 
-def draw_menu_legend(c, y=210):
+# The native font stores four monochrome glyph planes in each 4-bit texel.
+# AVATAR section 7 contains two KiB of palettes followed by the texture.
+MENU_BUTTON_GLYPHS = {
+    "○": (0x80, ("..##..", ".#..#.", "#....#", "#....#", "#....#", "#....#", ".#..#.", "..##..")),
+    "□": (0x81, ("######", "#....#", "#....#", "#....#", "#....#", "#....#", "#....#", "######")),
+    "△": (0x82, ("..##..", "..##..", ".#..#.", ".#..#.", ".#..#.", "#....#", "#....#", "######")),
+    "×": (0x83, ("#....#", ".#..#.", ".#..#.", "..##..", "..##..", ".#..#.", ".#..#.", "#....#")),
+}
+
+
+def menu_label(label):
+    return b"".join(
+        struct.pack(">H", MENU_BUTTON_GLYPHS[char][0]) if char in MENU_BUTTON_GLYPHS else char.encode("ascii")
+        for char in label
+    ) + b"\x1f"
+
+
+def menu_font_sector(track):
+    header = read_sector(track, AVATAR_LBA)
+    font_start, font_end = struct.unpack_from("<II", header, 24 + 7 * 4)
+    if font_start % 2048 or font_end - font_start != 0x8800:
+        raise ValueError("Unexpected AVATAR menu font extent.")
+    lba = AVATAR_LBA + font_start // 2048 + 1
+    original = read_sector(track, lba)
+    texture = bytearray(original[24:2072])
+    if form1_sector(original, texture) != original:
+        raise ValueError("Original menu font sector failed integrity check.")
+    for code, rows in MENU_BUTTON_GLYPHS.values():
+        # Codes 0x80–0x83 are blank eight-pixel glyphs in plane 3, row 0.
+        x = (code - 0x80) * 8
+        if any(texture[y * 128 + x // 2 + col] & 0x88 for y in range(16) for col in range(4)):
+            raise ValueError(f"Menu button glyph slot {code:#x} is already occupied.")
+        for y, row in enumerate(rows, 4):
+            for offset, pixel in enumerate(row, 1):
+                if pixel == "#":
+                    col = x + offset
+                    texture[y * 128 + col // 2] |= 8 << (4 * (col % 2))
+    return lba, form1_sector(original, texture)
+
+
+def draw_menu_legend(c, y=210, width=320):
     c.mem("sw", "a0", 16, "sp")
     if y is None:
         c.mem("sw", "a1", 12, "sp")
     c.jump(MENU_TEXT_WIDTH, True)
     c.nop()
     c.mem("lw", "a2", 16, "sp")
-    c.imm("ori", "a0", "zero", 320)
+    c.imm("ori", "a0", "zero", width)
     c.alu("subu", "a0", "a0", "v0")
     if y is None:
         c.mem("lw", "a1", 12, "sp")
@@ -1203,8 +1243,8 @@ def draw_menu_legend(c, y=210):
 
 def options_help():
     """Append an options legend after the stock items and before frame submission."""
-    root = b"Up/Down O:OK X:Exit\x1f"
-    submenu = b"Up/Down O:OK X:Back\x1f"
+    root = menu_label("○ OK  × Exit")
+    submenu = menu_label("○ OK  × Back")
     root_address = OPTIONS_HELP + 0x90
     submenu_address = root_address + len(root)
     c = Code(OPTIONS_HELP)
@@ -1238,109 +1278,102 @@ def options_help():
 
 
 def inventory_help():
-    """Show the actions for the focused slot and the current inventory state."""
-    labels = (
-        b"Square: Drop\x1f",
-        b"Circle: Pick up\x1f",
-        b"Circle: Pick up  Square: Drop\x1f",
-        b"Circle: Place\x1f",
-        b"Circle: Place  Square: Drop\x1f",
-        b"Triangle: Use\x1f",
-        b"Triangle: Open\x1f",
-        b"D-Pad: Move   Cross: Exit\x1f",
-        b"D-Pad: Move   Cross: Back\x1f",
-        b"D-Pad: Move   Cross: Cancel\x1f",
-    )
-    labels_offset = 0x250
+    """Build the current item actions and Cross prompt into one footer."""
+    actions = [
+        menu_label("".join(action + " " for action in (circle, square, triangle) if action))
+        for circle in ("", "○ Pick up", "○ Place")
+        for square in ("", "□ Drop")
+        for triangle in ("", "△ Use", "△ Open")
+    ]
+    navigation = [menu_label(f"× {action}") for action in ("Exit", "Back", "Cancel")]
+    if max(map(len, actions)) - 1 + max(map(len, navigation)) > 40:
+        raise ValueError("Inventory controls exceed the footer string buffer.")
+    table_offset = 0x160
+    table = INVENTORY_HELP + table_offset
+    address = table + 4 * len(actions)
     pointers = []
-    address = INVENTORY_HELP + labels_offset
-    for label in labels:
+    for label in actions + navigation:
         pointers.append(address)
         address += len(label)
 
     c = Code(INVENTORY_HELP)
-    c.imm("addiu", "sp", "sp", -32)
-    c.mem("sw", "ra", 28, "sp")
+    c.imm("addiu", "sp", "sp", -64)
+    c.mem("sw", "ra", 60, "sp")
     c.shift("sll", "t0", "s1", 1)
     c.alu("addu", "t0", "s6", "t0")
     c.mem("lh", "a0", 0, "t0")
     c.jump(0x80045380, True)  # Same read-only item lookup as native Triangle.
     c.imm("ori", "a1", "zero", 2)
-    c.mem("sw", "v0", 20, "sp")
-    c.imm("ori", "t0", "zero", 0x13)  # Native Square excludes this cursor.
-    c.alu("XOR", "t0", "s1", "t0")
-    c.alu("sltu", "t0", "zero", "t0")
-    c.alu("sltu", "t1", "zero", "v0")
-    c.alu("AND", "t0", "t0", "t1")  # Square is available on occupied drop slots.
-    c.branch("beq", "s3", "zero", "unheld")
-    c.nop()
-    c.branch("beq", "s1", "s7", "drop_only")
-    c.nop()
-    c.address("a0", pointers[3])
-    c.branch("beq", "t0", "zero", "draw_actions")
-    c.nop()
-    c.address("a0", pointers[4])
-    c.branch("beq", "zero", "zero", "draw_actions")
-    c.nop()
-    c.label("unheld")
-    c.branch("beq", "t1", "zero", "triangle")
-    c.nop()
-    c.address("a0", pointers[1])
-    c.branch("beq", "t0", "zero", "draw_actions")
-    c.nop()
-    c.address("a0", pointers[2])
-    c.branch("beq", "zero", "zero", "draw_actions")
-    c.nop()
-    c.label("drop_only")
-    c.branch("beq", "t0", "zero", "triangle")
-    c.nop()
-    c.address("a0", pointers[0])
-    c.label("draw_actions")
-    draw_menu_legend(c, y=8)
 
-    c.label("triangle")
-    c.mem("lw", "t0", 20, "sp")
-    c.nop()
-    c.branch("beq", "t0", "zero", "footer")
-    c.nop()
-    c.mem("lhu", "t0", 0, "t0")
-    c.address("a0", pointers[5])
-    c.imm("andi", "t0", "t0", 0x1ff)
-    c.imm("addiu", "t0", "t0", -0x80)
-    c.imm("sltiu", "t0", "t0", 0x10)  # Containers, including the Rune Bag.
-    c.branch("beq", "t0", "zero", "draw_triangle")
-    c.nop()
-    c.address("a0", pointers[6])
-    c.label("draw_triangle")
-    draw_menu_legend(c, y=24)
+    # Triangle contributes 0, 1 or 2 to the action row index.
+    c.branch("beq", "v0", "zero", "circle")
+    c.imm("ori", "t0", "zero", 0)
+    c.mem("lhu", "t1", 0, "v0")
+    c.imm("ori", "t2", "zero", 0x13)  # Native Square excludes this cursor.
+    c.imm("andi", "t1", "t1", 0x1ff)
+    c.imm("addiu", "t1", "t1", -0x80)
+    c.imm("sltiu", "t1", "t1", 0x10)  # Containers, including the Rune Bag.
+    c.branch("beq", "s1", "t2", "circle")
+    c.imm("addiu", "t0", "t1", 1)
+    c.imm("addiu", "t0", "t0", 3)  # Square is available on this occupied slot.
 
-    c.label("footer")
-    c.address("a0", pointers[9])
-    c.branch("bne", "s3", "zero", "draw_footer")
+    c.label("circle")
+    c.branch("bne", "s3", "zero", "held")
+    c.nop()
+    c.branch("beq", "v0", "zero", "actions")
+    c.nop()
+    c.branch("beq", "zero", "zero", "actions")
+    c.imm("addiu", "t0", "t0", 6)  # Pick up.
+    c.label("held")
+    c.branch("beq", "s1", "s7", "actions")
+    c.nop()
+    c.imm("addiu", "t0", "t0", 12)  # Place on a different slot.
+
+    c.label("actions")
+    c.shift("sll", "t0", "t0", 2)
+    c.address("t1", table)
+    c.alu("addu", "t1", "t1", "t0")
+    c.mem("lw", "t1", 0, "t1")
+    c.imm("addiu", "a0", "sp", 20)  # Up to 39 bytes before the saved return address.
+    c.imm("ori", "t2", "zero", 0x1f)
+    c.label("copy_actions")
+    c.mem("lbu", "t0", 0, "t1")
+    c.imm("addiu", "t1", "t1", 1)
+    c.branch("beq", "t0", "t2", "navigation")
+    c.mem("sb", "t0", 0, "a0")
+    c.branch("beq", "zero", "zero", "copy_actions")
+    c.imm("addiu", "a0", "a0", 1)
+
+    c.label("navigation")
+    c.address("a1", pointers[-1])
+    c.branch("bne", "s3", "zero", "append")
     c.mem("lw", "t0", 0x31c, "gp")  # Container pointer.
-    c.address("a0", pointers[7])
-    c.branch("beq", "t0", "zero", "draw_footer")
+    c.address("a1", pointers[-3])
+    c.branch("beq", "t0", "zero", "append")
     c.nop()
-    c.address("a0", pointers[8])
-    c.label("draw_footer")
-    draw_menu_legend(c)
-    c.mem("lw", "ra", 28, "sp")
+    c.address("a1", pointers[-2])
+    c.label("append")
+    c.jump(0x8007F698, True)  # Native encoded string copy.
+    c.nop()
+    c.imm("addiu", "a0", "sp", 20)
+    draw_menu_legend(c, width=264)  # Center within the space left of the HUD.
+    c.mem("lw", "ra", 60, "sp")
     c.nop()
     c.jump(SUBMIT_MENU_FRAME)
-    c.imm("addiu", "sp", "sp", 32)
+    c.imm("addiu", "sp", "sp", 64)
 
     code = c.out()
-    if len(code) > labels_offset:
+    if len(code) > table_offset:
         raise ValueError("Inventory controls routine overlaps its labels.")
-    return code.ljust(labels_offset, b"\0") + b"".join(labels)
+    return code.ljust(table_offset, b"\0") + struct.pack(f"<{len(actions)}I", *pointers[:len(actions)]) + b"".join(actions + navigation)
 
 
 def rune_spell_help():
     """Append footers to the rune grid and spell book before frame submission."""
     labels = (
-        b"D-Pad: Browse X:Back\x1f",
-        b"D-Pad O:Pick X:Exit\x1f",
-        b"D-Pad O:Pick X:Back\x1f",
+        menu_label("× Back"),
+        menu_label("○ Pick  × Exit"),
+        menu_label("○ Pick  × Back"),
     )
     label_address = RUNE_HELP + 0x70
     c = Code(RUNE_HELP)
@@ -1371,8 +1404,8 @@ def rune_spell_help():
 
 def dialogue_help(submit_help):
     """Show controls only when the conversation loop is waiting for input."""
-    advance = b"O: Continue\x1f"
-    replies = b"Up/Down O:Reply\x1f"
+    advance = menu_label("○ Continue")
+    replies = menu_label("○ Reply")
     text = DIALOGUE_HELP + 0x68
     c = Code(DIALOGUE_HELP)
     # The shared frame routine saves its caller at sp+16. The callers below
