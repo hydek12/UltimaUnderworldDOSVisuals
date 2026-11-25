@@ -28,6 +28,7 @@ NORMAL_ACTIVATIONS = {
     (6, 92, 45, 45): "Normal controller rest spawned actor",
     (6, 92, 4, 53): "Normal controller rest spawned actor",
     (6, 92, 47, 56): "Normal controller rest spawned actor",
+    (7, 120, 35, 56): "Normal controller rest spawned actor from trap 563",
 }
 
 
