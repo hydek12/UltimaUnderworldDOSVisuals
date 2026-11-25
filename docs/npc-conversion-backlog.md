@@ -85,7 +85,19 @@ The Academy default bank now uses compact DOS combat tables for type-92 spiders 
 
 In live DuckStation gameplay, the spider at (42, 43) selected attack `02` and drew the matching DOS frames at phases 0, 2, and 4. The native damage dispatcher identified the same spider as the source. The debugger staged the camera and assigned the player as the target. The game selected the action and advanced its phases.
 
-Controlled replay checked all seven slots against live projections of all nine spiders and the wizard at (24, 21). Each actor produced 54 matching DOS packets and six expected native fallbacks. The three dormant spiders at (45, 45), (4, 53), and (47, 56) spawned when the debugger invoked their original create handlers. Ordinary gameplay activation for those three remains open.
+Controlled replay checked all seven slots against live projections of all nine spiders and the wizard at (24, 21). Each actor produced 54 matching DOS packets and six expected native fallbacks. The three dormant spiders spawned when the debugger invoked their original create handlers.
+
+#### Dormant spider activation
+
+The Academy Spider Combat CHD cold-booted in DuckStation. A fresh character entered Level 6 through debugger staging. The subsequent movement and interactions used the mapped controller buttons while the debugger watched the native trap dispatcher and checked the destination tile for a live spider.
+
+| Spawn tile | PSX create trap | Controller test | Static link audit |
+| --- | --- | --- | --- |
+| (45, 45) | 778 | Tested forward and backward movement from the spawn tile. The player was on (45, 45) at the start and finish, with no observed trap call or spider. The alternate staging attempt failed before the controller crossing could be tested. | No static object links to the create trap. |
+| (4, 53) | 679 | Approached the book at (8, 46) and tried the face buttons. The run did not confirm that the book was read. No create call or spider was observed. | Book 773 has the same numeric value in its link field. Its text record has bit 15 set, which the native object-use trap traversal skips. |
+| (47, 56) | 639 | Walked north from (47, 55) onto (47, 56). The player tile trace confirmed entry, with no create call or spider. | No static object links to the create trap. |
+
+The DOS Level 6 archive also contains a create trap at each spawn tile, with no static object links to those three DOS trap records. The PSX audit found no ordinary activation chain for the three spiders. Scripted activation remains open. The preview continues to use the existing spawn rules and DOS combat mappings.
 
 ## Remaining checks
 
