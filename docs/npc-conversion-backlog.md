@@ -202,7 +202,7 @@ In DuckStation on the Dedicated Bank Actions Preview, the debugger placed the pl
 | (61, 41) | 91 | 662 | 56 / 43 | 184 |
 | (30, 52) | 82 | 559 | 47 / 40 | 183 |
 
-The type-67 creature at (35, 15) stayed dormant. Trap 852 rolled 42 and 32 on two confirmed rests, below its threshold of 49.
+A follow-up on the Default Academy Wide Actions Preview used the same rest site. The game linked the type-92 spider at (60, 24) in slot 185 when trap 761 rolled 44 against 42, and the type-81 imp at (35, 55) in slot 182 when trap 546 rolled 41 against 40. The type-67 creature at (35, 15) stayed dormant on earlier rests, then appeared in slot 182 after trap 852 rolled 59 against 49.
 
 ## Level 8 Reaper movement trigger
 
@@ -260,7 +260,7 @@ The cumulative candidate now covers 1,262 of 1,350 applicable checks (93.5%), in
 
 The cumulative opt-in preview closes 59 fixed-action records across Levels 1, 2, 6, 7, and 8, with all previously registered actions, directional views, and room assignments retained. Level 1 shares the four goblin palettes and the DOS shade selector across directional and fixed-action frames. Its combat atlas can reduce texture resolution to fit the existing VRAM regions while retaining native projected size and DOS hotspots. Levels 2, 5, and 7 use a compact fixed-action bank for the default green goblins, and Level 8 uses one for the default rats. The Academy packs grub combat colors into an 8-bit texture page and places the palette rows in the existing reserved CLUT region.
 
-In DuckStation the Level 2 goblin at (60, 55) selected action `03` and the Level 8 rat at (5, 58) selected action `01`. Each drew all five corresponding DOS phases. The native damage dispatcher identified the rat as the source. The shaded Level 1 goblin at (52, 52) selected action `01`, drew all five DOS phases with its expected shaded palette, and was identified by the same dispatcher. The debugger placed the camera and assigned the player as the target for these checks. Level 7 default-bank goblin attack verification remains open after the selected approaches failed to stage a live target.
+In DuckStation the Level 2 goblin at (60, 55) selected action `03` and the Level 8 rat at (5, 58) selected action `01`. Each drew all five corresponding DOS phases. The native damage dispatcher identified the rat as the source. The shaded Level 1 goblin at (52, 52) selected action `01`, drew all five DOS phases with its expected shaded palette, and was identified by the same dispatcher. The debugger placed the camera and assigned the player as the target for these checks. A follow-up on the cumulative CHD verified the Level 7 default bank. The goblin at (19, 7) selected action `03` and the goblin at (21, 2) selected action `01`. Both drew all five matching DOS phases at their original facing. The damage dispatcher identified the second goblin as the source.
 
 Controlled DuckStation playback verified five Academy encounters against their resident DOS frame, page, and palette data, including native fallback cases. The type-82 grub at (17, 51) matched 36 sprite submissions and 24 fallbacks. Both slugs at (16, 51) and (17, 53) matched 54 sprite submissions and six fallbacks each. The default-bank bat at (40, 50) and imp-bank bat at (35, 53) each matched 48 sprite submissions and 12 fallbacks. The clean Rev 1 round-trip and all four CHD track readbacks passed.
 
@@ -277,12 +277,32 @@ The debugger staged the player and bedroll at (27, 36) on the Shared Goblin Lurk
 
 On Level 8, a controller-confirmed rest from the debugger-staged tile (48, 32) triggered trap 649 for the type-72 rat at (28, 49). The roll of 52 exceeded its threshold of 47, and the original handler linked mobile slot 140.
 
-The cumulative candidate covers 1,326 of 1,350 applicable checks (98.2%), with 657 directional, 585 fixed-action, and 84 activation checks.
+The cumulative candidate covers 1,331 of 1,350 applicable checks (98.6%), with 657 directional, 585 fixed-action, and 89 activation checks.
+
+## Level 5 ghost movement trigger
+
+On the cumulative CHD, the debugger staged the player at (55, 2) facing west. Forward controller input crossed move trigger 1008 at (54, 2) and dispatched create trap 1007. The target tile (52, 3) had no type-113 ghost before the call. On return, template 254 was linked as a live ghost in slot 196.
+
+A separate controller-rest trial at (13, 61) ran the original wandering scan and linked the Level 5 type-91 creature at (36, 41). Create trap 720 rolled 60 against a threshold of 48 and produced live slot 196. The type-110 and type-81 targets at (52, 9) and (25, 44) remained dormant across the observed rests.
+
+## Unresolved trigger routes
+
+The live PSX tile lists distinguish linked trigger objects from serialized records whose tile links are unresolved.
+
+| Floor | Target or create tile | Native chain | Live evidence |
+| --- | --- | --- | --- |
+| 1 | (27, 34) | Object 371 → create trap 789 | Object 371 has no live tile link in the staged floor. |
+| 3 | (1, 8) | Triggers 1003 and 1008 → create trap 1007 | Neither trigger has a live tile link in the staged floor. |
+| 3 | (35, 6) | Items 898 and 900 at (40, 12), and item 908 at (40, 11) → pickup triggers 897, 899, and 907 → create trap 985 | Item positions and links confirmed. A successful pickup and spawn remain open. |
+| 3 | (42, 42) | Objects 649 at (38, 44) and 931 at (1, 9) → use trigger 648 → create trap 667 | Object positions and links confirmed. Successful use and spawn remain open. |
+| 3 | (44, 55) | Item 607 at (49, 52) → pickup trigger 606 → create trap 605 | The item cluster was visible from (48, 52). The pickup attempt did not dispatch the create handler. |
+| 5 | (54, 53) | Move trigger 608 at (54, 52) → create trap 607 | Forward input from (54, 51) met a wall and did not dispatch the trap. |
+| 8 | (56, 26) | Object 346 → create trap 821 | Object 346 has no live tile link in the staged floor. |
 
 ## Remaining checks
 
 - **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 585 records, including slot `0d` for 281. The Level 6 Warren Ghost is the one remaining fixed-action candidate. It is an intentional native combat exception. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
-- **Native activation.** Both sampled views already register DOS directional art for all 107 records marked noninitial by the archive heuristic. Of those, 84 have observed floor-load or controller activation and 23 have a create trap identified with the ordinary trigger chain still open. The Level 3 green goblin and the three Level 6 spiders were spawned by controller-driven rest. The Level 5 fire elemental and the five Level 7 spiders, Gazer, Reaper, shadow, type-113 ghost, and troll were spawned by controller-driven movement. All three Level 7 fire elemental activation records have been verified.
+- **Native activation.** Both sampled views already register DOS directional art for all 107 records marked noninitial by the archive heuristic. Of those, 89 have observed floor-load or controller activation and 18 have a create trap identified with the ordinary trigger chain still open. The Level 3 green goblin and the three Level 6 spiders were spawned by controller-driven rest. The Level 5 fire elemental and the five Level 7 spiders, Gazer, Reaper, shadow, type-113 ghost, and troll were spawned by controller-driven movement. All three Level 7 fire elemental activation records have been verified.
 
 ## Regenerate the inventory
 
