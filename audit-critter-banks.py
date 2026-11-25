@@ -31,6 +31,10 @@ NORMAL_ACTIVATIONS = {
     (1, 77, 3, 33): "Normal controller movement triggered native create trap 811",
     (2, 78, 32, 57): "Normal controller movement triggered native create trap 596",
     (2, 78, 31, 58): "Normal controller movement triggered native create trap 591",
+    (3, 73, 32, 3): "Normal controller rest spawned actor from trap 1014",
+    (3, 93, 3, 9): "Normal controller rest spawned actor from trap 930",
+    (3, 68, 58, 12): "Normal controller rest spawned actor from trap 885",
+    (3, 83, 44, 38): "Normal controller rest spawned actor from trap 708",
     (3, 78, 35, 62): "Normal controller rest spawned actor",
     (4, 82, 30, 52): "Normal controller rest spawned actor from trap 559",
     (4, 91, 61, 41): "Normal controller rest spawned actor from trap 662",
@@ -50,6 +54,7 @@ NORMAL_ACTIVATIONS = {
     (7, 102, 42, 57): "Normal controller movement triggered native create trap 588",
     (8, 102, 56, 55): "Normal controller movement triggered native create trap 593",
     (8, 111, 60, 49): "Normal controller movement triggered native create trap 631",
+    (8, 72, 28, 49): "Normal controller rest spawned actor from trap 649",
     (8, 118, 58, 47): "Normal controller movement triggered native create trap 680",
     (7, 112, 52, 59): "Normal controller movement triggered native create trap 536",
     (7, 113, 51, 54): "Normal controller movement triggered native create trap 625",
@@ -106,23 +111,33 @@ def view_coverage(floor, x, z, actor, image, combat_preview):
     bank_id = resident[0][grid + cell // 2] >> (4 * (cell & 1)) & 15
     bank = resident[bank_id]
     name = names[bank_id]
-    if bank_id == 0 and floor not in (6, 9):
+    action_offset = banks.COMBAT_ACTIONS
+    selector = bank[action_offset:action_offset + 64]
+    default_combat = (
+        combat_preview and bank_id == 0 and floor in banks.DEFAULT_COMBAT_BANKS
+        and selector == creatures.wizard_actions(True)[0]
+    )
+    if bank_id == 0 and floor not in (6, 9) and not default_combat:
         types = {
             1: variant_atlas.GOBLIN_TYPES, 2: (78,), 3: creatures.LIZARD_TYPES,
             4: creatures.LIZARD_TYPES, 5: (78,), 7: (78,), 8: creatures.LEVEL_EIGHT_RAT_TYPES,
         }[floor]
-        actions = FIXED_ACTIONS[:-1] if actor in types and floor in (3, 4) else ()
+        if actor in types and floor == 1 and combat_preview:
+            goblin_actions = creatures.actions_for_slots(creatures.COMBAT_SLOTS[1:])[0]
+            actions = tuple(action for action in FIXED_ACTIONS if goblin_actions[action] != 255
+                            and bank[0x1800:0x1840] == goblin_actions)
+        else:
+            actions = FIXED_ACTIONS[:-1] if actor in types and floor in (3, 4) else ()
         return name, actor in types, actions
 
     offset, palette = struct.unpack_from("<HH", bank, 0xf00 + 4 * (actor - 64))
     if not palette:
         return name, False, ()
     compact = combat_preview and (
-        name in banks.MIXED_COMBAT_BANKS or name in banks.DEDICATED_ROOM_COMBAT_BANKS
+        default_combat or name in banks.MIXED_COMBAT_BANKS or name in banks.DEDICATED_ROOM_COMBAT_BANKS
         or floor == 6 and name in banks.ACADEMY_COMBAT_BANKS
         or floor == 6 and bank_id == 0 and struct.unpack_from("<H", bank, 0xf00 + 4 * (103 - 64))[0] != 0
     )
-    selector = bank[banks.COMBAT_ACTIONS:banks.COMBAT_ACTIONS + 64]
     if compact:
         index = 0x800 + offset + creatures.MIXED_DIRECTIONAL_FRAMES
         actions = tuple(action for i, action in enumerate(FIXED_ACTIONS)

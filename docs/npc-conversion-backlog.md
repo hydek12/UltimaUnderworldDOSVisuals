@@ -1,21 +1,21 @@
 # Ultima Underworld critter inventory
 
-The [record-by-record inventory](ultima-underworld-npc-conversion-backlog.csv) covers all 657 mobile creature and NPC records in the clean Japanese Rev 1 archive. It compares the default release Track 1 (`72fed1544044659fc323ab86219be2b7eaba8cbf`) with the dedicated-bank combat preview (`72d5aacc9aaf68eacc8ebc591e555436393b6430`). The inventory reads the resident bank grids, palette registrations, and combat tables from the built tracks.
+The [record-by-record inventory](ultima-underworld-npc-conversion-backlog.csv) covers all 657 mobile creature and NPC records in the clean Japanese Rev 1 archive. It compares the default release Track 1 (`72fed1544044659fc323ab86219be2b7eaba8cbf`) with the dedicated-bank combat preview (`33cd305aa51163dac94792697280282af599b061`). The inventory reads the resident bank grids, palette registrations, and combat tables from the built tracks.
 
 Each record is checked at two camera cells, the archived spawn tile and one tile west. Directional coverage is identical in the two builds. Both cells register DOS art for **all 657 records**. The two-cell check measures configured coverage near the spawn. It leaves camera visibility, reachable viewpoints, actors that move, and actual gameplay draws to the [encounter audit](named-dialogue-audit.md).
 
 | Level | Records | Archive-noninitial | DOS in both views | DOS in one view | Source action candidates |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| 1 | 56 | 6 | 56 | 0 | 13 |
-| 2 | 57 | 8 | 57 | 0 | 4 |
+| 1 | 56 | 6 | 56 | 0 | 0 |
+| 2 | 57 | 8 | 57 | 0 | 0 |
 | 3 | 74 | 12 | 74 | 0 | 0 |
 | 4 | 70 | 10 | 70 | 0 | 0 |
 | 5 | 59 | 9 | 59 | 0 | 0 |
-| 6 | 60 | 11 | 60 | 0 | 18 |
-| 7 | 94 | 24 | 94 | 0 | 13 |
-| 8 | 115 | 25 | 115 | 0 | 12 |
+| 6 | 60 | 11 | 60 | 0 | 1 |
+| 7 | 94 | 24 | 94 | 0 | 0 |
+| 8 | 115 | 25 | 115 | 0 | 0 |
 | 9 | 72 | 2 | 72 | 0 | 0 |
-| Total | 657 | 107 | 657 | 0 | 60 |
+| Total | 657 | 107 | 657 | 0 | 1 |
 
 ## Level 8 boundary coverage
 
@@ -256,10 +256,33 @@ Controller-confirmed rest used the original wandering scan. The debugger staged 
 
 The cumulative candidate now covers 1,262 of 1,350 applicable checks (93.5%), including 657 directional, 526 fixed-action, and 79 activation checks.
 
+## Default-bank fixed actions
+
+The cumulative opt-in preview closes 59 fixed-action records across Levels 1, 2, 6, 7, and 8, with all previously registered actions, directional views, and room assignments retained. Level 1 shares the four goblin palettes and the DOS shade selector across directional and fixed-action frames. Its combat atlas can reduce texture resolution to fit the existing VRAM regions while retaining native projected size and DOS hotspots. Levels 2, 5, and 7 use a compact fixed-action bank for the default green goblins, and Level 8 uses one for the default rats. The Academy packs grub combat colors into an 8-bit texture page and places the palette rows in the existing reserved CLUT region.
+
+In DuckStation the Level 2 goblin at (60, 55) selected action `03` and the Level 8 rat at (5, 58) selected action `01`. Each drew all five corresponding DOS phases. The native damage dispatcher identified the rat as the source. The shaded Level 1 goblin at (52, 52) selected action `01`, drew all five DOS phases with its expected shaded palette, and was identified by the same dispatcher. The debugger placed the camera and assigned the player as the target for these checks. Level 7 default-bank goblin attack verification remains open after the selected approaches failed to stage a live target.
+
+Controlled DuckStation playback verified five Academy encounters against their resident DOS frame, page, and palette data, including native fallback cases. The type-82 grub at (17, 51) matched 36 sprite submissions and 24 fallbacks. Both slugs at (16, 51) and (17, 53) matched 54 sprite submissions and six fallbacks each. The default-bank bat at (40, 50) and imp-bank bat at (35, 53) each matched 48 sprite submissions and 12 fallbacks. The clean Rev 1 round-trip and all four CHD track readbacks passed.
+
+## Level 3 and 8 rest activations
+
+The debugger staged the player and bedroll at (27, 36) on the Shared Goblin Lurker Actions Preview. Controller-confirmed rests ran the original wandering scan and linked these previously absent actors.
+
+| Spawn tile | Actor type | Create trap | Roll / threshold | Live slot |
+| --- | --- | --- | --- | --- |
+| (32, 3) | 73 | 1014 | 43 / 29 | 181 |
+| (3, 9) | 93 | 930 | 40 / 35 | 180 |
+| (58, 12) | 68 | 885 | 43 / 35 | 181 |
+| (44, 38) | 83 | 708 | 60 / 54 | 180 |
+
+On Level 8, a controller-confirmed rest from the debugger-staged tile (48, 32) triggered trap 649 for the type-72 rat at (28, 49). The roll of 52 exceeded its threshold of 47, and the original handler linked mobile slot 140.
+
+The cumulative candidate covers 1,326 of 1,350 applicable checks (98.2%), with 657 directional, 585 fixed-action, and 84 activation checks.
+
 ## Remaining checks
 
-- **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 536 records, including slot `0d` for 277. There are 60 records across 12 types with one or more decodable source slots missing from a view that already registers their directional art. Slot `0d` remains missing from a sampled view for five of the candidates. Check whether the original PSX AI can select the corresponding action before mapping it. The Level 6 warren Ghost is an intentional exception and uses native combat. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
-- **Native activation.** Both sampled views already register DOS directional art for all 107 records marked noninitial by the archive heuristic. Of those, 79 have observed floor-load or controller activation and 28 have a create trap identified with the ordinary trigger chain still open. The Level 3 green goblin and the three Level 6 spiders were spawned by controller-driven rest. The Level 5 fire elemental and the five Level 7 spiders, Gazer, Reaper, shadow, type-113 ghost, and troll were spawned by controller-driven movement. All three Level 7 fire elemental activation records have been verified.
+- **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 585 records, including slot `0d` for 281. The Level 6 Warren Ghost is the one remaining fixed-action candidate. It is an intentional native combat exception. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
+- **Native activation.** Both sampled views already register DOS directional art for all 107 records marked noninitial by the archive heuristic. Of those, 84 have observed floor-load or controller activation and 23 have a create trap identified with the ordinary trigger chain still open. The Level 3 green goblin and the three Level 6 spiders were spawned by controller-driven rest. The Level 5 fire elemental and the five Level 7 spiders, Gazer, Reaper, shadow, type-113 ghost, and troll were spawned by controller-driven movement. All three Level 7 fire elemental activation records have been verified.
 
 ## Regenerate the inventory
 

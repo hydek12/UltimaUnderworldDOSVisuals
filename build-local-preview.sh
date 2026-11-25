@@ -200,6 +200,7 @@ if (( expanded_preview )); then
                             if (( slasher_combat )); then
                                 combat_actors=$(python3 "$project/lanugo/academy_banks.py")
                                 while IFS= read -r actor; do
+                                    mkdir -p "$scratch/wizards/type-$actor"
                                     "$exporter" export-mixed-combat "$dos_root" "$actor" "$scratch/wizards/type-$actor/mixed-combat"
                                 done <<< "$combat_actors"
                                 "$exporter" export-creature-combat "$dos_root" 124 "$scratch/wizards/type-124/combat"

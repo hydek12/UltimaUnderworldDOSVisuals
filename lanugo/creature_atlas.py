@@ -35,6 +35,10 @@ def combat_actions():
 
 def wizard_actions(combat=False):
     slots = (*COMBAT_SLOTS, CAST_SLOT) if combat else (CAST_SLOT,)
+    return actions_for_slots(slots)
+
+
+def actions_for_slots(slots):
     actions = bytearray([255] * 64)
     actions[0x20], actions[0x2c] = 0, 1
     phases = bytearray()
