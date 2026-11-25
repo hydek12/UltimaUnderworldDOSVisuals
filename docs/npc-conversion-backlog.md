@@ -19,7 +19,7 @@ Each record is checked at two camera cells, the archived spawn tile and one tile
 
 ## Level 8 boundary coverage
 
-The three west approach cells for the headless at (12, 3) and rats at (6, 22) and (26, 61) now select the existing ghosts, rats, and headless bank. In the built-track audit, all three gained directional coverage in the west approach and the combat preview registered DOS slots `00 01 02 03 07 0c` there. The ghost at (10, 3) retained its directional registration and gained the mixed bank’s fixed poses at its spawn. The new menu preview differs from the previous menu preview in 16 copies of the same Level 8 data sector. All four CHD tracks passed byte-for-byte readback.
+The three west approach cells for the headless at (12, 3) and rats at (6, 22) and (26, 61) now select the existing ghosts, rats, and headless bank. In the built-track audit, all three gained directional coverage in the west approach and the combat preview registered DOS slots `00 01 02 03 07 0c` there. The ghost at (10, 3) retained its directional registration and gained the mixed bank’s fixed poses at its spawn. The new menu preview differs from the previous menu preview in 16 copies of the same Level 8 data sector. All four CHD tracks passed byte-for-byte readback. In DuckStation, the preview loaded the `test` memory-card save and the native renderer submitted DOS sprite quads from bank 15 at all three west approaches. The probe checked the texture coordinates and palette for each draw after placing the camera with the debugger. Controller-driven approaches and combat at these boundaries remain open.
 
 ## Remaining checks
 
