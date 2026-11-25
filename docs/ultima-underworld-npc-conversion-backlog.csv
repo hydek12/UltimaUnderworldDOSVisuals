@@ -316,7 +316,7 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 5,0x9ab050,74,0,1,39,60,39,60,0x024c66,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 5,0x9ab06c,74,0,1,47,60,47,60,0x024c9c,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 6,0x9ac53c,109,191,1,43,4,43,4,0x02c529,4,wiza,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,wizc,wizc,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
-6,0x9ac558,97,207,1,4,5,4,5,0x02c35e,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,warren,warren,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+6,0x9ac558,97,207,1,4,5,4,5,0x02c35e,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,warren,warren,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 6,0x9ac574,120,0,1,55,6,55,6,0x02c2f2,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire-elemental,fire-elemental,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 6,0x9ac590,115,185,1,21,8,21,8,0x02c889,21,wizb,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,wizb,wizb,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 6,0x9ac5ac,108,187,1,21,10,21,10,0x02c8da,4,wiza,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,wizb,wizb,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
