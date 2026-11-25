@@ -33,6 +33,9 @@ OPTIONS_HELP = 0x800C2180
 OPTIONS_DRAW_ITEMS = 0x8005BEA0
 OPTIONS_DRAW_CALL = 0x8005C3C0
 INVENTORY_HELP = 0x800C3000
+RUNE_HELP = 0x800C31B0
+RUNE_SUBMIT_CALL = 0x800445A0
+SPELL_SUBMIT_CALL = 0x8004A204
 INVENTORY_SUBMIT_CALL = 0x800210F0
 SUBMIT_MENU_FRAME = 0x80072264
 MENU_TEXT_WIDTH = 0x8007F478
@@ -1284,6 +1287,38 @@ def inventory_help():
     return code.ljust(table_offset, b"\0") + struct.pack("<6I", *pointers) + b"".join(labels)
 
 
+def rune_spell_help():
+    """Append footers to the rune grid and spell book before frame submission."""
+    labels = (
+        b"D-Pad: Browse  Cross: Back\x1f",
+        b"D-Pad  Circle: Choose  Cross: Exit\x1f",
+        b"D-Pad  Circle: Choose  Cross: Back\x1f",
+    )
+    label_address = RUNE_HELP + 0x64
+    c = Code(RUNE_HELP)
+    c.address("a0", label_address)
+    c.branch("beq", "zero", "zero", "draw")
+    c.nop()
+    spell_help = c.origin + 4 * len(c.words)
+    # The spell book's s3 is set while browsing learned mantras.
+    c.address("a0", label_address + len(labels[0]))
+    c.branch("beq", "s3", "zero", "draw")
+    c.nop()
+    c.address("a0", label_address + len(labels[0]) + len(labels[1]))
+    c.label("draw")
+    c.imm("addiu", "sp", "sp", -24)
+    c.mem("sw", "ra", 20, "sp")
+    draw_menu_legend(c)
+    c.mem("lw", "ra", 20, "sp")
+    c.nop()
+    c.jump(SUBMIT_MENU_FRAME)
+    c.imm("addiu", "sp", "sp", 24)
+    code = c.out()
+    if len(code) > label_address - RUNE_HELP:
+        raise ValueError("Rune and spell controls routine overlaps its labels.")
+    return spell_help, code.ljust(label_address - RUNE_HELP, b"\0") + b"".join(labels)
+
+
 def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False,
                     lower_payload_lba=None, lizard_payload_lba=None, rat_payload_lba=None,
                     wizard_payload_lba=None, expanded_level_six=False, academy_runtime=False, level_one_dialogue=False,
@@ -1306,6 +1341,7 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
     if menu_controls:
         code[OPTIONS_HELP] = options_help()
         code[INVENTORY_HELP] = inventory_help()
+        spell_help, code[RUNE_HELP] = rune_spell_help()
     if academy_runtime:
         code.update(academy_banks.gates())
     if walking:
@@ -1351,6 +1387,8 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
         hooks += (
             (OPTIONS_DRAW_CALL, jump(OPTIONS_DRAW_ITEMS, True), jump(OPTIONS_HELP, True)),
             (INVENTORY_SUBMIT_CALL, jump(SUBMIT_MENU_FRAME, True), jump(INVENTORY_HELP, True)),
+            (RUNE_SUBMIT_CALL, jump(SUBMIT_MENU_FRAME, True), jump(RUNE_HELP, True)),
+            (SPELL_SUBMIT_CALL, jump(SUBMIT_MENU_FRAME, True), jump(spell_help, True)),
         )
     for address, expect, replace in hooks:
         offset = 2048 + address - EXE_LOAD
