@@ -582,13 +582,12 @@ def variant_payload(idle_atlas, walk_atlas, variants, dos_light_preview=None, fl
         bands += ((clut_rect, atlas_end, len(palettes)),)
         sections[atlas_end] = palettes
         atlas_end += len(palettes)
-        light_offset = (preview_lighting.LIGHT_LEVEL_OFFSET if bank_sections is None else
-                        preview_lighting.ROOM_LIGHT_LEVEL_OFFSET)
-        light = PAYLOAD_RAM + light_offset
-        sections[light_offset] = bytes(1)
-        sections[light_offset + preview_lighting.SETTINGS_DELTA] = preview_lighting.light_settings(dos_light_preview)
+        native_level = bank_sections is not None
+        settings_base = (preview_lighting.ROOM_LIGHT_SETTINGS_BASE if native_level else
+                         preview_lighting.LIGHT_LEVEL_OFFSET)
+        sections[settings_base + preview_lighting.SETTINGS_DELTA] = preview_lighting.light_settings(dos_light_preview)
         sections[preview_lighting.SELECTOR_OFFSET] = preview_lighting.select_clut(
-            shade_selector, light, shade_return, clut_id,
+            shade_selector, PAYLOAD_RAM + settings_base, shade_return, clut_id, native_level=native_level,
         )
         rectangles = tuple(rect for rect, _, _ in bands)
     sections[0x10] = b"".join(struct.pack("<4H", *rect) for rect in rectangles)

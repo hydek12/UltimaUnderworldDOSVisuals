@@ -100,7 +100,7 @@ The preview starts at light level 0 to show the DOS game's no-light scene. In a 
 
 DuckStation emitted the expected CLUT in 288 controlled draws across the four palettes, all eight light levels, several horizontal distances, and nonzero vertical and lateral offsets. After opening and closing Select, its live VRAM matched both atlas pages and every palette byte.
 
-The cumulative `--dos-shade-maps` recipe uses `0x801f7a00` for its Level 1 light selector because the cumulative room loader uses `0x801f6060` for its dispatch pointer. See the [local builder guide](../docs/local-patch-builder.md#dos-shade-maps-and-monochrome-preview).
+The cumulative `--dos-shade-maps` recipe reads the effective equipment and spell light level from Japanese Rev 1 at `0x800c9674`. Its standalone counterpart uses the debugger control described above. See the [local builder guide](../docs/local-patch-builder.md#dos-shade-maps-and-monochrome-preview).
 
 ## English v2.0 and DOS Lanugo
 

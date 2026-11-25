@@ -139,6 +139,7 @@ These percentages track the project checklist. They are estimates based on verif
 | 93% | Verified | 24 monochrome packet selections with matched sprite geometry and UVs |
 | 94% | Verified | Native Level 1 room-bank restoration and full texture and palette VRAM comparison |
 | 95% | Verified | Cumulative shade-map preview round-trip, four-track CHD readback, and default recipe hash regression |
+| 100% | Verified | Native torch, Light and Night Vision drive the Level 1 DOS palettes in DuckStation. Preview and default recipe regression checks passed. |
 
 ## Levels 1–4 recurring creature preview
 
@@ -278,3 +279,21 @@ The lighting option uses the PlayStation depth-light table for the two tested ro
 - The xdelta decoded against clean Japanese Rev 1 to Track 1 SHA-1 `19a1afea2fcfd96469b8383e9f36a2da7f03f1c5`. The CHD verified internally and all four extracted tracks matched their inputs byte for byte. A separate default recipe build reproduced `b824482c3b13b607aa039aba59effa4bd0cbac24`.
 
 The checks cover debugger-selected lighting on green goblin idle and walk sprites in the Level 1 default bank. The native game still controls dungeon lighting, torches, and spells.
+
+## 100% gameplay-driven DOS lighting
+
+The opt-in `--dos-shade-maps` recipe reads the effective light level at `0x800c9674` in Japanese Rev 1. The native equipment and active spell updater resolves the level. The Level 1 bank 0 idle and walk renderer uses `SHADES.DAT` for distance shading and selects `MONO.DAT` at level 5. Other levels use `LIGHT.DAT`.
+
+A disposable DuckStation Level 1 save reloaded through Level 2 to stream the rebuilt bank from disc. The debugger staged a fueled torch and invoked the game's inventory action, player spell dispatch, and timed-effect routine. The game changed the item and spell state, resolved the light level, and drew Lanugo. The spell timer was advanced through native calls. The normal controller and rune menus were outside this check.
+
+| Gameplay transition | Effective level | Lanugo CLUT | Map |
+| --- | --- | --- | --- |
+| Darkness | 0 | `0x7a58` | Normal |
+| Torch lit (item 145 to 149) | 2 | `0x7918` | Normal |
+| Torch extinguished (item 149 to 145) | 0 | `0x7a58` | Normal |
+| Light active | 3 | `0x7918` | Normal |
+| Light expired | 0 | `0x7a58` | Normal |
+| Night Vision active | 5 | `0x7c98` | Monochrome |
+| Night Vision expired | 0 | `0x7a58` | Normal |
+
+An independent controlled check matched the DOS shade calculation for all 192 combinations of four goblin palettes, eight levels, and six distances. This included 168 normal and 24 monochrome draws. The preview xdelta round-tripped against clean Japanese Rev 1 and all four tracks matched the CHD readback. The preview Track 1 SHA-1 was `4d0e5e33c53435989cd3b1f5ac2d1470e18925b0`. The default recipe reproduced `b824482c3b13b607aa039aba59effa4bd0cbac24`.

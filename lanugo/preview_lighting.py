@@ -1,4 +1,4 @@
-"""DOS distance shading with a fixed light level for renderer comparison."""
+"""DOS distance shading for the Level 1 goblin renderer."""
 
 from struct import iter_unpack, pack, unpack
 
@@ -8,8 +8,9 @@ TEXTURE_PAGES = ((384, 256, 224), (512, 384, 128))
 CLUT_RECT = (384, 480, 128, 32)
 SELECTOR_OFFSET = 0x500
 LIGHT_LEVEL_OFFSET = 0x60
-ROOM_LIGHT_LEVEL_OFFSET = 0x1a00
+ROOM_LIGHT_SETTINGS_BASE = 0x1a00
 SETTINGS_DELTA = 4
+NATIVE_LIGHT_LEVEL_GP_OFFSET = 0x414
 
 
 def light_settings(dos_root):
@@ -68,7 +69,7 @@ def palette_banks(dos_root, fullbright_clut):
     return bytes(banks)
 
 
-def select_clut(origin, light_selector, continuation, clut):
+def select_clut(origin, settings_base, continuation, clut, *, native_level=False):
     c = Code(origin)
     # Native horizontal deltas use the DOS world-unit scale. Use player height
     # before the PSX camera offset and the original creature anchor height.
@@ -115,11 +116,21 @@ def select_clut(origin, light_selector, continuation, clut):
     c.branch("bgtz", "t6", "zero", "sqrt")
     c.shift("srl", "t2", "t2", 1)
     c.label("scaled")
-    # The resident light-level byte indexes four constants from SHADES.DAT.
-    c.address("t8", light_selector)
-    c.mem("lbu", "t6", 0, "t8")
-    c.nop()
-    c.imm("andi", "t6", "t6", 7)
+    # The native equipment and spell updater stores the effective light level
+    # after applying the strongest light source, including Night Vision.
+    c.address("t8", settings_base)
+    if native_level:
+        c.mem("lw", "t6", NATIVE_LIGHT_LEVEL_GP_OFFSET, "gp")
+        c.nop()
+        c.imm("sltiu", "t9", "t6", 8)
+        c.branch("bne", "t9", "zero", "light_level")
+        c.nop()
+        c.alu("OR", "t6", "zero", "zero")
+        c.label("light_level")
+    else:
+        c.mem("lbu", "t6", 0, "t8")
+        c.nop()
+        c.imm("andi", "t6", "t6", 7)
     c.shift("sll", "t6", "t6", 2)
     c.alu("addu", "t8", "t8", "t6")
     c.mem("lbu", "t6", SETTINGS_DELTA, "t8")

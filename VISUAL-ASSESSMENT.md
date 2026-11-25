@@ -32,8 +32,14 @@ The DOS renderer selects a VGA remap row using the three-dimensional distance to
 
 ## Remaining implementation and acceptance
 
-1. Trace the PSX light state with an unlit character, a lit torch, a lantern, and an active light spell. Compare each light source to the corresponding DOS level before connecting the preview selector to gameplay.
+1. Extend the gameplay-driven DOS lighting beyond the verified Level 1 bank. Compare native lantern behavior and DOS shade levels before giving additional room banks the DOS palettes.
 2. Extend the four-palette path to the 19 initially linked green goblins on Levels 2, 5 and 7. The Level 2 texture loader uses VRAM x512–639, y384–511 for a native texture. Build a new texture layout or cache with room for the native texture, then check the dungeon, weapons and menus before enabling further floors.
 3. Match combat actions to DOS slots, including the DOS front-angle restrictions on many attack frames. Keep hit and death timings, selection bounds and native fallback for unavailable art. Verify foot placement, occlusion and overlapping sprites.
 4. Use the nine-floor crosswalk for the remaining creatures. Compare a named human in conversation, three troll variants, a ghost, and a shadow beast before moving to HUD, portraits, dungeon materials, objects, and map presentation. Record paired captures at comparable lighting and camera orientation.
 5. Rebuild a scratch disc image using the hash-checked clean Japanese Rev 1 source. Preserve Mode 2 sector integrity and the three CD audio tracks. Boot each candidate in DuckStation, then test original-hardware and Batocera behavior. Check English dialogue, controller behavior, combat, music, saves, and level transitions.
+
+## Future Avatar presentation
+
+Identify which PlayStation scenes draw an Avatar mesh, including any character preview, and locate the corresponding asset and animation data. The DOS inventory renderer uses 2D `BODIES` art for the paper doll and `ARMOR_F` or `ARMOR_M` art for equipped armor. Check character creation, portraits, and first-person weapon art separately before deciding which surfaces to replace.
+
+A future recipe can restore the matching DOS art directly on 2D surfaces. If an Avatar mesh is confirmed and no equivalent DOS mesh is found, use the DOS artwork as reference for the existing mesh's textures and silhouette. Prototype one scene and compare appearance, equipment layers, and animation before adding it as an opt-in recipe.

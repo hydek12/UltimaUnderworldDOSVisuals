@@ -173,6 +173,6 @@ The expected Track 1 SHA-1 is `0e2d7db3db07e11119d1803555b14952b6539d67`. The [9
 
 Use `--dos-shade-maps` as the first argument to the preview builder. It includes the native sprite lighting preview and adds the original DOS `LIGHT.DAT`, `MONO.DAT`, and `SHADES.DAT` behavior to idle and walking green goblins in the default Level 1 room bank. The bank uploads 16 normal and 16 monochrome shade rows for each of the four DOS palettes.
 
-In a disposable DuckStation debugger session, write a light level from 0 to 7 to `0x801f7a00` while Level 1 bank 0 is resident. Level 5 selects the monochrome map. Loading the bank resets the selector to level 0. This is a debugger-controlled sprite preview. The native game still controls room lighting, torches, and spell effects.
+In the cumulative preview, the game resolves equipped lights and active spells into one effective light level. The DOS renderer reads that level for each supported goblin draw. Level 5 (Night Vision) selects the monochrome map. The other levels use the normal map. Room bank loads leave the effective level under the game's control.
 
-The expected Track 1 SHA-1 is `19a1afea2fcfd96469b8383e9f36a2da7f03f1c5`. The [95% audit](named-dialogue-audit.md#95-dos-shade-map-and-monochrome-preview) records the packet, VRAM, and disc checks.
+The expected Track 1 SHA-1 is `4d0e5e33c53435989cd3b1f5ac2d1470e18925b0`. The [gameplay audit](named-dialogue-audit.md#100-gameplay-driven-dos-lighting) records the torch and spell transitions, disc checks, and default recipe regression.
