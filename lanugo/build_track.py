@@ -718,7 +718,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         elif room_bank == "hazards-nine":
             table_slots = ((0x804, 0x3fc), (0x1000, 0x400), (0x1800, 0x200), (0x1a00, 0x200))
         elif shared_format:
-            table_slots = ((0x804, 0x3fc), (0x1000, 0x400), (0x1800, 0x400))
+            table_slots = ((0x804, 0x3fc), (0x1000, 0x400), (0x1800, 0x400))[:len(families)]
         elif split_format:
             # The shared room needs two compact tables below the order log at 0x1800.
             table_slots = ((0x804, 0x3fc), (0x1000, 0x400))

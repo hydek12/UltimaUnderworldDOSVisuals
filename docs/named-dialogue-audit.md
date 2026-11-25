@@ -297,3 +297,17 @@ A disposable DuckStation Level 1 save reloaded through Level 2 to stream the reb
 | Night Vision expired | 0 | `0x7a58` | Normal |
 
 An independent controlled check matched the DOS shade calculation for all 192 combinations of four goblin palettes, eight levels, and six distances. This included 168 normal and 24 monochrome draws. The preview xdelta round-tripped against clean Japanese Rev 1 and all four tracks matched the CHD readback. The preview Track 1 SHA-1 was `4d0e5e33c53435989cd3b1f5ac2d1470e18925b0`. The default recipe reproduced `b824482c3b13b607aa039aba59effa4bd0cbac24`.
+
+## Imp, green goblin, and Gazer spawn coverage
+
+The cumulative recipe adds DOS idle and walking art for the Level 1 imp at (12, 20) and the Level 3 green goblin at (35, 62). On Level 5 the Gazer and nearby green goblins share a bank. The Gazer keeps its full-resolution DOS texture. The green goblin uses 13/16 texture resolution on Level 3 and 9/16 in the shared Level 5 bank. Both keep the original on-screen frame dimensions and anchors.
+
+A disposable DuckStation checkpoint used the rebuilt executable's floor table to stream the new banks from disc. The debugger positioned the camera. The native game supplied the actor poses and projection.
+
+| Actor | Live result |
+| --- | --- |
+| Level 1 imp (75) | Native floor loading linked slot 236 at (12, 20) despite its zero archive marker. Bank 8 submitted the DOS idle quad from the spawn tile with CLUT `0x7e18`. |
+| Level 3 green goblin (78) | The debugger invoked the original create-object trap for template 183. The native handler linked slot 179 at (35, 62), and bank 14 submitted the DOS idle quad from that tile with CLUT `0x7e18`. The player-facing activation sequence remains unverified. |
+| Level 5 Gazer (102) | Native floor loading linked slot 221 at (4, 43). From camera tile (3, 42), bank 10 submitted the DOS idle quad with CLUT `0x7e18`. This view previously selected the green-goblin-only bank. The shared bank registers DOS art for the three nearby green goblin spawn views. The goblin from (4, 42) also submitted a native walking quad with CLUT `0x7e58` from camera tile (5, 44). |
+
+The spawn-bank comparison checked all actor records on the three changed floors at each spawn tile and one tile west. The three target records gained coverage at both positions and no other record lost coverage at those positions. The [local release builder](local-patch-builder.md) reproduced the gameplay CHD byte for byte. The xdelta decoded against clean Japanese Rev 1, and all four tracks and CUE indexes passed readback. The qualified Track 1 SHA-1 is `0cb2e8536ae8c9a8f6436c78d08d972c975e95a1`.

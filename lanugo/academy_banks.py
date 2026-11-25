@@ -86,6 +86,7 @@ RECURRING_BANKS = {
         ("spiders", ((68, 83, 92),), ((29, 26), (27, 46), (37, 54), (19, 54))),
         ("skeletons", ((74,),), ((54, 35),)),
         ("lurkers", ((87, 116),), ((14, 23), (26, 38), (51, 55))),
+        ("entrance-imp", ((75,),), ((12, 20),)),
     ),
     2: (
         ("grubs-slugs", ((64, 82), (65, 69)),
@@ -110,6 +111,7 @@ RECURRING_BANKS = {
         ("gazers-golems", ((102,), (114, 121)), ((24, 44), (12, 55))),
         ("ghosts-shadows", ((97, 113), (117,)), ((57, 8), (2, 55), (2, 56), (3, 56))),
         ("reapers", ((118,),), ((7, 55),)),
+        ("south-green-goblin", ((78,),), ((35, 62),)),
     ),
     4: (
         ("grubs-slugs", ((64, 82), (65, 69)), ((26, 40), (36, 51))),
@@ -132,7 +134,8 @@ RECURRING_BANKS = {
         ("headless", ((91,),), ((34, 39), (25, 40), (36, 41), (35, 44))),
         ("spiders", ((68, 83, 92),), ((36, 52), (27, 53), (35, 53), (37, 54), (29, 55), (36, 55), (26, 56))),
         ("ghosts-five", ((97, 100, 101, 113),), ((9, 2), (52, 3), (42, 3), (17, 8), (6, 11), (60, 13), (11, 14), (15, 18), (8, 36), (9, 36), (48, 36), (53, 49), (57, 49), (54, 53))),
-        ("gazers", ((102,),), ((4, 43),)),
+        # The Gazer and the green goblins share the same two-tile camera cells.
+        ("gazers-goblins", ((102,), (78,)), ((3, 42), (4, 42), (5, 42), (4, 43))),
         ("reapers", ((118,),), ((18, 44), (14, 46))),
         ("fire", ((120,),), ((19, 50),)),
     ),
@@ -188,7 +191,8 @@ RECURRING_FORMATS = {
 RECURRING_SINGLE_FORMATS = {
     "spiders": (4, 16), "skeletons": (4, 16), "lurkers": (8, 16),
     "headless": (8, 16), "imps": (8, 16), "reapers": (4, 16), "wizards": (4, 16),
-    "imps-five": (8, 16), "ghosts-five": (4, 16), "gazers": (4, 16), "fire": (4, 16),
+    "imps-five": (8, 16), "ghosts-five": (4, 16), "fire": (4, 16),
+    "entrance-imp": (8, 16), "south-green-goblin": (8, 13),
     "ghosts-eight": (4, 16), "ghouls-eight": (8, 14), "golems-eight": (4, 16),
     "ghouls-five-recurring": (8, 14), "demon": (8, 16),
 }
@@ -233,6 +237,7 @@ SHARED_PAGE_FORMATS = {
     "bats-grubs-rats": ((4, (16, 16)), (4, (16,))),
     "hazards-nine": ((8, (10, 10)), (8, (10, 10))),
     "gazers-wisps-rats": ((4, (16, 16)), (4, (16,))),
+    "gazers-goblins": ((4, (16,)), (8, (9,))),
 }
 ROOM_FORMATS = {**LEVEL_ONE_FORMATS, "dwarves": (8, 16), "corby": (8, 15),
                 "bandits": (8, 15), "zak": (8, 15), "fighters-four": (8, 15), "trolls-four": (4, 16), "trolls-four-recurring": (4, 16),
@@ -378,7 +383,7 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None, recurring=False)
             shift = 4 * (index & 1)
             grid[index // 2] = (grid[index // 2] & ~(15 << shift)) | owner << shift
         grid = bytes(grid)
-    if floor == 7 or recurring and floor in (1, 2, 3, 4, 5, 8):
+    if floor == 7 or recurring and floor in (1, 2, 3, 4, 8):
         fallback_cells = {
             1: ((8, 43), (10, 43), (36, 28), (3, 38), (11, 38), (54, 38),
                 (45, 52), (52, 52), (46, 55), (45, 56), (47, 56), (51, 58)),
@@ -387,7 +392,6 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None, recurring=False)
                 (41, 23), (34, 24), (57, 24), (41, 29), (44, 29), (37, 32),
                 (11, 7), (17, 7), (10, 10)),
             4: ((31, 44),),
-            5: ((3, 42), (4, 42), (5, 42)),
             7: ((28, 57), (27, 55), (25, 55)),
             8: ((18, 12), (55, 12), (3, 13), (45, 23), (44, 34), (6, 38),
                 (9, 51), (5, 58)),
