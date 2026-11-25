@@ -150,6 +150,17 @@ On the Academy Spider Combat CHD in DuckStation, the debugger staged the player 
 
 On the Academy Spider Combat CHD in DuckStation, the debugger staged the player at (52, 61), facing west. Forward controller input reached move trigger 523 at (51, 61), which dispatched create trap 536. The handler used template 164 and linked a live type-112 troll in slot 161 at (52, 59). The target tile held no troll before the call.
 
+## Level 7 graveyard ghost pickup chains
+
+The Level 7 runtime object table identifies two gem pickups that lead to dormant type-97 ghosts. Each gem shares its horizontal sub-tile position with a gravestone and sits five object-height units above the stone's base.
+
+| Gem tile | Gem record | Pickup trigger | Create trap | Ghost template | Spawn tile |
+| --- | --- | --- | --- | --- | --- |
+| (17, 34) | 824, ruby | 823 | 822 | 211 | (19, 34) |
+| (17, 35) | 807, emerald | 806 | 805 | 208 | (19, 35) |
+
+In DuckStation on the Academy Spider Combat CHD, the debugger staged the approaches and watched the original create handler. With the game cursor, the controller interactions selected the gravestones and opened their inscriptions. Neither gem was collected and neither create handler ran during the trials. Both activation checks remain open.
+
 ## Remaining checks
 
 - **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 409 records, including slot `0d` for 208. There are 190 records across 34 types with one or more decodable source slots missing from a view that already registers their directional art. Slot `0d` appears in the source for 76 of the candidates. Check whether the original PSX AI can select the corresponding action before mapping it. The Level 6 warren Ghost is an intentional exception and uses native combat. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
