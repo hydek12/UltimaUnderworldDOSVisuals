@@ -12,6 +12,9 @@ if [[ ${1:-} == --menu-controls ]]; then
     menu_controls=1
     shift
 fi
+if (( warren_dialogue )); then
+    menu_controls=1
+fi
 
 dos_shade_maps=0
 if [[ ${1:-} == --dos-shade-maps ]]; then

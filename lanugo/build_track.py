@@ -49,7 +49,7 @@ INVENTORY_SUBMIT_CALL = 0x800210F0
 SUBMIT_MENU_FRAME = 0x80072264
 MENU_TEXT_WIDTH = 0x8007F478
 MENU_TEXT_DRAW = 0x8007DA90
-WARREN_TALK = 0x800C2200
+WARREN_TALK = MENU_CODE_RAM + 0x700
 BOOT = 0x800C2300
 SUPPRESS_NORMAL = 0x800C23C0
 SUPPRESS_DELAY = 0x800C2400
@@ -1506,7 +1506,7 @@ def map_help():
     return code.ljust(labels - MAP_HELP, b"\0") + exit_label + mark_label
 
 
-def menu_startup(spell_code):
+def menu_startup(spell_code, warren_dialogue=False):
     """Copy the menu code above the lowered stack before native heap setup."""
     sections = {
         OPTIONS_HELP - MENU_CODE_RAM: options_help(),
@@ -1517,6 +1517,10 @@ def menu_startup(spell_code):
     }
     cleanup_offset = 0x6b0
     length = cleanup_offset + 0x40
+    if warren_dialogue:
+        offset = WARREN_TALK - MENU_CODE_RAM
+        sections[offset] = warren_talk()
+        length = (offset + len(sections[offset]) + 3) & ~3
     source = MENU_STARTUP + 0x40
 
     # The native game can reuse the on-disc template's RAM after boot.
@@ -1624,11 +1628,11 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
         SUPPRESS_DELAY: gate(SUPPRESS_DELAY, WALK_SUPPRESS_DELAY_RAM if walking else SUPPRESS_DELAY_RAM, "a0", walking, floor_aware),
         DRAW_GATE: gate(DRAW_GATE, DRAW_RAM, walking=walking, floor_aware=floor_aware),
     }
-    if warren_dialogue:
-        code[WARREN_TALK] = warren_talk()
+    if warren_dialogue and not menu_controls:
+        raise ValueError("Warren dialogue requires the menu controls runtime.")
     if menu_controls:
         spell_help, spell_code = rune_spell_help()
-        code[MENU_STARTUP] = menu_startup(spell_code)
+        code[MENU_STARTUP] = menu_startup(spell_code, warren_dialogue)
     if academy_runtime:
         code.update(academy_banks.gates())
     if walking:
