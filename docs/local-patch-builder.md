@@ -15,7 +15,7 @@ python3 build-local-release.py --english-patch \
 
 Omit `--english-patch` and supply the already translated English v2.0 Track 1 BIN if you have it. Use the original split four-track Japanese Rev 1 CUE. Its `FILE` entries must point to the accompanying raw BINs.
 
-The release command verifies the hashes of all four original tracks and the CUE indexes before building. It runs the cumulative `--dos-shade-maps` recipe, decodes the combined xdelta against the original Japanese Track 1, and verifies the patched track SHA-1 `16d09f832ab39f01baaae93ebd4c5dce7ebdb5da`. It verifies the CHD and checks the indexes and bytes of all four tracks on extraction. The new output directory contains `english-dos-visuals.xdelta` and `Ultima Underworld (English Patch - DOS Visuals).chd`. Both files contain locally supplied game data and belong on the user's machine.
+The release command verifies the hashes of all four original tracks and the CUE indexes before building. It runs the cumulative `--dos-shade-maps` recipe, decodes the combined xdelta against the original Japanese Track 1, and verifies the patched track SHA-1 `a329fe8cab9c27aeb5255cff38225c35e551bd75`. It verifies the CHD and checks the indexes and bytes of all four tracks on extraction. The new output directory contains `english-dos-visuals.xdelta` and `Ultima Underworld (English Patch - DOS Visuals).chd`. Both files contain locally supplied game data and belong on the user's machine.
 
 The release includes the Slasher of Veils combat poses, mixed and dedicated room combat and casting, native sprite lighting, and gameplay-driven DOS normal and monochrome shade maps. The [encounter audit](named-dialogue-audit.md#levels-59-recurring-creatures-and-special-models) records the remaining gameplay and art coverage. Delta bytes can vary with the xdelta3 version. The patched track hash identifies the reproduced data track.
 
@@ -167,7 +167,7 @@ The same option adds Level 7 banks for Tyball, Cardon, the gray guards, the pris
 
 The Level 1 imp and Level 3 green goblin have local idle and walk banks. The Level 5 Gazer shares a bank with the three nearby green goblins so their spawn views can show both families. See the [critter coverage audit](named-dialogue-audit.md#imp-green-goblin-and-gazer-spawn-coverage). The cumulative recipe also fills 27 spawn-view gaps for noninitial records. See the [dormant creature audit](named-dialogue-audit.md#dormant-creature-spawn-coverage).
 
-The early-floor room selector selects a bank from the camera’s two-tile cell. Shared banks retain independent DOS palettes for nearby families. Level 4 packs bats and grubs on one page and rats on the other so their rooms can overlap without displacing the grub. The eight idle and walk facings retain their frame rectangles and anchor points. The `--late-dialogue` comparison build’s Track 1 SHA-1 is `9e9f71e0bfe17dca3f703e80b3606fc1bd12c86a`. The renderer falls back to native art when the selected room lacks the actor’s entry or when an action has no supported DOS pose.
+The early-floor room selector selects a bank from the camera’s two-tile cell. Shared banks retain independent DOS palettes for nearby families. Level 4 packs bats and grubs on one page and rats on the other so their rooms can overlap without displacing the grub. The eight idle and walk facings retain their frame rectangles and anchor points. The `--late-dialogue` comparison build’s Track 1 SHA-1 is `ae115f5170f751f0d9290c42ff2a1c7dec210065`. The renderer falls back to native art when the selected room lacks the actor’s entry or when an action has no supported DOS pose.
 
 ### Levels 5–9
 
@@ -177,7 +177,7 @@ The cumulative build uses additional room banks on Levels 5, 7, and 8, and exten
 
 Use `--slasher-combat` as the first argument to build the cumulative preview with the Slasher’s seven DOS combat sequences. The Level 9 bank fits all 31 combat frames at 9/16 texture resolution for the Slasher, with the original DOS frame rectangles and hotspots. Fixed combat poses use the forward three views. The other views use directional standing sprites, and the death pose uses all eight views. Action values without a mapped pose keep the PlayStation renderer.
 
-The expected Track 1 SHA-1 is `a398af54f881632a755a259915048d5a6638a2d4`. The preview also enables full-resolution combat art for imps, skeletons, and headless in their dedicated room banks. The imps have DOS casting sprites. See the [encounter audit](named-dialogue-audit.md#level-9-slasher-combat-preview) for the verified cases.
+The expected Track 1 SHA-1 is `b3f23af190c49f776b627ee061228ebf270b9e7e`. The preview also enables full-resolution combat art for imps, skeletons, and headless in their dedicated room banks. The imps have DOS casting sprites. See the [encounter audit](named-dialogue-audit.md#level-9-slasher-combat-preview) for the verified cases.
 
 The combat preview also selects DOS action frames per actor family in 24 mixed room layouts (32 banks) on Levels 1–5, 7, and 8. The two lighting previews inherit these tables. Room pages may use a lower common texture scale to fit the extra frames. Actions without a usable DOS source keep the native sprite. The [mixed room audit](named-dialogue-audit.md#mixed-room-combat-and-casting) covers the renderer matrix and the [Level 5 AI-initiated Gazer cast](named-dialogue-audit.md#ai-initiated-gazer-cast).
 
@@ -187,7 +187,7 @@ The combat preview also enables the remaining DOS combat poses in the dedicated 
 
 Use `--native-sprite-lighting` as the first argument to the preview builder. It includes the Slasher combat preview and enables PlayStation depth-based lighting on DOS sprites in the Level 3 bandit bank and the Level 4 bat, grub, and rat bank. The lighting uses the same depth table as the native polygons and preserves the existing sprite geometry, palette, and combat fallbacks in those rooms.
 
-The expected Track 1 SHA-1 is `9f4f6f96e066c0cb0e602603c4d2756c048e51e5`. The [90% audit](named-dialogue-audit.md#90-native-sprite-lighting-preview) records the runtime and build checks.
+The expected Track 1 SHA-1 is `438912d20872ce91831b3317cdf0de3a9bcb3cb8`. The [90% audit](named-dialogue-audit.md#90-native-sprite-lighting-preview) records the runtime and build checks.
 
 ### DOS shade maps and monochrome preview
 
@@ -195,13 +195,13 @@ The release builder selects `--dos-shade-maps` automatically. Pass the same flag
 
 In the cumulative preview, the game resolves equipped lights and active spells into one effective light level. The DOS renderer reads that level for each supported goblin draw. Level 5 (Night Vision) selects the monochrome map. The other levels use the normal map. Room bank loads leave the effective level under the game's control.
 
-The expected Track 1 SHA-1 is `16d09f832ab39f01baaae93ebd4c5dce7ebdb5da`. The [gameplay audit](named-dialogue-audit.md#100-gameplay-driven-dos-lighting) records the torch and spell transitions and earlier disc checks.
+The expected Track 1 SHA-1 is `a329fe8cab9c27aeb5255cff38225c35e551bd75`. The [gameplay audit](named-dialogue-audit.md#100-gameplay-driven-dos-lighting) records the torch and spell transitions and earlier disc checks.
 
 ### Context-sensitive menu controls development preview
 
 Pass `--menu-controls` before the preview profile flag to add a button legend to the PSX Options, Inventory, map, Rune Bag, spell, and dialogue screens. For example, use `build-local-preview.sh --menu-controls --dos-shade-maps` with the usual source arguments. The top-level page shows Cross to exit. Submenus show Cross to go back. The legend uses single-glyph ○, □, △, and × icons in the native menu font. The opt-in recipe adds the icons to four unused font slots and draws the legend just before the frame is submitted. Save and load screens use their stock prompts.
 
-The Level 1 goblin coverage preview includes this opt-in menu patch. Its Track 1 SHA-1 is `af3d81d3814b05d865a7f3830b4f2a6cec78c8ae`. All four CHD tracks passed byte-for-byte readback.
+The Levels 2 and 4 critter coverage preview includes this opt-in menu patch. Its Track 1 SHA-1 is `4321d7a4c37390c6d3b8f6b6c2ebd38bdf8c9908`. All four CHD tracks passed byte-for-byte readback.
 
 The legends list applicable buttons in this order: □, ○, △, ×. Inventory centers the footer and shifts long prompts left just enough to clear the health and mana icons. On an occupied slot, □ starts the native drop flow, ○ picks up the item, and △ opens a container or uses the item. While holding an item, ○ places it on a different slot. × cancels a held selection, closes an open container, or exits Inventory.
 

@@ -1,21 +1,21 @@
 # Ultima Underworld critter inventory
 
-The [record-by-record inventory](ultima-underworld-npc-conversion-backlog.csv) covers all 657 mobile creature and NPC records in the clean Japanese Rev 1 archive. It compares the default release Track 1 (`16d09f832ab39f01baaae93ebd4c5dce7ebdb5da`) with the dedicated-bank combat preview (`a398af54f881632a755a259915048d5a6638a2d4`). The inventory reads the resident bank grids, palette registrations, and combat tables from the built tracks.
+The [record-by-record inventory](ultima-underworld-npc-conversion-backlog.csv) covers all 657 mobile creature and NPC records in the clean Japanese Rev 1 archive. It compares the default release Track 1 (`a329fe8cab9c27aeb5255cff38225c35e551bd75`) with the dedicated-bank combat preview (`b3f23af190c49f776b627ee061228ebf270b9e7e`). The inventory reads the resident bank grids, palette registrations, and combat tables from the built tracks.
 
-Each record is checked at two camera cells, the archived spawn tile and one tile west. Directional coverage is identical in the two builds. Both cells register DOS art for **653 records** and one cell registers it for **4 records**. All 4 are initially linked in the archive. The two-cell check measures configured coverage near the spawn. It leaves camera visibility, reachable viewpoints, actors that move, and actual gameplay draws to the [encounter audit](named-dialogue-audit.md).
+Each record is checked at two camera cells, the archived spawn tile and one tile west. Directional coverage is identical in the two builds. Both cells register DOS art for **all 657 records**. The two-cell check measures configured coverage near the spawn. It leaves camera visibility, reachable viewpoints, actors that move, and actual gameplay draws to the [encounter audit](named-dialogue-audit.md).
 
 | Level | Records | Archive-noninitial | DOS in both views | DOS in one view | Source action candidates |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | 1 | 56 | 6 | 56 | 0 | 33 |
-| 2 | 57 | 8 | 54 | 3 | 24 |
+| 2 | 57 | 8 | 57 | 0 | 24 |
 | 3 | 74 | 12 | 74 | 0 | 31 |
-| 4 | 70 | 10 | 69 | 1 | 26 |
+| 4 | 70 | 10 | 70 | 0 | 26 |
 | 5 | 59 | 9 | 59 | 0 | 24 |
 | 6 | 60 | 11 | 60 | 0 | 33 |
 | 7 | 94 | 24 | 94 | 0 | 47 |
 | 8 | 115 | 25 | 115 | 0 | 31 |
 | 9 | 72 | 2 | 72 | 0 | 0 |
-| Total | 657 | 107 | 653 | 4 | 249 |
+| Total | 657 | 107 | 657 | 0 | 249 |
 
 ## Level 8 boundary coverage
 
@@ -57,9 +57,16 @@ Three green goblins at (54, 38), (52, 52), and (46, 55) now use the default DOS 
 
 The live DuckStation check matched the DOS texture coordinates and palettes for all five targets. From (53, 38), the green goblin at (54, 38) drew its walk frame with palette `0x7a1e`. The green goblins at (52, 52) and (46, 55) drew idle frames from (51, 52) and (45, 55) with palette `0x7a1a`. The gray goblins at (2, 57) and (52, 59) drew idle frames from (2, 56) and (51, 59) with palettes `0x7e18` and `0x7e58`. Both nearby green goblins at (4, 56) and (51, 58) also drew their expected idle frames in the shared bank. The debugger placed the camera, and the game selected all seven poses.
 
+## Remaining Level 2 and Level 4 approaches
+
+On Level 2, the green goblins at (54, 55) and (60, 55) use the default goblin bank from the west. The gray goblin at (56, 60) uses a gray and green bank from the west. The shared bank packs gray sprites at 13/16 and green sprites at 9/16 texture scale.
+
+On Level 4, the bat at (32, 45) gains a west approach in a bank it shares with the lizardman at (31, 44). The shared bank retains the lizardman’s DOS combat slots and the bat’s native depth-based lighting. The built-track audit confirmed that exactly four camera cells changed across both floors, with all previously mapped actions retained.
+
+In live DuckStation gameplay, the green goblins at (54, 55) and (60, 55) drew the exact DOS idle frames from camera tiles (52, 55) and (59, 55) using palette `0x7f1a`. The gray goblin drew its idle frame from (55, 61) using palette `0x7e58`. The Level 4 bat drew its idle frame from (31, 45) with palette `0x7e18`. The neighboring green goblin and lizardman also drew their expected DOS frames and palettes. The debugger placed the camera, and the game selected the poses.
+
 ## Remaining checks
 
-- **Directional coverage at bank boundaries.** Filter for `preview_directional_views=1` to get all 4 records with their bank names and coordinates. A neighbouring bank may already serve another family, so confirm visibility and bank ownership in-game before changing its grid cells.
 - **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 351 records, including slot `0d` for 150. There are 249 records across 37 types with one or more decodable source slots missing from a view that already registers their directional art. Spiders (26 type-92 records, plus other variants) remain among the largest groups. Slot `0d` appears in the source for 135 of the candidates. Check whether the original PSX AI can select the corresponding action before mapping it. The Level 6 warren Ghost is an intentional exception and uses native combat. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
 - **Native activation.** Both sampled views already register DOS directional art for all 107 archive-noninitial records. The earlier native tile-chain trace found 44 already linked on floor load and identified create traps for another 60 records. Two Level 7 fire elementals share a type and spawn coordinate and need record-specific evidence. The remaining record, the Level 3 green goblin at (35, 62), was spawned by controller-driven rest. A create-trap entry identifies a candidate trigger and can include calls exercised with the debugger. The complete ordinary gameplay trigger chain still needs verification where the encounter audit lacks it.
 

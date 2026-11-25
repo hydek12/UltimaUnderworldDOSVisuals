@@ -98,7 +98,7 @@ RECURRING_BANKS = {
         ("lurkers", ((87, 116),), ((60, 26), (49, 54))),
         ("headless", ((91,),), ((28, 42), (21, 52))),
         ("gazers-golems", ((102,), (114, 121)), ((48, 23), (5, 23))),
-        ("gray-goblins", ((71, 80),), ((56, 60),)),
+        ("gray-green-goblins-two", ((71, 80), (78,)), ((56, 60),)),
     ),
     3: (
         ("grubs-slugs", ((64, 82), (65, 69)), ((47, 55), (51, 56), (53, 61))),
@@ -127,6 +127,7 @@ RECURRING_BANKS = {
         ("reapers", ((118,),), ((4, 40),)),
         ("wizards", ((106,),), ((8, 55), (8, 56))),
         ("grub-imp", ((82,), (81,)), ()),
+        ("bats-lizard-four", ((66, 73), (89,)), ()),
     ),
     5: (
         ("rats-grubs-five", ((72,), (82,)),
@@ -188,7 +189,8 @@ ROOM_CELL_OVERRIDES = {
     2: {
         "headless": ((9, 44),),
         "rats-spiders": ((43, 48),),
-        None: ((31, 57), (32, 57), (31, 58)),
+        "gray-green-goblins-two": ((55, 60),),
+        None: ((31, 57), (32, 57), (31, 58), (53, 55), (59, 55)),
     },
     3: {
         "bats-rats": ((31, 3), (32, 3), (42, 42)),
@@ -202,6 +204,7 @@ ROOM_CELL_OVERRIDES = {
     4: {
         "bats-grubs-rats": ((35, 15), (27, 51), (29, 54), (33, 55)),
         "grub-imp": ((29, 52),),
+        "bats-lizard-four": ((31, 45),),
     },
     7: {
         "imp-seven": ((33, 35), (34, 35)),
@@ -278,6 +281,8 @@ ROOM_FAMILIES.update({
 # Each entry gives one texture page's bit depth and scales for its families.
 SHARED_PAGE_FORMATS = {
     "gray-green-goblins": ((4, (13,)), (8, (9,))),
+    "gray-green-goblins-two": ((4, (13,)), (8, (9,))),
+    "bats-lizard-four": ((4, (16,)), (8, (9,))),
     "prison-seven": ((4, (16,)), (8, (9, 8))),
     "troll-seven-recurring": ((4, (16,)), (8, (9,))),
     "lurkers-goblins-seven": ((8, (16,)), (8, (9,))),
@@ -299,7 +304,9 @@ ROOM_FORMATS = {**LEVEL_ONE_FORMATS, "dwarves": (8, 16), "corby": (8, 15),
                 "troll-seven": (4, 16), "imp-seven": (8, 16), **RECURRING_SINGLE_FORMATS}
 SPLIT_ROOM_FORMATS = {"prisoner": (4, (12, 16)), "town": (8, (11, 11)), "carasso": (8, (16, 11)),
                       **RECURRING_FORMATS}
-MIXED_COMBAT_BANKS = (SHARED_PAGE_FORMATS.keys() | SPLIT_ROOM_FORMATS.keys()) - {"hazards-nine", "gray-green-goblins"}
+MIXED_COMBAT_BANKS = (SHARED_PAGE_FORMATS.keys() | SPLIT_ROOM_FORMATS.keys()) - {
+    "hazards-nine", "gray-green-goblins", "gray-green-goblins-two",
+}
 DEDICATED_ROOM_COMBAT_BANKS = frozenset((
     "wizards", "judy", "anjor", "tyball", "ghouls-five", "ghouls-five-recurring", "ghouls-eight",
 ))

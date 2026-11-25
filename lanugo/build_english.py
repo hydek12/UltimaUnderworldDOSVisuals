@@ -149,7 +149,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
                             slasher_combat=slasher_combat and floor == 9, room_combat=slasher_combat,
                             native_sprite_lighting=native_sprite_lighting and (
                                 (floor == 3 and bank == "bandits") or
-                                (floor == 4 and bank == "bats-grubs-rats")
+                                (floor == 4 and bank in ("bats-grubs-rats", "bats-lizard-four"))
                             ),
                         )
                     if len(bank_payload) != stride:

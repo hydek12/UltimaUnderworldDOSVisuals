@@ -101,17 +101,17 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 2,0x9a5e20,83,0,1,35,54,35,54,0x00d6d4,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 2,0x9a5e3c,87,0,1,49,54,49,54,0x00d5fc,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 2,0x9a5e58,83,0,1,36,55,36,55,0x00d5e1,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
-2,0x9a5e74,78,0,1,54,55,54,55,0x00d44c,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,skeletons,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
-2,0x9a5e90,78,0,1,60,55,60,55,0x00d467,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,skeletons,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+2,0x9a5e74,78,0,1,54,55,54,55,0x00d44c,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+2,0x9a5e90,78,0,1,60,55,60,55,0x00d467,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 2,0x9a5eac,78,0,0,32,57,32,57,,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Create trap identified
 2,0x9a5ec8,78,0,0,31,58,31,58,,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Create trap identified
 2,0x9a5ee4,82,0,1,26,58,26,58,0x00d7e2,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
 2,0x9a5f00,82,0,1,27,58,27,58,0x00d7c7,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
 2,0x9a5f1c,82,0,1,26,59,26,59,0x00d7fd,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
 2,0x9a5f38,82,0,0,27,59,27,59,0x00d818,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Linked on floor load
-2,0x9a5f54,78,0,1,55,60,55,60,0x00d431,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
-2,0x9a5f70,80,0,1,56,60,56,60,0x00d359,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-goblins,default,1,1,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-2,0x9a5f8c,78,0,1,55,61,55,61,0x00d416,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+2,0x9a5f54,78,0,1,55,60,55,60,0x00d431,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins-two,gray-green-goblins-two,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+2,0x9a5f70,80,0,1,56,60,56,60,0x00d359,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins-two,gray-green-goblins-two,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+2,0x9a5f8c,78,0,1,55,61,55,61,0x00d416,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-green-goblins-two,gray-green-goblins-two,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 3,0x9a7248,67,0,1,21,2,21,2,0x01523a,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 3,0x9a7264,72,0,1,21,3,21,3,0x015162,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 3,0x9a7280,73,0,0,32,3,32,3,,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
@@ -227,12 +227,12 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 4,0x9a925c,95,143,1,20,43,20,43,0x01c94d,26,fight32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fighters-four,fighters-four,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
 4,0x9a9278,83,0,1,3,44,3,44,0x01cc41,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
 4,0x9a9294,83,0,1,4,44,4,44,0x01cc26,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
-4,0x9a92b0,89,0,1,31,44,31,44,0x01cd85,2,lizman,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+4,0x9a92b0,89,0,1,31,44,31,44,0x01cd85,2,lizman,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-lizard-four,bats-lizard-four,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 4,0x9a92cc,73,0,1,33,44,33,44,0x01cfd7,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-grubs-rats,bats-grubs-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 4,0x9a92e8,83,0,1,2,45,2,45,0x01cc92,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
 4,0x9a9304,83,0,1,4,45,4,45,0x01cc5c,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
 4,0x9a9320,83,0,1,5,45,5,45,0x01ccad,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
-4,0x9a933c,66,0,1,32,45,32,45,0x01cfbc,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-grubs-rats,default,1,1,00 01 02 03 07 0c,,00 01 02 03 07 0c,,Initially linked
+4,0x9a933c,66,0,1,32,45,32,45,0x01cfbc,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-grubs-rats,bats-lizard-four,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 4,0x9a9358,83,0,1,3,46,3,46,0x01cc77,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
 4,0x9a9374,122,0,1,8,47,8,47,0x01ccc8,23,wisp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-wisps,gazers-wisps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 4,0x9a9390,83,0,1,32,48,32,48,0x01cbf0,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
