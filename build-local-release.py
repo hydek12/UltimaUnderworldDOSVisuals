@@ -17,7 +17,7 @@ JAPANESE_SHA1 = (
     "635416f6871854ead90c9a6cab2cc4afbe2e0615",
     "04786e51a431ac37910f7b2e3fc5294e44b3664f",
 )
-PATCHED_SHA1 = "0cb2e8536ae8c9a8f6436c78d08d972c975e95a1"
+PATCHED_SHA1 = "e3e2845b85d665a1240c5c89fab828b8703850b2"
 DISC_NAME = "Ultima Underworld (English Patch - DOS Visuals).chd"
 FILE_LINE = re.compile(r'FILE\s+"([^"]+)"\s+BINARY', re.IGNORECASE)
 

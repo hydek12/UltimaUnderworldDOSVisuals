@@ -15,7 +15,7 @@ python3 build-local-release.py --english-patch \
 
 Omit `--english-patch` and supply the already translated English v2.0 Track 1 BIN if you have it. Use the original split four-track Japanese Rev 1 CUE. Its `FILE` entries must point to the accompanying raw BINs.
 
-The release command verifies the hashes of all four original tracks and the CUE indexes before building. It runs the cumulative renderer recipe, decodes the combined xdelta against the original Japanese Track 1, and verifies the patched track SHA-1 `0cb2e8536ae8c9a8f6436c78d08d972c975e95a1`. It verifies the CHD and checks the indexes and bytes of all four tracks on extraction. The new output directory contains `english-dos-visuals.xdelta` and `Ultima Underworld (English Patch - DOS Visuals).chd`. Both files contain locally supplied game data and belong on the user's machine.
+The release command verifies the hashes of all four original tracks and the CUE indexes before building. It runs the cumulative renderer recipe, decodes the combined xdelta against the original Japanese Track 1, and verifies the patched track SHA-1 `e3e2845b85d665a1240c5c89fab828b8703850b2`. It verifies the CHD and checks the indexes and bytes of all four tracks on extraction. The new output directory contains `english-dos-visuals.xdelta` and `Ultima Underworld (English Patch - DOS Visuals).chd`. Both files contain locally supplied game data and belong on the user's machine.
 
 The release includes the Level 9 DOS sprite draw fix for the Slasher of Veils. The [encounter audit](named-dialogue-audit.md#levels-59-recurring-creatures-and-special-models) records the remaining gameplay and art coverage. Delta bytes can vary with the xdelta3 version. The patched track hash identifies the reproduced data track.
 
@@ -151,9 +151,9 @@ Use `--late-dialogue` as the first argument for the cumulative build. This inclu
 
 The same option adds Level 7 banks for Tyball, Cardon, the gray guards, the prison corridor, the troll guard, and the dormant imp. The prison bank shares two pages across wizards, dwarves, and fighters. The wizard page runs at full 4-bit resolution. The shared 8-bit page uses 9/16 textures for dwarves and 8/16 textures for fighters and retains the original sprite dimensions and anchors. Cardon’s separate 8-bit bank uses 15/16 textures. These additions supply directional idle and walk frames. Other actions use the existing native fallback. Dormant actors still require their original gameplay triggers.
 
-The Level 1 imp and Level 3 green goblin have local idle and walk banks. The Level 5 Gazer shares a bank with the three nearby green goblins so their spawn views can show both families. See the [critter coverage audit](named-dialogue-audit.md#imp-green-goblin-and-gazer-spawn-coverage).
+The Level 1 imp and Level 3 green goblin have local idle and walk banks. The Level 5 Gazer shares a bank with the three nearby green goblins so their spawn views can show both families. See the [critter coverage audit](named-dialogue-audit.md#imp-green-goblin-and-gazer-spawn-coverage). The cumulative recipe also fills 27 spawn-view gaps for noninitial records. See the [dormant creature audit](named-dialogue-audit.md#dormant-creature-spawn-coverage).
 
-The early-floor room selector selects a bank from the camera’s two-tile cell. Shared banks retain independent DOS palettes for nearby families. Level 4 packs bats and grubs on one page and rats on the other so their rooms can overlap without displacing the grub. The eight idle and walk facings retain their frame rectangles and anchor points. The current cumulative Track 1 SHA-1 is `0cb2e8536ae8c9a8f6436c78d08d972c975e95a1`. The renderer falls back to native art when the selected room lacks the actor’s entry or when an action has no supported DOS pose.
+The early-floor room selector selects a bank from the camera’s two-tile cell. Shared banks retain independent DOS palettes for nearby families. Level 4 packs bats and grubs on one page and rats on the other so their rooms can overlap without displacing the grub. The eight idle and walk facings retain their frame rectangles and anchor points. The current cumulative Track 1 SHA-1 is `e3e2845b85d665a1240c5c89fab828b8703850b2`. The renderer falls back to native art when the selected room lacks the actor’s entry or when an action has no supported DOS pose.
 
 ### Levels 5–9
 
@@ -163,13 +163,13 @@ The cumulative build uses additional room banks on Levels 5, 7, and 8, and exten
 
 Use `--slasher-combat` as the first argument to build the cumulative preview with the Slasher’s seven DOS combat sequences. The Level 9 bank fits all 31 combat frames at 9/16 texture resolution for the Slasher, with the original DOS frame rectangles and hotspots. Fixed combat poses use the forward three views. The other views use directional standing sprites, and the death pose uses all eight views. Action values without a mapped pose keep the PlayStation renderer.
 
-The expected Track 1 SHA-1 is `3561eaa665927bbe938eab0b59056d7d3ea0f811`. The preview differs from the cumulative release by 17 raw sectors, all within the Level 9 bank. See the [encounter audit](named-dialogue-audit.md#level-9-slasher-combat-preview) for the verified cases.
+The expected Track 1 SHA-1 is `ff6424ed5ebfc4a3051e7dde3bd0dedca5136c68`. The preview differs from the cumulative release by 17 raw sectors, all within the Level 9 bank. See the [encounter audit](named-dialogue-audit.md#level-9-slasher-combat-preview) for the verified cases.
 
 ### Native sprite lighting preview
 
 Use `--native-sprite-lighting` as the first argument to the preview builder. It includes the Slasher combat preview and enables PlayStation depth-based lighting on DOS sprites in the Level 3 bandit bank and the Level 4 bat, grub, and rat bank. The lighting uses the same depth table as the native polygons and preserves the existing sprite geometry, palette, and combat fallbacks in those rooms.
 
-The expected Track 1 SHA-1 is `773418c92b4dd6f97ce32b3c5051cf009265734a`. The [90% audit](named-dialogue-audit.md#90-native-sprite-lighting-preview) records the runtime and build checks.
+The expected Track 1 SHA-1 is `e6f5771e51dc2edc8cbcc9339efb475618c73f32`. The [90% audit](named-dialogue-audit.md#90-native-sprite-lighting-preview) records the runtime and build checks.
 
 ### DOS shade maps and monochrome preview
 
@@ -177,4 +177,4 @@ Use `--dos-shade-maps` as the first argument to the preview builder. It includes
 
 In the cumulative preview, the game resolves equipped lights and active spells into one effective light level. The DOS renderer reads that level for each supported goblin draw. Level 5 (Night Vision) selects the monochrome map. The other levels use the normal map. Room bank loads leave the effective level under the game's control.
 
-The expected Track 1 SHA-1 is `9d6b30891410460225725c2a8b0c30f93b0583f7`. The [gameplay audit](named-dialogue-audit.md#100-gameplay-driven-dos-lighting) records the torch and spell transitions, disc checks, and default recipe regression.
+The expected Track 1 SHA-1 is `8524fd18e94188fe96089766b7925d1b34fe4596`. The [gameplay audit](named-dialogue-audit.md#100-gameplay-driven-dos-lighting) records the torch and spell transitions, disc checks, and default recipe regression.

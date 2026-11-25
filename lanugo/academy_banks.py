@@ -112,6 +112,7 @@ RECURRING_BANKS = {
         ("ghosts-shadows", ((97, 113), (117,)), ((57, 8), (2, 55), (2, 56), (3, 56))),
         ("reapers", ((118,),), ((7, 55),)),
         ("south-green-goblin", ((78,),), ((35, 62),)),
+        ("skeletons-spiders-headless", ((74,), (68, 83, 92), (91,)), ()),
     ),
     4: (
         ("grubs-slugs", ((64, 82), (65, 69)), ((26, 40), (36, 51))),
@@ -125,6 +126,7 @@ RECURRING_BANKS = {
         ("gazers-wisps", ((102,), (122,)), ((8, 47), (3, 50))),
         ("reapers", ((118,),), ((4, 40),)),
         ("wizards", ((106,),), ((8, 55), (8, 56))),
+        ("grub-imp", ((82,), (81,)), ()),
     ),
     5: (
         ("rats-grubs-five", ((72,), (82,)),
@@ -150,6 +152,7 @@ RECURRING_BANKS = {
         ("bats-lurkers", ((66,), (87, 116)), ((3, 8), (4, 23))),
         ("fire", ((120,),), ((47, 40), (51, 40), (42, 41), (56, 41), (38, 43), (60, 43), (35, 45), (33, 49), (34, 53), (35, 56), (35, 59), (32, 61))),
         ("reapers", ((118,),), ((27, 3), (33, 8))),
+        ("golems-imp", ((114, 121), (75,)), ()),
     ),
     8: (
         ("rats-imps", ((72,), (81,)),
@@ -170,7 +173,37 @@ RECURRING_BANKS = {
         ("fire", ((120,),), ((22, 5), (54, 7), (23, 15), (41, 22), (31, 27), (33, 27), (9, 30), (4, 36), (53, 37), (33, 38), (41, 51))),
         ("demon", ((124,),), ((32, 33),)),
         ("imps-ghosts", ((81,), (97, 113)), ((8, 61),)),
+        ("ghosts-rat-headless", ((97, 113), (72,), (91,)), ()),
     ),
+}
+
+# Preserve the established nearest-spawn grids around these dormant encounters.
+# Keys name the bank that owns the two-tile cells, with None selecting bank zero.
+DORMANT_ROOM_CELLS = {
+    1: {"spiders": ((13, 7), (14, 7))},
+    2: {
+        "headless": ((9, 44),),
+        "rats-spiders": ((43, 48),),
+        None: ((31, 57), (32, 57), (31, 58)),
+    },
+    3: {
+        "bats-rats": ((31, 3), (32, 3), (42, 42)),
+        "skeletons": ((1, 8),),
+        "bandits": ((3, 9),),
+        "spiders": ((57, 12), (58, 12), (17, 34), (18, 34), (44, 38)),
+        "skeletons-spiders-headless": ((43, 38), (49, 52)),
+        "lurkers": ((3, 59),),
+        "headless": ((43, 55), (44, 55), (45, 62)),
+    },
+    4: {
+        "bats-grubs-rats": ((35, 15), (27, 51), (29, 54), (33, 55)),
+        "grub-imp": ((29, 52),),
+    },
+    7: {"imp-seven": ((33, 35), (34, 35)), "golems-imp": ((32, 36), (34, 37))},
+    8: {
+        "ghosts-rat-headless": ((21, 40), (27, 49)),
+        "rats-spiders": ((14, 58),),
+    },
 }
 
 RECURRING_FORMATS = {
@@ -238,6 +271,10 @@ SHARED_PAGE_FORMATS = {
     "hazards-nine": ((8, (10, 10)), (8, (10, 10))),
     "gazers-wisps-rats": ((4, (16, 16)), (4, (16,))),
     "gazers-goblins": ((4, (16,)), (8, (9,))),
+    "skeletons-spiders-headless": ((4, (12, 12)), (8, (13,))),
+    "grub-imp": ((4, (16,)), (8, (16,))),
+    "golems-imp": ((4, (16,)), (8, (16,))),
+    "ghosts-rat-headless": ((4, (16, 16)), (8, (13,))),
 }
 ROOM_FORMATS = {**LEVEL_ONE_FORMATS, "dwarves": (8, 16), "corby": (8, 15),
                 "bandits": (8, 15), "zak": (8, 15), "fighters-four": (8, 15), "trolls-four": (4, 16), "trolls-four-recurring": (4, 16),
@@ -377,7 +414,7 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None, recurring=False)
             (42, 43, 0), (43, 45, 0), (45, 45, 0), (4, 53, 0), (47, 56, 0),
             (35, 50, 0), (35, 53, 0), (40, 48, 0), (40, 50, 0), (40, 52, 0),
             (17, 53, 0), (18, 53, 0), (16, 54, 0), (18, 56, 0), (16, 55, 0),
-            (43, 59, 0), (41, 61, 0), (35, 56, 3), (8, 57, 4), (57, 56, 6),
+            (43, 59, 0), (41, 61, 0), (15, 55, 0), (35, 56, 3), (8, 57, 4), (57, 56, 6),
         ):
             index = z // 4 * 16 + x // 4
             shift = 4 * (index & 1)
@@ -409,6 +446,16 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None, recurring=False)
             shift = 4 * (index & 1)
             headless = next(i for i, (name, _, _) in enumerate(room_banks(8, True), 1) if name == "headless")
             grid[index // 2] = (grid[index // 2] & ~(15 << shift)) | headless << shift
+        grid = bytes(grid)
+    if recurring and floor in DORMANT_ROOM_CELLS:
+        grid = bytearray(grid)
+        bank_ids = {name: index for index, (name, _, _) in enumerate(room_banks(floor, True), 1)}
+        bank_ids[None] = 0
+        for name, tiles in DORMANT_ROOM_CELLS[floor].items():
+            for x, z in tiles:
+                index = z // 2 * 32 + x // 2
+                shift = 4 * (index & 1)
+                grid[index // 2] = (grid[index // 2] & ~(15 << shift)) | bank_ids[name] << shift
         grid = bytes(grid)
     return {
         POINTER: struct.pack("<I", SELECTOR),

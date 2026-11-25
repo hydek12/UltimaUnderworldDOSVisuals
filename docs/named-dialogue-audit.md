@@ -307,7 +307,31 @@ A disposable DuckStation checkpoint used the rebuilt executable's floor table to
 | Actor | Live result |
 | --- | --- |
 | Level 1 imp (75) | Native floor loading linked slot 236 at (12, 20) despite its zero archive marker. Bank 8 submitted the DOS idle quad from the spawn tile with CLUT `0x7e18`. |
-| Level 3 green goblin (78) | The debugger invoked the original create-object trap for template 183. The native handler linked slot 179 at (35, 62), and bank 14 submitted the DOS idle quad from that tile with CLUT `0x7e18`. The player-facing activation sequence remains unverified. |
+| Level 3 green goblin (78) | The debugger invoked the original create-object trap for template 183. The native handler linked slot 179 at (35, 62), and bank 14 submitted the DOS idle quad from that tile with CLUT `0x7e18`. The controller follow-up below verified which gameplay action dispatches the trap. |
 | Level 5 Gazer (102) | Native floor loading linked slot 221 at (4, 43). From camera tile (3, 42), bank 10 submitted the DOS idle quad with CLUT `0x7e18`. This view previously selected the green-goblin-only bank. The shared bank registers DOS art for the three nearby green goblin spawn views. The goblin from (4, 42) also submitted a native walking quad with CLUT `0x7e58` from camera tile (5, 44). |
 
 The spawn-bank comparison checked all actor records on the three changed floors at each spawn tile and one tile west. The three target records gained coverage at both positions and no other record lost coverage at those positions. The [local release builder](local-patch-builder.md) reproduced the gameplay CHD byte for byte. The xdelta decoded against clean Japanese Rev 1, and all four tracks and CUE indexes passed readback. The qualified Track 1 SHA-1 is `0cb2e8536ae8c9a8f6436c78d08d972c975e95a1`.
+
+## Dormant creature spawn coverage
+
+The Level 3 green goblin has a wandering-monster trap. In DuckStation, with a bedroll staged in the disposable character's backpack, the original R2 + Triangle shortcut opened the rest prompt. Confirming rest dispatched trap 536 for template 183 at (35, 62) from the native wandering-monster routine. The debugger observed the dispatch and checked the tile chain. The controller trials did not observe a successful creation roll. Successful tile linkage and the DOS quad were confirmed in the earlier debugger-invoked trap test.
+
+The archive marks 107 of 657 creature records as noninitial. A native tile-chain and create-object audit found records that floor loading already links and records that a trap can create. At Level 7 (60, 43), two fire elemental records share the same archive identity and position. The original tile chain identifies slot 189 as already linked and the create-object trap points to slot 190. That location already has a DOS fire elemental bank.
+
+The prior build lacked DOS art in at least one of two spawn views for 27 records. The revised grids register the appropriate idle and walking art at all 107 archive spawn tiles and one tile west, with no loss of existing actor coverage at those positions. The audit also checked the native create-object trap locations. One Level 3 headless is serialized at (49, 52) and spawns at (44, 55). Both areas now select a headless bank.
+
+DuckStation captured a DOS idle or walking quad for each of the 27 corrected records. Native floor loading linked 11 of the tested actors. For the other 16, the debugger invoked the original create-object handlers and checked the live tile chains before the draw. The debugger positioned the camera. The game supplied each pose and projection.
+
+| Floor | DOS sprite draws verified |
+| --- | --- |
+| 1 | Spider (14, 7) |
+| 2 | Headless (9, 44), spider (43, 48), green goblins (32, 57) and (31, 58) |
+| 3 | Bat (32, 3), skeleton (1, 8), bandit (3, 9), spiders (58, 12), (18, 34) and (44, 38), rat (42, 42), lurker (3, 59), headless (44, 55) and (45, 62) |
+| 4 | Rats (35, 15) and (29, 54), grubs (28, 51), (30, 52) and (33, 55) |
+| 6 | Grub (16, 55) |
+| 7 | Imps (34, 35), (33, 36) and (35, 37) |
+| 8 | Headless (21, 40), rats (28, 49) and (14, 58) |
+
+The Level 3 mixed room uses 12/16 skeleton and spider textures alongside a 13/16 headless texture. The Level 8 mixed room uses a 13/16 headless texture with full-size ghost and rat textures. The shared banks retain the original frame dimensions and anchors. Native combat poses remain available for unsupported actions.
+
+The release builder reproduced the tested CHD byte for byte. All four tracks and CUE indexes passed readback. Track 1 SHA-1 is `e3e2845b85d665a1240c5c89fab828b8703850b2`.
