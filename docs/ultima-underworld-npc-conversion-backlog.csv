@@ -223,7 +223,7 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 4,0x9a91ec,69,0,1,26,40,26,40,0x01cda0,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 4,0x9a9208,91,0,1,59,41,59,41,0x01cb84,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 4,0x9a9224,91,0,1,60,41,60,41,0x01cb9f,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
-4,0x9a9240,91,0,0,61,41,61,41,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+4,0x9a9240,91,0,0,61,41,61,41,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Normal controller rest spawned actor from trap 662
 4,0x9a925c,95,143,1,20,43,20,43,0x01c94d,26,fight32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fighters-four,fighters-four,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 4,0x9a9278,83,0,1,3,44,3,44,0x01cc41,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 4,0x9a9294,83,0,1,4,44,4,44,0x01cc26,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
@@ -242,7 +242,7 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 4,0x9a9400,72,0,1,36,50,36,50,0x01cb33,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-grubs-rats,bats-grubs-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 4,0x9a941c,82,0,0,28,51,28,51,0x01cf50,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,bats-grubs-rats,bats-grubs-rats,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Linked on floor load
 4,0x9a9438,82,0,1,36,51,36,51,0x01cf1a,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,bats-grubs-rats,bats-grubs-rats,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
-4,0x9a9454,82,0,0,30,52,30,52,,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,bats-grubs-rats,grub-imp,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Create trap identified
+4,0x9a9454,82,0,0,30,52,30,52,,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,bats-grubs-rats,grub-imp,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Normal controller rest spawned actor from trap 559
 4,0x9a9470,72,0,1,31,52,31,52,0x01cb69,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-grubs-rats,bats-grubs-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 4,0x9a948c,67,0,1,12,53,12,53,0x01cdf1,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-grubs-rats,bats-grubs-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 4,0x9a94a8,81,0,1,28,53,28,53,0x01cfa1,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,grub-imp,imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
