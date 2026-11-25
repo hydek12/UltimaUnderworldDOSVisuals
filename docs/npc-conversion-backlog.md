@@ -169,6 +169,12 @@ In DuckStation on the Academy Spider Combat CHD, the debugger staged the player 
 
 In DuckStation on the Academy Spider Combat CHD, the debugger staged the player at (59, 55), facing east. Forward input crossed move trigger 586 at (60, 55), which dispatched native create trap 631. The target tile (60, 49) had no type-111 troll on handler entry. On return, the game had linked a live troll in mobile slot 140 using template 169.
 
+## Level 8 golem movement triggers
+
+The live PSX object lists identify move trigger 702 at (61, 45), which links to create trap 701 for the type-114 golem at (55, 47). Move trigger 647 at (55, 49) links to create trap 674 for the type-119 golem at (61, 47).
+
+In DuckStation on the Academy Spider Combat CHD, the debugger staged the player at (61, 46) facing toward (61, 45), then at (60, 45) facing east. Neither forward-input trial dispatched trap 701. The east approach showed a lava surface and the player remained at the staging position. A third trial staged the player at (56, 49) facing west. The view was blocked by a wall and trap 674 did not dispatch. Both activation checks remain open pending a traversable approach.
+
 ## Remaining checks
 
 - **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 409 records, including slot `0d` for 208. There are 190 records across 34 types with one or more decodable source slots missing from a view that already registers their directional art. Slot `0d` appears in the source for 76 of the candidates. Check whether the original PSX AI can select the corresponding action before mapping it. The Level 6 warren Ghost is an intentional exception and uses native combat. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
