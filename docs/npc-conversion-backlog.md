@@ -193,6 +193,17 @@ In DuckStation on the Dedicated Bank Actions Preview CHD, the debugger staged bo
 | Level 1 type-77 goblin | (2, 36) | (3, 36) | 782 | 811 | 229 | (3, 33) | 199 |
 | Level 6 type-120 fire elemental | (54, 56) | (55, 56) | 638 | 637 | 203 | (57, 56) | 195 |
 
+## Level 4 rest activations
+
+In DuckStation on the Dedicated Bank Actions Preview, the debugger placed the player at (56, 59) and staged a bedroll. Controller input opened the original rest prompt and confirmed it. The rest path called the wandering scan from `0x80077134`, and the native create handler linked both previously absent actors.
+
+| Spawn tile | Actor type | Create trap | Roll / threshold | Live slot |
+| --- | --- | --- | --- | --- |
+| (61, 41) | 91 | 662 | 56 / 43 | 184 |
+| (30, 52) | 82 | 559 | 47 / 40 | 183 |
+
+The type-67 creature at (35, 15) stayed dormant. Trap 852 rolled 42 and 32 on two confirmed rests, below its threshold of 49.
+
 ## Level 8 Reaper movement trigger
 
 The live PSX tile list confirms that move trigger 655 at (61, 48) links to create trap 680 for the type-118 Reaper at (58, 47). Forward input from the debugger-staged tile (61, 47) did not move the player to (61, 48). The create handler did not run on that approach. A follow-up staged the player at (61, 50), facing toward decreasing Z. Forward input descended the ramp through (61, 49) and reached trigger 655. The original movement handler dispatched create trap 680, which instantiated a live Reaper in slot 140 from template 178. The target tile had no type-118 Reaper on handler entry.
@@ -200,7 +211,7 @@ The live PSX tile list confirms that move trigger 655 at (61, 48) links to creat
 ## Remaining checks
 
 - **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 409 records, including slot `0d` for 208. There are 190 records across 34 types with one or more decodable source slots missing from a view that already registers their directional art. Slot `0d` appears in the source for 76 of the candidates. Check whether the original PSX AI can select the corresponding action before mapping it. The Level 6 warren Ghost is an intentional exception and uses native combat. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
-- **Native activation.** Both sampled views already register DOS directional art for all 107 records marked noninitial by the archive heuristic. Of those, 69 have observed floor-load or controller activation and 38 have a create trap identified with the ordinary trigger chain still open. The Level 3 green goblin and the three Level 6 spiders were spawned by controller-driven rest. The Level 5 fire elemental and the five Level 7 spiders, Gazer, Reaper, shadow, type-113 ghost, and troll were spawned by controller-driven movement. All three Level 7 fire elemental activation records have been verified.
+- **Native activation.** Both sampled views already register DOS directional art for all 107 records marked noninitial by the archive heuristic. Of those, 71 have observed floor-load or controller activation and 36 have a create trap identified with the ordinary trigger chain still open. The Level 3 green goblin and the three Level 6 spiders were spawned by controller-driven rest. The Level 5 fire elemental and the five Level 7 spiders, Gazer, Reaper, shadow, type-113 ghost, and troll were spawned by controller-driven movement. All three Level 7 fire elemental activation records have been verified.
 
 ## Regenerate the inventory
 
