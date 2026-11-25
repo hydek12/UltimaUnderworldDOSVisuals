@@ -4,6 +4,10 @@ This macOS Xcode command-line project uses the local DOS release as the visual r
 
 [View the NPC screenshot gallery](docs/npc-screenshots.md) for a matched Level 3 lizardman comparison and a Level 7 goblin capture.
 
+## Project changes
+
+Use the [pull request workflow](docs/pull-request-workflow.md) for all changes to `main`. See the [historical change log](docs/change-history.md) for changes made before PRs were adopted.
+
 ## Reproduce the asset checks
 
 1. Open `UnderworldVisuals.xcodeproj` and build the `UnderworldVisuals` scheme.
