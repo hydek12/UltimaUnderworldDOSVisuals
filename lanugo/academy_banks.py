@@ -311,9 +311,11 @@ DEDICATED_ROOM_COMBAT_BANKS = frozenset((
     "wizards", "judy", "anjor", "tyball", "ghouls-five", "ghouls-five-recurring", "ghouls-eight", "fire", "spiders",
     "lurkers", "dwarves", "ghosts-five", "reapers", "trolls-four-recurring", "ghosts-eight",
     "bandits", "fighters", "gray-guards-seven", "fighters-four", "troll-seven", "corby", "zak",
-    "south-green-goblin", "cardon",
+    "south-green-goblin", "cardon", "demon",
 ))
-ACADEMY_COMBAT_BANKS = frozenset(("wizb", "wizc", "warren", "ghouls", "imps"))
+ACADEMY_COMBAT_BANKS = frozenset((
+    "wizb", "wizc", "warren", "ghouls", "imps", "trolls", "golem", "fire-elemental",
+))
 
 ROOM_STRIDE = 0x19800
 # (texture depth, sixteenths of original size, uses both pages)
