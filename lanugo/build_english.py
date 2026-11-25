@@ -88,6 +88,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
                         level_six_wizards, lanugo.creature_atlas.LEVEL_SIX_WIZARD_TYPES,
                         lanugo.creature_atlas.TEXTURE_PAGES[:1], extra_type=92, combat=True,
                         casting=True, expanded_level_six=True, academy_sections=bank_sections, room_bank=bank,
+                        room_combat=slasher_combat,
                     )
                     if len(bank_payload) > level_one_stride:
                         raise ValueError("A Level 1 room bank exceeds the shared disc stride.")
@@ -142,7 +143,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
                             level_six_wizards, lanugo.creature_atlas.LEVEL_SIX_WIZARD_TYPES,
                             lanugo.creature_atlas.TEXTURE_PAGES[:1], extra_type=92, combat=True,
                             casting=True, expanded_level_six=True, academy_sections=bank_sections, room_bank=bank or "hazards-nine",
-                            slasher_combat=slasher_combat and floor == 9,
+                            slasher_combat=slasher_combat and floor == 9, room_combat=slasher_combat,
                             native_sprite_lighting=native_sprite_lighting and (
                                 (floor == 3 and bank == "bandits") or
                                 (floor == 4 and bank == "bats-grubs-rats")

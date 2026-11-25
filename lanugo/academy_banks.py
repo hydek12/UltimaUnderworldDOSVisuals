@@ -288,6 +288,11 @@ ROOM_STRIDE = 0x19800
 SPECIAL_FORMATS = {"imps": (8, 16, True), "skeletons": (4, 16, True),
                    "ghouls": (8, 14, True), "headless": (8, 16, True)}
 
+# Single-family banks can use the resident fixed-pose table at full scale.
+ROOM_COMBAT_BANKS = frozenset((
+    "entrance-imp", "imps", "imps-five", "imp-seven", "skeletons", "headless",
+))
+
 
 def room_grid(points=ACADEMY_NPCS, radius=9, *, x_step=4, z_step=4, level_one=True):
     banks = []

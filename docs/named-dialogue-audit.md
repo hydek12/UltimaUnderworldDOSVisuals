@@ -314,7 +314,7 @@ The spawn-bank comparison checked all actor records on the three changed floors 
 
 ## Dormant creature spawn coverage
 
-The Level 3 green goblin has a wandering-monster trap. In DuckStation, with a bedroll staged in the disposable character's backpack, the original R2 + Triangle shortcut opened the rest prompt. Confirming rest dispatched trap 536 for template 183 at (35, 62) from the native wandering-monster routine. The debugger observed the dispatch and checked the tile chain. The controller trials did not observe a successful creation roll. Successful tile linkage and the DOS quad were confirmed in the earlier debugger-invoked trap test.
+The Level 3 green goblin has a wandering-monster trap. In DuckStation, with a bedroll staged in the disposable character's backpack, the original R2 + Triangle shortcut opened the rest prompt. Confirming rest dispatched trap 536 for template 183 at (35, 62) from the native wandering-monster routine. The first controller trials verified dispatch. In the follow-up, the player rested at (5, 1) until the native roll of 57 cleared the threshold of 54. The tile chain changed from no goblin to a live type 78 actor in slot 179 at (35, 62). The debugger observed the call, roll, and tile chain during the rest trials. The earlier debugger-invoked trap test confirmed the DOS quad at the spawn tile.
 
 The archive marks 107 of 657 creature records as noninitial. A native tile-chain and create-object audit found records that floor loading already links and records that a trap can create. At Level 7 (60, 43), two fire elemental records share the same archive identity and position. The original tile chain identifies slot 189 as already linked and the create-object trap points to slot 190. That location already has a DOS fire elemental bank.
 
@@ -335,3 +335,11 @@ DuckStation captured a DOS idle or walking quad for each of the 27 corrected rec
 The Level 3 mixed room uses 12/16 skeleton and spider textures alongside a 13/16 headless texture. The Level 8 mixed room uses a 13/16 headless texture with full-size ghost and rat textures. The shared banks retain the original frame dimensions and anchors. Native combat poses remain available for unsupported actions.
 
 The release builder reproduced the tested CHD byte for byte. All four tracks and CUE indexes passed readback. Track 1 SHA-1 is `e3e2845b85d665a1240c5c89fab828b8703850b2`.
+
+## Dedicated room combat preview
+
+The cumulative `--slasher-combat` preview now gives imps (75 and 81), skeletons (74), and headless (91) full-resolution DOS combat textures in their dedicated room banks. These banks share the Academy renderer's fixed-pose path. Stance, three attacks, retreat, and death use the original DOS sequences. Imps also use their four-frame spell sequence. Existing view and timing rules still apply, including directional standing art for side and rear combat views and the death pose from all views.
+
+DuckStation replayed seven action values from native actor projections in 15 dedicated room-bank encounters on Levels 1–5, 7, and 8. The Level 5 imp first spawned through the debugger-invoked original trap. The 105 action checks produced 95 DOS sprite packets and ten expected native fallbacks for skeleton and headless casting. The fallback checks preserved each captured GPU packet and ordering-table head. The fixed-pose path has one action and phase table per bank. Mixed banks need per-family pose lookup before they can select distinct combat frames for actors that share the bank. Other dedicated families, including ghouls, gazers, and wizards outside the existing Academy preview, still need pose mapping and live checks.
+
+The preview xdelta decoded against clean Japanese Rev 1 and all four CHD tracks passed readback. Track 1 matched `e55251f4d53020fcace419823e2466a04831dab8`. The default `--late-dialogue` build reproduced `e3e2845b85d665a1240c5c89fab828b8703850b2`.

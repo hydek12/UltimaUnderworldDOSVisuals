@@ -685,8 +685,8 @@ def rat_payload(variants, bank_sections=None):
 
 
 def creature_payload(variants, actor_types, texture_pages, combat=False, extra_type=None, casting=False,
-                     expanded_level_six=False, academy_bank=None, academy_sections=None, room_bank=None, room_default=False, slasher_combat=False,
-                     recurring_academy=False, native_sprite_lighting=False):
+                     expanded_level_six=False, academy_bank=None, academy_sections=None, room_bank=None, room_default=False,
+                     slasher_combat=False, room_combat=False, recurring_academy=False, native_sprite_lighting=False):
     sources = creature_sources(variants, actor_types, combat, casting)
     images, clut, metadata = creature_atlas.build(sources, texture_pages)
     base = actor_types[0]
@@ -732,6 +732,9 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             )
         texture_pages = creature_atlas.TEXTURE_PAGES
         format_override = academy_banks.SPECIAL_FORMATS.get(academy_bank)
+        if room_combat and room_bank in academy_banks.ROOM_COMBAT_BANKS:
+            bits, scale = academy_banks.ROOM_FORMATS[room_bank]
+            format_override = bits, scale, True
         primary_types = actor_types
         if shared_format:
             texture_pages = creature_atlas.TEXTURE_PAGES
@@ -772,7 +775,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
                         for i in range(0, len(clut), palette_stride)]
             directional = tuple(table for _, _, table in packed)
             primary_types = ()
-        elif room_bank:
+        elif room_bank and format_override is None:
             bits, scale = academy_banks.ROOM_FORMATS[room_bank]
             images, palette_data, table = creature_atlas.build(
                 creature_sources(variants, families[0]), texture_pages, bits=bits, scale=scale,
@@ -783,16 +786,13 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             directional = (table,)
         elif format_override:
             bits, scale, _ = format_override
-            if academy_bank == "imps":
-                bank_combat_slots = creature_atlas.COMBAT_SLOTS + ((13, 4),)
-            elif academy_bank == "ghouls":
-                bank_combat_slots = ((0, 4), (7, 4))
-            else:
-                bank_combat_slots = creature_atlas.COMBAT_SLOTS
             primary_types = families[0]
+            available = creature_atlas.COMBAT_SLOTS
+            if primary_types[0] in (75, 81):
+                available += ((13, 4),)
+            # The Academy ghoul keeps the two sequences that fit its existing atlas.
+            bank_combat_slots = ((0, 4), (7, 4)) if academy_bank == "ghouls" else available
             special_sources = creature_sources(variants, primary_types)
-            # The exporter emits all applicable pose slots. Keep only the groups that fit.
-            available = creature_atlas.COMBAT_SLOTS + (((13, 4),) if academy_bank == "imps" else ())
             selected = []
             first = 0
             for slot, count in available:
