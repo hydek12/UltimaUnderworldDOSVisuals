@@ -8,7 +8,8 @@ TEXTURE_PAGES = ((384, 256, 224), (512, 384, 128))
 CLUT_RECT = (384, 480, 128, 32)
 SELECTOR_OFFSET = 0x500
 LIGHT_LEVEL_OFFSET = 0x60
-SETTINGS_OFFSET = 0x64
+ROOM_LIGHT_LEVEL_OFFSET = 0x1a00
+SETTINGS_DELTA = 4
 
 
 def light_settings(dos_root):
@@ -121,11 +122,11 @@ def select_clut(origin, light_selector, continuation, clut):
     c.imm("andi", "t6", "t6", 7)
     c.shift("sll", "t6", "t6", 2)
     c.alu("addu", "t8", "t8", "t6")
-    c.mem("lbu", "t6", 4, "t8")
-    c.mem("lb", "t9", 6, "t8")
+    c.mem("lbu", "t6", SETTINGS_DELTA, "t8")
+    c.mem("lb", "t9", SETTINGS_DELTA + 2, "t8")
     c.muldiv("multu", "t2", "t6")
-    c.mem("lbu", "v0", 5, "t8")
-    c.mem("lbu", "v1", 7, "t8")
+    c.mem("lbu", "v0", SETTINGS_DELTA + 1, "t8")
+    c.mem("lbu", "v1", SETTINGS_DELTA + 3, "t8")
     c.mflo("t2")
     c.shift("srl", "t2", "t2", 6)
     c.alu("addu", "t2", "t2", "t9")

@@ -547,7 +547,8 @@ def variant_sources(idle_atlas, walk_atlas, variants):
     return data
 
 
-def variant_payload(idle_atlas, walk_atlas, variants, dos_light_preview=None, floor_aware=False, bank_sections=None):
+def variant_payload(idle_atlas, walk_atlas, variants, dos_light_preview=None, floor_aware=False,
+                    bank_sections=None, bank_stride=academy_banks.ROOM_STRIDE):
     sources = variant_sources(idle_atlas, walk_atlas, variants)
     pages = variant_atlas.TEXTURE_PAGES if dos_light_preview is None else preview_lighting.TEXTURE_PAGES
     images, clut, metadata = variant_atlas.build(sources, pages)
@@ -581,9 +582,11 @@ def variant_payload(idle_atlas, walk_atlas, variants, dos_light_preview=None, fl
         bands += ((clut_rect, atlas_end, len(palettes)),)
         sections[atlas_end] = palettes
         atlas_end += len(palettes)
-        light = PAYLOAD_RAM + preview_lighting.LIGHT_LEVEL_OFFSET
-        sections[preview_lighting.LIGHT_LEVEL_OFFSET] = bytes(1)
-        sections[preview_lighting.SETTINGS_OFFSET] = preview_lighting.light_settings(dos_light_preview)
+        light_offset = (preview_lighting.LIGHT_LEVEL_OFFSET if bank_sections is None else
+                        preview_lighting.ROOM_LIGHT_LEVEL_OFFSET)
+        light = PAYLOAD_RAM + light_offset
+        sections[light_offset] = bytes(1)
+        sections[light_offset + preview_lighting.SETTINGS_DELTA] = preview_lighting.light_settings(dos_light_preview)
         sections[preview_lighting.SELECTOR_OFFSET] = preview_lighting.select_clut(
             shade_selector, light, shade_return, clut_id,
         )
@@ -592,16 +595,17 @@ def variant_payload(idle_atlas, walk_atlas, variants, dos_light_preview=None, fl
     if bank_sections is None:
         sections[VARIANT_UPLOAD_RAM - PAYLOAD_RAM] = variant_uploader(bands, dos_light_preview is None, floor_aware)
     else:
-        if dos_light_preview is not None:
-            raise ValueError("Room banks require the standard Level 1 palette layout.")
         sections[0x100] = jump(PAYLOAD_RAM + 0x700) + bytes(4)
         sections[0x180] = jump(PAYLOAD_RAM + 0xd00) + bytes(4)
         sections[0x700] = renderer.suppress(PAYLOAD_RAM + 0x700, walk_ready=WALK_READY_RAM, wide=True)
         sections[0xd00] = renderer.suppress(PAYLOAD_RAM + 0xd00, "a0", WALK_READY_RAM, wide=True)
         sections[0xc00] = jump(PAYLOAD_RAM + 0x1400) + bytes(4)
-        sections[0x1400] = variant_uploader(bands, True, floor_aware, PAYLOAD_RAM + 0x1400)
+        sections[0x1400] = variant_uploader(bands, dos_light_preview is None, floor_aware, PAYLOAD_RAM + 0x1400)
+        overlap = sections.keys() & bank_sections.keys()
+        if overlap:
+            raise ValueError(f"Level 1 renderer and room-bank sections share offsets: {sorted(overlap)}.")
         sections.update(bank_sections)
-        atlas_end = academy_banks.ROOM_STRIDE
+        atlas_end = bank_stride
     return assemble_payload(sections, atlas_end)
 
 

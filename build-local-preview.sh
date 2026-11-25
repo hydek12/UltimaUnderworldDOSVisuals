@@ -1,6 +1,13 @@
 #!/bin/bash
 set -euo pipefail
 
+dos_shade_maps=0
+if [[ ${1:-} == --dos-shade-maps ]]; then
+    dos_shade_maps=1
+    shift
+    set -- --native-sprite-lighting "$@"
+fi
+
 native_sprite_lighting=0
 if [[ ${1:-} == --native-sprite-lighting ]]; then
     native_sprite_lighting=1
@@ -70,7 +77,7 @@ if [[ ${1:-} == --english-patch ]]; then
 fi
 
 if [[ $# != 5 ]]; then
-    printf 'Usage: %s [--level-six-wizards|--level-six-spiders|--level-six-casting|--level-six-combat|--level-six-effects|--level-six-expanded|--academy-wizb|--academy-wizc|--academy-runtime|--level-one-dialogue|--level-two-dialogue|--level-three-dialogue|--level-four-dialogue|--late-dialogue|--slasher-combat|--native-sprite-lighting] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
+    printf 'Usage: %s [--level-six-wizards|--level-six-spiders|--level-six-casting|--level-six-combat|--level-six-effects|--level-six-expanded|--academy-wizb|--academy-wizc|--academy-runtime|--level-one-dialogue|--level-two-dialogue|--level-three-dialogue|--level-four-dialogue|--late-dialogue|--slasher-combat|--native-sprite-lighting|--dos-shade-maps] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
     exit 2
 fi
 
@@ -190,6 +197,9 @@ if (( expanded_preview )); then
                             fi
                             if (( native_sprite_lighting )); then
                                 wizard_args+=(--native-sprite-lighting)
+                            fi
+                            if (( dos_shade_maps )); then
+                                wizard_args+=(--dos-light-preview "$dos_root")
                             fi
                             wizard_args+=(--late-dialogue)
                         fi

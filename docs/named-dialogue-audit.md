@@ -134,6 +134,11 @@ These percentages track the project checklist. They are estimates based on verif
 | 88% | Verified | Level 3 bandit idle and walk lighting on the source-built preview |
 | 89% | Verified | Live Level 4 creature lighting and seven native bandit combat fallbacks on the source-built preview |
 | 90% | Verified | Preview bandit damage recheck, two-sector comparison, clean-disc delta and CHD readback, and default recipe hash regression |
+| 91% | Verified | DOS normal and monochrome maps matched all 4,096 generated RGB555 entries |
+| 92% | Verified | 168 normal shade-map packet selections across seven light levels and four palettes |
+| 93% | Verified | 24 monochrome packet selections with matched sprite geometry and UVs |
+| 94% | Verified | Native Level 1 room-bank restoration and full texture and palette VRAM comparison |
+| 95% | Verified | Cumulative shade-map preview round-trip, four-track CHD readback, and default recipe hash regression |
 
 ## Levels 1–4 recurring creature preview
 
@@ -263,4 +268,13 @@ For the humanoid gameplay check, the debugger assigned a Level 3 bandit (type 93
 - Seven live samples across the rat, grub, and both bat types matched the native lighting table in their original Level 4 bank. The Level 3 bandit preserved its native draw and ordering-table heads in seven staged combat fallback cases, and its control sprite drew with the expected DOS palette.
 - The preview differs from the Slasher combat build at raw Track 1 sectors 149991 and 150909. The clean Japanese Rev 1 xdelta round-trip produced Track 1 SHA-1 `0e2d7db3db07e11119d1803555b14952b6539d67`. CHD integrity passed, and all four extracted tracks matched their inputs byte for byte. A separate default recipe build reproduced Track 1 SHA-1 `b824482c3b13b607aa039aba59effa4bd0cbac24`.
 
-The lighting option uses the PlayStation depth-light table for the two tested room banks. The DOS shade-map and monochrome checks are still open.
+The lighting option uses the PlayStation depth-light table for the two tested room banks. The cumulative DOS shade-map preview adds a separate Level 1 mode.
+
+## 95% DOS shade-map and monochrome preview
+
+- The DOS data comparison checked all 2,048 RGB555 entries from `LIGHT.DAT` and all 2,048 from `MONO.DAT`, including the transparent entries in each palette. All monochrome entries had equal red, green, and blue channels.
+- DuckStation replayed a captured Level 1 green-goblin draw at six distance inputs for each of four palettes. All 168 normal and 24 monochrome CLUT selections matched the DOS distance calculation. The geometry, texture page, and UVs matched across the replayed lighting states.
+- The cumulative Level 1 room stride is one sector larger in this preview to fit the streamed CLUT block. Its light selector at `0x801f7a00` has separate storage from the room-switch pointer. DuckStation loaded the preview bank after a Level 2 to Level 1 transition, switched from bank 0 to the gray-goblin bank, and returned to bank 0. Lanugo submitted the expected normal CLUT after the return. The restored GPU capture matched 90,112 texture bytes and all 8,192 shade-map palette bytes.
+- The xdelta decoded against clean Japanese Rev 1 to Track 1 SHA-1 `19a1afea2fcfd96469b8383e9f36a2da7f03f1c5`. The CHD verified internally and all four extracted tracks matched their inputs byte for byte. A separate default recipe build reproduced `b824482c3b13b607aa039aba59effa4bd0cbac24`.
+
+The checks cover debugger-selected lighting on green goblin idle and walk sprites in the Level 1 default bank. The native game still controls dungeon lighting, torches, and spells.

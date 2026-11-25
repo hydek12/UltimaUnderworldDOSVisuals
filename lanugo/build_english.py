@@ -64,23 +64,34 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
                 raise ValueError("Floor-specific atlases require both --walk-atlas and --goblin-variants.")
             level_one_lbas = [first_lba]
             level_one_sections = None
+            level_one_stride = lanugo.academy_banks.ROOM_STRIDE
             if level_one_dialogue:
                 byte_offset = (first_lba - lanugo.AVATAR_LBA) * 2048
-                stride = lanugo.academy_banks.ROOM_STRIDE
-                level_one_sections = lanugo.academy_banks.sections(byte_offset, stride, 0, floor=1, recurring=late_dialogue)
+                if dos_light_preview is not None:
+                    # The streamed shade palettes need one additional sector.
+                    level_one_stride += 2048
+                level_one_sections = lanugo.academy_banks.sections(
+                    byte_offset, level_one_stride, 0, floor=1, recurring=late_dialogue,
+                )
             payload = lanugo.variant_payload(
                 atlas, walk_atlas, goblin_variants, dos_light_preview, floor_aware=True, bank_sections=level_one_sections,
+                bank_stride=level_one_stride,
             )
             if level_one_dialogue:
                 room_banks = lanugo.academy_banks.room_banks(1, late_dialogue)
                 for bank_id, (bank, _, _) in enumerate(room_banks, 1):
                     level_one_lbas.append(first_lba + len(payload) // 2048)
-                    bank_sections = lanugo.academy_banks.sections(byte_offset, stride, bank_id, floor=1, recurring=late_dialogue)
-                    payload += lanugo.creature_payload(
+                    bank_sections = lanugo.academy_banks.sections(
+                        byte_offset, level_one_stride, bank_id, floor=1, recurring=late_dialogue,
+                    )
+                    bank_payload = lanugo.creature_payload(
                         level_six_wizards, lanugo.creature_atlas.LEVEL_SIX_WIZARD_TYPES,
                         lanugo.creature_atlas.TEXTURE_PAGES[:1], extra_type=92, combat=True,
                         casting=True, expanded_level_six=True, academy_sections=bank_sections, room_bank=bank,
                     )
+                    if len(bank_payload) > level_one_stride:
+                        raise ValueError("A Level 1 room bank exceeds the shared disc stride.")
+                    payload += bank_payload.ljust(level_one_stride, b"\0")
             if lower_floor_goblins:
                 lower_payload_lba = first_lba + len(payload) // 2048
                 payload += lanugo.lower_floor_payload(goblin_variants)
@@ -109,6 +120,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
                     if academy_runtime and len(bank_payload) != bank_size:
                         raise ValueError("The runtime Academy banks must have the same disc stride.")
                     payload += bank_payload
+            stride = lanugo.academy_banks.ROOM_STRIDE
             for floor, enabled in ((2, level_two_dialogue), (3, level_three_dialogue),
                                    (4, level_four_dialogue), (5, late_dialogue), (8, late_dialogue), (7, late_dialogue), (9, late_dialogue)):
                 if not enabled:

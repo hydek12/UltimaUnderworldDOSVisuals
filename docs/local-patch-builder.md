@@ -168,3 +168,11 @@ The expected Track 1 SHA-1 is `711e19c5623334a842f9c591d4ae1028d0ea97d6`. The pr
 Use `--native-sprite-lighting` as the first argument to the preview builder. It includes the Slasher combat preview and enables PlayStation depth-based lighting on DOS sprites in the Level 3 bandit bank and the Level 4 bat, grub, and rat bank. The lighting uses the same depth table as the native polygons and preserves the existing sprite geometry, palette, and combat fallbacks in those rooms.
 
 The expected Track 1 SHA-1 is `0e2d7db3db07e11119d1803555b14952b6539d67`. The [90% audit](named-dialogue-audit.md#90-native-sprite-lighting-preview) records the runtime and build checks.
+
+### DOS shade maps and monochrome preview
+
+Use `--dos-shade-maps` as the first argument to the preview builder. It includes the native sprite lighting preview and adds the original DOS `LIGHT.DAT`, `MONO.DAT`, and `SHADES.DAT` behavior to idle and walking green goblins in the default Level 1 room bank. The bank uploads 16 normal and 16 monochrome shade rows for each of the four DOS palettes.
+
+In a disposable DuckStation debugger session, write a light level from 0 to 7 to `0x801f7a00` while Level 1 bank 0 is resident. Level 5 selects the monochrome map. Loading the bank resets the selector to level 0. This is a debugger-controlled sprite preview. The native game still controls room lighting, torches, and spell effects.
+
+The expected Track 1 SHA-1 is `19a1afea2fcfd96469b8383e9f36a2da7f03f1c5`. The [95% audit](named-dialogue-audit.md#95-dos-shade-map-and-monochrome-preview) records the packet, VRAM, and disc checks.
