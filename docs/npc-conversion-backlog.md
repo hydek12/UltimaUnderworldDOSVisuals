@@ -1,21 +1,21 @@
 # Ultima Underworld critter inventory
 
-The [record-by-record inventory](ultima-underworld-npc-conversion-backlog.csv) covers all 657 mobile creature and NPC records in the clean Japanese Rev 1 archive. It compares the default release Track 1 (`691fea5eaf8d6925c170ed40fe35dd9a69709d0f`) with the dedicated-bank combat preview (`2895f48350a195d396015f515216b4c5718e1d63`). The inventory reads the resident bank grids, palette registrations, and combat tables from the built tracks.
+The [record-by-record inventory](ultima-underworld-npc-conversion-backlog.csv) covers all 657 mobile creature and NPC records in the clean Japanese Rev 1 archive. It compares the default release Track 1 (`84ed3f796b76bfa26c5826988733125060897118`) with the dedicated-bank combat preview (`76113d0bf156592c048858fdbee9595030dd9fdc`). The inventory reads the resident bank grids, palette registrations, and combat tables from the built tracks.
 
 Each record is checked at two camera cells, the archived spawn tile and one tile west. Directional coverage is identical in the two builds. Both cells register DOS art for **all 657 records**. The two-cell check measures configured coverage near the spawn. It leaves camera visibility, reachable viewpoints, actors that move, and actual gameplay draws to the [encounter audit](named-dialogue-audit.md).
 
 | Level | Records | Archive-noninitial | DOS in both views | DOS in one view | Source action candidates |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| 1 | 56 | 6 | 56 | 0 | 33 |
+| 1 | 56 | 6 | 56 | 0 | 28 |
 | 2 | 57 | 8 | 57 | 0 | 24 |
-| 3 | 74 | 12 | 74 | 0 | 31 |
-| 4 | 70 | 10 | 70 | 0 | 26 |
-| 5 | 59 | 9 | 59 | 0 | 23 |
+| 3 | 74 | 12 | 74 | 0 | 24 |
+| 4 | 70 | 10 | 70 | 0 | 15 |
+| 5 | 59 | 9 | 59 | 0 | 16 |
 | 6 | 60 | 11 | 60 | 0 | 33 |
-| 7 | 94 | 24 | 94 | 0 | 34 |
+| 7 | 94 | 24 | 94 | 0 | 28 |
 | 8 | 115 | 25 | 115 | 0 | 31 |
 | 9 | 72 | 2 | 72 | 0 | 0 |
-| Total | 657 | 107 | 657 | 0 | 235 |
+| Total | 657 | 107 | 657 | 0 | 199 |
 
 ## Level 8 boundary coverage
 
@@ -69,14 +69,20 @@ In live DuckStation gameplay, the green goblins at (54, 55) and (60, 55) drew th
 
 The Level 5 and 7 fire elemental banks now carry DOS slots `00 01 02 03 07 0c 0d` for all 14 records that use those banks in the audit. The existing room grid and other combat mappings were retained.
 
-In DuckStation, the Level 7 elemental at (51, 40) selected action `01` and drew all five DOS phases before the native damage dispatcher identified it as the source. On Level 5, invoking the original create trap with the debugger spawned the dormant elemental at (19, 50). After it spawned, its AI selected action `03` and drew all five DOS phases. The debugger staged the approaches and assigned the player as the AI target. The game selected the actions and advanced their phases. The ordinary gameplay trigger for the Level 5 trap remains open.
+In DuckStation, the Level 7 elemental at (51, 40) selected action `01` and drew all five DOS phases before the native damage dispatcher identified it as the source. On Level 5, invoking the original create trap with the debugger spawned the dormant elemental at (19, 50). After it spawned, its AI selected action `03` and drew all five DOS phases. The debugger staged the approaches and assigned the player as the AI target. The game selected the actions and advanced their phases. A follow-up test staged the player on the dry tile (12, 48), facing east. Normal forward input entered the move trigger’s approach at (13, 48). The native trigger chain called create trap 645 with the player as the source and linked the previously absent elemental at (19, 50) in mobile slot 196. The debugger positioned the player and observed the trigger call.
 
 A separate replay used live actor projections from both banks and staged the seven action values across front and rear views and three animation phases. Each floor produced 54 matching DOS sprite packets and six expected native fallbacks for an unmapped action. The checks compared palette, texture page, and texture coordinates, and verified that native fallbacks preserved the packet and draw order.
 
+## Dedicated spider combat
+
+Dedicated spider banks on Levels 1, 3, 4, 5, and 7 now carry DOS slots `00 01 02 03 07 0c 0d` for spider types 68, 83, and 92. Across the two sampled views, the patch resolves missing action mappings for 36 records. The nine Level 6 default-bank spiders still require a separate atlas pass.
+
+In live DuckStation gameplay, the Level 5 type-92 spider at (36, 52) drew DOS frames for native actions `00`, `01`, and `07`, and the damage dispatcher identified that spider as the source. The debugger placed the camera and assigned the player as the target. The game selected and advanced the actions. Controlled replay used live projections from a type-68 spider on Level 1, type 83 on Level 3, and type 92 on Level 5. Each produced 54 matching DOS sprite packets and six expected native fallbacks across the action, view, and phase checks.
+
 ## Remaining checks
 
-- **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 365 records, including slot `0d` for 164. There are 235 records across 37 types with one or more decodable source slots missing from a view that already registers their directional art. Spiders (26 type-92 records, plus other variants) remain among the largest groups. Slot `0d` appears in the source for 121 of the candidates. Check whether the original PSX AI can select the corresponding action before mapping it. The Level 6 warren Ghost is an intentional exception and uses native combat. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
-- **Native activation.** Both sampled views already register DOS directional art for all 107 archive-noninitial records. The earlier native tile-chain trace found 44 already linked on floor load and identified create traps for another 60 records. Two Level 7 fire elementals share a type and spawn coordinate and need record-specific evidence. The remaining record, the Level 3 green goblin at (35, 62), was spawned by controller-driven rest. A create-trap entry identifies a candidate trigger and can include calls exercised with the debugger. The complete ordinary gameplay trigger chain still needs verification where the encounter audit lacks it.
+- **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 400 records, including slot `0d` for 199. There are 199 records across 35 types with one or more decodable source slots missing from a view that already registers their directional art. Nine type-92 spiders in the Level 6 Academy default bank still have missing action mappings. Slot `0d` appears in the source for 85 of the candidates. Check whether the original PSX AI can select the corresponding action before mapping it. The Level 6 warren Ghost is an intentional exception and uses native combat. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
+- **Native activation.** Both sampled views already register DOS directional art for all 107 archive-noninitial records. The earlier native tile-chain trace found 44 already linked on floor load and identified create traps for another 60 records. Two Level 7 fire elementals share a type and spawn coordinate and need record-specific evidence. The Level 3 green goblin at (35, 62) was spawned by controller-driven rest. The Level 5 fire elemental was spawned by controller-driven movement. A create-trap entry identifies a candidate trigger and can include calls exercised with the debugger. The complete ordinary gameplay trigger chain still needs verification where the encounter audit lacks it.
 
 ## Regenerate the inventory
 

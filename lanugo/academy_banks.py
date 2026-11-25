@@ -308,7 +308,7 @@ MIXED_COMBAT_BANKS = (SHARED_PAGE_FORMATS.keys() | SPLIT_ROOM_FORMATS.keys()) - 
     "hazards-nine", "gray-green-goblins", "gray-green-goblins-two",
 }
 DEDICATED_ROOM_COMBAT_BANKS = frozenset((
-    "wizards", "judy", "anjor", "tyball", "ghouls-five", "ghouls-five-recurring", "ghouls-eight", "fire",
+    "wizards", "judy", "anjor", "tyball", "ghouls-five", "ghouls-five-recurring", "ghouls-eight", "fire", "spiders",
 ))
 ACADEMY_COMBAT_BANKS = frozenset(("wizb", "wizc", "warren", "ghouls", "imps"))
 
