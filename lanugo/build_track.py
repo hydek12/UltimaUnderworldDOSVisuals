@@ -29,14 +29,19 @@ WALK_HEADER_BYTES = 0x800
 WALK_MAGIC = 0x4B4C4157
 PAYLOAD_MAGIC = 0x4C414E55
 READY_MAGIC = 0x4C414E52
-OPTIONS_HELP = 0x800C2180
+MENU_CODE_RAM = 0x801FF800
+MENU_STARTUP = 0x800C77B0
+MENU_STARTUP_CALL = 0x80012418
+NATIVE_HEAP_INIT = 0x8008C6CC
+NATIVE_STACK_TABLE_ENTRY = 0x8001243C
+OPTIONS_HELP = MENU_CODE_RAM
 OPTIONS_DRAW_ITEMS = 0x8005BEA0
 OPTIONS_DRAW_CALL = 0x8005C3C0
-INVENTORY_HELP = 0x800C3000
-RUNE_HELP = 0x800C31B0
+INVENTORY_HELP = MENU_CODE_RAM + 0x160
+RUNE_HELP = MENU_CODE_RAM + 0x300
 RUNE_SUBMIT_CALL = 0x800445A0
 SPELL_SUBMIT_CALL = 0x8004A204
-DIALOGUE_HELP = 0x800C2260
+DIALOGUE_HELP = MENU_CODE_RAM + 0xc0
 DIALOGUE_SUBMIT_CALL = 0x80026284
 INVENTORY_SUBMIT_CALL = 0x800210F0
 SUBMIT_MENU_FRAME = 0x80072264
@@ -1374,6 +1379,51 @@ def dialogue_help(submit_help):
     return code.ljust(text - DIALOGUE_HELP, b"\0") + advance + replies
 
 
+def menu_startup(spell_code, submit_help):
+    """Copy the menu code above the lowered stack before native heap setup."""
+    sections = {
+        OPTIONS_HELP - MENU_CODE_RAM: options_help(),
+        DIALOGUE_HELP - MENU_CODE_RAM: dialogue_help(submit_help),
+        INVENTORY_HELP - MENU_CODE_RAM: inventory_help(),
+        RUNE_HELP - MENU_CODE_RAM: spell_code,
+    }
+    cleanup_offset = 0x400
+    length = cleanup_offset + 0x40
+    source = MENU_STARTUP + 0x40
+
+    # The native game can reuse the on-disc template's RAM after boot.
+    cleanup = Code(MENU_CODE_RAM + cleanup_offset)
+    cleanup.address("t0", MENU_STARTUP)
+    cleanup.imm("ori", "t2", "zero", source - MENU_STARTUP + length)
+    cleanup.label("clear")
+    cleanup.mem("sw", "zero", 0, "t0")
+    cleanup.imm("addiu", "t2", "t2", -4)
+    cleanup.branch("bne", "t2", "zero", "clear")
+    cleanup.imm("addiu", "t0", "t0", 4)
+    cleanup.jump(NATIVE_HEAP_INIT)
+    cleanup.nop()
+    sections[cleanup_offset] = cleanup.out()
+    if MENU_CODE_RAM + length > 0x80200000:
+        raise ValueError("Menu controls exceed the reserved space above the stack.")
+    c = Code(MENU_STARTUP)
+    c.address("t0", source)
+    c.address("t1", MENU_CODE_RAM)
+    c.imm("ori", "t2", "zero", length)
+    c.label("copy")
+    c.mem("lw", "t3", 0, "t0")
+    c.imm("addiu", "t0", "t0", 4)
+    c.mem("sw", "t3", 0, "t1")
+    c.imm("addiu", "t2", "t2", -4)
+    c.branch("bne", "t2", "zero", "copy")
+    c.imm("addiu", "t1", "t1", 4)
+    c.jump(cleanup.origin)
+    c.nop()
+    boot = c.out()
+    if len(boot) > source - MENU_STARTUP:
+        raise ValueError("Menu startup routine overlaps its source data.")
+    return boot.ljust(source - MENU_STARTUP, b"\0") + assemble_payload(sections, length)
+
+
 def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False,
                     lower_payload_lba=None, lizard_payload_lba=None, rat_payload_lba=None,
                     wizard_payload_lba=None, expanded_level_six=False, academy_runtime=False, level_one_dialogue=False,
@@ -1394,10 +1444,8 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
         DRAW_GATE: gate(DRAW_GATE, DRAW_RAM, walking=walking, floor_aware=floor_aware),
     }
     if menu_controls:
-        code[OPTIONS_HELP] = options_help()
-        code[INVENTORY_HELP] = inventory_help()
-        spell_help, submit_help, code[RUNE_HELP] = rune_spell_help()
-        code[DIALOGUE_HELP] = dialogue_help(submit_help)
+        spell_help, submit_help, spell_code = rune_spell_help()
+        code[MENU_STARTUP] = menu_startup(spell_code, submit_help)
     if academy_runtime:
         code.update(academy_banks.gates())
     if walking:
@@ -1441,6 +1489,10 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
                    jump(academy_banks.GATE) + bytes(4)),)
     if menu_controls:
         hooks += (
+            # CRT reads this stack ceiling for both SP and the heap size.
+            (NATIVE_STACK_TABLE_ENTRY, struct.pack("<I", 0x200000),
+             struct.pack("<I", MENU_CODE_RAM & 0x1fffff)),
+            (MENU_STARTUP_CALL, jump(NATIVE_HEAP_INIT, True), jump(MENU_STARTUP, True)),
             (OPTIONS_DRAW_CALL, jump(OPTIONS_DRAW_ITEMS, True), jump(OPTIONS_HELP, True)),
             (INVENTORY_SUBMIT_CALL, jump(SUBMIT_MENU_FRAME, True), jump(INVENTORY_HELP, True)),
             (RUNE_SUBMIT_CALL, jump(SUBMIT_MENU_FRAME, True), jump(RUNE_HELP, True)),
