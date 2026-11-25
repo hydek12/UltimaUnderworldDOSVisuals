@@ -457,7 +457,7 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 7,0x9ae620,104,214,0,6,55,6,55,0x034425,26,fight32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prison-seven,prison-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
 7,0x9ae63c,78,220,0,25,55,25,55,0x03445b,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Linked on floor load
 7,0x9ae658,78,220,0,27,55,27,55,0x033f15,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Linked on floor load
-7,0x9ae674,102,0,0,42,57,42,57,,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+7,0x9ae674,102,0,0,42,57,42,57,,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Normal controller movement triggered native create trap 588
 7,0x9ae690,111,216,1,26,56,26,56,0x0344c7,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9ae6ac,120,0,0,35,56,35,56,,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Normal controller rest spawned actor from trap 563
 7,0x9ae6c8,98,211,0,7,57,7,57,0x0343d4,26,fight32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prison-seven,prison-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
