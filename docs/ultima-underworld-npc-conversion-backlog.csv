@@ -431,7 +431,7 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 7,0x9ae348,114,0,1,36,38,36,38,0x034008,19,golem,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 7,0x9ae364,92,0,0,11,39,11,39,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Normal controller movement triggered native create trap 722
 7,0x9ae380,92,0,0,15,40,15,40,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Normal controller movement triggered native create trap 713
-7,0x9ae39c,117,0,0,33,40,33,40,,28,shadow,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 0c,00 01 02 03 0c,00 01 02 03 0c,,Create trap identified
+7,0x9ae39c,117,0,0,33,40,33,40,,28,shadow,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 0c,00 01 02 03 0c,00 01 02 03 0c,,Normal controller movement triggered native create trap 698
 7,0x9ae3b8,120,0,1,47,40,47,40,0x0340aa,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9ae3d4,120,0,1,51,40,51,40,0x0340c5,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9ae3f0,92,0,0,3,41,3,41,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Normal controller movement triggered native create trap 693
