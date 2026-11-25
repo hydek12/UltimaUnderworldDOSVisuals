@@ -170,9 +170,9 @@ RECURRING_BANKS = {
         ("reapers", ((118,),), ((31, 3), (52, 18), (46, 29), (8, 40), (28, 47), (58, 47), (15, 57))),
         ("golems-wisps", ((114, 119, 121), (122,)),
          ((39, 2), (4, 14), (10, 20), (37, 28), (38, 32), (53, 32), (55, 47), (61, 47))),
-        ("fire", ((120,),), ((22, 5), (54, 7), (23, 15), (41, 22), (31, 27), (33, 27), (9, 30), (4, 36), (53, 37), (33, 38), (41, 51))),
+        ("fire-rats-eight", ((120,), (72,)), ((22, 5), (54, 7), (23, 15), (41, 22), (31, 27), (33, 27), (9, 30), (4, 36), (53, 37), (33, 38), (41, 51))),
         ("demon", ((124,),), ((32, 33),)),
-        ("imps-ghosts", ((81,), (97, 113)), ((8, 61),)),
+        ("imps-ghosts-headless", ((81,), (91,), (97, 113)), ((8, 61),)),
         ("ghosts-rat-headless", ((97, 113), (72,), (91,)), ()),
     ),
 }
@@ -209,6 +209,7 @@ ROOM_CELL_OVERRIDES = {
         # Keep the ghosts in these approach cells and add the adjacent rats and headless.
         "ghosts-rat-headless": ((21, 40), (27, 49), (11, 3), (5, 22), (25, 61)),
         "rats-spiders": ((14, 58),),
+        "imps-ghosts-headless": ((7, 61),),
     },
 }
 
@@ -220,7 +221,6 @@ RECURRING_FORMATS = {
     "rats-imps": (8, (16, 16)),
     "bats-lurkers": (8, (16, 16)),
     "golems-wisps": (4, (16, 16)),
-    "imps-ghosts": (8, (16, 16)),
     "bats-rats": (4, (16, 16)),
     "rats-spiders": (4, (16, 16)),
     "gazers-golems": (4, (16, 16)),
@@ -283,6 +283,8 @@ SHARED_PAGE_FORMATS = {
     "grub-imp": ((4, (16,)), (8, (16,))),
     "golems-imp": ((4, (16,)), (8, (16,))),
     "ghosts-rat-headless": ((4, (16, 16)), (8, (13,))),
+    "fire-rats-eight": ((4, (16,)), (4, (16,))),
+    "imps-ghosts-headless": ((8, (11, 11)), (4, (16,))),
 }
 ROOM_FORMATS = {**LEVEL_ONE_FORMATS, "dwarves": (8, 16), "corby": (8, 15),
                 "bandits": (8, 15), "zak": (8, 15), "fighters-four": (8, 15), "trolls-four": (4, 16), "trolls-four-recurring": (4, 16),

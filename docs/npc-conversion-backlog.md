@@ -1,8 +1,8 @@
 # Ultima Underworld critter inventory
 
-The [record-by-record inventory](ultima-underworld-npc-conversion-backlog.csv) covers all 657 mobile creature and NPC records in the clean Japanese Rev 1 archive. It compares the default release Track 1 (`f209e51d2600bba83eb2af51159981d783496258`) with the dedicated-bank combat preview (`19b4338cb47846ed8205c0dfcebc3f3fff4db9b8`). The inventory reads the resident bank grids, palette registrations, and combat tables from the built tracks.
+The [record-by-record inventory](ultima-underworld-npc-conversion-backlog.csv) covers all 657 mobile creature and NPC records in the clean Japanese Rev 1 archive. It compares the default release Track 1 (`26db773964e4a2dc09a2115e7387d5b487d53679`) with the dedicated-bank combat preview (`82821e477b5effe1c9a9e74a0c8a228ffb87e5bf`). The inventory reads the resident bank grids, palette registrations, and combat tables from the built tracks.
 
-Each record is checked at two camera cells, the archived spawn tile and one tile west. Directional coverage is identical in the two builds. Both cells register DOS art for **642 records** and one cell registers it for **15 records**. All 15 are initially linked in the archive. The two-cell check measures configured coverage near the spawn. It leaves camera visibility, reachable viewpoints, actors that move, and actual gameplay draws to the [encounter audit](named-dialogue-audit.md).
+Each record is checked at two camera cells, the archived spawn tile and one tile west. Directional coverage is identical in the two builds. Both cells register DOS art for **644 records** and one cell registers it for **13 records**. All 13 are initially linked in the archive. The two-cell check measures configured coverage near the spawn. It leaves camera visibility, reachable viewpoints, actors that move, and actual gameplay draws to the [encounter audit](named-dialogue-audit.md).
 
 | Level | Records | Archive-noninitial | DOS in both views | DOS in one view | Source action candidates |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -13,13 +13,19 @@ Each record is checked at two camera cells, the archived spawn tile and one tile
 | 5 | 59 | 9 | 59 | 0 | 24 |
 | 6 | 60 | 11 | 56 | 4 | 33 |
 | 7 | 94 | 24 | 94 | 0 | 47 |
-| 8 | 115 | 25 | 113 | 2 | 42 |
+| 8 | 115 | 25 | 115 | 0 | 31 |
 | 9 | 72 | 2 | 72 | 0 | 0 |
-| Total | 657 | 107 | 642 | 15 | 260 |
+| Total | 657 | 107 | 644 | 13 | 249 |
 
 ## Level 8 boundary coverage
 
 The three west approach cells for the headless at (12, 3) and rats at (6, 22) and (26, 61) now select the existing ghosts, rats, and headless bank. In the built-track audit, all three gained directional coverage in the west approach and the combat preview registered DOS slots `00 01 02 03 07 0c` there. The ghost at (10, 3) retained its directional registration and gained the mixed bank’s fixed poses at its spawn. The new menu preview differs from the previous menu preview in 16 copies of the same Level 8 data sector. All four CHD tracks passed byte-for-byte readback. In DuckStation, the preview loaded the `test` memory-card save and the native renderer submitted DOS sprite quads from bank 15 at all three west approaches. The probe checked the texture coordinates and palette for each draw after placing the camera with the debugger. Controller-driven approaches and combat at these boundaries remain open.
+
+## Remaining Level 8 approaches
+
+The rat at (26, 7) now shares the west approach with the fire elemental bank. The imp at (8, 61) uses a mixed bank that carries the nearby headless and ghost as well. The imp and headless share an 8-bit texture page and the ghosts use a 4-bit page. The built-track audit now registers DOS directional sprites in both sampled views for all 115 Level 8 records. All previously mapped action slots were retained, and the rat and imp gained DOS action mappings on their west approaches.
+
+In live DuckStation gameplay, the rat used its DOS walk frame from camera tile (25, 7) in bank 12 with palette `0x7e58`. The imp used its DOS idle frame from (7, 61) in bank 14 with palette `0x7e18`. The probe also matched the expected frames and palettes for the fire elemental at (22, 5), headless at (6, 60), and ghost at (9, 60). The debugger placed the camera, and the game selected the poses.
 
 ## Level 7 troll and green goblin bank
 
@@ -35,8 +41,8 @@ In live DuckStation gameplay, the green goblin at (18, 8) rendered from camera t
 
 ## Remaining checks
 
-- **Directional coverage at bank boundaries.** Filter for `preview_directional_views=1` to get all 15 records with their bank names and coordinates. Level 6 still has two bat records with a one-view gap. Level 8 still has one rat at (26, 7) and one imp at (8, 61). A neighbouring bank may already serve another family, so confirm visibility and bank ownership in-game before changing its grid cells.
-- **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 339 records, including slot `0d` for 139. There are 260 records across 37 types with one or more decodable source slots missing from a view that already registers their directional art. Fire elementals (27 records) and spiders (26 type-92 records, plus other variants) are the largest groups. Slot `0d` appears in the source for 146 of the candidates. Check whether the original PSX AI can select the corresponding action before mapping it. The Level 6 warren Ghost is an intentional exception and uses native combat. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
+- **Directional coverage at bank boundaries.** Filter for `preview_directional_views=1` to get all 13 records with their bank names and coordinates. Level 6 still has two bat records with a one-view gap. A neighbouring bank may already serve another family, so confirm visibility and bank ownership in-game before changing its grid cells.
+- **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 351 records, including slot `0d` for 150. There are 249 records across 37 types with one or more decodable source slots missing from a view that already registers their directional art. Spiders (26 type-92 records, plus other variants) remain among the largest groups. Slot `0d` appears in the source for 135 of the candidates. Check whether the original PSX AI can select the corresponding action before mapping it. The Level 6 warren Ghost is an intentional exception and uses native combat. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
 - **Native activation.** Both sampled views already register DOS directional art for all 107 archive-noninitial records. The earlier native tile-chain trace found 44 already linked on floor load and identified create traps for another 60 records. Two Level 7 fire elementals share a type and spawn coordinate and need record-specific evidence. The remaining record, the Level 3 green goblin at (35, 62), was spawned by controller-driven rest. A create-trap entry identifies a candidate trigger and can include calls exercised with the debugger. The complete ordinary gameplay trigger chain still needs verification where the encounter audit lacks it.
 
 ## Regenerate the inventory
