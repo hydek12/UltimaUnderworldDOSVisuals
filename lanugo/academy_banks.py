@@ -432,12 +432,16 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None, recurring=False,
     if recurring and not has_rooms:
         # Keep the stock Academy atlas at the actual common-creature and trap cells.
         grid = bytearray(grid)
-        for x, z, owner in (
+        cells = (
             (42, 43, 0), (43, 45, 0), (45, 45, 0), (4, 53, 0), (47, 56, 0),
-            (35, 50, 0), (35, 53, 0), (40, 48, 0), (40, 50, 0), (40, 52, 0),
+            (35, 50, 0), (40, 48, 0), (40, 50, 0), (40, 52, 0),
             (17, 53, 0), (18, 53, 0), (16, 54, 0), (18, 56, 0), (16, 55, 0),
             (43, 59, 0), (41, 61, 0), (15, 55, 0), (35, 56, 3), (8, 57, 4), (57, 56, 6),
-        ):
+        )
+        # The combat bank serves both the imp and the bat on the west approach.
+        # The default bank carries the slug on its west approach.
+        cells += ((35, 53, 7), (15, 51, 0)) if full_resident else ((35, 53, 0),)
+        for x, z, owner in cells:
             index = z // 4 * 16 + x // 4
             shift = 4 * (index & 1)
             grid[index // 2] = (grid[index // 2] & ~(15 << shift)) | owner << shift
