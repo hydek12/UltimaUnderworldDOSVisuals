@@ -145,6 +145,36 @@ func distanceShade(root: URL, level: Int, dx: Int, dy: Int, dz: Int) throws -> D
     return DOSShade(row: row, file: level == 5 ? "MONO.DAT" : "LIGHT.DAT")
 }
 
+func mixedCombatPoses(root: URL, actor: Int) throws -> [(slot: Int, count: Int)] {
+    let crit = root.appendingPathComponent("CRIT")
+    let associations = try Bytes(crit.appendingPathComponent("ASSOC.ANM"))
+    let animation = try associations.byte(256 + (actor - 64) * 2)
+    guard animation < 32 else { throw FormatError("Actor has no animation association.") }
+
+    var counts: [Int: Int] = [:]
+    for pageNumber in 0...1 {
+        let url = crit.appendingPathComponent(String(format: "CR%02oPAGE.N%02o", animation, pageNumber))
+        guard FileManager.default.fileExists(atPath: url.path) else { continue }
+        let page = try Bytes(url)
+        let first = try page.byte(0)
+        let count = try page.byte(1)
+        let segments = try page.byte(2 + count)
+        for slot in [0, 1, 2, 3, 7, 12, 13] where (first..<(first + count)).contains(slot) {
+            let segment = try page.byte(2 + slot - first)
+            guard segment < segments else { continue }
+            var frames = 0
+            for phase in 0..<8 {
+                if try page.byte(3 + count + segment * 8 + phase) == 255 { break }
+                frames += 1
+            }
+            if frames > 0 { counts[slot] = frames }
+        }
+    }
+    // The green-goblin stance has a truncated source frame.
+    if animation == 0 { counts.removeValue(forKey: 0) }
+    return counts.sorted { $0.key < $1.key }.map { ($0.key, $0.value) }
+}
+
 func readFrame(root: URL, actor: Int, slot: Int, frame: Int, shade: DOSShade? = nil) throws -> DOSFrame {
     let shadeRow = try shade.map { shade in
         let light = try Bytes(root.appendingPathComponent("DATA/\(shade.file)")).data
@@ -449,6 +479,15 @@ do {
             try exportAtlas(root: root, directory: directory.appendingPathComponent("combat"),
                             actor: actor, name: "creature-combat", poses: combatPoses, height: 512)
         }
+    case "export-mixed-combat" where arguments.count == 4:
+        guard let actor = Int(arguments[2]), (64...127).contains(actor) else {
+            throw FormatError("Choose a DOS creature type between 64 and 127.")
+        }
+        let root = URL(fileURLWithPath: arguments[1])
+        let poses = try mixedCombatPoses(root: root, actor: actor)
+        guard !poses.isEmpty else { throw FormatError("Creature has no supported DOS combat frames.") }
+        try exportAtlas(root: root, directory: URL(fileURLWithPath: arguments[3]), actor: actor,
+                        name: "creature-combat", poses: poses, height: 512)
     case "export-creature-combat" where arguments.count == 4:
         guard let actor = Int(arguments[2]), [74, 75, 81, 91, 105, 124].contains(actor) else {
             throw FormatError("Choose a creature type with a supported combat slot map.")
@@ -501,6 +540,7 @@ do {
           UnderworldVisuals export-lanugo-walk-tim DOS_ROOT NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-goblin-atlases DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-creature-atlases DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY [--lizardman-combat]
+          UnderworldVisuals export-mixed-combat DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-creature-combat DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-wizard-casting DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY
           UnderworldVisuals export-wizard-combat DOS_ROOT ACTOR NEW_OUTPUT_DIRECTORY

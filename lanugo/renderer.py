@@ -1,6 +1,10 @@
 """Emit the Japanese Rev 1 Lanugo rendering hooks."""
 
+from creature_atlas import MIXED_COMBAT_PHASES, MIXED_DIRECTIONAL_FRAMES, MIXED_FRAME_HEADER
 from mipswords import Code
+
+# Action map indices 0 and 1 select the directional idle and walk rows.
+MIXED_ACTION_OFFSET = MIXED_DIRECTIONAL_FRAMES - 2 * MIXED_COMBAT_PHASES
 
 IDLE_ACTION = 0x20
 WALK_ACTION = 0x2c
@@ -34,7 +38,7 @@ def registry_entry(c, actor, entry, scratch, registry):
     c.nop()
 
 
-def require_registered_action(c, actor, action, entry, scratch, registry, fallback):
+def require_registered_action(c, actor, action, entry, scratch, registry, fallback, mixed_combat=False):
     c.imm("addiu", scratch, actor, -64)
     c.imm("sltiu", scratch, scratch, 64)
     c.branch("beq", scratch, "zero", fallback)
@@ -42,6 +46,8 @@ def require_registered_action(c, actor, action, entry, scratch, registry, fallba
     registry_entry(c, actor, entry, scratch, registry)
     c.branch("beq", entry, "zero", fallback)
     c.imm("andi", scratch, entry, 0xffff)
+    if mixed_combat:
+        return
     # Wizard entries have no directional-table override and support fixed poses.
     c.branch("beq", scratch, "zero", "registry_action")
     c.imm("ori", scratch, "zero", IDLE_ACTION)
@@ -92,7 +98,7 @@ def atlas_action_index(c, table, action, result, scratch, fallback):
 
 # Keep actor projection and hit testing when substituting a sprite.
 def suppress(origin, order_table_register="v1", walk_ready=None, wide=False, lower_floor=False,
-             palette_types=GOBLIN_PALETTE_TYPES, order_writer=None, action_map=None, extra_type=None, wizard_combat=False, registry=None):
+             palette_types=GOBLIN_PALETTE_TYPES, order_writer=None, action_map=None, extra_type=None, wizard_combat=False, registry=None, mixed_combat=False):
     c=Code(origin)
     c.mem("lw","t8",0x74,"sp")
     c.address("t9",0x8002a5d8)
@@ -116,7 +122,7 @@ def suppress(origin, order_table_register="v1", walk_ready=None, wide=False, low
     else:
         c.imm("andi", "t8", "t8", 0x1ff)
         if registry is not None:
-            require_registered_action(c, "t8", "t9", "t8", "t7", registry, "normal")
+            require_registered_action(c, "t8", "t9", "t8", "t7", registry, "normal", mixed_combat)
         elif wide:
             require_palette_type(c, "t8", "t7", "normal", palette_types, extra_type)
         else:
@@ -151,7 +157,7 @@ DOS_IDLE_DIRECTIONS = bytes((
 def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=False,
          shade_selector=None, overlay_offset=None, palette_types=GOBLIN_PALETTE_TYPES,
          order_log=None, combat=None, extra_atlas=None, wizard_combat=False, registry=None,
-         native_sprite_lighting=False):
+         native_sprite_lighting=False, mixed_combat=False):
     c=Code(origin)
     shade_return = None
     extra_type = extra_atlas[0] if extra_atlas else None
@@ -189,7 +195,7 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
         c.imm("andi","t6","t6",3)
     else:
         if registry is not None:
-            require_registered_action(c, "t2", "t4", "t5", "t3", registry, "finish")
+            require_registered_action(c, "t2", "t4", "t5", "t3", registry, "finish", mixed_combat)
         elif extra_type is not None:
             require_fixed_pose_family(c, "t2", "t4", "t3", extra_type, "finish", wizard_combat)
         atlas_action_index(c, combat[0], "t4", "t7", "t3", "finish")
@@ -200,7 +206,7 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
     c.imm("sltiu","t2","t1",256 if order_log is None else 512)
     c.branch("beq","t2","zero","finish")
     c.nop()
-    if order_log is not None:
+    if order_log is not None and not mixed_combat:
         rewind_native_order(c, *order_log)
     # DOS chooses the view from actor facing and camera yaw.
     c.mem("lhu", "t5", 2, "t0")
@@ -234,7 +240,10 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
         c.nop()
         c.address("t0", extra_atlas[1])
         c.label("atlas_selected")
-    if combat is not None:
+    if mixed_combat:
+        select_mixed_combat_pose(c, combat[-1])
+        rewind_native_order(c, *order_log)
+    elif combat is not None:
         select_combat_pose(c, *combat[1:], compact_base=metadata if registry is not None else None)
     else:
         c.shift("sll", "t2", "t2", 2)
@@ -422,7 +431,7 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
     return c.out(), shade_return
 
 
-def select_combat_pose(c, phases, metadata, death, compact_base=None):
+def classify_combat_view(c, death, native_fallback=False):
     # For fixed-view DOS actions, use the matching standing pose outside views 3–5.
     c.imm("sltiu", "t3", "t7", 2)
     c.branch("bne", "t3", "zero", "directional_pose")
@@ -432,7 +441,48 @@ def select_combat_pose(c, phases, metadata, death, compact_base=None):
     c.imm("sltiu", "t3", "t3", 3)
     c.branch("bne", "t3", "zero", "combat_pose")
     c.nop()
+    if native_fallback:
+        # Even a side or rear combat draw needs a mapped family action.
+        c.shift("sll", "t3", "t7", 3)
+        c.alu("addu", "t3", "t3", "t0")
+        c.mem("lbu", "t3", MIXED_ACTION_OFFSET, "t3")
+        c.imm("ori", "t4", "zero", 255)
+        c.branch("beq", "t3", "t4", "finish")
+        c.nop()
     c.imm("ori", "t7", "zero", 0)
+
+def select_mixed_combat_pose(c, death):
+    classify_combat_view(c, death, native_fallback=True)
+    c.label("directional_pose")
+    c.shift("sll", "t7", "t7", 5)
+    c.shift("sll", "t2", "t2", 2)
+    c.shift("srl", "t6", "t6", 1)
+    c.imm("andi", "t6", "t6", 3)
+    c.alu("addu", "t7", "t7", "t2")
+    c.branch("beq", "zero", "zero", "mixed_index")
+    c.alu("addu", "t7", "t7", "t6")
+    c.label("combat_pose")
+    c.imm("sltiu", "t3", "t6", MIXED_COMBAT_PHASES)
+    c.branch("bne", "t3", "zero", "mixed_phase")
+    c.shift("sll", "t7", "t7", 3)
+    c.imm("ori", "t6", "zero", MIXED_COMBAT_PHASES - 1)
+    c.label("mixed_phase")
+    c.alu("addu", "t7", "t7", "t6")
+    c.imm("addiu", "t7", "t7", MIXED_ACTION_OFFSET)
+    c.label("mixed_index")
+    c.alu("addu", "t7", "t7", "t0")
+    c.mem("lbu", "t2", 0, "t7")
+    c.imm("ori", "t3", "zero", 255)
+    c.branch("beq", "t2", "t3", "finish")
+    c.imm("addiu", "t0", "t0", MIXED_FRAME_HEADER)
+    c.shift("sll", "t3", "t2", 1)
+    c.shift("sll", "t2", "t2", 4)
+    c.alu("subu", "t2", "t2", "t3")
+    c.alu("addu", "t0", "t0", "t2")
+
+
+def select_combat_pose(c, phases, metadata, death, compact_base=None):
+    classify_combat_view(c, death)
     c.label("directional_pose")
     c.shift("srl", "t6", "t6", 1)
     c.imm("andi", "t6", "t6", 3)

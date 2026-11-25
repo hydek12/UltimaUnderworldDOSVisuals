@@ -11,6 +11,9 @@ LEVEL_SIX_SPIDER_TYPE = 92
 COMBAT_SLOTS = ((0, 4), (1, 5), (2, 5), (3, 5), (7, 4), (0x0c, 4))
 DEATH_SLOT = 0x0c
 CAST_SLOT = (0x0d, 5)
+MIXED_DIRECTIONAL_FRAMES = 64
+MIXED_COMBAT_PHASES = 8
+MIXED_FRAME_HEADER = MIXED_DIRECTIONAL_FRAMES + (len(COMBAT_SLOTS) + 1) * MIXED_COMBAT_PHASES
 SOURCE_HEIGHT = 512
 TEXTURE_PAGES = ((384, 256, 248), (448, 256, 248))
 RAT_TEXTURE_PAGES = TEXTURE_PAGES[:1]
@@ -167,13 +170,28 @@ def build_families(families, page, *, bits=4, scales=None):
     return image, palettes, tables
 
 
-def compact_frame_table(table):
-    """Index unique directional entries and omit their final two padding bytes."""
+def compact_frame_table(table, combat_slots=None):
+    """Index unique frame records and omit their final two padding bytes."""
     keys = {}
     indices = bytearray()
     for offset in range(0, len(table), 16):
         entry = bytes(table[offset:offset + 14])
         indices.append(keys.setdefault(entry, len(keys)))
-    if len(indices) != 64:
-        raise ValueError("Expected four phases in each idle and walking direction.")
-    return bytes(indices) + b"".join(keys)
+    if combat_slots is None:
+        if len(indices) != 64:
+            raise ValueError("Expected four phases in each idle and walking direction.")
+        return bytes(indices) + b"".join(keys)
+
+    if len(indices) != MIXED_DIRECTIONAL_FRAMES + sum(count for _, count in combat_slots):
+        raise ValueError("Mixed combat metadata does not match its action counts.")
+    combat = bytearray([255] * (MIXED_FRAME_HEADER - MIXED_DIRECTIONAL_FRAMES))
+    start = MIXED_DIRECTIONAL_FRAMES
+    counts = dict(combat_slots)
+    for index, (action, _) in enumerate((*COMBAT_SLOTS, CAST_SLOT)):
+        count = counts.get(action, 0)
+        if count:
+            combat[index * MIXED_COMBAT_PHASES:(index + 1) * MIXED_COMBAT_PHASES] = bytes(
+                indices[start + min(phase, count - 1)] for phase in range(MIXED_COMBAT_PHASES)
+            )
+            start += count
+    return bytes(indices[:MIXED_DIRECTIONAL_FRAMES]) + combat + b"".join(keys)

@@ -283,6 +283,7 @@ ROOM_FORMATS = {**LEVEL_ONE_FORMATS, "dwarves": (8, 16), "corby": (8, 15),
                 "troll-seven": (4, 16), "troll-seven-recurring": (4, 16), "imp-seven": (8, 16), **RECURRING_SINGLE_FORMATS}
 SPLIT_ROOM_FORMATS = {"prisoner": (4, (12, 16)), "town": (8, (11, 11)), "carasso": (8, (16, 11)),
                       **RECURRING_FORMATS}
+MIXED_COMBAT_BANKS = (SHARED_PAGE_FORMATS.keys() | SPLIT_ROOM_FORMATS.keys()) - {"hazards-nine"}
 ROOM_STRIDE = 0x19800
 # (texture depth, sixteenths of original size, uses both pages)
 SPECIAL_FORMATS = {"imps": (8, 16, True), "skeletons": (4, 16, True),
@@ -468,3 +469,7 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None, recurring=False)
         SELECTOR - PAYLOAD: c.out(), SWITCH - PAYLOAD: switch.out(),
         ACTIVE: struct.pack("<I", bank),
     }
+
+if __name__ == "__main__":
+    for actor in sorted({actor for bank in MIXED_COMBAT_BANKS for family in ROOM_FAMILIES[bank] for actor in family}):
+        print(actor)

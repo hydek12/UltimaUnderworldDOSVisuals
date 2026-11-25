@@ -684,6 +684,52 @@ def rat_payload(variants, bank_sections=None):
                             academy_sections=bank_sections, room_default=bank_sections is not None)
 
 
+def mixed_combat_sources(variants, types):
+    directory = variants / f"type-{types[0]}" / "mixed-combat"
+    with (directory / "creature-combat.csv").open() as manifest:
+        counts = {}
+        for row in csv.DictReader(manifest):
+            slot = int(row["slot"])
+            counts[slot] = counts.get(slot, 0) + 1
+    slots = tuple(sorted(counts.items()))
+    allowed = {action for action, _ in (*creature_atlas.COMBAT_SLOTS, creature_atlas.CAST_SLOT)}
+    if not slots or any(action not in allowed or not 1 <= count <= 8 for action, count in slots):
+        raise ValueError(f"Invalid mixed combat action table for {types}.")
+    frames = tuple(read_source_atlas(
+        variants / f"type-{actor}" / "mixed-combat", "combat", creature_atlas.SOURCE_HEIGHT, 0,
+        prefix="creature", poses=slots,
+    ) for actor in types)
+    return creature_sources(variants, types) + (frames,), slots
+
+
+def pack_mixed_page(families, page, bits, scales):
+    # Try the room's original texture scales first, then reduce both axes as needed.
+    for cap in range(max(scales), 0, -1):
+        try:
+            return creature_atlas.build_families(
+                families, page, bits=bits, scales=tuple(min(scale, cap) for scale in scales),
+            )
+        except variant_atlas.AtlasDoesNotFit:
+            if cap == 1:
+                raise
+
+
+def mixed_table_locations(tables, room_bank):
+    # Gaps between renderer stubs, uploader, and camera grid.
+    windows = [(0x804, 0xc00), (0x1000, 0x1400), (0x1600, 0x1c00), (0x1e00, 0x2000)]
+    locations = [0] * len(tables)
+    for index in sorted(range(len(tables)), key=lambda i: -len(tables[i])):
+        size = len(tables[index])
+        for i, (start, end) in enumerate(windows):
+            if start + size <= end:
+                locations[index] = start
+                windows[i] = ((start + size + 3) & ~3, end)
+                break
+        else:
+            raise ValueError(f"Mixed combat metadata does not fit {room_bank}: {[len(t) for t in tables]}.")
+    return locations
+
+
 def creature_payload(variants, actor_types, texture_pages, combat=False, extra_type=None, casting=False,
                      expanded_level_six=False, academy_bank=None, academy_sections=None, room_bank=None, room_default=False,
                      slasher_combat=False, room_combat=False, recurring_academy=False, native_sprite_lighting=False):
@@ -702,6 +748,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     bank_combat_slots = None
     split_format = academy_banks.SPLIT_ROOM_FORMATS.get(room_bank)
     shared_format = academy_banks.SHARED_PAGE_FORMATS.get(room_bank)
+    mixed_combat = room_combat and room_bank in academy_banks.MIXED_COMBAT_BANKS
     if expanded_level_six:
         # Keep persistent frame lookups below 0x801f8000, where the native floor load writes.
         if not (casting and combat and extra_type == 92 and texture_pages == creature_atlas.TEXTURE_PAGES[:1]):
@@ -713,6 +760,13 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             families = ((96, 111, 112),)
         if room_bank:
             families = academy_banks.ROOM_FAMILIES[room_bank]
+        if mixed_combat:
+            # The grub's DOS combat frames use colors absent from its directional atlas.
+            if room_bank in ("grubs-slugs", "rats-grubs-five", "rats-grubs-eight"):
+                split_format = 8, split_format[1]
+            if room_bank in ("bats-grubs-rats", "grub-imp"):
+                shared_format = ((8, shared_format[0][1]), shared_format[1])
+            mixed_sources, family_actions = zip(*(mixed_combat_sources(variants, types) for types in families))
         if slasher_combat:
             table_slots = ((0x1000, 0x400), (0x1800, 0x200), (0x1a00, 0x200))
         elif room_bank == "hazards-nine":
@@ -744,6 +798,8 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             for page, (bits, scales) in zip(texture_pages, shared_format, strict=True):
                 end = next_family + len(scales)
                 page_families = [creature_sources(variants, types) for types in families[next_family:end]]
+                if mixed_combat:
+                    page_families = mixed_sources[next_family:end]
                 if slasher_combat and next_family == 0:
                     bank_combat_slots = (*creature_atlas.COMBAT_SLOTS, (13, 4))
                     combat_source = read_source_atlas(
@@ -753,7 +809,10 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
                     page_families[0] += ((combat_source,),)
                     # The extra 31 combat frames fit with the eye at this resolution.
                     scales = (9, *scales[1:])
-                art, colors, tables = creature_atlas.build_families(page_families, page, bits=bits, scales=scales)
+                if mixed_combat:
+                    art, colors, tables = pack_mixed_page(page_families, page, bits, scales)
+                else:
+                    art, colors, tables = creature_atlas.build_families(page_families, page, bits=bits, scales=scales)
                 images.append(art)
                 palettes.extend(clut.ljust(palette_stride, b"\0") for clut in colors)
                 directional.extend(tables)
@@ -766,14 +825,22 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         elif split_format:
             bits, scales = split_format
             palette_stride = 64 if bits == 8 else 32
-            packed = [
-                creature_atlas.build(creature_sources(variants, types), (page,), bits=bits, scale=scale)
-                for types, page, scale in zip(families, texture_pages, scales, strict=True)
-            ]
-            images = tuple(image for (image,), _, _ in packed)
-            palettes = [clut[i:i + palette_stride] for _, clut, _ in packed
-                        for i in range(0, len(clut), palette_stride)]
-            directional = tuple(table for _, _, table in packed)
+            if mixed_combat:
+                packed = [
+                    pack_mixed_page((sources,), page, bits, (scale,))
+                    for sources, page, scale in zip(mixed_sources, texture_pages, scales, strict=True)
+                ]
+                images, palettes, directional = zip(*((image, colors, tables[0]) for image, colors, tables in packed))
+                palettes = [clut for colors in palettes for clut in colors]
+            else:
+                packed = [
+                    creature_atlas.build(creature_sources(variants, types), (page,), bits=bits, scale=scale)
+                    for types, page, scale in zip(families, texture_pages, scales, strict=True)
+                ]
+                images = tuple(image for (image,), _, _ in packed)
+                palettes = [clut[i:i + palette_stride] for _, clut, _ in packed
+                            for i in range(0, len(clut), palette_stride)]
+                directional = tuple(table for _, _, table in packed)
             primary_types = ()
         elif room_bank and format_override is None:
             bits, scale = academy_banks.ROOM_FORMATS[room_bank]
@@ -835,17 +902,25 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         for row, actor in enumerate(primary_types):
             struct.pack_into("<HH", registry_data, 4 * (actor - 64), 0, creature_atlas.CLUT_BASE + row * 64)
         row = len(primary_types)
-        for types, table, (location, capacity) in zip(families, directional, table_slots, strict=True):
-            compact = creature_atlas.compact_frame_table(table)
-            if len(compact) > capacity:
-                raise ValueError("The compact Level 6 frame table exceeds its safe RAM range.")
+        if mixed_combat:
+            tables = tuple(creature_atlas.compact_frame_table(table, slots)
+                           for table, slots in zip(directional, family_actions, strict=True))
+            locations = mixed_table_locations(tables, room_bank)
+        else:
+            tables = tuple(creature_atlas.compact_frame_table(table) for table in directional)
+            locations = []
+            for table, (location, capacity) in zip(tables, table_slots[:len(tables)], strict=True):
+                if len(table) > capacity:
+                    raise ValueError("The compact Level 6 frame table exceeds its safe RAM range.")
+                locations.append(location)
+        for types, compact, location in zip(families, tables, locations, strict=True):
             extra_sections[location] = compact
             for actor in types:
                 palette = creature_atlas.CLUT_BASE + (row % palette_columns) * 64 + row // palette_columns
                 struct.pack_into("<HH", registry_data, 4 * (actor - 64), location - 0x800, palette)
                 row += 1
         extra_sections[0xf00] = registry_data
-        log_offset = EXPANDED_RESIDENT_BYTES if shared_format else LOWER_RESIDENT_BYTES
+        log_offset = EXPANDED_RESIDENT_BYTES if shared_format or mixed_combat else LOWER_RESIDENT_BYTES
         order_log = PAYLOAD_RAM + ORDER_COUNT_OFFSET, PAYLOAD_RAM + log_offset
     elif extra_type is not None:
         if (combat and not casting) or texture_pages != creature_atlas.TEXTURE_PAGES[:1]:
@@ -883,7 +958,9 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
                     first += count
                 else:
                     actions[action] = 255
-        combat_sections = {action_offset: actions, phase_offset: phases, 0x1600: metadata[0x400:]}
+        combat_sections = {action_offset: actions}
+        if not mixed_combat:
+            combat_sections.update({phase_offset: phases, 0x1600: metadata[0x400:]})
         metadata = metadata[:0x400]
         action_addresses = (
             PAYLOAD_RAM + action_offset, PAYLOAD_RAM + phase_offset, PAYLOAD_RAM + 0x1600,
@@ -902,19 +979,19 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             suppress_addr, walk_ready=WALK_READY_RAM, wide=True,
             palette_types=palette_types, order_writer=ORDER_WRITER_RAM,
             action_map=None if action_addresses is None else action_addresses[0], extra_type=extra_type,
-            wizard_combat=casting and combat, registry=registry,
+            wizard_combat=casting and combat, registry=registry, mixed_combat=mixed_combat,
         ),
         delay_addr - PAYLOAD_RAM: renderer.suppress(
             delay_addr, "a0", WALK_READY_RAM, wide=True,
             palette_types=palette_types, order_writer=ORDER_WRITER_RAM,
             action_map=None if action_addresses is None else action_addresses[0], extra_type=extra_type,
-            wizard_combat=casting and combat, registry=registry,
+            wizard_combat=casting and combat, registry=registry, mixed_combat=mixed_combat,
         ),
         0x200: renderer.draw(
             DRAW_RAM, PAYLOAD_RAM + 0x800, PAYLOAD_RAM + 0x90,
             clut=creature_atlas.CLUT_BASE, walk_ready=WALK_READY_RAM, wide=True,
             palette_types=palette_types, order_log=order_log, combat=action_addresses, extra_atlas=extra_atlas, wizard_combat=casting and combat, registry=registry,
-            native_sprite_lighting=native_sprite_lighting,
+            native_sprite_lighting=native_sprite_lighting, mixed_combat=mixed_combat,
         )[0],
         ORDER_WRITER_RAM - PAYLOAD_RAM: renderer.log_native_order(
             ORDER_WRITER_RAM, *order_log, unique_buckets=room_bank == "hazards-nine",

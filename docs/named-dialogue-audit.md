@@ -340,6 +340,24 @@ The release builder reproduced the tested CHD byte for byte. All four tracks and
 
 The cumulative `--slasher-combat` preview now gives imps (75 and 81), skeletons (74), and headless (91) full-resolution DOS combat textures in their dedicated room banks. These banks share the Academy renderer's fixed-pose path. Stance, three attacks, retreat, and death use the original DOS sequences. Imps also use their four-frame spell sequence. Existing view and timing rules still apply, including directional standing art for side and rear combat views and the death pose from all views.
 
-DuckStation replayed seven action values from native actor projections in 15 dedicated room-bank encounters on Levels 1–5, 7, and 8. The Level 5 imp first spawned through the debugger-invoked original trap. The 105 action checks produced 95 DOS sprite packets and ten expected native fallbacks for skeleton and headless casting. The fallback checks preserved each captured GPU packet and ordering-table head. The fixed-pose path has one action and phase table per bank. Mixed banks need per-family pose lookup before they can select distinct combat frames for actors that share the bank. Other dedicated families, including ghouls, gazers, and wizards outside the existing Academy preview, still need pose mapping and live checks.
+DuckStation replayed seven action values from native actor projections in 15 dedicated room-bank encounters on Levels 1–5, 7, and 8. The Level 5 imp first spawned through the debugger-invoked original trap. The 105 action checks produced 95 DOS sprite packets and ten expected native fallbacks for skeleton and headless casting. The fallback checks preserved each captured GPU packet and ordering-table head. The fixed-pose path has one action and phase table per bank. The later mixed-room preview adds per-family pose lookup for actors that share a bank. Other dedicated families, including ghouls, gazers, and wizards outside the existing Academy preview, still need pose mapping and live checks.
 
 The preview xdelta decoded against clean Japanese Rev 1 and all four CHD tracks passed readback. Track 1 matched `e55251f4d53020fcace419823e2466a04831dab8`. The default `--late-dialogue` build reproduced `e3e2845b85d665a1240c5c89fab828b8703850b2`.
+
+
+### Mixed room combat and casting
+
+The combat preview packs directional locomotion and available DOS stance, ready, melee, cast, hit, death, and special poses per actor type. It covers 37 actor types across 24 room layouts and 32 physical banks on Levels 1–5, 7, and 8. The runtime selects the active actor’s table and holds the final authored phase as needed. Fixed combat poses use the forward view, with directional standing frames for side and rear views. Death uses its fixed pose from all angles. Unavailable actions preserve native drawing, including the green goblin stance whose DOS source frame is truncated. The DOS green goblin slot 5 has no confirmed mapping to a native action.
+
+DuckStation started from disposable checkpoints and loaded the candidate disc’s floor banks. The debugger captured native actor projections in live encounters and staged action values, facing, and animation phase at draw time. It compared the submitted texture page, palette, and UVs against the actor’s DOS frame records. Each native fallback preserved the captured packet and ordering-table state. This verified sprite selection under controlled inputs. Natural AI selection of each combat action remains unverified.
+
+| Level | Bank and actor type IDs | DOS packets | Native fallbacks |
+| --- | --- | ---: | ---: |
+| 1 | 3 (64, 65) | 90 | 30 |
+| 3 | 12 (97, 117) | 96 | 24 |
+| 4 | 5 (72, 82) | 84 | 36 |
+| 7 | 4 (108), 15 (114) | 102 | 18 |
+| 8 | 11 (122) | 54 | 6 |
+| Total | Nine actor types | 426 | 114 |
+
+The Level 5 probe did not capture a qualifying mixed-bank projection. The preview decoded byte for byte from xdelta against clean Japanese Rev 1 and all four CHD tracks passed readback. Track 1 matched `39e1d7f346fa261f5c944fa35747bf1d38251db9`. The default `--late-dialogue` build reproduced `e3e2845b85d665a1240c5c89fab828b8703850b2`.
