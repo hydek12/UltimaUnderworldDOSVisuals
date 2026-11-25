@@ -1,6 +1,6 @@
 # Ultima Underworld critter inventory
 
-The [record-by-record inventory](ultima-underworld-npc-conversion-backlog.csv) covers all 657 mobile creature and NPC records in the clean Japanese Rev 1 archive. It compares the default release Track 1 (`84ed3f796b76bfa26c5826988733125060897118`) with the dedicated-bank combat preview (`76113d0bf156592c048858fdbee9595030dd9fdc`). The inventory reads the resident bank grids, palette registrations, and combat tables from the built tracks.
+The [record-by-record inventory](ultima-underworld-npc-conversion-backlog.csv) covers all 657 mobile creature and NPC records in the clean Japanese Rev 1 archive. It compares the default release Track 1 (`72fed1544044659fc323ab86219be2b7eaba8cbf`) with the dedicated-bank combat preview (`06223230c45149324e738cb85288b52109c79af2`). The inventory reads the resident bank grids, palette registrations, and combat tables from the built tracks.
 
 Each record is checked at two camera cells, the archived spawn tile and one tile west. Directional coverage is identical in the two builds. Both cells register DOS art for **all 657 records**. The two-cell check measures configured coverage near the spawn. It leaves camera visibility, reachable viewpoints, actors that move, and actual gameplay draws to the [encounter audit](named-dialogue-audit.md).
 
@@ -11,11 +11,11 @@ Each record is checked at two camera cells, the archived spawn tile and one tile
 | 3 | 74 | 12 | 74 | 0 | 24 |
 | 4 | 70 | 10 | 70 | 0 | 15 |
 | 5 | 59 | 9 | 59 | 0 | 16 |
-| 6 | 60 | 11 | 60 | 0 | 33 |
+| 6 | 60 | 11 | 60 | 0 | 24 |
 | 7 | 94 | 24 | 94 | 0 | 28 |
 | 8 | 115 | 25 | 115 | 0 | 31 |
 | 9 | 72 | 2 | 72 | 0 | 0 |
-| Total | 657 | 107 | 657 | 0 | 199 |
+| Total | 657 | 107 | 657 | 0 | 190 |
 
 ## Level 8 boundary coverage
 
@@ -75,13 +75,21 @@ A separate replay used live actor projections from both banks and staged the sev
 
 ## Dedicated spider combat
 
-Dedicated spider banks on Levels 1, 3, 4, 5, and 7 now carry DOS slots `00 01 02 03 07 0c 0d` for spider types 68, 83, and 92. Across the two sampled views, the patch resolves missing action mappings for 36 records. The nine Level 6 default-bank spiders still require a separate atlas pass.
+Dedicated spider banks on Levels 1, 3, 4, 5, and 7 now carry DOS slots `00 01 02 03 07 0c 0d` for spider types 68, 83, and 92. Across the two sampled views, the patch resolves missing action mappings for 36 records.
 
 In live DuckStation gameplay, the Level 5 type-92 spider at (36, 52) drew DOS frames for native actions `00`, `01`, and `07`, and the damage dispatcher identified that spider as the source. The debugger placed the camera and assigned the player as the target. The game selected and advanced the actions. Controlled replay used live projections from a type-68 spider on Level 1, type 83 on Level 3, and type 92 on Level 5. Each produced 54 matching DOS sprite packets and six expected native fallbacks across the action, view, and phase checks.
 
+## Level 6 default-bank spider combat
+
+The Academy default bank now uses compact DOS combat tables for type-92 spiders and the wizard family. It retains directional sprites for grubs, slugs, and bats. Both pages fit at full texture scale. All nine default-bank spider records now have DOS slots `00 01 02 03 07 0c 0d` in both sampled views, and the audit found no loss of directional coverage or existing action mappings.
+
+In live DuckStation gameplay, the spider at (42, 43) selected attack `02` and drew the matching DOS frames at phases 0, 2, and 4. The native damage dispatcher identified the same spider as the source. The debugger staged the camera and assigned the player as the target. The game selected the action and advanced its phases.
+
+Controlled replay checked all seven slots against live projections of all nine spiders and the wizard at (24, 21). Each actor produced 54 matching DOS packets and six expected native fallbacks. The three dormant spiders at (45, 45), (4, 53), and (47, 56) spawned when the debugger invoked their original create handlers. Ordinary gameplay activation for those three remains open.
+
 ## Remaining checks
 
-- **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 400 records, including slot `0d` for 199. There are 199 records across 35 types with one or more decodable source slots missing from a view that already registers their directional art. Nine type-92 spiders in the Level 6 Academy default bank still have missing action mappings. Slot `0d` appears in the source for 85 of the candidates. Check whether the original PSX AI can select the corresponding action before mapping it. The Level 6 warren Ghost is an intentional exception and uses native combat. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
+- **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 409 records, including slot `0d` for 208. There are 190 records across 34 types with one or more decodable source slots missing from a view that already registers their directional art. Slot `0d` appears in the source for 76 of the candidates. Check whether the original PSX AI can select the corresponding action before mapping it. The Level 6 warren Ghost is an intentional exception and uses native combat. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
 - **Native activation.** Both sampled views already register DOS directional art for all 107 archive-noninitial records. The earlier native tile-chain trace found 44 already linked on floor load and identified create traps for another 60 records. Two Level 7 fire elementals share a type and spawn coordinate and need record-specific evidence. The Level 3 green goblin at (35, 62) was spawned by controller-driven rest. The Level 5 fire elemental was spawned by controller-driven movement. A create-trap entry identifies a candidate trigger and can include calls exercised with the debugger. The complete ordinary gameplay trigger chain still needs verification where the encounter audit lacks it.
 
 ## Regenerate the inventory

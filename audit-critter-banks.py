@@ -85,6 +85,7 @@ def view_coverage(floor, x, z, actor, image, combat_preview):
     compact = combat_preview and (
         name in banks.MIXED_COMBAT_BANKS or name in banks.DEDICATED_ROOM_COMBAT_BANKS
         or floor == 6 and name in banks.ACADEMY_COMBAT_BANKS
+        or floor == 6 and bank_id == 0 and struct.unpack_from("<H", bank, 0xf00 + 4 * (103 - 64))[0] != 0
     )
     selector = bank[banks.COMBAT_ACTIONS:banks.COMBAT_ACTIONS + 64]
     if compact:

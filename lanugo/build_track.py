@@ -734,9 +734,12 @@ def pack_mixed_page(families, page, bits, scales):
                 raise
 
 
-def mixed_table_locations(tables, room_bank):
+def mixed_table_locations(tables, room_bank, academy_default=False):
     # Gaps between renderer stubs, uploader, and camera grid.
     windows = [(0x804, 0xc00), (0x1000, 0x1400), (0x1600, 0x1c00), (0x1e00, 0x2000)]
+    if academy_default:
+        # The Academy camera grid lives at 0xc80.
+        windows[-1] = (0x1c00, 0x2000)
     locations = [0] * len(tables)
     for index in sorted(range(len(tables)), key=lambda i: -len(tables[i])):
         size = len(tables[index])
@@ -771,7 +774,9 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     dedicated_combat = room_combat and (
         room_bank in academy_banks.DEDICATED_ROOM_COMBAT_BANKS or academy_bank in academy_banks.ACADEMY_COMBAT_BANKS
     )
-    mixed_combat = dedicated_combat or (room_combat and room_bank in academy_banks.MIXED_COMBAT_BANKS)
+    academy_default_combat = room_combat and academy_bank is None and room_bank is None
+    mixed_combat = (dedicated_combat or academy_default_combat
+                    or room_combat and room_bank in academy_banks.MIXED_COMBAT_BANKS)
     if expanded_level_six:
         # Keep persistent frame lookups below 0x801f8000, where the native floor load writes.
         if not (casting and combat and extra_type == 92 and texture_pages == creature_atlas.TEXTURE_PAGES[:1]):
@@ -787,7 +792,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             # Keep imp attack and casting poses on their own page beside the bats.
             families = (*families, (66, 73))
             shared_format = ((8, (16,)), (4, (16,)))
-        if dedicated_combat and academy_bank in ("wizb", "wizc", "warren"):
+        if academy_default_combat or (dedicated_combat and academy_bank in ("wizb", "wizc", "warren")):
             # Preserve the primary wizard family carried by these Academy banks.
             families = (actor_types, *families)
             shared_format = ((4, (16,)), (4, (16,) * (len(families) - 1)))
@@ -804,7 +809,8 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
                 "lurkers-goblins-seven": (87, 116),
             }.get(room_bank or academy_bank)
             mixed_sources, family_actions = zip(*(
-                (creature_sources(variants, types), ()) if types == directional_only
+                (creature_sources(variants, types), ())
+                if types == directional_only or (academy_default_combat and types not in (actor_types, (92,)))
                 else mixed_combat_sources(variants, types)
                 for types in families
             ))
@@ -961,7 +967,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
         if mixed_combat:
             tables = tuple(creature_atlas.compact_frame_table(table, slots)
                            for table, slots in zip(directional, family_actions, strict=True))
-            locations = mixed_table_locations(tables, room_bank)
+            locations = mixed_table_locations(tables, room_bank, academy_default_combat)
         else:
             tables = tuple(creature_atlas.compact_frame_table(table) for table in directional)
             locations = []
