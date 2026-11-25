@@ -34,6 +34,7 @@ NORMAL_ACTIVATIONS = {
     (7, 92, 13, 43): "Normal controller movement triggered native create trap 674",
     (7, 92, 11, 39): "Normal controller movement triggered native create trap 722",
     (7, 102, 42, 57): "Normal controller movement triggered native create trap 588",
+    (8, 102, 56, 55): "Normal controller movement triggered native create trap 593",
     (7, 112, 52, 59): "Normal controller movement triggered native create trap 536",
     (7, 113, 51, 54): "Normal controller movement triggered native create trap 625",
     (7, 117, 33, 40): "Normal controller movement triggered native create trap 698",
