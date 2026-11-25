@@ -565,7 +565,7 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 8,0x9b0670,81,0,0,39,53,39,53,0x03b9a3,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
 8,0x9b068c,111,0,1,31,54,31,54,0x03b9be,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven,troll-seven,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
 8,0x9b06a8,92,0,1,50,54,50,54,0x03bd6f,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
-8,0x9b06c4,102,0,0,56,55,56,55,,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-wisps-rats,gazers-wisps-rats,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+8,0x9b06c4,102,0,0,56,55,56,55,,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-wisps-rats,gazers-wisps-rats,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Normal controller movement triggered native create trap 593
 8,0x9b06e0,72,0,1,57,55,57,55,0x03b51a,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-wisps-rats,gazers-wisps-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 8,0x9b06fc,118,0,0,15,57,15,57,0x03b679,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Linked on floor load
 8,0x9b0718,72,0,1,5,58,5,58,0x03b1ba,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
