@@ -683,7 +683,7 @@ def rat_payload(variants, bank_sections=None):
 
 def creature_payload(variants, actor_types, texture_pages, combat=False, extra_type=None, casting=False,
                      expanded_level_six=False, academy_bank=None, academy_sections=None, room_bank=None, room_default=False, slasher_combat=False,
-                     recurring_academy=False):
+                     recurring_academy=False, native_sprite_lighting=False):
     sources = creature_sources(variants, actor_types, combat, casting)
     images, clut, metadata = creature_atlas.build(sources, texture_pages)
     base = actor_types[0]
@@ -911,6 +911,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             DRAW_RAM, PAYLOAD_RAM + 0x800, PAYLOAD_RAM + 0x90,
             clut=creature_atlas.CLUT_BASE, walk_ready=WALK_READY_RAM, wide=True,
             palette_types=palette_types, order_log=order_log, combat=action_addresses, extra_atlas=extra_atlas, wizard_combat=casting and combat, registry=registry,
+            native_sprite_lighting=native_sprite_lighting,
         )[0],
         ORDER_WRITER_RAM - PAYLOAD_RAM: renderer.log_native_order(
             ORDER_WRITER_RAM, *order_log, unique_buckets=room_bank == "hazards-nine",

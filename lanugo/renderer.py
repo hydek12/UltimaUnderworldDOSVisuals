@@ -150,7 +150,8 @@ DOS_IDLE_DIRECTIONS = bytes((
 
 def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=False,
          shade_selector=None, overlay_offset=None, palette_types=GOBLIN_PALETTE_TYPES,
-         order_log=None, combat=None, extra_atlas=None, wizard_combat=False, registry=None):
+         order_log=None, combat=None, extra_atlas=None, wizard_combat=False, registry=None,
+         native_sprite_lighting=False):
     c=Code(origin)
     shade_return = None
     extra_type = extra_atlas[0] if extra_atlas else None
@@ -310,9 +311,14 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
     c.alu("OR","v1","v1","t1")
     c.mem("sw","v1",0,"t7")
     c.mem("sw","t6",0,"v0")
-    # Opaque raw-texture quad preserves the RGB555 palette entries.
-    c.imm("lui","v1","zero",0x2d00)
-    c.mem("sw","v1",4,"t7")
+    if native_sprite_lighting:
+        c.branch("beq", "zero", "zero", "native_light")
+        c.nop()
+        c.label("write_vertices")
+    else:
+        # Opaque raw-texture quad preserves the RGB555 palette entries.
+        c.imm("lui","v1","zero",0x2d00)
+        c.mem("sw","v1",4,"t7")
     c.imm("andi","t8","t8",0xffff)
     c.imm("andi","t2","t2",0xffff)
     c.shift("sll","t9","t9",16)
@@ -396,6 +402,23 @@ def draw(origin, metadata, direction_table, clut=0x401c, walk_ready=None, wide=F
     c.label("finish")
     c.jump(0x800757c4)
     c.nop()
+    if native_sprite_lighting:
+        c.label("native_light")
+        # The native depth-light table holds the multiplier for a neutral
+        # polygon. Drop the low bit to match its native RGB calculation.
+        c.mem("lhu", "v1", 0x114, "sp")
+        c.imm("lui", "v0", "zero", 0x800d)
+        c.alu("addu", "v0", "v0", "v1")
+        c.mem("lbu", "v1", -0x5c34, "v0")
+        c.imm("lui", "v0", "zero", 0x2c00)
+        c.imm("andi", "v1", "v1", 0xfe)
+        c.shift("sll", "t6", "v1", 8)
+        c.alu("OR", "v1", "v1", "t6")
+        c.shift("sll", "t6", "t6", 8)
+        c.alu("OR", "v1", "v1", "t6")
+        c.alu("OR", "v1", "v1", "v0")
+        c.branch("beq", "zero", "zero", "write_vertices")
+        c.mem("sw", "v1", 4, "t7")
     return c.out(), shade_return
 
 

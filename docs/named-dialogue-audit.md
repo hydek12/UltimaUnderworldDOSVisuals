@@ -129,6 +129,11 @@ These percentages track the project checklist. They are estimates based on verif
 | 83% | Verified | Native torch toggle and matched environment lighting captures in the Level 4 mixed room |
 | 84% | Verified | Level 4 partial wall cover, reversed depth order, and overlapping sprite bounds during native movement |
 | 85% | Verified | Representative creature and humanoid combat rendering across all nine floors, native bandit strikes, and controller-driven grub damage |
+| 86% | Verified | Native Level 3 bandit strike reduced player health from 35 to 30 |
+| 87% | Verified | AI-driven rat walking packets followed native depth-based lighting |
+| 88% | Verified | Level 3 bandit idle and walk lighting on the source-built preview |
+| 89% | Verified | Live Level 4 creature lighting and seven native bandit combat fallbacks on the source-built preview |
+| 90% | Verified | Preview bandit damage recheck, two-sector comparison, clean-disc delta and CHD readback, and default recipe hash regression |
 
 ## Levels 1–4 recurring creature preview
 
@@ -249,3 +254,13 @@ DuckStation replayed seven combat action values (`0x00`, `0x01`, `0x02`, `0x03`,
 The gazer and Tyball reached the ordering-log overflow guard from some camera positions. A valid alternate view completed each palette control. The Slasher's 31-frame combat sweep is recorded above. The default release CHD, Slasher combat CHD, and local lighting prototype passed a fresh CHD integrity check.
 
 For the humanoid gameplay check, the debugger assigned a Level 3 bandit (type 93) the attack goal for the player in a disposable save. The original AI drove movement, retreat, and swing actions `0x01`, `0x02`, and `0x03`. The native damage dispatcher received the bandit at `0x80113c98` as source and the player at `0x801121e8` as target on multiple attacks. The humanoid trace confirms attacker and target selection. The Level 4 grub trace supplies the measured health change.
+
+## 90% native sprite lighting preview
+
+- Reading the player actor's health byte at entry to and return from the native damage call confirmed a bandit hit from 35 to 30 HP on the Slasher preview and from 35 to 26 HP on the lighting preview. The disposable setup assigned the bandit its attack goal. The original AI selected the swing and the game resolved damage.
+- With native movement on the Level 4 lighting prototype, a walking rat at depth 291 used RGB (26, 26, 26) from table entry 27. At depths 588 and 636 the native table and sprite multiplier were both zero.
+- The source-built preview matched eight native idle and walking bandit samples to the depth-light table. The idle bandit used RGB (50, 50, 50) at depth 159 and (30, 30, 30) at depth 269. The two draws used the same DOS palette selector.
+- Seven live samples across the rat, grub, and both bat types matched the native lighting table in their original Level 4 bank. The Level 3 bandit preserved its native draw and ordering-table heads in seven staged combat fallback cases, and its control sprite drew with the expected DOS palette.
+- The preview differs from the Slasher combat build at raw Track 1 sectors 149991 and 150909. The clean Japanese Rev 1 xdelta round-trip produced Track 1 SHA-1 `0e2d7db3db07e11119d1803555b14952b6539d67`. CHD integrity passed, and all four extracted tracks matched their inputs byte for byte. A separate default recipe build reproduced Track 1 SHA-1 `b824482c3b13b607aa039aba59effa4bd0cbac24`.
+
+The lighting option uses the PlayStation depth-light table for the two tested room banks. The DOS shade-map and monochrome checks are still open.

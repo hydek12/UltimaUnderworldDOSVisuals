@@ -162,3 +162,9 @@ The cumulative build uses additional room banks on Levels 5, 7, and 8, and exten
 Use `--slasher-combat` as the first argument to build the cumulative preview with the Slasher’s seven DOS combat sequences. The Level 9 bank fits all 31 combat frames at 9/16 texture resolution for the Slasher, with the original DOS frame rectangles and hotspots. Fixed combat poses use the forward three views. The other views use directional standing sprites, and the death pose uses all eight views. Action values without a mapped pose keep the PlayStation renderer.
 
 The expected Track 1 SHA-1 is `711e19c5623334a842f9c591d4ae1028d0ea97d6`. The preview differs from the cumulative release by 17 raw sectors, all within the Level 9 bank. See the [encounter audit](named-dialogue-audit.md#level-9-slasher-combat-preview) for the verified cases.
+
+### Native sprite lighting preview
+
+Use `--native-sprite-lighting` as the first argument to the preview builder. It includes the Slasher combat preview and enables PlayStation depth-based lighting on DOS sprites in the Level 3 bandit bank and the Level 4 bat, grub, and rat bank. The lighting uses the same depth table as the native polygons and preserves the existing sprite geometry, palette, and combat fallbacks in those rooms.
+
+The expected Track 1 SHA-1 is `0e2d7db3db07e11119d1803555b14952b6539d67`. The [90% audit](named-dialogue-audit.md#90-native-sprite-lighting-preview) records the runtime and build checks.
