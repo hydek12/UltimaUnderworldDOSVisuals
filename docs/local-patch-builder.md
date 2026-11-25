@@ -165,7 +165,7 @@ Use `--slasher-combat` as the first argument to build the cumulative preview wit
 
 The expected Track 1 SHA-1 is `2dbf1674c89160d7449d1d84c317270ea23d6605`. The preview also enables full-resolution combat art for imps, skeletons, and headless in their dedicated room banks. The imps have DOS casting sprites. See the [encounter audit](named-dialogue-audit.md#level-9-slasher-combat-preview) for the verified cases.
 
-The combat preview also selects DOS action frames per actor family in 24 mixed room layouts (32 banks) on Levels 1–5, 7, and 8. The two lighting previews inherit these tables. Room pages may use a lower common texture scale to fit the extra frames. Actions without a usable DOS source keep the native sprite. See the [mixed room audit](named-dialogue-audit.md#mixed-room-combat-and-casting).
+The combat preview also selects DOS action frames per actor family in 24 mixed room layouts (32 banks) on Levels 1–5, 7, and 8. The two lighting previews inherit these tables. Room pages may use a lower common texture scale to fit the extra frames. Actions without a usable DOS source keep the native sprite. The [mixed room audit](named-dialogue-audit.md#mixed-room-combat-and-casting) covers the renderer matrix and the [Level 5 AI-initiated Gazer cast](named-dialogue-audit.md#ai-initiated-gazer-cast).
 
 ### Native sprite lighting preview
 
