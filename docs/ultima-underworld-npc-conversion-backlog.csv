@@ -347,13 +347,13 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 6,0x9ac868,91,0,1,51,48,51,48,0x02c41b,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 6,0x9ac884,66,0,1,35,50,35,50,0x02c910,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 6,0x9ac8a0,81,0,1,37,50,37,50,0x02c838,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,imps,imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
-6,0x9ac8bc,73,0,1,40,50,40,50,0x02c760,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,imps,1,1,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+6,0x9ac8bc,73,0,1,40,50,40,50,0x02c760,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,imps,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 6,0x9ac8d8,65,0,1,16,51,16,51,0x02c601,9,slug,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,trolls,1,1,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
 6,0x9ac8f4,82,0,1,17,51,17,51,0x02c66d,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Initially linked
 6,0x9ac910,69,0,1,18,51,18,51,0x02c5cb,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
 6,0x9ac92c,64,0,0,18,51,18,51,0x02c652,22,rotgrub,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Linked on floor load
 6,0x9ac948,81,0,1,36,52,36,52,0x02c81d,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,imps,default,1,1,00 01 02 03 07 0c 0d,,00 01 02 03 07 0c 0d,,Initially linked
-6,0x9ac964,73,0,1,40,52,40,52,0x02c7e7,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,imps,1,1,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+6,0x9ac964,73,0,1,40,52,40,52,0x02c7e7,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,imps,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 6,0x9ac980,92,0,0,4,53,4,53,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
 6,0x9ac99c,69,0,1,17,53,17,53,0x02c5b0,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
 6,0x9ac9b8,82,0,1,18,53,18,53,0x02c688,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Initially linked

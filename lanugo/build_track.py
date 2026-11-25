@@ -783,6 +783,10 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
             families = ((96, 111, 112),)
         if room_bank:
             families = academy_banks.ROOM_FAMILIES[room_bank]
+        if dedicated_combat and academy_bank == "imps":
+            # Keep imp attack and casting poses on their own page beside the bats.
+            families = (*families, (66, 73))
+            shared_format = ((8, (16,)), (4, (16,)))
         if dedicated_combat and academy_bank in ("wizb", "wizc", "warren"):
             # Preserve the primary wizard family carried by these Academy banks.
             families = (actor_types, *families)
@@ -795,6 +799,7 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
                 shared_format = ((8, shared_format[0][1]), shared_format[1])
             directional_only = {
                 "warren": (97,),
+                "imps": (66, 73),
                 # Leave room for the goblin combat table and retain native lurker combat.
                 "lurkers-goblins-seven": (87, 116),
             }.get(room_bank or academy_bank)

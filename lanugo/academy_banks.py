@@ -297,7 +297,7 @@ MIXED_COMBAT_BANKS = (SHARED_PAGE_FORMATS.keys() | SPLIT_ROOM_FORMATS.keys()) - 
 DEDICATED_ROOM_COMBAT_BANKS = frozenset((
     "wizards", "judy", "anjor", "tyball", "ghouls-five", "ghouls-five-recurring", "ghouls-eight",
 ))
-ACADEMY_COMBAT_BANKS = frozenset(("wizb", "wizc", "warren", "ghouls"))
+ACADEMY_COMBAT_BANKS = frozenset(("wizb", "wizc", "warren", "ghouls", "imps"))
 
 ROOM_STRIDE = 0x19800
 # (texture depth, sixteenths of original size, uses both pages)

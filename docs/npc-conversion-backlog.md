@@ -1,8 +1,8 @@
 # Ultima Underworld critter inventory
 
-The [record-by-record inventory](ultima-underworld-npc-conversion-backlog.csv) covers all 657 mobile creature and NPC records in the clean Japanese Rev 1 archive. It compares the default release Track 1 (`26db773964e4a2dc09a2115e7387d5b487d53679`) with the dedicated-bank combat preview (`82821e477b5effe1c9a9e74a0c8a228ffb87e5bf`). The inventory reads the resident bank grids, palette registrations, and combat tables from the built tracks.
+The [record-by-record inventory](ultima-underworld-npc-conversion-backlog.csv) covers all 657 mobile creature and NPC records in the clean Japanese Rev 1 archive. It compares the default release Track 1 (`e29e66fb895387c304b4c47c945e2876b24c87a9`) with the dedicated-bank combat preview (`a7573c30fbd148136314ead74e799bcd6dd06506`). The inventory reads the resident bank grids, palette registrations, and combat tables from the built tracks.
 
-Each record is checked at two camera cells, the archived spawn tile and one tile west. Directional coverage is identical in the two builds. Both cells register DOS art for **644 records** and one cell registers it for **13 records**. All 13 are initially linked in the archive. The two-cell check measures configured coverage near the spawn. It leaves camera visibility, reachable viewpoints, actors that move, and actual gameplay draws to the [encounter audit](named-dialogue-audit.md).
+Each record is checked at two camera cells, the archived spawn tile and one tile west. Directional coverage is identical in the two builds. Both cells register DOS art for **646 records** and one cell registers it for **11 records**. All 11 are initially linked in the archive. The two-cell check measures configured coverage near the spawn. It leaves camera visibility, reachable viewpoints, actors that move, and actual gameplay draws to the [encounter audit](named-dialogue-audit.md).
 
 | Level | Records | Archive-noninitial | DOS in both views | DOS in one view | Source action candidates |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -11,11 +11,11 @@ Each record is checked at two camera cells, the archived spawn tile and one tile
 | 3 | 74 | 12 | 74 | 0 | 31 |
 | 4 | 70 | 10 | 69 | 1 | 26 |
 | 5 | 59 | 9 | 59 | 0 | 24 |
-| 6 | 60 | 11 | 56 | 4 | 33 |
+| 6 | 60 | 11 | 58 | 2 | 33 |
 | 7 | 94 | 24 | 94 | 0 | 47 |
 | 8 | 115 | 25 | 115 | 0 | 31 |
 | 9 | 72 | 2 | 72 | 0 | 0 |
-| Total | 657 | 107 | 644 | 13 | 249 |
+| Total | 657 | 107 | 646 | 11 | 249 |
 
 ## Level 8 boundary coverage
 
@@ -39,9 +39,15 @@ The green goblin at (18, 8) now has DOS sprites in the west approach, where the 
 
 In live DuckStation gameplay, the green goblin at (18, 8) rendered from camera tile (17, 9) with bank 8 and palette `0x7e98`. The troll at (6, 29) rendered from (5, 29) with bank 5 and palette `0x7e18`. The nearby lurker at (15, 9) and goblin at (5, 29) also rendered correctly. The debugger placed the camera, and the game selected all four idle poses. The probe checked the exact DOS texture coordinates and palette for each draw.
 
+## Level 6 bat approaches
+
+The bats at (40, 50) and (40, 52) now have DOS idle and walk sprites in the existing Academy imp bank. The bank uses separate texture pages for imps and bats. The room grid is identical, and the audit confirmed that all previously mapped imp action slots remain available. Bats use native combat in this bank. The change applies to the Slasher combat preview and cumulative profiles based on it.
+
+In live DuckStation gameplay, both bats drew the exact DOS idle frame and palette `0x7ed8` from camera tiles (39, 50) and (39, 52) in bank 7. The nearby imp at (37, 50) also drew the expected idle frame with its own palette, `0x7e58`. The debugger placed the camera, and the game selected the poses.
+
 ## Remaining checks
 
-- **Directional coverage at bank boundaries.** Filter for `preview_directional_views=1` to get all 13 records with their bank names and coordinates. Level 6 still has two bat records with a one-view gap. A neighbouring bank may already serve another family, so confirm visibility and bank ownership in-game before changing its grid cells.
+- **Directional coverage at bank boundaries.** Filter for `preview_directional_views=1` to get all 11 records with their bank names and coordinates. Level 6 still has a slug at (16, 51) on a troll approach and an imp at (36, 52) on a default-bank approach. A neighbouring bank may already serve another family, so confirm visibility and bank ownership in-game before changing its grid cells.
 - **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 351 records, including slot `0d` for 150. There are 249 records across 37 types with one or more decodable source slots missing from a view that already registers their directional art. Spiders (26 type-92 records, plus other variants) remain among the largest groups. Slot `0d` appears in the source for 135 of the candidates. Check whether the original PSX AI can select the corresponding action before mapping it. The Level 6 warren Ghost is an intentional exception and uses native combat. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
 - **Native activation.** Both sampled views already register DOS directional art for all 107 archive-noninitial records. The earlier native tile-chain trace found 44 already linked on floor load and identified create traps for another 60 records. Two Level 7 fire elementals share a type and spawn coordinate and need record-specific evidence. The remaining record, the Level 3 green goblin at (35, 62), was spawned by controller-driven rest. A create-trap entry identifies a candidate trigger and can include calls exercised with the debugger. The complete ordinary gameplay trigger chain still needs verification where the encounter audit lacks it.
 
