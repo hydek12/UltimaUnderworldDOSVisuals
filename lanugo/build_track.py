@@ -1034,8 +1034,8 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
     if room_default:
         suppress_addr = PAYLOAD_RAM + 0x1800
         delay_addr = PAYLOAD_RAM + 0x1900
-    # Gazers and Tyball can exceed the polygon log limit. Keep one head per depth bucket.
-    dense_models = mixed_combat and any(102 in family or 123 in family for family in families)
+    # Gazers, Tyball, and the demon can exceed the polygon log limit.
+    dense_models = mixed_combat and any({102, 123, 124}.intersection(family) for family in families)
     unique_order_buckets = room_bank == "hazards-nine" or dense_models
     sections = {
         0: struct.pack("<I", PAYLOAD_MAGIC),
