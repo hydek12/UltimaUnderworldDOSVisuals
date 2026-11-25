@@ -29,6 +29,11 @@ WALK_HEADER_BYTES = 0x800
 WALK_MAGIC = 0x4B4C4157
 PAYLOAD_MAGIC = 0x4C414E55
 READY_MAGIC = 0x4C414E52
+OPTIONS_HELP = 0x800C2180
+OPTIONS_DRAW_ITEMS = 0x8005BEA0
+OPTIONS_DRAW_CALL = 0x8005C3C0
+MENU_TEXT_WIDTH = 0x8007F478
+MENU_TEXT_DRAW = 0x8007DA90
 BOOT = 0x800C2300
 SUPPRESS_NORMAL = 0x800C23C0
 SUPPRESS_DELAY = 0x800C2400
@@ -1164,10 +1169,54 @@ def form1_sector(original, data):
     result[12:16] = original[12:16]
     return result
 
+def options_help():
+    """Append an options legend after the stock items and before frame submission."""
+    root = b"Up/Down: Move  Circle: OK  Cross: Exit\x1f"
+    submenu = b"Up/Down: Move  Circle: OK  Cross: Back\x1f"
+    root_address = OPTIONS_HELP + 0x90
+    submenu_address = root_address + len(root)
+    c = Code(OPTIONS_HELP)
+    c.imm("addiu", "sp", "sp", -24)
+    c.mem("sw", "ra", 20, "sp")
+    c.jump(OPTIONS_DRAW_ITEMS, True)
+    c.nop()
+    c.mem("lw", "t0", 0x398, "gp")  # Options page.
+    c.imm("ori", "t1", "zero", 7)
+    c.branch("beq", "t0", "t1", "submenu")
+    c.imm("sltiu", "t1", "t0", 4)
+    c.branch("beq", "t1", "zero", "done")  # Save/load pages and exit states.
+    c.nop()
+    c.branch("bne", "t0", "zero", "submenu")
+    c.nop()
+    c.address("a0", root_address)
+    c.branch("beq", "zero", "zero", "measure")
+    c.nop()
+    c.label("submenu")
+    c.address("a0", submenu_address)
+    c.label("measure")
+    c.mem("sw", "a0", 16, "sp")
+    c.jump(MENU_TEXT_WIDTH, True)
+    c.nop()
+    c.mem("lw", "a2", 16, "sp")
+    c.imm("ori", "a0", "zero", 320)
+    c.alu("subu", "a0", "a0", "v0")
+    c.shift("sra", "a0", "a0", 1)
+    c.jump(MENU_TEXT_DRAW, True)
+    c.imm("ori", "a1", "zero", 218)
+    c.label("done")
+    c.mem("lw", "ra", 20, "sp")
+    c.nop()
+    ret(c, lambda: c.imm("addiu", "sp", "sp", 24))
+    code = c.out()
+    if len(code) > root_address - OPTIONS_HELP:
+        raise ValueError("Options controls routine overlaps its labels.")
+    return code.ljust(root_address - OPTIONS_HELP, b"\0") + root + submenu
+
+
 def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False,
                     lower_payload_lba=None, lizard_payload_lba=None, rat_payload_lba=None,
                     wizard_payload_lba=None, expanded_level_six=False, academy_runtime=False, level_one_dialogue=False,
-                    room_payload_lbas=None):
+                    room_payload_lbas=None, menu_controls=False):
     target = bytearray(original)
     deferred_ordering = any(
         lba is not None for lba in (lizard_payload_lba, rat_payload_lba, wizard_payload_lba)
@@ -1183,6 +1232,8 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
         SUPPRESS_DELAY: gate(SUPPRESS_DELAY, WALK_SUPPRESS_DELAY_RAM if walking else SUPPRESS_DELAY_RAM, "a0", walking, floor_aware),
         DRAW_GATE: gate(DRAW_GATE, DRAW_RAM, walking=walking, floor_aware=floor_aware),
     }
+    if menu_controls:
+        code[OPTIONS_HELP] = options_help()
     if academy_runtime:
         code.update(academy_banks.gates())
     if walking:
@@ -1224,6 +1275,8 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
     if academy_runtime:
         hooks += ((academy_banks.FRAME_HOOK, bytes.fromhex("a0048397e8ffbd27"),
                    jump(academy_banks.GATE) + bytes(4)),)
+    if menu_controls:
+        hooks += ((OPTIONS_DRAW_CALL, jump(OPTIONS_DRAW_ITEMS, True), jump(OPTIONS_HELP, True)),)
     for address, expect, replace in hooks:
         offset = 2048 + address - EXE_LOAD
         if target[offset:offset + len(expect)] != expect:
