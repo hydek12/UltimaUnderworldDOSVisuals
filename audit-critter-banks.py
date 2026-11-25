@@ -23,6 +23,8 @@ RECORD_ACTIVATIONS = {
     (7, 0x9ae4b4): "Normal controller floor entry linked actor",
 }
 NORMAL_ACTIVATIONS = {
+    (2, 78, 32, 57): "Normal controller movement triggered native create trap 596",
+    (2, 78, 31, 58): "Normal controller movement triggered native create trap 591",
     (3, 78, 35, 62): "Normal controller rest spawned actor",
     (5, 120, 19, 50): "Normal controller movement triggered native create trap",
     (6, 92, 45, 45): "Normal controller rest spawned actor",

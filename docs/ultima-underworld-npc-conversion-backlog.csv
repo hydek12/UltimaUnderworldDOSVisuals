@@ -103,8 +103,8 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 2,0x9a5e58,83,0,1,36,55,36,55,0x00d5e1,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 2,0x9a5e74,78,0,1,54,55,54,55,0x00d44c,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 2,0x9a5e90,78,0,1,60,55,60,55,0x00d467,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
-2,0x9a5eac,78,0,0,32,57,32,57,,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Create trap identified
-2,0x9a5ec8,78,0,0,31,58,31,58,,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Create trap identified
+2,0x9a5eac,78,0,0,32,57,32,57,,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Normal controller movement triggered native create trap 596
+2,0x9a5ec8,78,0,0,31,58,31,58,,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Normal controller movement triggered native create trap 591
 2,0x9a5ee4,82,0,1,26,58,26,58,0x00d7e2,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
 2,0x9a5f00,82,0,1,27,58,27,58,0x00d7c7,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
 2,0x9a5f1c,82,0,1,26,59,26,59,0x00d7fd,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
