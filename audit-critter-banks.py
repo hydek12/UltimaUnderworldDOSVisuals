@@ -18,6 +18,10 @@ import variant_atlas
 
 FIXED_ACTIONS = tuple(action for action, _ in (*creatures.COMBAT_SLOTS, creatures.CAST_SLOT))
 ARCHIVE_ONLY = "Archive marker only"
+RECORD_ACTIVATIONS = {
+    (7, 0x9ae498): "Normal controller rest spawned actor from trap 665",
+    (7, 0x9ae4b4): "Normal controller floor entry linked actor",
+}
 NORMAL_ACTIVATIONS = {
     (3, 78, 35, 62): "Normal controller rest spawned actor",
     (5, 120, 19, 50): "Normal controller movement triggered native create trap",
@@ -167,7 +171,10 @@ def main():
         stock = [view_coverage(floor, cx, z, actor, release, False) for cx in positions]
         status = "Initially linked"
         if row["initially_linked"] == "0":
-            if key in NORMAL_ACTIVATIONS:
+            record = (floor, int(row["psx_record_offset"], 16))
+            if record in RECORD_ACTIVATIONS:
+                status = RECORD_ACTIVATIONS[record]
+            elif key in NORMAL_ACTIVATIONS:
                 status = NORMAL_ACTIVATIONS[key]
             elif counts[key] == 1:
                 status = evidence.get(key, ARCHIVE_ONLY)

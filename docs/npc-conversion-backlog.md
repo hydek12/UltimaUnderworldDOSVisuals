@@ -101,10 +101,21 @@ The Academy Spider Combat CHD cold-booted in DuckStation. The debugger staged a 
 
 Each successful call put a live spider in the target tile's object chain before the handler returned. The slot numbers are runtime allocations. Slot 195 was reused on the second rest.
 
+## Level 7 fire elementals at (60, 43)
+
+Two type-120 records share (60, 43), and both have a zero in the archive field used by the inventory's initial-link heuristic. Comparing the clean Japanese Rev 1 record bytes to the live tile chain distinguished the floor-loaded actor from the dormant template.
+
+| AVATAR offset | Original activation | Live verification |
+| --- | --- | --- |
+| `0x9ae4b4` | Level 7 floor load | Starting one tile from the stairs on Level 6, the player walked west from (4, 61) into move trigger 585 at (3, 61). Teleport trap 586 took the player to Level 7 at (2, 61). The elemental was already in mobile slot 189 at (60, 43) before the player rested. |
+| `0x9ae498` | Wandering-monster create trap 665, linked to template slot 190 | The player used R2 + Triangle and confirmed Rest with Circle from (2, 61). The original wandering routine called the create handler from return address `0x80089ef4`. A roll of 42 cleared the threshold of 30, and a live elemental matching template 190 appeared at (60, 43). |
+
+The tile was empty just before trap 665 ran, and the game reused mobile slot 189 for the spawned actor. The original archive records differ in the word at offset `+0x0a` (`0x0008` for the floor-loaded actor and `0x0000` for the trap template). The debugger staged the Level 6 approach using the disposable checkpoint and then observed the transition, rest, and tile chains.
+
 ## Remaining checks
 
 - **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 409 records, including slot `0d` for 208. There are 190 records across 34 types with one or more decodable source slots missing from a view that already registers their directional art. Slot `0d` appears in the source for 76 of the candidates. Check whether the original PSX AI can select the corresponding action before mapping it. The Level 6 warren Ghost is an intentional exception and uses native combat. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
-- **Native activation.** Both sampled views already register DOS directional art for all 107 archive-noninitial records. The earlier native tile-chain trace found 44 already linked on floor load and identified create traps for another 60 records. Two Level 7 fire elementals share a type and spawn coordinate and need record-specific evidence. The Level 3 green goblin at (35, 62) was spawned by controller-driven rest. The Level 5 fire elemental was spawned by controller-driven movement. A create-trap entry identifies a candidate trigger and can include calls exercised with the debugger. The complete ordinary gameplay trigger chain still needs verification where the encounter audit lacks it.
+- **Native activation.** Both sampled views already register DOS directional art for all 107 records marked noninitial by the archive heuristic. Of those, 51 have observed floor-load or controller activation and 56 have a create trap identified with the ordinary trigger chain still open. The Level 3 green goblin and the three Level 6 spiders were spawned by controller-driven rest. The Level 5 fire elemental was spawned by controller-driven movement. The two Level 7 elementals at (60, 43) now have record-specific results.
 
 ## Regenerate the inventory
 
