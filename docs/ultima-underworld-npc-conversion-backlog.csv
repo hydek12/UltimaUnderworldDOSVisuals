@@ -474,8 +474,8 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 8,0x9afc7c,114,0,0,39,2,39,2,0x03b751,19,golem,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,golems-wisps,golems-wisps,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Linked on floor load
 8,0x9afc98,82,0,1,54,2,54,2,0x03bbf5,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,rats-grubs-eight,rats-grubs-eight,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
 8,0x9afcb4,72,0,1,57,2,57,2,0x03b442,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-grubs-eight,rats-grubs-eight,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
-8,0x9afcd0,97,0,1,10,3,10,3,0x03b4ff,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-eight,ghosts-eight,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
-8,0x9afcec,91,0,1,12,3,12,3,0x03bce8,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,ghosts-eight,1,1,00 01 02 03 07 0c,,00 01 02 03 07 0c,,Initially linked
+8,0x9afcd0,97,0,1,10,3,10,3,0x03b4ff,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-rat-headless,ghosts-eight,2,2,00 01 02 03 07 0c 0d,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9afcec,91,0,1,12,3,12,3,0x03bce8,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,ghosts-rat-headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 8,0x9afd08,81,0,1,15,3,15,3,0x03b85f,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 8,0x9afd24,118,0,1,31,3,31,3,0x03b628,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 8,0x9afd40,82,0,1,35,3,35,3,0x03bbda,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,rats-grubs-eight,rats-grubs-eight,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
@@ -502,7 +502,7 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 8,0x9aff8c,118,0,1,52,18,52,18,0x03b643,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 8,0x9affa8,113,0,1,7,20,7,20,0x03bf3a,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-eight,ghosts-eight,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
 8,0x9affc4,119,0,0,10,20,10,20,0x03b6e5,19,golem,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,golems-wisps,golems-wisps,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Linked on floor load
-8,0x9affe0,72,0,1,6,22,6,22,0x03b2fe,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-grubs-eight,ghosts-eight,1,1,00 01 02 03 07 0c,,00 01 02 03 07 0c,,Initially linked
+8,0x9affe0,72,0,1,6,22,6,22,0x03b2fe,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-grubs-eight,ghosts-rat-headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 8,0x9afffc,120,0,1,41,22,41,22,0x03b5f2,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
 8,0x9b0018,72,0,1,45,23,45,23,0x03b40c,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 8,0x9b0034,97,0,1,4,24,4,24,0x03be2c,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-eight,ghosts-eight,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
@@ -580,7 +580,7 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 8,0x9b0814,72,0,1,43,60,43,60,0x03b0ac,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 8,0x9b0830,81,0,1,51,60,51,60,0x03b736,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 8,0x9b084c,81,0,1,8,61,8,61,0x03b829,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,imps-ghosts,headless,1,1,00 01 02 03 07 0c 0d,,00 01 02 03 07 0c 0d,,Initially linked
-8,0x9b0868,72,0,1,26,61,26,61,0x03b14e,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,ghosts-eight,1,1,00 01 02 03 07 0c,,00 01 02 03 07 0c,,Initially linked
+8,0x9b0868,72,0,1,26,61,26,61,0x03b14e,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,ghosts-rat-headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 8,0x9b0884,81,0,1,30,61,30,61,0x03b9f4,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 8,0x9b08a0,92,0,1,14,62,14,62,0x03bacc,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 8,0x9b08bc,91,0,1,30,62,30,62,0x03bc7c,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked

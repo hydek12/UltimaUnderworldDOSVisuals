@@ -62,6 +62,8 @@ xdelta3 -d -s japanese-rev1-track1.bin dos-visuals.xdelta patched-track1.bin
 
 Use `build-local-release.py` to generate the cumulative xdelta and verify a local CHD in one command. The release includes DOS combat and casting poses in mixed and dedicated rooms, native sprite lighting, and gameplay-driven DOS shade maps. It reads the original split CUE and preserves the three audio tracks and indexes. The [local patch builder guide](docs/local-patch-builder.md) gives the command, source requirements, and manual preview workflow.
 
+Add `--menu-controls` to a local preview build for context-sensitive PlayStation button legends, including the inventory and map footers and the right-aligned dialogue footer. The current creature coverage and remaining checks are tracked in the [critter inventory](docs/npc-conversion-backlog.md).
+
 Start the visual work with one camera-facing goblin using the original DOS frames, anchor and eight viewing angles. Trace the retail renderer on the original Japanese Rev 1 before porting any executable change found on the English build. Extend actor coverage after palette, lighting, wall occlusion, facing and animation work on the first actor. Restore DOS materials and color response next. The viewport and HUD need a separate pass to fit the console menus and any chosen language. The patch builder is packaging infrastructure and does not implement these visual changes.
 
 ## Clean Japanese baseline and Lanugo texture

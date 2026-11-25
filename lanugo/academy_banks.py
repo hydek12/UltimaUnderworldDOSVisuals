@@ -177,9 +177,9 @@ RECURRING_BANKS = {
     ),
 }
 
-# Preserve the established nearest-spawn grids around these dormant encounters.
+# Override the nearest-spawn grid around these encounters.
 # Keys name the bank that owns the two-tile cells, with None selecting bank zero.
-DORMANT_ROOM_CELLS = {
+ROOM_CELL_OVERRIDES = {
     1: {"spiders": ((13, 7), (14, 7))},
     2: {
         "headless": ((9, 44),),
@@ -201,7 +201,8 @@ DORMANT_ROOM_CELLS = {
     },
     7: {"imp-seven": ((33, 35), (34, 35)), "golems-imp": ((32, 36), (34, 37))},
     8: {
-        "ghosts-rat-headless": ((21, 40), (27, 49)),
+        # Keep the ghosts in these approach cells and add the adjacent rats and headless.
+        "ghosts-rat-headless": ((21, 40), (27, 49), (11, 3), (5, 22), (25, 61)),
         "rats-spiders": ((14, 58),),
     },
 }
@@ -459,11 +460,11 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None, recurring=False,
             headless = next(i for i, (name, _, _) in enumerate(room_banks(8, True), 1) if name == "headless")
             grid[index // 2] = (grid[index // 2] & ~(15 << shift)) | headless << shift
         grid = bytes(grid)
-    if recurring and floor in DORMANT_ROOM_CELLS:
+    if recurring and floor in ROOM_CELL_OVERRIDES:
         grid = bytearray(grid)
         bank_ids = {name: index for index, (name, _, _) in enumerate(room_banks(floor, True), 1)}
         bank_ids[None] = 0
-        for name, tiles in DORMANT_ROOM_CELLS[floor].items():
+        for name, tiles in ROOM_CELL_OVERRIDES[floor].items():
             for x, z in tiles:
                 index = z // 2 * 32 + x // 2
                 shift = 4 * (index & 1)
