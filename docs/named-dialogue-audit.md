@@ -406,3 +406,9 @@ DuckStation ran the combat preview with Track 1 `619b7b76837d008690679e3c9812a05
 | Level 7 bank 1, Tyball (123) | Cast (`0x0d`) | All five DOS phases matched. The native dispatcher ran and Tyball returned to stance. |
 
 The Gazer cast after the probe entered the warren at tile (52, 52). Native AI selected the Gazer and Tyball casts at `0x800330a8` and the Level 4 wizard cast at `0x80032ec0`. The spell dispatcher confirmed the same actor in all three cases.
+
+## Combat and lighting release
+
+The local release builder now selects the cumulative `--dos-shade-maps` recipe. Its Track 1 SHA-1 is `78427bb7dea91c18fc2ca345865983a2ad6cc642`. It includes the mixed and dedicated combat banks, the Slasher poses, native sprite lighting, and gameplay-driven normal and monochrome DOS shades. The release builder verified the input CUE and the four clean tracks, decoded the resulting xdelta against Japanese Rev 1, and verified all four CHD readback tracks and indexes. The translated BIN and a locally generated translation-input delta produced byte-identical release xdelta and CHD files.
+
+On the packaged CHD, the Level 2 to Level 1 reload selected the on-disc lighting bank. A lit torch selected effective light level 2 and extinguishing it restored level 0. Light selected normal level 3, Night Vision selected monochrome level 5, and both spell expiries restored darkness. The debugger invoked the native inventory and spell routines. In a separate encounter it assigned Tyball a player target. The game selected the cast, drew all five DOS phases, dispatched the spell, and returned to stance.

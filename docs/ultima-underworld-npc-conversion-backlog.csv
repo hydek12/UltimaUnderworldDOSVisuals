@@ -1,658 +1,658 @@
-level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_y,home_x,home_y,dos_candidate_offsets,dos_animation,dos_asset,dos_palette,idle_frames_by_direction,walk_frames_by_direction,current_idle_walk,combat_pose_coverage,development_batch
-1,0x9a4048,64,0,1,58,2,58,2,0x005988,22,rotgrub,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-1,0x9a4064,66,0,0,47,4,47,4,,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a4080,69,0,1,55,4,55,4,0x005a0f,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-1,0x9a409c,64,0,1,5,6,5,6,0x005cb2,22,rotgrub,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-1,0x9a40b8,66,0,1,45,6,45,6,0x005a45,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a40d4,66,0,1,50,6,50,6,0x005a2a,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a40f0,68,0,0,14,7,14,7,,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a410c,90,67,1,17,7,17,7,0x005b6e,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a4128,67,0,1,22,8,22,8,0x005ce8,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a4144,67,0,1,18,12,18,12,0x0058b0,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a4160,90,0,1,33,12,33,13,0x005b89,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a417c,69,0,1,59,14,59,14,0x0059f4,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-1,0x9a4198,73,0,1,2,15,2,15,0x005829,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a41b4,90,0,1,33,15,33,15,0x005b53,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a41d0,66,0,1,12,16,12,16,0x00585f,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a41ec,72,0,1,2,17,2,17,0x0058cb,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a4208,67,0,0,3,17,3,17,,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a4224,67,0,1,2,19,2,19,0x005901,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a4240,90,20,1,22,19,22,19,0x005ba4,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a425c,75,0,0,12,20,12,20,0x005895,18,imp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a4278,90,19,1,33,20,33,20,0x005bbf,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a4294,67,0,1,2,22,2,22,0x0058e6,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a42b0,87,0,1,14,23,14,23,0x005c7c,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a42cc,66,0,1,31,23,31,23,0x00587a,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a42e8,68,0,1,29,26,29,26,0x005ccd,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a4304,77,0,1,36,28,36,28,0x0059d9,0,gngob32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-1,0x9a4320,77,0,0,3,33,3,33,,0,gngob32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,"DOS substitution eligible, activation unverified",Native PSX,
-1,0x9a433c,65,0,1,26,33,26,33,0x0057f3,9,slug,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-1,0x9a4358,65,0,0,27,34,27,34,,9,slug,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-1,0x9a4374,71,66,1,15,35,15,35,0x005952,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a4390,74,0,1,54,35,54,35,0x0057a2,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a43ac,77,0,1,3,38,3,38,0x005937,0,gngob32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-1,0x9a43c8,77,0,1,11,38,11,38,0x00591c,0,gngob32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-1,0x9a43e4,87,0,1,26,38,26,38,0x0059a3,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a4400,78,0,1,54,38,54,38,0x0059be,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-1,0x9a441c,70,0,1,8,43,8,43,0x005bda,0,gngob32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-1,0x9a4438,70,0,1,10,43,10,43,0x005bf5,0,gngob32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-1,0x9a4454,66,0,1,23,43,23,43,0x005844,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a4470,66,0,1,24,43,24,43,0x00580e,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a448c,68,0,1,27,46,27,46,0x005c2b,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a44a8,71,255,1,4,47,4,47,0x005736,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a44c4,80,7,1,60,51,60,51,0x005b38,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a44e0,76,65,1,45,52,45,52,0x005ab1,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-1,0x9a44fc,76,0,1,52,52,52,52,0x005acc,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-1,0x9a4518,68,0,1,37,54,37,54,0x005c46,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a4534,83,0,1,19,54,19,55,0x005c10,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a4550,76,0,1,46,55,46,55,0x005b02,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-1,0x9a456c,87,0,1,51,55,51,55,0x0057d8,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a4588,80,8,1,57,55,57,55,0x005c61,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a45a4,70,10,1,4,56,4,56,0x005a60,0,gngob32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-1,0x9a45c0,76,64,1,45,56,45,56,0x005b1d,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-1,0x9a45dc,76,0,1,47,56,47,56,0x005ae7,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-1,0x9a45f8,71,9,1,2,57,2,57,0x005a7b,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a4614,76,0,1,51,58,51,58,0x005787,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-1,0x9a4630,80,0,1,52,59,52,59,0x00576c,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-1,0x9a464c,65,0,1,37,60,37,60,0x00596d,9,slug,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-2,0x9a596c,84,2,1,60,3,60,3,0x00d8f0,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5988,74,0,1,22,4,22,4,0x00d3fb,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a59a4,74,0,0,22,4,22,4,0x00d3e0,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a59c0,84,0,1,12,6,12,6,0x00d740,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a59dc,84,0,1,14,6,14,6,0x00d323,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a59f8,84,0,1,18,6,18,6,0x00d374,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5a14,84,89,1,40,5,37,6,0x00d6ef,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5a30,86,3,1,9,8,9,8,0x00d90b,27,dwarf32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5a4c,84,0,1,12,10,12,10,0x00d725,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5a68,84,0,1,14,10,14,10,0x00d33e,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5a84,84,0,1,18,10,18,10,0x00d38f,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5aa0,69,0,0,27,10,27,10,0x00d3aa,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-2,0x9a5abc,69,0,1,27,11,27,11,0x00d3c5,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-2,0x9a5ad8,84,21,1,9,14,9,14,0x00d884,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5af4,72,0,1,58,14,58,14,0x00d617,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5b10,84,0,1,29,17,29,17,0x00d869,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5b2c,82,0,1,50,21,50,21,0x00d4b8,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-2,0x9a5b48,98,1,1,28,22,28,22,0x00d8d5,26,fight32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5b64,68,0,1,36,22,36,22,0x00d4ee,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5b80,84,0,1,20,23,20,23,0x00d84e,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5b9c,102,110,1,48,23,48,23,0x00d89f,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5bb8,114,0,1,5,23,5,24,0x00d833,19,golem,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5bd4,87,0,1,60,26,60,26,0x00d70a,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5bf0,84,88,1,12,28,12,28,0x00d8ba,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5c0c,69,0,1,8,34,8,34,0x00d524,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-2,0x9a5c28,69,0,1,10,34,10,34,0x00d55a,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-2,0x9a5c44,69,0,1,15,34,15,34,0x00d69e,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-2,0x9a5c60,69,0,1,8,36,8,36,0x00d53f,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-2,0x9a5c7c,69,0,1,10,36,10,36,0x00d575,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-2,0x9a5c98,86,90,1,19,36,19,36,0x00d75b,27,dwarf32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5cb4,69,0,1,2,37,2,37,0x00d683,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-2,0x9a5cd0,69,0,1,10,38,10,38,0x00d6b9,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-2,0x9a5cec,72,0,1,34,38,34,38,0x00d5ab,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5d08,72,0,1,35,38,35,38,0x00d590,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5d24,91,0,1,28,42,28,42,0x00d7ac,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5d40,91,0,0,29,42,29,42,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5d5c,69,0,1,4,44,4,44,0x00d668,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-2,0x9a5d78,91,0,0,9,44,9,44,0x00d776,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5d94,83,0,1,37,44,37,44,0x00d5c6,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5db0,83,0,0,43,48,43,48,,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5dcc,91,0,1,21,52,21,52,0x00d791,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5de8,74,0,1,51,53,51,53,0x00d64d,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5e04,74,0,1,59,53,59,53,0x00d632,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5e20,83,0,1,35,54,35,54,0x00d6d4,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5e3c,87,0,1,49,54,49,54,0x00d5fc,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5e58,83,0,1,36,55,36,55,0x00d5e1,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5e74,78,0,1,54,55,54,55,0x00d44c,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-2,0x9a5e90,78,0,1,60,55,60,55,0x00d467,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-2,0x9a5eac,78,0,0,32,57,32,57,,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,"DOS substitution eligible, activation unverified",Native PSX,
-2,0x9a5ec8,78,0,0,31,58,31,58,,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,"DOS substitution eligible, activation unverified",Native PSX,
-2,0x9a5ee4,82,0,1,26,58,26,58,0x00d7e2,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-2,0x9a5f00,82,0,1,27,58,27,58,0x00d7c7,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-2,0x9a5f1c,82,0,1,26,59,26,59,0x00d7fd,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-2,0x9a5f38,82,0,0,27,59,27,59,0x00d818,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-2,0x9a5f54,78,0,1,55,60,55,60,0x00d431,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-2,0x9a5f70,80,0,1,56,60,56,60,0x00d359,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-2,0x9a5f8c,78,0,1,55,61,55,61,0x00d416,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-3,0x9a7248,67,0,1,21,2,21,2,0x01523a,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7264,72,0,1,21,3,21,3,0x015162,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7280,73,0,0,32,3,32,3,,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a729c,74,0,0,1,8,1,8,,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a72b8,83,0,1,47,4,47,4,0x014f97,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a72d4,93,112,0,40,11,35,6,,17,femfite,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a72f0,89,0,1,11,7,11,7,0x015363,2,lizman,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-3,0x9a730c,89,16,1,17,7,17,7,0x015204,2,lizman,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-3,0x9a7328,87,0,1,20,7,20,7,0x014f61,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7344,72,0,1,23,7,21,7,0x0153ea,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7360,93,112,1,29,9,29,7,0x014e02,17,femfite,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a737c,97,0,1,57,8,57,8,0x014e53,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-3,0x9a7398,93,0,0,3,9,3,9,,17,femfite,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a73b4,94,113,1,36,9,35,9,0x014e89,17,femfite,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a73d0,89,0,1,10,10,10,10,0x015348,2,lizman,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-3,0x9a73ec,93,112,1,33,12,31,10,0x01517d,17,femfite,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7408,68,0,0,58,12,58,12,,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7424,87,0,1,7,17,7,17,0x0152f7,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7440,87,0,1,35,17,35,17,0x0152c1,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a745c,66,0,1,1,20,1,20,0x015111,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7478,66,0,1,2,21,2,21,0x01512c,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7494,85,15,1,25,21,25,21,0x0154dd,2,lizman,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-3,0x9a74b0,85,0,1,29,21,29,21,0x014d7b,2,lizman,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-3,0x9a74cc,106,24,1,27,22,27,22,0x0154c2,21,wizb,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a74e8,87,0,1,52,22,52,22,0x0152a6,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7504,68,0,1,13,23,13,23,0x014d96,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7520,88,0,1,41,23,41,23,0x0150a5,2,lizman,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-3,0x9a753c,88,0,1,34,24,34,24,0x015456,2,lizman,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-3,0x9a7558,88,0,1,57,24,57,24,0x01508a,2,lizman,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-3,0x9a7574,87,0,1,1,26,1,26,0x01537e,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7590,74,0,1,10,26,10,26,0x014db1,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a75ac,74,0,1,12,26,12,26,0x014dcc,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a75c8,85,0,1,23,28,23,28,0x0154a7,2,lizman,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-3,0x9a75e4,85,0,1,29,28,29,28,0x01548c,2,lizman,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-3,0x9a7600,85,0,1,33,28,33,28,0x015471,2,lizman,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-3,0x9a761c,88,114,1,41,29,41,29,0x015147,2,lizman,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-3,0x9a7638,88,0,1,44,29,44,29,0x0150f6,2,lizman,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-3,0x9a7654,85,0,1,36,31,36,31,0x015420,2,lizman,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-3,0x9a7670,85,0,1,38,31,38,31,0x015405,2,lizman,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-3,0x9a768c,88,0,1,37,32,37,32,0x01543b,2,lizman,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-3,0x9a76a8,85,0,1,11,33,11,33,0x015198,2,lizman,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-3,0x9a76c4,87,0,1,7,34,7,34,0x01532d,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a76e0,83,0,0,18,34,18,34,0x0150db,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a76fc,87,0,1,51,37,51,37,0x01528b,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7718,92,0,1,35,39,36,38,0x0153cf,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7734,91,0,1,43,38,43,38,0x014cf4,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7750,83,0,0,44,38,44,38,,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a776c,104,28,1,47,38,47,38,0x0154f8,26,fight32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7788,93,112,1,20,41,20,39,0x014e38,17,femfite,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a77a4,83,0,1,35,40,35,39,0x0153b4,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a77c0,72,0,1,40,40,40,41,0x014ea4,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a77dc,67,0,0,42,42,42,42,,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a77f8,102,0,1,24,44,23,45,0x014de7,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7814,87,0,1,19,49,19,49,0x01521f,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7830,87,0,1,35,51,35,49,0x015255,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a784c,87,0,1,52,50,52,50,0x015270,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7868,116,0,1,3,52,3,52,0x014fcd,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7884,116,0,1,11,52,11,52,0x014fe8,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a78a0,91,0,0,49,52,44,55,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a78bc,74,0,1,49,53,49,53,0x014ebf,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a78d8,117,0,1,2,55,2,55,0x015039,28,shadow,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a78f4,118,0,1,7,55,7,55,0x01506f,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7910,121,0,1,12,55,12,55,0x015054,19,golem,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a792c,64,0,1,47,55,47,55,0x014ef5,22,rotgrub,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-3,0x9a7948,117,0,1,2,56,2,56,0x014fb2,28,shadow,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7964,113,0,1,3,56,3,56,0x014f7c,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-3,0x9a7980,69,0,1,51,56,51,56,0x014f10,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-3,0x9a799c,81,0,1,29,57,29,57,0x015312,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a79b8,116,0,0,3,59,3,59,0x01501e,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a79d4,116,0,1,11,59,11,59,0x015003,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a79f0,82,0,1,53,61,53,61,0x014f2b,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-3,0x9a7a0c,87,0,1,55,61,55,61,0x014f46,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7a28,78,0,0,35,62,35,62,,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-3,0x9a7a44,91,0,0,45,62,45,62,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a8e34,93,149,1,5,2,5,2,0x01cec9,17,femfite,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a8e50,74,0,1,38,2,38,2,0x01cafd,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a8e6c,74,0,0,39,2,39,2,0x01cb18,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a8e88,104,12,1,8,4,8,4,0x01ceff,26,fight32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a8ea4,95,148,1,5,5,5,5,0x01cee4,26,fight32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a8ec0,94,146,1,14,5,14,5,0x01cd4f,17,femfite,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a8edc,98,147,1,13,7,13,7,0x01ca76,26,fight32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a8ef8,96,0,0,52,9,52,9,0x01d0ca,7,troll,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a8f14,96,0,1,54,9,54,9,0x01cae2,7,troll,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a8f30,96,144,1,58,9,58,9,0x01ca5b,7,troll,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a8f4c,90,136,1,22,10,22,10,0x01d11b,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a8f68,96,0,1,53,14,53,14,0x01d0af,7,troll,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a8f84,67,0,0,35,15,35,15,,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a8fa0,96,18,1,58,15,58,15,0x01d0e5,7,troll,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a8fbc,98,138,1,13,16,13,16,0x01ce5d,26,fight32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a8fd8,90,137,1,40,19,40,19,0x01d100,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a8ff4,112,17,1,49,22,49,22,0x01d043,7,troll,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9010,92,0,1,60,22,60,22,0x01d05e,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a902c,98,141,1,3,23,3,23,0x01ce93,26,fight32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9048,93,139,1,13,23,13,23,0x01ce78,17,femfite,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9064,87,0,1,20,23,20,23,0x01ce42,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9080,96,0,1,47,23,47,23,0x01d094,7,troll,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a909c,92,0,1,59,24,59,24,0x01d079,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a90b8,92,0,0,60,24,60,24,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a90d4,94,140,1,12,29,12,29,0x01ca91,17,femfite,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a90f0,74,0,1,61,30,61,30,0x01cd6a,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a910c,74,0,1,59,32,59,32,0x01ca40,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9128,116,0,1,23,33,23,33,0x01ce27,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9144,111,0,1,43,33,43,33,0x01d028,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9160,74,0,1,60,34,60,34,0x01cff2,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a917c,111,0,1,47,38,47,38,0x01d00d,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9198,91,0,1,60,38,60,38,0x01cbd5,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a91b4,91,0,1,60,39,60,39,0x01cbba,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a91d0,118,0,1,4,40,4,40,0x01cce3,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a91ec,69,0,1,26,40,26,40,0x01cda0,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-4,0x9a9208,91,0,1,59,41,59,41,0x01cb84,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9224,91,0,1,60,41,60,41,0x01cb9f,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9240,91,0,0,61,41,61,41,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a925c,95,143,1,20,43,20,43,0x01c94d,26,fight32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9278,83,0,1,3,44,3,44,0x01cc41,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9294,83,0,1,4,44,4,44,0x01cc26,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a92b0,89,0,1,31,44,31,44,0x01cd85,2,lizman,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,"DOS sampled for stance, melee, retreat and death. Native fallback for other actions and unsafe projections.",Lizardmen
-4,0x9a92cc,73,0,1,33,44,33,44,0x01cfd7,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a92e8,83,0,1,2,45,2,45,0x01cc92,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9304,83,0,1,4,45,4,45,0x01cc5c,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9320,83,0,1,5,45,5,45,0x01ccad,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a933c,66,0,1,32,45,32,45,0x01cfbc,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9358,83,0,1,3,46,3,46,0x01cc77,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9374,122,0,1,8,47,8,47,0x01ccc8,23,wisp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9390,83,0,1,32,48,32,48,0x01cbf0,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a93ac,67,0,1,18,49,18,49,0x01cdd6,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a93c8,102,0,1,3,50,3,50,0x01cd34,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a93e4,81,0,1,32,50,32,50,0x01cf6b,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9400,72,0,1,36,50,36,50,0x01cb33,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a941c,82,0,0,28,51,28,51,0x01cf50,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-4,0x9a9438,82,0,1,36,51,36,51,0x01cf1a,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-4,0x9a9454,82,0,0,30,52,30,52,,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-4,0x9a9470,72,0,1,31,52,31,52,0x01cb69,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a948c,67,0,1,12,53,12,53,0x01cdf1,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a94a8,81,0,1,28,53,28,53,0x01cfa1,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a94c4,81,0,1,35,53,35,53,0x01cf86,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a94e0,72,0,0,29,54,29,54,0x01cb4e,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a94fc,106,0,1,8,55,8,55,0x01ccfe,21,wizb,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9518,72,0,1,20,55,20,55,0x01cdbb,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9534,82,0,0,33,55,33,55,0x01cf35,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-4,0x9a9550,81,0,0,35,55,35,55,,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a956c,106,0,1,8,56,8,56,0x01cd19,21,wizb,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a9588,83,0,1,29,58,29,58,0x01cc0b,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a95a4,91,0,1,5,59,5,59,0x01c968,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-4,0x9a95c0,98,142,1,32,61,32,61,0x01caac,26,fight32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aaa14,101,0,1,9,2,9,2,0x0249c3,13,ghost,2,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-5,0x9aaa30,113,0,0,52,3,52,3,,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-5,0x9aaa4c,113,0,1,42,3,42,3,0x024957,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-5,0x9aaa68,100,0,1,17,8,17,8,0x0249a8,13,ghost,1,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-5,0x9aaa84,107,23,1,34,8,34,8,0x024d08,8,femwiz,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aaaa0,110,0,1,43,9,43,9,0x024b22,11,ghoul,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aaabc,110,0,0,52,9,52,9,,11,ghoul,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aaad8,100,0,1,6,11,6,11,0x0249f9,13,ghost,1,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-5,0x9aaaf4,97,0,1,60,13,60,13,0x02498d,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-5,0x9aab10,100,0,0,11,14,11,14,,13,ghost,1,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-5,0x9aab2c,110,0,1,43,17,43,17,0x024972,11,ghoul,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aab48,101,0,1,15,18,15,18,0x0249de,13,ghost,2,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-5,0x9aab64,99,5,1,54,20,54,20,0x024a65,11,ghoul,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aab80,99,4,1,49,22,49,22,0x024d23,11,ghoul,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aab9c,99,6,1,34,23,34,23,0x024a4a,11,ghoul,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aabb8,99,162,1,58,26,58,26,0x024a14,11,ghoul,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aabd4,72,0,1,6,34,6,34,0x024b3d,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aabf0,72,0,1,2,36,2,36,0x024b58,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aac0c,97,0,1,8,36,8,36,0x024705,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-5,0x9aac28,97,0,1,9,36,9,36,0x02493c,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-5,0x9aac44,106,161,1,17,36,17,36,0x024a2f,21,wizb,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aac60,97,0,1,48,36,48,36,0x0247dd,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-5,0x9aac7c,82,0,1,26,37,26,37,0x024bdf,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-5,0x9aac98,82,0,1,39,37,39,37,0x024ba9,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-5,0x9aacb4,91,0,1,34,39,34,39,0x024c4b,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aacd0,72,0,1,6,40,6,40,0x024b73,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aacec,82,0,1,22,40,22,40,0x024bfa,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-5,0x9aad08,91,0,1,25,40,25,40,0x024c30,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aad24,91,0,0,36,41,36,41,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aad40,74,0,1,47,41,47,41,0x024813,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aad5c,78,0,1,3,42,3,42,0x024906,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-5,0x9aad78,78,0,1,4,42,4,42,0x0248eb,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-5,0x9aad94,78,0,1,5,42,5,42,0x024921,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-5,0x9aadb0,74,0,1,53,42,53,42,0x02482e,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aadcc,102,0,1,4,43,4,43,0x0248d0,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aade8,82,0,1,41,43,41,43,0x024bc4,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-5,0x9aae04,118,0,1,18,44,18,44,0x0248b5,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aae20,81,0,0,25,44,25,44,,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aae3c,91,0,1,35,44,35,44,0x024ad1,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aae58,118,0,1,14,46,14,46,0x02489a,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aae74,82,0,1,41,47,41,47,0x024aec,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-5,0x9aae90,120,0,0,19,50,19,50,,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aaeac,74,0,1,49,48,49,48,0x024849,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aaec8,82,0,1,22,49,22,49,0x024c15,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-5,0x9aaee4,97,0,0,53,49,53,49,,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-5,0x9aaf00,97,0,1,57,49,57,49,0x0247f8,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-5,0x9aaf1c,92,0,1,36,52,36,52,0x024ced,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aaf38,97,27,0,54,53,54,53,,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-5,0x9aaf54,92,0,1,27,53,27,53,0x024cb7,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aaf70,92,0,1,35,53,35,53,0x024a80,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aaf8c,92,0,1,37,54,37,54,0x024a9b,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aafa8,74,0,1,45,54,45,54,0x024864,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aafc4,92,0,1,29,55,29,55,0x024cd2,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aafe0,92,0,0,36,55,36,55,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9aaffc,92,0,1,26,56,26,56,0x024ab6,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9ab018,74,0,1,38,59,38,59,0x024b07,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9ab034,74,0,1,46,59,46,59,0x024c81,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9ab050,74,0,1,39,60,39,60,0x024c66,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-5,0x9ab06c,74,0,1,47,60,47,60,0x024c9c,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac53c,109,191,1,43,4,43,4,0x02c529,4,wiza,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac558,97,207,1,4,5,4,5,0x02c35e,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-6,0x9ac574,120,0,1,55,6,55,6,0x02c2f2,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac590,115,185,1,21,8,21,8,0x02c889,21,wizb,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac5ac,108,187,1,21,10,21,10,0x02c8da,4,wiza,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac5c8,103,190,1,46,10,46,10,0x02c7cc,4,wiza,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac5e4,107,184,1,43,11,43,11,0x02c8a4,8,femwiz,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac600,109,192,1,44,15,44,15,0x02c57a,4,wiza,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac61c,107,193,1,21,16,21,16,0x02c487,8,femwiz,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac638,106,14,1,15,21,15,21,0x02c796,21,wizb,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac654,108,13,1,24,21,24,21,0x02c7b1,4,wiza,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac670,108,188,1,43,21,43,21,0x02c853,4,wiza,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac68c,119,22,1,6,22,6,22,0x02c92b,19,golem,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac6a8,103,189,1,32,23,32,23,0x02c8bf,4,wiza,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac6c4,106,194,1,39,23,39,23,0x02c3e5,21,wizb,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac6e0,75,0,1,60,36,60,36,0x02c3af,18,imp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac6fc,105,0,1,41,37,41,37,0x02c4f3,11,ghoul,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac718,105,0,1,44,37,44,37,0x02c544,11,ghoul,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac734,92,0,1,16,42,16,42,0x02c70f,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac750,92,0,1,18,42,18,42,0x02c6f4,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac76c,111,0,1,58,42,58,42,0x02c55f,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac788,92,0,1,42,43,42,43,0x02c394,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac7a4,92,0,1,43,45,43,45,0x02c379,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac7c0,92,0,0,45,45,45,45,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac7dc,92,0,1,16,46,16,46,0x02c6d9,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac7f8,92,0,1,18,46,18,46,0x02c6be,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac814,91,0,0,50,46,50,46,0x02c436,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac830,66,0,0,41,48,41,48,0x02c802,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac84c,91,0,0,49,48,49,48,0x02c8f5,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac868,91,0,1,51,48,51,48,0x02c41b,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac884,66,0,1,35,50,35,50,0x02c910,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac8a0,81,0,1,37,50,37,50,0x02c838,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac8bc,73,0,1,40,50,40,50,0x02c760,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac8d8,65,0,1,16,51,16,51,0x02c601,9,slug,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-6,0x9ac8f4,82,0,1,17,51,17,51,0x02c66d,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-6,0x9ac910,69,0,1,18,51,18,51,0x02c5cb,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-6,0x9ac92c,64,0,0,18,51,18,51,0x02c652,22,rotgrub,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-6,0x9ac948,81,0,1,36,52,36,52,0x02c81d,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac964,73,0,1,40,52,40,52,0x02c7e7,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac980,92,0,0,4,53,4,53,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac99c,69,0,1,17,53,17,53,0x02c5b0,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-6,0x9ac9b8,82,0,1,18,53,18,53,0x02c688,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-6,0x9ac9d4,91,0,1,27,53,27,53,0x02c72a,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9ac9f0,66,0,1,35,53,35,53,0x02c86e,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9aca0c,64,0,1,16,54,16,54,0x02c637,22,rotgrub,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-6,0x9aca28,102,0,1,52,54,52,54,0x02c3ca,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9aca44,65,0,1,16,55,16,55,0x02c5e6,9,slug,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-6,0x9aca60,82,0,0,16,55,16,55,0x02c6a3,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-6,0x9aca7c,91,0,1,26,55,26,55,0x02c745,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9aca98,64,0,1,18,56,18,56,0x02c61c,22,rotgrub,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-6,0x9acab4,102,0,0,35,56,35,56,0x02c50e,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9acad0,92,0,0,47,56,47,56,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9acaec,120,0,0,57,56,57,56,,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9acb08,96,0,0,8,57,8,57,0x02c77b,7,troll,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9acb24,112,0,1,13,57,13,57,0x02c595,7,troll,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9acb40,74,0,1,22,57,22,57,0x02c451,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9acb5c,74,0,1,23,58,23,58,0x02c46c,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9acb78,82,0,1,43,59,43,59,0x02c328,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-6,0x9acb94,91,0,1,46,60,46,60,0x02c30d,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-6,0x9acbb0,82,0,1,41,61,41,61,0x02c343,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-7,0x9add7c,116,0,1,7,1,7,1,0x03439e,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9add98,116,0,1,9,2,9,2,0x034368,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9addb4,78,209,1,21,2,21,2,0x0341d3,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-7,0x9addd0,111,0,1,24,2,24,2,0x0342ab,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9addec,102,0,1,39,2,39,2,0x033e8e,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ade08,111,0,1,23,3,23,3,0x034182,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ade24,118,0,1,27,3,27,3,0x033efa,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ade40,111,255,1,20,5,20,5,0x034224,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ade5c,78,209,1,22,5,22,5,0x033f66,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-7,0x9ade78,116,0,1,2,6,2,6,0x0342e1,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ade94,87,0,1,4,7,4,7,0x034317,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9adeb0,78,255,1,19,7,19,7,0x03419d,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-7,0x9adecc,78,209,1,20,7,20,7,0x0341b8,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-7,0x9adee8,66,0,1,3,8,3,8,0x033b7f,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9adf04,78,255,1,18,8,18,8,0x034167,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-7,0x9adf20,118,0,0,33,8,33,8,,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9adf3c,116,0,1,2,9,2,9,0x0342fc,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9adf58,116,0,1,15,9,15,9,0x0341ee,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9adf74,102,0,1,30,10,30,10,0x034209,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9adf90,123,231,1,54,10,54,10,0x033fb7,29,tybal,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9adfac,104,208,1,19,14,19,14,0x034533,26,fight32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9adfc8,113,0,1,36,15,36,15,0x033ea9,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-7,0x9adfe4,66,0,1,35,20,35,20,0x033bb5,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae000,66,0,1,10,22,12,22,0x033b9a,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae01c,80,222,1,27,22,27,22,0x033ca8,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae038,66,0,1,37,22,37,22,0x033c57,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae054,116,0,1,6,23,6,23,0x0342c6,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae070,66,0,1,4,23,7,23,0x033b49,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae08c,116,0,1,23,23,23,23,0x034290,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae0a8,80,222,1,27,24,27,24,0x033edf,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae0c4,80,222,1,29,24,29,24,0x033cde,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae0e0,80,222,1,30,24,30,24,0x033e07,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae0fc,66,0,1,36,24,36,24,0x033bd0,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae118,97,0,1,16,26,16,26,0x033c3c,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-7,0x9ae134,66,0,1,38,26,38,26,0x033b2e,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae150,78,219,1,5,29,5,29,0x033f9c,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-7,0x9ae16c,111,255,1,6,29,6,29,0x03414c,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae188,78,255,1,9,28,9,29,0x0340e0,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-7,0x9ae1a4,78,255,1,11,28,11,29,0x0340fb,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-7,0x9ae1c0,78,219,1,8,30,8,30,0x034116,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-7,0x9ae1dc,66,0,1,38,30,38,30,0x033b64,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae1f8,111,255,1,4,31,4,31,0x034131,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae214,111,255,1,3,33,3,33,0x033d80,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae230,111,255,1,7,34,7,34,0x033f30,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae24c,97,0,0,19,34,19,34,,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-7,0x9ae268,78,255,1,2,34,2,35,0x034491,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-7,0x9ae284,78,255,1,3,35,3,35,0x0344ac,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-7,0x9ae2a0,97,0,0,19,35,19,35,,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-7,0x9ae2bc,75,255,0,34,35,34,35,0x033d65,18,imp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae2d8,75,255,0,33,36,33,36,0x033d4a,18,imp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae2f4,114,0,1,34,36,34,36,0x03403e,19,golem,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae310,75,255,0,39,36,39,36,0x033d2f,18,imp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae32c,75,221,0,35,37,35,37,0x033d9b,18,imp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae348,114,0,1,36,38,36,38,0x034008,19,golem,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae364,92,0,0,11,39,11,39,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae380,92,0,0,15,40,15,40,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae39c,117,0,0,33,40,33,40,,28,shadow,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae3b8,120,0,1,47,40,47,40,0x0340aa,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae3d4,120,0,1,51,40,51,40,0x0340c5,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae3f0,92,0,0,3,41,3,41,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae40c,120,0,1,42,41,42,41,0x03425a,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae428,120,0,1,56,41,56,41,0x034059,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae444,92,0,0,4,43,4,43,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae460,92,0,0,13,43,13,43,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae47c,120,0,1,38,43,38,43,0x034518,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae498,120,0,0,60,43,60,43,0x034332,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae4b4,120,0,0,60,43,60,43,0x034332,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae4d0,113,0,1,50,44,50,44,0x033e73,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-7,0x9ae4ec,120,0,1,35,45,35,45,0x033fed,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae508,108,210,1,13,47,13,47,0x03423f,4,wiza,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae524,92,0,1,19,45,18,48,0x0343ef,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae540,120,0,1,33,49,33,49,0x033cf9,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae55c,113,0,1,40,50,40,50,0x033db6,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-7,0x9ae578,86,212,1,10,51,10,51,0x03440a,27,dwarf32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae594,109,217,1,1,52,1,52,0x033c8d,4,wiza,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae5b0,90,218,0,12,53,12,53,0x034440,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae5cc,120,0,1,34,53,34,53,0x033d14,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae5e8,113,0,0,51,54,51,54,,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-7,0x9ae604,86,215,1,2,55,2,55,0x0343b9,27,dwarf32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae620,104,214,0,6,55,6,55,0x034425,26,fight32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae63c,78,220,0,25,55,25,55,0x03445b,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,"DOS substitution eligible, activation unverified",Native PSX,
-7,0x9ae658,78,220,0,27,55,27,55,0x033f15,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,"DOS substitution eligible, activation unverified",Native PSX,
-7,0x9ae674,102,0,0,42,57,42,57,,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae690,111,216,1,26,56,26,56,0x0344c7,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae6ac,120,0,0,35,56,35,56,,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae6c8,98,211,0,7,57,7,57,0x0343d4,26,fight32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae6e4,111,255,1,25,57,25,57,0x0344e2,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae700,78,220,1,28,57,28,57,0x034476,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,
-7,0x9ae71c,114,0,1,61,57,61,57,0x033f81,19,golem,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae738,108,213,1,20,58,20,58,0x033cc3,4,wiza,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae754,120,0,1,35,59,35,59,0x03408f,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae770,112,0,0,52,59,52,59,,7,troll,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae78c,120,0,1,32,61,33,61,0x034275,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-7,0x9ae7a8,72,0,1,44,61,44,61,0x033e3d,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9afc44,113,0,1,31,1,31,1,0x03b6af,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-8,0x9afc60,92,0,0,2,2,2,2,0x03bddb,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9afc7c,114,0,0,39,2,39,2,0x03b751,19,golem,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9afc98,82,0,1,54,2,54,2,0x03bbf5,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-8,0x9afcb4,72,0,1,57,2,57,2,0x03b442,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9afcd0,97,0,1,10,3,10,3,0x03b4ff,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-8,0x9afcec,91,0,1,12,3,12,3,0x03bce8,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9afd08,81,0,1,15,3,15,3,0x03b85f,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9afd24,118,0,1,31,3,31,3,0x03b628,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9afd40,82,0,1,35,3,35,3,0x03bbda,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-8,0x9afd5c,81,0,1,49,3,49,3,0x03b895,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9afd78,120,0,1,22,5,22,5,0x03b550,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9afd94,92,0,0,7,7,7,7,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9afdb0,72,0,1,26,7,26,7,0x03b45d,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9afdcc,91,0,1,44,7,44,7,0x03bd1e,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9afde8,91,0,1,48,7,48,7,0x03bd03,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9afe04,120,0,1,54,7,54,7,0x03b5d7,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9afe20,72,0,1,18,8,18,8,0x03b2c8,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9afe3c,72,0,1,34,8,34,8,0x03b4c9,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9afe58,91,0,0,46,8,46,8,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9afe74,81,0,1,7,12,7,12,0x03b844,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9afe90,82,0,1,10,12,10,12,0x03bba4,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-8,0x9afeac,72,0,1,18,12,18,12,0x03b319,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9afec8,72,0,1,55,12,55,12,0x03b3bb,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9afee4,72,0,1,3,13,3,13,0x03b2ad,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9aff00,81,0,1,36,13,36,13,0x03b8cb,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9aff1c,91,0,0,52,13,52,13,0x03bd54,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9aff38,119,0,1,4,14,4,14,0x03b76c,19,golem,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9aff54,120,0,0,23,15,23,15,0x03b535,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9aff70,81,0,1,7,17,7,17,0x03ba96,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9aff8c,118,0,1,52,18,52,18,0x03b643,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9affa8,113,0,1,7,20,7,20,0x03bf3a,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-8,0x9affc4,119,0,0,10,20,10,20,0x03b6e5,19,golem,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9affe0,72,0,1,6,22,6,22,0x03b2fe,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9afffc,120,0,1,41,22,41,22,0x03b5f2,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0018,72,0,1,45,23,45,23,0x03b40c,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9b0034,97,0,1,4,24,4,24,0x03be2c,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-8,0x9b0050,97,0,1,52,25,52,25,0x03bf8b,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-8,0x9b006c,82,0,1,7,26,7,26,0x03bb6e,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-8,0x9b0088,91,0,0,56,26,56,26,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b00a4,120,0,0,31,27,31,27,0x03c120,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b00c0,120,0,0,33,27,33,27,0x03ba7b,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b00dc,91,0,1,56,27,56,27,0x03bd39,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b00f8,119,0,1,37,28,37,28,0x03c105,19,golem,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0114,118,0,1,46,29,46,29,0x03c0cf,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0130,120,0,1,9,30,9,30,0x03b56b,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b014c,81,0,1,13,31,13,31,0x03bab1,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0168,72,0,1,13,32,13,32,0x03b292,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9b0184,102,0,1,25,32,25,32,0x03be7d,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b01a0,121,0,1,38,32,38,32,0x03c02d,19,golem,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b01bc,122,0,1,39,32,39,32,0x03bfdc,23,wisp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b01d8,119,0,1,53,32,53,32,0x03c012,19,golem,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b01f4,124,248,0,32,33,32,33,0x03b3f1,12,demon,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0210,72,0,1,44,34,44,34,0x03b025,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9b022c,120,0,1,4,36,4,36,0x03b586,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0248,102,0,1,39,36,39,36,0x03be98,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0264,110,0,1,49,36,49,36,0x03c0b4,11,ghoul,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0280,120,0,1,53,37,53,37,0x03b5bc,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b029c,72,0,1,6,38,6,38,0x03b277,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9b02b8,120,0,1,33,38,33,38,0x03b5a1,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b02d4,81,0,1,50,38,50,38,0x03b952,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b02f0,81,0,1,31,39,31,39,0x03ba60,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b030c,118,0,1,8,40,8,40,0x03b694,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0328,72,0,1,14,40,14,40,0x03b20b,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9b0344,97,0,0,20,40,20,40,0x03b6ca,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-8,0x9b0360,91,0,0,21,40,21,40,0x03bccd,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b037c,82,0,1,3,41,3,41,0x03bb53,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-8,0x9b0398,83,0,1,12,41,12,41,0x03bb02,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b03b4,81,0,1,7,43,7,43,0x03ba2a,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b03d0,72,0,1,39,43,39,43,0x03bdc0,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9b03ec,104,232,1,47,44,47,44,0x03af9e,26,fight32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0408,97,0,1,37,45,37,45,0x03bff7,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-8,0x9b0424,92,0,1,58,45,58,45,0x03afef,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0440,114,0,0,55,47,55,47,,19,golem,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b045c,81,0,0,39,46,39,46,0x03be62,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0478,81,0,1,1,47,1,47,0x03ba0f,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0494,118,0,1,28,47,28,47,0x03b65e,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b04b0,118,0,0,58,47,58,47,,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b04cc,119,0,0,61,47,61,47,,19,golem,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b04e8,83,0,1,23,48,23,48,0x03bb1d,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0504,81,0,0,25,48,25,48,,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0520,91,0,1,50,48,50,48,0x03c0ea,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b053c,72,0,1,22,49,22,49,0x03b0e2,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9b0558,91,0,1,27,49,27,49,0x03bc97,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0574,72,0,0,28,49,28,49,,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,"DOS substitution eligible, activation unverified",Native PSX,Level 8 rats
-8,0x9b0590,82,0,1,30,49,30,49,0x03bc2b,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-8,0x9b05ac,111,0,0,60,49,60,49,,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b05c8,97,0,1,6,51,6,51,0x03bf1f,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-8,0x9b05e4,72,0,1,9,51,9,51,0x03b226,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9b0600,92,0,1,34,51,34,51,0x03bd8a,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b061c,120,0,1,41,51,41,51,0x03b4e4,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0638,92,0,1,2,52,2,52,0x03bda5,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0654,83,0,1,60,52,60,52,0x03b7d8,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0670,81,0,0,39,53,39,53,0x03b9a3,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b068c,111,0,1,31,54,31,54,0x03b9be,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b06a8,92,0,1,50,54,50,54,0x03bd6f,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b06c4,102,0,0,56,55,56,55,,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b06e0,72,0,1,57,55,57,55,0x03b51a,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9b06fc,118,0,0,15,57,15,57,0x03b679,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0718,72,0,1,5,58,5,58,0x03b1ba,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9b0734,83,0,0,8,58,8,58,0x03bae7,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0750,72,0,0,14,58,14,58,,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,"DOS substitution eligible, activation unverified",Native PSX,Level 8 rats
-8,0x9b076c,113,0,1,26,58,26,58,0x03bee9,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-8,0x9b0788,82,0,1,35,58,35,58,0x03bc46,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,Native PSX,Native PSX,
-8,0x9b07a4,81,0,1,59,59,59,59,0x03b80e,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b07c0,91,0,1,6,60,6,60,0x03bcb2,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b07dc,113,0,1,9,60,9,60,0x03bf04,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,Native PSX,Native PSX,
-8,0x9b07f8,91,0,1,36,60,36,60,0x03c07e,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0814,72,0,1,43,60,43,60,0x03b0ac,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9b0830,81,0,1,51,60,51,60,0x03b736,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b084c,81,0,1,8,61,8,61,0x03b829,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b0868,72,0,1,26,61,26,61,0x03b14e,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,DOS sprites verified,Native PSX,Level 8 rats
-8,0x9b0884,81,0,1,30,61,30,61,0x03b9f4,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b08a0,92,0,1,14,62,14,62,0x03bacc,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-8,0x9b08bc,91,0,1,30,62,30,62,0x03bc7c,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b1d18,79,0,1,4,3,4,3,0x043977,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b1d34,126,240,1,18,3,18,3,0x0439c8,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b1d50,79,242,1,60,3,60,3,0x04375b,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b1d6c,79,242,1,59,5,59,5,0x043740,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b1d88,126,246,1,13,6,13,6,0x043992,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b1da4,126,240,1,21,6,21,6,0x0439ad,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b1dc0,125,241,1,26,6,26,6,0x043b27,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b1ddc,125,243,1,43,6,43,6,0x0437ac,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b1df8,126,241,1,55,7,55,7,0x043776,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b1e14,79,242,1,34,8,34,8,0x043b0c,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b1e30,79,247,1,47,8,47,8,0x043791,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b1e4c,125,0,1,19,10,19,10,0x043bc9,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b1e68,125,243,1,5,11,5,11,0x043941,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b1e84,125,243,1,2,12,2,12,0x04395c,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b1ea0,125,240,1,43,12,43,12,0x0437c7,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b1ebc,125,240,1,45,13,45,13,0x0437fd,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b1ed8,126,246,1,11,15,11,15,0x04390b,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b1ef4,125,243,1,28,15,28,15,0x043be4,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b1f10,125,240,1,43,15,43,15,0x0437e2,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b1f2c,79,247,1,58,16,58,16,0x043cd7,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b1f48,125,241,1,4,17,4,17,0x043926,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b1f64,126,246,1,11,17,11,17,0x0438f0,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b1f80,79,244,1,18,17,18,17,0x043ca1,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b1f9c,79,242,1,37,17,37,17,0x043c6b,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b1fb8,79,242,0,38,18,38,18,0x043c50,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b1fd4,125,240,1,28,19,28,19,0x0435e1,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b1ff0,126,246,1,54,19,54,19,0x043833,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b200c,125,240,1,23,20,23,20,0x0435fc,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b2028,125,240,1,30,20,30,20,0x043683,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b2044,79,244,1,45,20,45,20,0x043c1a,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b2060,79,244,1,49,20,49,20,0x043818,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b207c,79,242,1,19,21,19,21,0x043cf2,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b2098,126,246,1,16,23,16,23,0x043d0d,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b20b4,124,248,1,28,23,28,23,0x0435c6,12,demon,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b20d0,125,240,1,31,23,31,23,0x043632,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b20ec,79,242,1,49,23,49,23,0x04384e,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b2108,79,242,1,58,23,58,23,0x043725,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b2124,125,240,1,23,24,23,24,0x043617,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b2140,126,240,1,40,24,40,24,0x043d28,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b215c,79,242,1,48,24,48,24,0x043869,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b2178,79,242,1,60,25,60,25,0x04370a,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b2194,126,240,1,40,26,40,26,0x043bff,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b21b0,125,243,1,44,26,44,26,0x0438d5,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b21cc,79,242,1,10,27,10,27,0x043af1,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b21e8,125,240,1,26,27,26,27,0x04364d,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b2204,79,242,1,33,27,33,27,0x043d43,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b2220,125,240,1,28,28,28,28,0x043668,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b223c,79,242,1,31,28,31,28,0x043cbc,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b2258,79,242,1,10,29,10,29,0x043ad6,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b2274,79,245,1,16,30,16,30,0x043c86,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b2290,125,243,1,55,30,55,30,0x04369e,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b22ac,126,240,1,44,33,44,33,0x04389f,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b22c8,126,241,1,12,34,12,34,0x043c35,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b22e4,79,244,1,22,34,22,34,0x043aa0,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b2300,79,244,1,24,34,24,34,0x043abb,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b231c,125,241,1,41,36,41,36,0x0438ba,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b2338,125,241,1,20,37,20,37,0x043a34,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b2354,126,240,0,50,37,50,37,0x043b78,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b2370,126,240,1,59,37,59,37,0x043b42,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b238c,126,240,1,51,38,51,38,0x043b5d,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b23a8,79,245,1,57,40,57,40,0x043884,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b23c4,79,244,1,3,41,3,41,0x043a4f,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b23e0,79,242,1,17,42,17,42,0x043a19,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b23fc,126,246,1,11,43,11,43,0x043a6a,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b2418,79,242,1,53,44,53,44,0x0436b9,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,Native PSX,Native PSX,
-9,0x9b2434,125,243,1,26,49,26,49,0x043a85,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b2450,125,241,1,51,49,51,49,0x0436d4,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b246c,125,241,1,53,49,53,49,0x0436ef,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b2488,125,240,1,8,50,8,50,0x0439fe,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b24a4,125,241,1,51,50,51,50,0x043b93,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b24c0,125,241,1,53,50,53,50,0x043bae,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
-9,0x9b24dc,125,240,1,8,52,8,52,0x0439e3,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,Native PSX,Native PSX,
+level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_y,home_x,home_y,dos_candidate_offsets,dos_animation,dos_asset,dos_palette,idle_frames_by_direction,walk_frames_by_direction,spawn_bank,west_bank,preview_directional_views,release_directional_views,preview_spawn_dos_actions,preview_west_dos_actions,dos_source_actions,preview_missing_actions,activation_evidence
+1,0x9a4048,64,0,1,58,2,58,2,0x005988,22,rotgrub,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+1,0x9a4064,66,0,0,47,4,47,4,,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+1,0x9a4080,69,0,1,55,4,55,4,0x005a0f,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+1,0x9a409c,64,0,1,5,6,5,6,0x005cb2,22,rotgrub,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+1,0x9a40b8,66,0,1,45,6,45,6,0x005a45,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+1,0x9a40d4,66,0,1,50,6,50,6,0x005a2a,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+1,0x9a40f0,68,0,0,14,7,14,7,,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+1,0x9a410c,90,67,1,17,7,17,7,0x005b6e,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fighters,fighters,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+1,0x9a4128,67,0,1,22,8,22,8,0x005ce8,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+1,0x9a4144,67,0,1,18,12,18,12,0x0058b0,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+1,0x9a4160,90,0,1,33,12,33,13,0x005b89,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fighters,fighters,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+1,0x9a417c,69,0,1,59,14,59,14,0x0059f4,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+1,0x9a4198,73,0,1,2,15,2,15,0x005829,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+1,0x9a41b4,90,0,1,33,15,33,15,0x005b53,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fighters,fighters,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+1,0x9a41d0,66,0,1,12,16,12,16,0x00585f,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+1,0x9a41ec,72,0,1,2,17,2,17,0x0058cb,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+1,0x9a4208,67,0,0,3,17,3,17,,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+1,0x9a4224,67,0,1,2,19,2,19,0x005901,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+1,0x9a4240,90,20,1,22,19,22,19,0x005ba4,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fighters,fighters,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+1,0x9a425c,75,0,0,12,20,12,20,0x005895,18,imp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,entrance-imp,entrance-imp,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
+1,0x9a4278,90,19,1,33,20,33,20,0x005bbf,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fighters,fighters,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+1,0x9a4294,67,0,1,2,22,2,22,0x0058e6,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+1,0x9a42b0,87,0,1,14,23,14,23,0x005c7c,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a42cc,66,0,1,31,23,31,23,0x00587a,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+1,0x9a42e8,68,0,1,29,26,29,26,0x005ccd,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+1,0x9a4304,77,0,1,36,28,36,28,0x0059d9,0,gngob32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a4320,77,0,0,3,33,3,33,,0,gngob32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Create trap identified
+1,0x9a433c,65,0,1,26,33,26,33,0x0057f3,9,slug,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+1,0x9a4358,65,0,0,27,34,27,34,,9,slug,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+1,0x9a4374,71,66,1,15,35,15,35,0x005952,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-goblins,gray-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a4390,74,0,1,54,35,54,35,0x0057a2,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+1,0x9a43ac,77,0,1,3,38,3,38,0x005937,0,gngob32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a43c8,77,0,1,11,38,11,38,0x00591c,0,gngob32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a43e4,87,0,1,26,38,26,38,0x0059a3,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a4400,78,0,1,54,38,54,38,0x0059be,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,skeletons,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a441c,70,0,1,8,43,8,43,0x005bda,0,gngob32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a4438,70,0,1,10,43,10,43,0x005bf5,0,gngob32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a4454,66,0,1,23,43,23,43,0x005844,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+1,0x9a4470,66,0,1,24,43,24,43,0x00580e,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+1,0x9a448c,68,0,1,27,46,27,46,0x005c2b,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+1,0x9a44a8,71,255,1,4,47,4,47,0x005736,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-goblins,gray-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a44c4,80,7,1,60,51,60,51,0x005b38,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-goblins,gray-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a44e0,76,65,1,45,52,45,52,0x005ab1,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a44fc,76,0,1,52,52,52,52,0x005acc,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,lurkers,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a4518,68,0,1,37,54,37,54,0x005c46,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+1,0x9a4534,83,0,1,19,54,19,55,0x005c10,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+1,0x9a4550,76,0,1,46,55,46,55,0x005b02,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,lurkers,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a456c,87,0,1,51,55,51,55,0x0057d8,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a4588,80,8,1,57,55,57,55,0x005c61,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-goblins,gray-goblins,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a45a4,70,10,1,4,56,4,56,0x005a60,0,gngob32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a45c0,76,64,1,45,56,45,56,0x005b1d,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a45dc,76,0,1,47,56,47,56,0x005ae7,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a45f8,71,9,1,2,57,2,57,0x005a7b,14,graygob,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,gray-goblins,1,1,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a4614,76,0,1,51,58,51,58,0x005787,0,gngob32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+1,0x9a4630,80,0,1,52,59,52,59,0x00576c,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-goblins,default,1,1,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+1,0x9a464c,65,0,1,37,60,37,60,0x00596d,9,slug,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+2,0x9a596c,84,2,1,60,3,60,3,0x00d8f0,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,dwarves,dwarves,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+2,0x9a5988,74,0,1,22,4,22,4,0x00d3fb,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+2,0x9a59a4,74,0,0,22,4,22,4,0x00d3e0,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Linked on floor load
+2,0x9a59c0,84,0,1,12,6,12,6,0x00d740,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,dwarves,dwarves,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+2,0x9a59dc,84,0,1,14,6,14,6,0x00d323,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,dwarves,dwarves,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+2,0x9a59f8,84,0,1,18,6,18,6,0x00d374,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,dwarves,dwarves,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+2,0x9a5a14,84,89,1,40,5,37,6,0x00d6ef,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,dwarves,dwarves,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+2,0x9a5a30,86,3,1,9,8,9,8,0x00d90b,27,dwarf32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,dwarves,dwarves,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+2,0x9a5a4c,84,0,1,12,10,12,10,0x00d725,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,dwarves,dwarves,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+2,0x9a5a68,84,0,1,14,10,14,10,0x00d33e,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,dwarves,dwarves,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+2,0x9a5a84,84,0,1,18,10,18,10,0x00d38f,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,dwarves,dwarves,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+2,0x9a5aa0,69,0,0,27,10,27,10,0x00d3aa,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
+2,0x9a5abc,69,0,1,27,11,27,11,0x00d3c5,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+2,0x9a5ad8,84,21,1,9,14,9,14,0x00d884,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,dwarves,dwarves,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+2,0x9a5af4,72,0,1,58,14,58,14,0x00d617,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+2,0x9a5b10,84,0,1,29,17,29,17,0x00d869,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,dwarves,dwarves,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+2,0x9a5b2c,82,0,1,50,21,50,21,0x00d4b8,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+2,0x9a5b48,98,1,1,28,22,28,22,0x00d8d5,26,fight32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,corby,corby,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+2,0x9a5b64,68,0,1,36,22,36,22,0x00d4ee,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+2,0x9a5b80,84,0,1,20,23,20,23,0x00d84e,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,dwarves,dwarves,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+2,0x9a5b9c,102,110,1,48,23,48,23,0x00d89f,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+2,0x9a5bb8,114,0,1,5,23,5,24,0x00d833,19,golem,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+2,0x9a5bd4,87,0,1,60,26,60,26,0x00d70a,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+2,0x9a5bf0,84,88,1,12,28,12,28,0x00d8ba,27,dwarf32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,dwarves,dwarves,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+2,0x9a5c0c,69,0,1,8,34,8,34,0x00d524,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+2,0x9a5c28,69,0,1,10,34,10,34,0x00d55a,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+2,0x9a5c44,69,0,1,15,34,15,34,0x00d69e,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+2,0x9a5c60,69,0,1,8,36,8,36,0x00d53f,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+2,0x9a5c7c,69,0,1,10,36,10,36,0x00d575,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+2,0x9a5c98,86,90,1,19,36,19,36,0x00d75b,27,dwarf32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,dwarves,dwarves,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+2,0x9a5cb4,69,0,1,2,37,2,37,0x00d683,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+2,0x9a5cd0,69,0,1,10,38,10,38,0x00d6b9,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+2,0x9a5cec,72,0,1,34,38,34,38,0x00d5ab,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+2,0x9a5d08,72,0,1,35,38,35,38,0x00d590,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+2,0x9a5d24,91,0,1,28,42,28,42,0x00d7ac,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+2,0x9a5d40,91,0,0,29,42,29,42,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+2,0x9a5d5c,69,0,1,4,44,4,44,0x00d668,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+2,0x9a5d78,91,0,0,9,44,9,44,0x00d776,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Linked on floor load
+2,0x9a5d94,83,0,1,37,44,37,44,0x00d5c6,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+2,0x9a5db0,83,0,0,43,48,43,48,,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+2,0x9a5dcc,91,0,1,21,52,21,52,0x00d791,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+2,0x9a5de8,74,0,1,51,53,51,53,0x00d64d,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+2,0x9a5e04,74,0,1,59,53,59,53,0x00d632,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+2,0x9a5e20,83,0,1,35,54,35,54,0x00d6d4,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+2,0x9a5e3c,87,0,1,49,54,49,54,0x00d5fc,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+2,0x9a5e58,83,0,1,36,55,36,55,0x00d5e1,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+2,0x9a5e74,78,0,1,54,55,54,55,0x00d44c,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,skeletons,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+2,0x9a5e90,78,0,1,60,55,60,55,0x00d467,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,skeletons,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+2,0x9a5eac,78,0,0,32,57,32,57,,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Create trap identified
+2,0x9a5ec8,78,0,0,31,58,31,58,,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Create trap identified
+2,0x9a5ee4,82,0,1,26,58,26,58,0x00d7e2,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+2,0x9a5f00,82,0,1,27,58,27,58,0x00d7c7,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+2,0x9a5f1c,82,0,1,26,59,26,59,0x00d7fd,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+2,0x9a5f38,82,0,0,27,59,27,59,0x00d818,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Linked on floor load
+2,0x9a5f54,78,0,1,55,60,55,60,0x00d431,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+2,0x9a5f70,80,0,1,56,60,56,60,0x00d359,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-goblins,default,1,1,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+2,0x9a5f8c,78,0,1,55,61,55,61,0x00d416,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+3,0x9a7248,67,0,1,21,2,21,2,0x01523a,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a7264,72,0,1,21,3,21,3,0x015162,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a7280,73,0,0,32,3,32,3,,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+3,0x9a729c,74,0,0,1,8,1,8,,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+3,0x9a72b8,83,0,1,47,4,47,4,0x014f97,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+3,0x9a72d4,93,112,0,40,11,35,6,,17,femfite,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bandits,bandits,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+3,0x9a72f0,89,0,1,11,7,11,7,0x015363,2,lizman,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a730c,89,16,1,17,7,17,7,0x015204,2,lizman,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a7328,87,0,1,20,7,20,7,0x014f61,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+3,0x9a7344,72,0,1,23,7,21,7,0x0153ea,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a7360,93,112,1,29,9,29,7,0x014e02,17,femfite,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bandits,bandits,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+3,0x9a737c,97,0,1,57,8,57,8,0x014e53,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+3,0x9a7398,93,0,0,3,9,3,9,,17,femfite,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bandits,bandits,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+3,0x9a73b4,94,113,1,36,9,35,9,0x014e89,17,femfite,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bandits,bandits,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+3,0x9a73d0,89,0,1,10,10,10,10,0x015348,2,lizman,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a73ec,93,112,1,33,12,31,10,0x01517d,17,femfite,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bandits,bandits,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+3,0x9a7408,68,0,0,58,12,58,12,,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+3,0x9a7424,87,0,1,7,17,7,17,0x0152f7,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+3,0x9a7440,87,0,1,35,17,35,17,0x0152c1,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+3,0x9a745c,66,0,1,1,20,1,20,0x015111,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a7478,66,0,1,2,21,2,21,0x01512c,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a7494,85,15,1,25,21,25,21,0x0154dd,2,lizman,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prisoner,prisoner,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a74b0,85,0,1,29,21,29,21,0x014d7b,2,lizman,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a74cc,106,24,1,27,22,27,22,0x0154c2,21,wizb,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prisoner,prisoner,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+3,0x9a74e8,87,0,1,52,22,52,22,0x0152a6,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+3,0x9a7504,68,0,1,13,23,13,23,0x014d96,5,spider,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+3,0x9a7520,88,0,1,41,23,41,23,0x0150a5,2,lizman,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a753c,88,0,1,34,24,34,24,0x015456,2,lizman,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a7558,88,0,1,57,24,57,24,0x01508a,2,lizman,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a7574,87,0,1,1,26,1,26,0x01537e,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+3,0x9a7590,74,0,1,10,26,10,26,0x014db1,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a75ac,74,0,1,12,26,12,26,0x014dcc,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a75c8,85,0,1,23,28,23,28,0x0154a7,2,lizman,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a75e4,85,0,1,29,28,29,28,0x01548c,2,lizman,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a7600,85,0,1,33,28,33,28,0x015471,2,lizman,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a761c,88,114,1,41,29,41,29,0x015147,2,lizman,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a7638,88,0,1,44,29,44,29,0x0150f6,2,lizman,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a7654,85,0,1,36,31,36,31,0x015420,2,lizman,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a7670,85,0,1,38,31,38,31,0x015405,2,lizman,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a768c,88,0,1,37,32,37,32,0x01543b,2,lizman,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a76a8,85,0,1,11,33,11,33,0x015198,2,lizman,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a76c4,87,0,1,7,34,7,34,0x01532d,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+3,0x9a76e0,83,0,0,18,34,18,34,0x0150db,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Linked on floor load
+3,0x9a76fc,87,0,1,51,37,51,37,0x01528b,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+3,0x9a7718,92,0,1,35,39,36,38,0x0153cf,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+3,0x9a7734,91,0,1,43,38,43,38,0x014cf4,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons-spiders-headless,skeletons-spiders-headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a7750,83,0,0,44,38,44,38,,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,skeletons-spiders-headless,2,2,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+3,0x9a776c,104,28,1,47,38,47,38,0x0154f8,26,fight32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,zak,zak,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+3,0x9a7788,93,112,1,20,41,20,39,0x014e38,17,femfite,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bandits,bandits,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+3,0x9a77a4,83,0,1,35,40,35,39,0x0153b4,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+3,0x9a77c0,72,0,1,40,40,40,41,0x014ea4,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a77dc,67,0,0,42,42,42,42,,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats,bats-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+3,0x9a77f8,102,0,1,24,44,23,45,0x014de7,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+3,0x9a7814,87,0,1,19,49,19,49,0x01521f,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+3,0x9a7830,87,0,1,35,51,35,49,0x015255,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+3,0x9a784c,87,0,1,52,50,52,50,0x015270,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+3,0x9a7868,116,0,1,3,52,3,52,0x014fcd,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+3,0x9a7884,116,0,1,11,52,11,52,0x014fe8,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+3,0x9a78a0,91,0,0,49,52,44,55,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons-spiders-headless,skeletons-spiders-headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+3,0x9a78bc,74,0,1,49,53,49,53,0x014ebf,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons-spiders-headless,skeletons-spiders-headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a78d8,117,0,1,2,55,2,55,0x015039,28,shadow,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 0c,00 01 02 03 0c,00 01 02 03 0c,,Initially linked
+3,0x9a78f4,118,0,1,7,55,7,55,0x01506f,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+3,0x9a7910,121,0,1,12,55,12,55,0x015054,19,golem,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+3,0x9a792c,64,0,1,47,55,47,55,0x014ef5,22,rotgrub,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+3,0x9a7948,117,0,1,2,56,2,56,0x014fb2,28,shadow,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 0c,00 01 02 03 0c,00 01 02 03 0c,,Initially linked
+3,0x9a7964,113,0,1,3,56,3,56,0x014f7c,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+3,0x9a7980,69,0,1,51,56,51,56,0x014f10,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+3,0x9a799c,81,0,1,29,57,29,57,0x015312,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,imps,imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+3,0x9a79b8,116,0,0,3,59,3,59,0x01501e,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Linked on floor load
+3,0x9a79d4,116,0,1,11,59,11,59,0x015003,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+3,0x9a79f0,82,0,1,53,61,53,61,0x014f2b,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+3,0x9a7a0c,87,0,1,55,61,55,61,0x014f46,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+3,0x9a7a28,78,0,0,35,62,35,62,,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,south-green-goblin,south-green-goblin,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Normal controller rest spawned actor
+3,0x9a7a44,91,0,0,45,62,45,62,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+4,0x9a8e34,93,149,1,5,2,5,2,0x01cec9,17,femfite,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,town,town,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a8e50,74,0,1,38,2,38,2,0x01cafd,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+4,0x9a8e6c,74,0,0,39,2,39,2,0x01cb18,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Linked on floor load
+4,0x9a8e88,104,12,1,8,4,8,4,0x01ceff,26,fight32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,town,town,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a8ea4,95,148,1,5,5,5,5,0x01cee4,26,fight32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,town,town,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a8ec0,94,146,1,14,5,14,5,0x01cd4f,17,femfite,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,town,town,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a8edc,98,147,1,13,7,13,7,0x01ca76,26,fight32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,town,town,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a8ef8,96,0,0,52,9,52,9,0x01d0ca,7,troll,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,trolls-four-recurring,trolls-four-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Linked on floor load
+4,0x9a8f14,96,0,1,54,9,54,9,0x01cae2,7,troll,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,trolls-four-recurring,trolls-four-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a8f30,96,144,1,58,9,58,9,0x01ca5b,7,troll,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,trolls-four-recurring,trolls-four-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a8f4c,90,136,1,22,10,22,10,0x01d11b,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,town,town,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a8f68,96,0,1,53,14,53,14,0x01d0af,7,troll,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,trolls-four-recurring,trolls-four-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a8f84,67,0,0,35,15,35,15,,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-grubs-rats,bats-grubs-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+4,0x9a8fa0,96,18,1,58,15,58,15,0x01d0e5,7,troll,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,trolls-four-recurring,trolls-four-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a8fbc,98,138,1,13,16,13,16,0x01ce5d,26,fight32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,town,town,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a8fd8,90,137,1,40,19,40,19,0x01d100,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fighters-four,fighters-four,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a8ff4,112,17,1,49,22,49,22,0x01d043,7,troll,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,trolls-four-recurring,trolls-four-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a9010,92,0,1,60,22,60,22,0x01d05e,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a902c,98,141,1,3,23,3,23,0x01ce93,26,fight32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,town,town,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a9048,93,139,1,13,23,13,23,0x01ce78,17,femfite,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,town,town,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a9064,87,0,1,20,23,20,23,0x01ce42,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+4,0x9a9080,96,0,1,47,23,47,23,0x01d094,7,troll,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,trolls-four-recurring,trolls-four-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a909c,92,0,1,59,24,59,24,0x01d079,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a90b8,92,0,0,60,24,60,24,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+4,0x9a90d4,94,140,1,12,29,12,29,0x01ca91,17,femfite,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,town,town,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a90f0,74,0,1,61,30,61,30,0x01cd6a,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+4,0x9a910c,74,0,1,59,32,59,32,0x01ca40,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+4,0x9a9128,116,0,1,23,33,23,33,0x01ce27,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+4,0x9a9144,111,0,1,43,33,43,33,0x01d028,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,trolls-four-recurring,trolls-four-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a9160,74,0,1,60,34,60,34,0x01cff2,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+4,0x9a917c,111,0,1,47,38,47,38,0x01d00d,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,trolls-four-recurring,trolls-four-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a9198,91,0,1,60,38,60,38,0x01cbd5,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+4,0x9a91b4,91,0,1,60,39,60,39,0x01cbba,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+4,0x9a91d0,118,0,1,4,40,4,40,0x01cce3,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+4,0x9a91ec,69,0,1,26,40,26,40,0x01cda0,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,grubs-slugs,grubs-slugs,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a9208,91,0,1,59,41,59,41,0x01cb84,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+4,0x9a9224,91,0,1,60,41,60,41,0x01cb9f,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+4,0x9a9240,91,0,0,61,41,61,41,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+4,0x9a925c,95,143,1,20,43,20,43,0x01c94d,26,fight32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fighters-four,fighters-four,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a9278,83,0,1,3,44,3,44,0x01cc41,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a9294,83,0,1,4,44,4,44,0x01cc26,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a92b0,89,0,1,31,44,31,44,0x01cd85,2,lizman,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+4,0x9a92cc,73,0,1,33,44,33,44,0x01cfd7,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-grubs-rats,bats-grubs-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+4,0x9a92e8,83,0,1,2,45,2,45,0x01cc92,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a9304,83,0,1,4,45,4,45,0x01cc5c,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a9320,83,0,1,5,45,5,45,0x01ccad,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a933c,66,0,1,32,45,32,45,0x01cfbc,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-grubs-rats,default,1,1,00 01 02 03 07 0c,,00 01 02 03 07 0c,,Initially linked
+4,0x9a9358,83,0,1,3,46,3,46,0x01cc77,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a9374,122,0,1,8,47,8,47,0x01ccc8,23,wisp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-wisps,gazers-wisps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a9390,83,0,1,32,48,32,48,0x01cbf0,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a93ac,67,0,1,18,49,18,49,0x01cdd6,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-grubs-rats,bats-grubs-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+4,0x9a93c8,102,0,1,3,50,3,50,0x01cd34,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-wisps,gazers-wisps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a93e4,81,0,1,32,50,32,50,0x01cf6b,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,imps,imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a9400,72,0,1,36,50,36,50,0x01cb33,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-grubs-rats,bats-grubs-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+4,0x9a941c,82,0,0,28,51,28,51,0x01cf50,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,bats-grubs-rats,bats-grubs-rats,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Linked on floor load
+4,0x9a9438,82,0,1,36,51,36,51,0x01cf1a,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,bats-grubs-rats,bats-grubs-rats,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+4,0x9a9454,82,0,0,30,52,30,52,,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,bats-grubs-rats,grub-imp,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Create trap identified
+4,0x9a9470,72,0,1,31,52,31,52,0x01cb69,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-grubs-rats,bats-grubs-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+4,0x9a948c,67,0,1,12,53,12,53,0x01cdf1,16,rat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-grubs-rats,bats-grubs-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+4,0x9a94a8,81,0,1,28,53,28,53,0x01cfa1,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,grub-imp,imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a94c4,81,0,1,35,53,35,53,0x01cf86,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,imps,imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a94e0,72,0,0,29,54,29,54,0x01cb4e,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-grubs-rats,bats-grubs-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Linked on floor load
+4,0x9a94fc,106,0,1,8,55,8,55,0x01ccfe,21,wizb,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,wizards,wizards,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a9518,72,0,1,20,55,20,55,0x01cdbb,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-grubs-rats,bats-grubs-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+4,0x9a9534,82,0,0,33,55,33,55,0x01cf35,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,bats-grubs-rats,bats-grubs-rats,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Linked on floor load
+4,0x9a9550,81,0,0,35,55,35,55,,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,imps,imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+4,0x9a956c,106,0,1,8,56,8,56,0x01cd19,21,wizb,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,wizards,wizards,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+4,0x9a9588,83,0,1,29,58,29,58,0x01cc0b,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+4,0x9a95a4,91,0,1,5,59,5,59,0x01c968,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+4,0x9a95c0,98,142,1,32,61,32,61,0x01caac,26,fight32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fighters-four,fighters-four,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+5,0x9aaa14,101,0,1,9,2,9,2,0x0249c3,13,ghost,2,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-five,ghosts-five,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+5,0x9aaa30,113,0,0,52,3,52,3,,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-five,ghosts-five,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+5,0x9aaa4c,113,0,1,42,3,42,3,0x024957,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-five,ghosts-five,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+5,0x9aaa68,100,0,1,17,8,17,8,0x0249a8,13,ghost,1,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-five,ghosts-five,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+5,0x9aaa84,107,23,1,34,8,34,8,0x024d08,8,femwiz,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,judy,judy,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+5,0x9aaaa0,110,0,1,43,9,43,9,0x024b22,11,ghoul,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghouls-five-recurring,ghouls-five-recurring,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9aaabc,110,0,0,52,9,52,9,,11,ghoul,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghouls-five-recurring,ghouls-five-recurring,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+5,0x9aaad8,100,0,1,6,11,6,11,0x0249f9,13,ghost,1,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-five,ghosts-five,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+5,0x9aaaf4,97,0,1,60,13,60,13,0x02498d,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-five,ghosts-five,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+5,0x9aab10,100,0,0,11,14,11,14,,13,ghost,1,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-five,ghosts-five,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+5,0x9aab2c,110,0,1,43,17,43,17,0x024972,11,ghoul,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghouls-five-recurring,ghouls-five-recurring,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9aab48,101,0,1,15,18,15,18,0x0249de,13,ghost,2,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-five,ghosts-five,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+5,0x9aab64,99,5,1,54,20,54,20,0x024a65,11,ghoul,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghouls-five-recurring,ghouls-five-recurring,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9aab80,99,4,1,49,22,49,22,0x024d23,11,ghoul,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghouls-five-recurring,ghouls-five-recurring,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9aab9c,99,6,1,34,23,34,23,0x024a4a,11,ghoul,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghouls-five-recurring,ghouls-five-recurring,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9aabb8,99,162,1,58,26,58,26,0x024a14,11,ghoul,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghouls-five-recurring,ghouls-five-recurring,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9aabd4,72,0,1,6,34,6,34,0x024b3d,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-grubs-five,rats-grubs-five,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9aabf0,72,0,1,2,36,2,36,0x024b58,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-grubs-five,rats-grubs-five,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9aac0c,97,0,1,8,36,8,36,0x024705,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-five,ghosts-five,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+5,0x9aac28,97,0,1,9,36,9,36,0x02493c,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-five,ghosts-five,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+5,0x9aac44,106,161,1,17,36,17,36,0x024a2f,21,wizb,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,anjor,anjor,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+5,0x9aac60,97,0,1,48,36,48,36,0x0247dd,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-five,ghosts-five,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+5,0x9aac7c,82,0,1,26,37,26,37,0x024bdf,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,rats-grubs-five,rats-grubs-five,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+5,0x9aac98,82,0,1,39,37,39,37,0x024ba9,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,rats-grubs-five,rats-grubs-five,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+5,0x9aacb4,91,0,1,34,39,34,39,0x024c4b,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9aacd0,72,0,1,6,40,6,40,0x024b73,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-grubs-five,rats-grubs-five,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9aacec,82,0,1,22,40,22,40,0x024bfa,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,rats-grubs-five,rats-grubs-five,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+5,0x9aad08,91,0,1,25,40,25,40,0x024c30,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9aad24,91,0,0,36,41,36,41,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+5,0x9aad40,74,0,1,47,41,47,41,0x024813,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9aad5c,78,0,1,3,42,3,42,0x024906,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-goblins,gazers-goblins,2,2,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,,Initially linked
+5,0x9aad78,78,0,1,4,42,4,42,0x0248eb,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-goblins,gazers-goblins,2,2,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,,Initially linked
+5,0x9aad94,78,0,1,5,42,5,42,0x024921,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-goblins,gazers-goblins,2,2,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,,Initially linked
+5,0x9aadb0,74,0,1,53,42,53,42,0x02482e,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9aadcc,102,0,1,4,43,4,43,0x0248d0,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-goblins,gazers-goblins,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+5,0x9aade8,82,0,1,41,43,41,43,0x024bc4,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,rats-grubs-five,rats-grubs-five,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+5,0x9aae04,118,0,1,18,44,18,44,0x0248b5,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+5,0x9aae20,81,0,0,25,44,25,44,,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,imps-five,imps-five,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+5,0x9aae3c,91,0,1,35,44,35,44,0x024ad1,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9aae58,118,0,1,14,46,14,46,0x02489a,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+5,0x9aae74,82,0,1,41,47,41,47,0x024aec,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,rats-grubs-five,rats-grubs-five,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+5,0x9aae90,120,0,0,19,50,19,50,,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+5,0x9aaeac,74,0,1,49,48,49,48,0x024849,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9aaec8,82,0,1,22,49,22,49,0x024c15,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,rats-grubs-five,rats-grubs-five,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+5,0x9aaee4,97,0,0,53,49,53,49,,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-five,ghosts-five,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+5,0x9aaf00,97,0,1,57,49,57,49,0x0247f8,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-five,ghosts-five,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+5,0x9aaf1c,92,0,1,36,52,36,52,0x024ced,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+5,0x9aaf38,97,27,0,54,53,54,53,,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-five,ghosts-five,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+5,0x9aaf54,92,0,1,27,53,27,53,0x024cb7,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+5,0x9aaf70,92,0,1,35,53,35,53,0x024a80,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+5,0x9aaf8c,92,0,1,37,54,37,54,0x024a9b,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+5,0x9aafa8,74,0,1,45,54,45,54,0x024864,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9aafc4,92,0,1,29,55,29,55,0x024cd2,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+5,0x9aafe0,92,0,0,36,55,36,55,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+5,0x9aaffc,92,0,1,26,56,26,56,0x024ab6,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+5,0x9ab018,74,0,1,38,59,38,59,0x024b07,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9ab034,74,0,1,46,59,46,59,0x024c81,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9ab050,74,0,1,39,60,39,60,0x024c66,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+5,0x9ab06c,74,0,1,47,60,47,60,0x024c9c,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+6,0x9ac53c,109,191,1,43,4,43,4,0x02c529,4,wiza,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,wizc,wizc,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+6,0x9ac558,97,207,1,4,5,4,5,0x02c35e,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,warren,warren,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+6,0x9ac574,120,0,1,55,6,55,6,0x02c2f2,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire-elemental,fire-elemental,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+6,0x9ac590,115,185,1,21,8,21,8,0x02c889,21,wizb,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,wizb,wizb,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+6,0x9ac5ac,108,187,1,21,10,21,10,0x02c8da,4,wiza,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,wizb,wizb,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+6,0x9ac5c8,103,190,1,46,10,46,10,0x02c7cc,4,wiza,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,wizc,wizc,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+6,0x9ac5e4,107,184,1,43,11,43,11,0x02c8a4,8,femwiz,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,wizc,wizc,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+6,0x9ac600,109,192,1,44,15,44,15,0x02c57a,4,wiza,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,wizc,wizc,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+6,0x9ac61c,107,193,1,21,16,21,16,0x02c487,8,femwiz,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,wizc,wizc,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+6,0x9ac638,106,14,1,15,21,15,21,0x02c796,21,wizb,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,wizb,wizb,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+6,0x9ac654,108,13,1,24,21,24,21,0x02c7b1,4,wiza,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,wizc,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+6,0x9ac670,108,188,1,43,21,43,21,0x02c853,4,wiza,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,wizb,wizb,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+6,0x9ac68c,119,22,1,6,22,6,22,0x02c92b,19,golem,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,golem,golem,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+6,0x9ac6a8,103,189,1,32,23,32,23,0x02c8bf,4,wiza,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,wizb,default,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+6,0x9ac6c4,106,194,1,39,23,39,23,0x02c3e5,21,wizb,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,wizb,wizb,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+6,0x9ac6e0,75,0,1,60,36,60,36,0x02c3af,18,imp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,imps,imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+6,0x9ac6fc,105,0,1,41,37,41,37,0x02c4f3,11,ghoul,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghouls,ghouls,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+6,0x9ac718,105,0,1,44,37,44,37,0x02c544,11,ghoul,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghouls,ghouls,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+6,0x9ac734,92,0,1,16,42,16,42,0x02c70f,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+6,0x9ac750,92,0,1,18,42,18,42,0x02c6f4,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+6,0x9ac76c,111,0,1,58,42,58,42,0x02c55f,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,trolls,trolls,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+6,0x9ac788,92,0,1,42,43,42,43,0x02c394,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+6,0x9ac7a4,92,0,1,43,45,43,45,0x02c379,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+6,0x9ac7c0,92,0,0,45,45,45,45,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+6,0x9ac7dc,92,0,1,16,46,16,46,0x02c6d9,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+6,0x9ac7f8,92,0,1,18,46,18,46,0x02c6be,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+6,0x9ac814,91,0,0,50,46,50,46,0x02c436,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Linked on floor load
+6,0x9ac830,66,0,0,41,48,41,48,0x02c802,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Linked on floor load
+6,0x9ac84c,91,0,0,49,48,49,48,0x02c8f5,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Linked on floor load
+6,0x9ac868,91,0,1,51,48,51,48,0x02c41b,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+6,0x9ac884,66,0,1,35,50,35,50,0x02c910,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+6,0x9ac8a0,81,0,1,37,50,37,50,0x02c838,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,imps,imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+6,0x9ac8bc,73,0,1,40,50,40,50,0x02c760,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,imps,1,1,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+6,0x9ac8d8,65,0,1,16,51,16,51,0x02c601,9,slug,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,trolls,1,1,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+6,0x9ac8f4,82,0,1,17,51,17,51,0x02c66d,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Initially linked
+6,0x9ac910,69,0,1,18,51,18,51,0x02c5cb,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+6,0x9ac92c,64,0,0,18,51,18,51,0x02c652,22,rotgrub,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Linked on floor load
+6,0x9ac948,81,0,1,36,52,36,52,0x02c81d,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,imps,default,1,1,00 01 02 03 07 0c 0d,,00 01 02 03 07 0c 0d,,Initially linked
+6,0x9ac964,73,0,1,40,52,40,52,0x02c7e7,3,bat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,imps,1,1,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+6,0x9ac980,92,0,0,4,53,4,53,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+6,0x9ac99c,69,0,1,17,53,17,53,0x02c5b0,9,slug,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+6,0x9ac9b8,82,0,1,18,53,18,53,0x02c688,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Initially linked
+6,0x9ac9d4,91,0,1,27,53,27,53,0x02c72a,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+6,0x9ac9f0,66,0,1,35,53,35,53,0x02c86e,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+6,0x9aca0c,64,0,1,16,54,16,54,0x02c637,22,rotgrub,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Initially linked
+6,0x9aca28,102,0,1,52,54,52,54,0x02c3ca,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,warren,warren,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+6,0x9aca44,65,0,1,16,55,16,55,0x02c5e6,9,slug,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+6,0x9aca60,82,0,0,16,55,16,55,0x02c6a3,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Linked on floor load
+6,0x9aca7c,91,0,1,26,55,26,55,0x02c745,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+6,0x9aca98,64,0,1,18,56,18,56,0x02c61c,22,rotgrub,0,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Initially linked
+6,0x9acab4,102,0,0,35,56,35,56,0x02c50e,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,warren,warren,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
+6,0x9acad0,92,0,0,47,56,47,56,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+6,0x9acaec,120,0,0,57,56,57,56,,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire-elemental,fire-elemental,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+6,0x9acb08,96,0,0,8,57,8,57,0x02c77b,7,troll,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,trolls,trolls,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Linked on floor load
+6,0x9acb24,112,0,1,13,57,13,57,0x02c595,7,troll,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,trolls,trolls,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+6,0x9acb40,74,0,1,22,57,22,57,0x02c451,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+6,0x9acb5c,74,0,1,23,58,23,58,0x02c46c,1,skela,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,skeletons,skeletons,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+6,0x9acb78,82,0,1,43,59,43,59,0x02c328,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Initially linked
+6,0x9acb94,91,0,1,46,60,46,60,0x02c30d,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+6,0x9acbb0,82,0,1,41,61,41,61,0x02c343,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Initially linked
+7,0x9add7c,116,0,1,7,1,7,1,0x03439e,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9add98,116,0,1,9,2,9,2,0x034368,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9addb4,78,209,1,21,2,21,2,0x0341d3,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+7,0x9addd0,111,0,1,24,2,24,2,0x0342ab,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9addec,102,0,1,39,2,39,2,0x033e8e,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+7,0x9ade08,111,0,1,23,3,23,3,0x034182,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ade24,118,0,1,27,3,27,3,0x033efa,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9ade40,111,255,1,20,5,20,5,0x034224,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ade5c,78,209,1,22,5,22,5,0x033f66,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,troll-seven-recurring,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+7,0x9ade78,116,0,1,2,6,2,6,0x0342e1,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9ade94,87,0,1,4,7,4,7,0x034317,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9adeb0,78,255,1,19,7,19,7,0x03419d,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+7,0x9adecc,78,209,1,20,7,20,7,0x0341b8,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+7,0x9adee8,66,0,1,3,8,3,8,0x033b7f,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-lurkers,bats-lurkers,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+7,0x9adf04,78,255,1,18,8,18,8,0x034167,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,lurkers,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+7,0x9adf20,118,0,0,33,8,33,8,,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Create trap identified
+7,0x9adf3c,116,0,1,2,9,2,9,0x0342fc,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-lurkers,lurkers,2,2,00 01 02 03 07 0c,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9adf58,116,0,1,15,9,15,9,0x0341ee,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9adf74,102,0,1,30,10,30,10,0x034209,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+7,0x9adf90,123,231,1,54,10,54,10,0x033fb7,29,tybal,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,tyball,tyball,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+7,0x9adfac,104,208,1,19,14,19,14,0x034533,26,fight32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,cardon,cardon,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9adfc8,113,0,1,36,15,36,15,0x033ea9,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+7,0x9adfe4,66,0,1,35,20,35,20,0x033bb5,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats-seven,bats-rats-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+7,0x9ae000,66,0,1,10,22,12,22,0x033b9a,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats-seven,bats-rats-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+7,0x9ae01c,80,222,1,27,22,27,22,0x033ca8,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-guards-seven,gray-guards-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9ae038,66,0,1,37,22,37,22,0x033c57,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats-seven,bats-rats-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+7,0x9ae054,116,0,1,6,23,6,23,0x0342c6,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,bats-lurkers,2,2,,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9ae070,66,0,1,4,23,7,23,0x033b49,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-lurkers,bats-lurkers,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+7,0x9ae08c,116,0,1,23,23,23,23,0x034290,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9ae0a8,80,222,1,27,24,27,24,0x033edf,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-guards-seven,gray-guards-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9ae0c4,80,222,1,29,24,29,24,0x033cde,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-guards-seven,gray-guards-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9ae0e0,80,222,1,30,24,30,24,0x033e07,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-guards-seven,gray-guards-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9ae0fc,66,0,1,36,24,36,24,0x033bd0,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats-seven,bats-rats-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+7,0x9ae118,97,0,1,16,26,16,26,0x033c3c,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+7,0x9ae134,66,0,1,38,26,38,26,0x033b2e,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats-seven,bats-rats-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+7,0x9ae150,78,219,1,5,29,5,29,0x033f9c,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+7,0x9ae16c,111,255,1,6,29,6,29,0x03414c,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,default,1,1,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae188,78,255,1,9,28,9,29,0x0340e0,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+7,0x9ae1a4,78,255,1,11,28,11,29,0x0340fb,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+7,0x9ae1c0,78,219,1,8,30,8,30,0x034116,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,troll-seven-recurring,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+7,0x9ae1dc,66,0,1,38,30,38,30,0x033b64,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats-seven,bats-rats-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+7,0x9ae1f8,111,255,1,4,31,4,31,0x034131,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae214,111,255,1,3,33,3,33,0x033d80,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae230,111,255,1,7,34,7,34,0x033f30,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae24c,97,0,0,19,34,19,34,,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+7,0x9ae268,78,255,1,2,34,2,35,0x034491,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,troll-seven-recurring,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+7,0x9ae284,78,255,1,3,35,3,35,0x0344ac,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+7,0x9ae2a0,97,0,0,19,35,19,35,,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+7,0x9ae2bc,75,255,0,34,35,34,35,0x033d65,18,imp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,imp-seven,imp-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
+7,0x9ae2d8,75,255,0,33,36,33,36,0x033d4a,18,imp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,golems-imp,golems-imp,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
+7,0x9ae2f4,114,0,1,34,36,34,36,0x03403e,19,golem,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,golems-imp,golems-imp,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+7,0x9ae310,75,255,0,39,36,39,36,0x033d2f,18,imp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,imp-seven,imp-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
+7,0x9ae32c,75,221,0,35,37,35,37,0x033d9b,18,imp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,golems-imp,golems-imp,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
+7,0x9ae348,114,0,1,36,38,36,38,0x034008,19,golem,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+7,0x9ae364,92,0,0,11,39,11,39,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+7,0x9ae380,92,0,0,15,40,15,40,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+7,0x9ae39c,117,0,0,33,40,33,40,,28,shadow,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 0c,00 01 02 03 0c,00 01 02 03 0c,,Create trap identified
+7,0x9ae3b8,120,0,1,47,40,47,40,0x0340aa,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae3d4,120,0,1,51,40,51,40,0x0340c5,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae3f0,92,0,0,3,41,3,41,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+7,0x9ae40c,120,0,1,42,41,42,41,0x03425a,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae428,120,0,1,56,41,56,41,0x034059,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae444,92,0,0,4,43,4,43,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+7,0x9ae460,92,0,0,13,43,13,43,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+7,0x9ae47c,120,0,1,38,43,38,43,0x034518,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae498,120,0,0,60,43,60,43,0x034332,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Shared identity and spawn coordinates; review record separately
+7,0x9ae4b4,120,0,0,60,43,60,43,0x034332,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Shared identity and spawn coordinates; review record separately
+7,0x9ae4d0,113,0,1,50,44,50,44,0x033e73,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+7,0x9ae4ec,120,0,1,35,45,35,45,0x033fed,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae508,108,210,1,13,47,13,47,0x03423f,4,wiza,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prison-seven,prison-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+7,0x9ae524,92,0,1,19,45,18,48,0x0343ef,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,spiders,spiders,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae540,120,0,1,33,49,33,49,0x033cf9,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae55c,113,0,1,40,50,40,50,0x033db6,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+7,0x9ae578,86,212,1,10,51,10,51,0x03440a,27,dwarf32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prison-seven,prison-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+7,0x9ae594,109,217,1,1,52,1,52,0x033c8d,4,wiza,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prison-seven,prison-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+7,0x9ae5b0,90,218,0,12,53,12,53,0x034440,26,fight32,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prison-seven,prison-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
+7,0x9ae5cc,120,0,1,34,53,34,53,0x033d14,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae5e8,113,0,0,51,54,51,54,,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+7,0x9ae604,86,215,1,2,55,2,55,0x0343b9,27,dwarf32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prison-seven,prison-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+7,0x9ae620,104,214,0,6,55,6,55,0x034425,26,fight32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prison-seven,prison-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
+7,0x9ae63c,78,220,0,25,55,25,55,0x03445b,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Linked on floor load
+7,0x9ae658,78,220,0,27,55,27,55,0x033f15,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Linked on floor load
+7,0x9ae674,102,0,0,42,57,42,57,,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+7,0x9ae690,111,216,1,26,56,26,56,0x0344c7,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae6ac,120,0,0,35,56,35,56,,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+7,0x9ae6c8,98,211,0,7,57,7,57,0x0343d4,26,fight32,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prison-seven,prison-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
+7,0x9ae6e4,111,255,1,25,57,25,57,0x0344e2,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae700,78,220,1,28,57,28,57,0x034476,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,troll-seven-recurring,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+7,0x9ae71c,114,0,1,61,57,61,57,0x033f81,19,golem,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+7,0x9ae738,108,213,1,20,58,20,58,0x033cc3,4,wiza,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,prison-seven,prison-seven,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+7,0x9ae754,120,0,1,35,59,35,59,0x03408f,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae770,112,0,0,52,59,52,59,,7,troll,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+7,0x9ae78c,120,0,1,32,61,33,61,0x034275,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+7,0x9ae7a8,72,0,1,44,61,44,61,0x033e3d,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats-seven,bats-rats-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9afc44,113,0,1,31,1,31,1,0x03b6af,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-eight,ghosts-eight,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9afc60,92,0,0,2,2,2,2,0x03bddb,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
+8,0x9afc7c,114,0,0,39,2,39,2,0x03b751,19,golem,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,golems-wisps,golems-wisps,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Linked on floor load
+8,0x9afc98,82,0,1,54,2,54,2,0x03bbf5,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,rats-grubs-eight,rats-grubs-eight,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+8,0x9afcb4,72,0,1,57,2,57,2,0x03b442,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-grubs-eight,rats-grubs-eight,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9afcd0,97,0,1,10,3,10,3,0x03b4ff,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-eight,ghosts-eight,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9afcec,91,0,1,12,3,12,3,0x03bce8,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,ghosts-eight,1,1,00 01 02 03 07 0c,,00 01 02 03 07 0c,,Initially linked
+8,0x9afd08,81,0,1,15,3,15,3,0x03b85f,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9afd24,118,0,1,31,3,31,3,0x03b628,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+8,0x9afd40,82,0,1,35,3,35,3,0x03bbda,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,rats-grubs-eight,rats-grubs-eight,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+8,0x9afd5c,81,0,1,49,3,49,3,0x03b895,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9afd78,120,0,1,22,5,22,5,0x03b550,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9afd94,92,0,0,7,7,7,7,,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+8,0x9afdb0,72,0,1,26,7,26,7,0x03b45d,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,fire,1,1,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+8,0x9afdcc,91,0,1,44,7,44,7,0x03bd1e,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9afde8,91,0,1,48,7,48,7,0x03bd03,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9afe04,120,0,1,54,7,54,7,0x03b5d7,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9afe20,72,0,1,18,8,18,8,0x03b2c8,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+8,0x9afe3c,72,0,1,34,8,34,8,0x03b4c9,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,default,2,2,00 01 02 03 07 0c,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+8,0x9afe58,91,0,0,46,8,46,8,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+8,0x9afe74,81,0,1,7,12,7,12,0x03b844,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9afe90,82,0,1,10,12,10,12,0x03bba4,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,rats-grubs-eight,rats-grubs-eight,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+8,0x9afeac,72,0,1,18,12,18,12,0x03b319,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+8,0x9afec8,72,0,1,55,12,55,12,0x03b3bb,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+8,0x9afee4,72,0,1,3,13,3,13,0x03b2ad,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+8,0x9aff00,81,0,1,36,13,36,13,0x03b8cb,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9aff1c,91,0,0,52,13,52,13,0x03bd54,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Linked on floor load
+8,0x9aff38,119,0,1,4,14,4,14,0x03b76c,19,golem,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,golems-wisps,golems-wisps,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9aff54,120,0,0,23,15,23,15,0x03b535,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Linked on floor load
+8,0x9aff70,81,0,1,7,17,7,17,0x03ba96,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9aff8c,118,0,1,52,18,52,18,0x03b643,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+8,0x9affa8,113,0,1,7,20,7,20,0x03bf3a,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-eight,ghosts-eight,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9affc4,119,0,0,10,20,10,20,0x03b6e5,19,golem,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,golems-wisps,golems-wisps,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Linked on floor load
+8,0x9affe0,72,0,1,6,22,6,22,0x03b2fe,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-grubs-eight,ghosts-eight,1,1,00 01 02 03 07 0c,,00 01 02 03 07 0c,,Initially linked
+8,0x9afffc,120,0,1,41,22,41,22,0x03b5f2,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9b0018,72,0,1,45,23,45,23,0x03b40c,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+8,0x9b0034,97,0,1,4,24,4,24,0x03be2c,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-eight,ghosts-eight,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9b0050,97,0,1,52,25,52,25,0x03bf8b,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-eight,ghosts-eight,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9b006c,82,0,1,7,26,7,26,0x03bb6e,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,rats-grubs-eight,rats-grubs-eight,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+8,0x9b0088,91,0,0,56,26,56,26,,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+8,0x9b00a4,120,0,0,31,27,31,27,0x03c120,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Linked on floor load
+8,0x9b00c0,120,0,0,33,27,33,27,0x03ba7b,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Linked on floor load
+8,0x9b00dc,91,0,1,56,27,56,27,0x03bd39,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9b00f8,119,0,1,37,28,37,28,0x03c105,19,golem,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,golems-wisps,golems-wisps,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9b0114,118,0,1,46,29,46,29,0x03c0cf,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+8,0x9b0130,120,0,1,9,30,9,30,0x03b56b,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9b014c,81,0,1,13,31,13,31,0x03bab1,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b0168,72,0,1,13,32,13,32,0x03b292,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9b0184,102,0,1,25,32,25,32,0x03be7d,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-wisps-rats,gazers-wisps-rats,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b01a0,121,0,1,38,32,38,32,0x03c02d,19,golem,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,golems-wisps,golems-wisps,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9b01bc,122,0,1,39,32,39,32,0x03bfdc,23,wisp,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,golems-wisps,golems-wisps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b01d8,119,0,1,53,32,53,32,0x03c012,19,golem,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,golems-wisps,golems-wisps,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9b01f4,124,248,0,32,33,32,33,0x03b3f1,12,demon,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,demon,demon,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Linked on floor load
+8,0x9b0210,72,0,1,44,34,44,34,0x03b025,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,gazers-wisps-rats,2,2,,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+8,0x9b022c,120,0,1,4,36,4,36,0x03b586,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9b0248,102,0,1,39,36,39,36,0x03be98,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-wisps-rats,gazers-wisps-rats,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b0264,110,0,1,49,36,49,36,0x03c0b4,11,ghoul,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghouls-eight,ghouls-eight,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9b0280,120,0,1,53,37,53,37,0x03b5bc,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9b029c,72,0,1,6,38,6,38,0x03b277,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,rats-grubs-eight,2,2,,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+8,0x9b02b8,120,0,1,33,38,33,38,0x03b5a1,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9b02d4,81,0,1,50,38,50,38,0x03b952,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b02f0,81,0,1,31,39,31,39,0x03ba60,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b030c,118,0,1,8,40,8,40,0x03b694,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+8,0x9b0328,72,0,1,14,40,14,40,0x03b20b,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9b0344,97,0,0,20,40,20,40,0x03b6ca,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-rat-headless,ghosts-eight,2,2,00 01 02 03 07 0c 0d,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Linked on floor load
+8,0x9b0360,91,0,0,21,40,21,40,0x03bccd,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghosts-rat-headless,ghosts-rat-headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Linked on floor load
+8,0x9b037c,82,0,1,3,41,3,41,0x03bb53,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,rats-grubs-eight,rats-grubs-eight,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+8,0x9b0398,83,0,1,12,41,12,41,0x03bb02,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b03b4,81,0,1,7,43,7,43,0x03ba2a,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b03d0,72,0,1,39,43,39,43,0x03bdc0,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9b03ec,104,232,1,47,44,47,44,0x03af9e,26,fight32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,carasso,carasso,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b0408,97,0,1,37,45,37,45,0x03bff7,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-eight,ghosts-eight,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9b0424,92,0,1,58,45,58,45,0x03afef,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b0440,114,0,0,55,47,55,47,,19,golem,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,golems-wisps,golems-wisps,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+8,0x9b045c,81,0,0,39,46,39,46,0x03be62,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
+8,0x9b0478,81,0,1,1,47,1,47,0x03ba0f,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b0494,118,0,1,28,47,28,47,0x03b65e,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+8,0x9b04b0,118,0,0,58,47,58,47,,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Create trap identified
+8,0x9b04cc,119,0,0,61,47,61,47,,19,golem,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,golems-wisps,golems-wisps,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+8,0x9b04e8,83,0,1,23,48,23,48,0x03bb1d,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b0504,81,0,0,25,48,25,48,,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+8,0x9b0520,91,0,1,50,48,50,48,0x03c0ea,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9b053c,72,0,1,22,49,22,49,0x03b0e2,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9b0558,91,0,1,27,49,27,49,0x03bc97,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghosts-rat-headless,ghosts-rat-headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9b0574,72,0,0,28,49,28,49,,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-grubs-eight,ghosts-rat-headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+8,0x9b0590,82,0,1,30,49,30,49,0x03bc2b,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,rats-grubs-eight,rats-grubs-eight,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+8,0x9b05ac,111,0,0,60,49,60,49,,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven,troll-seven,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+8,0x9b05c8,97,0,1,6,51,6,51,0x03bf1f,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-eight,ghosts-eight,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9b05e4,72,0,1,9,51,9,51,0x03b226,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+8,0x9b0600,92,0,1,34,51,34,51,0x03bd8a,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b061c,120,0,1,41,51,41,51,0x03b4e4,10,fire,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,fire,fire,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9b0638,92,0,1,2,52,2,52,0x03bda5,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b0654,83,0,1,60,52,60,52,0x03b7d8,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b0670,81,0,0,39,53,39,53,0x03b9a3,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
+8,0x9b068c,111,0,1,31,54,31,54,0x03b9be,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven,troll-seven,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9b06a8,92,0,1,50,54,50,54,0x03bd6f,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b06c4,102,0,0,56,55,56,55,,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-wisps-rats,gazers-wisps-rats,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
+8,0x9b06e0,72,0,1,57,55,57,55,0x03b51a,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-wisps-rats,gazers-wisps-rats,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9b06fc,118,0,0,15,57,15,57,0x03b679,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Linked on floor load
+8,0x9b0718,72,0,1,5,58,5,58,0x03b1ba,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+8,0x9b0734,83,0,0,8,58,8,58,0x03bae7,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
+8,0x9b0750,72,0,0,14,58,14,58,,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
+8,0x9b076c,113,0,1,26,58,26,58,0x03bee9,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-eight,ghosts-eight,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
+8,0x9b0788,82,0,1,35,58,35,58,0x03bc46,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,rats-grubs-eight,rats-grubs-eight,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
+8,0x9b07a4,81,0,1,59,59,59,59,0x03b80e,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b07c0,91,0,1,6,60,6,60,0x03bcb2,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9b07dc,113,0,1,9,60,9,60,0x03bf04,13,ghost,3,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,imps-ghosts,imps-ghosts,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b07f8,91,0,1,36,60,36,60,0x03c07e,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+8,0x9b0814,72,0,1,43,60,43,60,0x03b0ac,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+8,0x9b0830,81,0,1,51,60,51,60,0x03b736,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b084c,81,0,1,8,61,8,61,0x03b829,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,imps-ghosts,headless,1,1,00 01 02 03 07 0c 0d,,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b0868,72,0,1,26,61,26,61,0x03b14e,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,ghosts-eight,1,1,00 01 02 03 07 0c,,00 01 02 03 07 0c,,Initially linked
+8,0x9b0884,81,0,1,30,61,30,61,0x03b9f4,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b08a0,92,0,1,14,62,14,62,0x03bacc,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+8,0x9b08bc,91,0,1,30,62,30,62,0x03bc7c,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
+9,0x9b1d18,79,0,1,4,3,4,3,0x043977,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1d34,126,240,1,18,3,18,3,0x0439c8,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1d50,79,242,1,60,3,60,3,0x04375b,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1d6c,79,242,1,59,5,59,5,0x043740,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1d88,126,246,1,13,6,13,6,0x043992,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1da4,126,240,1,21,6,21,6,0x0439ad,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1dc0,125,241,1,26,6,26,6,0x043b27,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1ddc,125,243,1,43,6,43,6,0x0437ac,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1df8,126,241,1,55,7,55,7,0x043776,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1e14,79,242,1,34,8,34,8,0x043b0c,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1e30,79,247,1,47,8,47,8,0x043791,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1e4c,125,0,1,19,10,19,10,0x043bc9,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1e68,125,243,1,5,11,5,11,0x043941,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1e84,125,243,1,2,12,2,12,0x04395c,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1ea0,125,240,1,43,12,43,12,0x0437c7,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1ebc,125,240,1,45,13,45,13,0x0437fd,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1ed8,126,246,1,11,15,11,15,0x04390b,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1ef4,125,243,1,28,15,28,15,0x043be4,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1f10,125,240,1,43,15,43,15,0x0437e2,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1f2c,79,247,1,58,16,58,16,0x043cd7,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1f48,125,241,1,4,17,4,17,0x043926,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1f64,126,246,1,11,17,11,17,0x0438f0,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1f80,79,244,1,18,17,18,17,0x043ca1,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1f9c,79,242,1,37,17,37,17,0x043c6b,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1fb8,79,242,0,38,18,38,18,0x043c50,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Linked on floor load
+9,0x9b1fd4,125,240,1,28,19,28,19,0x0435e1,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b1ff0,126,246,1,54,19,54,19,0x043833,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b200c,125,240,1,23,20,23,20,0x0435fc,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2028,125,240,1,30,20,30,20,0x043683,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2044,79,244,1,45,20,45,20,0x043c1a,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2060,79,244,1,49,20,49,20,0x043818,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b207c,79,242,1,19,21,19,21,0x043cf2,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2098,126,246,1,16,23,16,23,0x043d0d,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b20b4,124,248,1,28,23,28,23,0x0435c6,12,demon,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
+9,0x9b20d0,125,240,1,31,23,31,23,0x043632,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b20ec,79,242,1,49,23,49,23,0x04384e,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2108,79,242,1,58,23,58,23,0x043725,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2124,125,240,1,23,24,23,24,0x043617,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2140,126,240,1,40,24,40,24,0x043d28,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b215c,79,242,1,48,24,48,24,0x043869,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2178,79,242,1,60,25,60,25,0x04370a,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2194,126,240,1,40,26,40,26,0x043bff,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b21b0,125,243,1,44,26,44,26,0x0438d5,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b21cc,79,242,1,10,27,10,27,0x043af1,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b21e8,125,240,1,26,27,26,27,0x04364d,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2204,79,242,1,33,27,33,27,0x043d43,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2220,125,240,1,28,28,28,28,0x043668,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b223c,79,242,1,31,28,31,28,0x043cbc,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2258,79,242,1,10,29,10,29,0x043ad6,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2274,79,245,1,16,30,16,30,0x043c86,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2290,125,243,1,55,30,55,30,0x04369e,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b22ac,126,240,1,44,33,44,33,0x04389f,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b22c8,126,241,1,12,34,12,34,0x043c35,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b22e4,79,244,1,22,34,22,34,0x043aa0,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2300,79,244,1,24,34,24,34,0x043abb,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b231c,125,241,1,41,36,41,36,0x0438ba,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2338,125,241,1,20,37,20,37,0x043a34,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2354,126,240,0,50,37,50,37,0x043b78,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Linked on floor load
+9,0x9b2370,126,240,1,59,37,59,37,0x043b42,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b238c,126,240,1,51,38,51,38,0x043b5d,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b23a8,79,245,1,57,40,57,40,0x043884,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b23c4,79,244,1,3,41,3,41,0x043a4f,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b23e0,79,242,1,17,42,17,42,0x043a19,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b23fc,126,246,1,11,43,11,43,0x043a6a,30,eye,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2418,79,242,1,53,44,53,44,0x0436b9,24,batskull,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2434,125,243,1,26,49,26,49,0x043a85,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2450,125,241,1,51,49,51,49,0x0436d4,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b246c,125,241,1,53,49,53,49,0x0436ef,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b2488,125,240,1,8,50,8,50,0x0439fe,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b24a4,125,241,1,51,50,51,50,0x043b93,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b24c0,125,241,1,53,50,53,50,0x043bae,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked
+9,0x9b24dc,125,240,1,8,52,8,52,0x0439e3,31,litening,0,4 4 4 4 4 4 4 4,0 0 0 0 0 0 0 0,hazards-nine,hazards-nine,2,2,,,none,,Initially linked

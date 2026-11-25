@@ -15,9 +15,9 @@ python3 build-local-release.py --english-patch \
 
 Omit `--english-patch` and supply the already translated English v2.0 Track 1 BIN if you have it. Use the original split four-track Japanese Rev 1 CUE. Its `FILE` entries must point to the accompanying raw BINs.
 
-The release command verifies the hashes of all four original tracks and the CUE indexes before building. It runs the cumulative renderer recipe, decodes the combined xdelta against the original Japanese Track 1, and verifies the patched track SHA-1 `e3e2845b85d665a1240c5c89fab828b8703850b2`. It verifies the CHD and checks the indexes and bytes of all four tracks on extraction. The new output directory contains `english-dos-visuals.xdelta` and `Ultima Underworld (English Patch - DOS Visuals).chd`. Both files contain locally supplied game data and belong on the user's machine.
+The release command verifies the hashes of all four original tracks and the CUE indexes before building. It runs the cumulative `--dos-shade-maps` recipe, decodes the combined xdelta against the original Japanese Track 1, and verifies the patched track SHA-1 `78427bb7dea91c18fc2ca345865983a2ad6cc642`. It verifies the CHD and checks the indexes and bytes of all four tracks on extraction. The new output directory contains `english-dos-visuals.xdelta` and `Ultima Underworld (English Patch - DOS Visuals).chd`. Both files contain locally supplied game data and belong on the user's machine.
 
-The release includes the Level 9 DOS sprite draw fix for the Slasher of Veils. The [encounter audit](named-dialogue-audit.md#levels-59-recurring-creatures-and-special-models) records the remaining gameplay and art coverage. Delta bytes can vary with the xdelta3 version. The patched track hash identifies the reproduced data track.
+The release includes the Slasher of Veils combat poses, mixed and dedicated room combat and casting, native sprite lighting, and gameplay-driven DOS normal and monochrome shade maps. The [encounter audit](named-dialogue-audit.md#levels-59-recurring-creatures-and-special-models) records the remaining gameplay and art coverage. Delta bytes can vary with the xdelta3 version. The patched track hash identifies the reproduced data track.
 
 ## Run the current preview builder
 
@@ -87,7 +87,7 @@ Run this from the repository root after committing the reviewed release sources.
 
 ```sh
 git archive --format=zip --output=/tmp/underworld-builder-source.zip HEAD -- \
-  build-local-preview.sh build-rev1-patch.sh main.swift docs/local-patch-builder.md \
+  build-local-release.py build-local-preview.sh build-rev1-patch.sh main.swift docs/local-patch-builder.md \
   lanugo/academy_banks.py lanugo/build_english.py lanugo/build_track.py lanugo/creature_atlas.py \
   lanugo/lower_atlas.py lanugo/mipswords.py lanugo/preview_lighting.py \
   lanugo/renderer.py lanugo/spell_effects.py lanugo/variant_atlas.py
@@ -153,7 +153,7 @@ The same option adds Level 7 banks for Tyball, Cardon, the gray guards, the pris
 
 The Level 1 imp and Level 3 green goblin have local idle and walk banks. The Level 5 Gazer shares a bank with the three nearby green goblins so their spawn views can show both families. See the [critter coverage audit](named-dialogue-audit.md#imp-green-goblin-and-gazer-spawn-coverage). The cumulative recipe also fills 27 spawn-view gaps for noninitial records. See the [dormant creature audit](named-dialogue-audit.md#dormant-creature-spawn-coverage).
 
-The early-floor room selector selects a bank from the camera’s two-tile cell. Shared banks retain independent DOS palettes for nearby families. Level 4 packs bats and grubs on one page and rats on the other so their rooms can overlap without displacing the grub. The eight idle and walk facings retain their frame rectangles and anchor points. The current cumulative Track 1 SHA-1 is `e3e2845b85d665a1240c5c89fab828b8703850b2`. The renderer falls back to native art when the selected room lacks the actor’s entry or when an action has no supported DOS pose.
+The early-floor room selector selects a bank from the camera’s two-tile cell. Shared banks retain independent DOS palettes for nearby families. Level 4 packs bats and grubs on one page and rats on the other so their rooms can overlap without displacing the grub. The eight idle and walk facings retain their frame rectangles and anchor points. The `--late-dialogue` comparison build’s Track 1 SHA-1 is `e3e2845b85d665a1240c5c89fab828b8703850b2`. The renderer falls back to native art when the selected room lacks the actor’s entry or when an action has no supported DOS pose.
 
 ### Levels 5–9
 
@@ -177,8 +177,8 @@ The expected Track 1 SHA-1 is `176822fef5c922b8cf6eda800a4bb6464dd15679`. The [9
 
 ### DOS shade maps and monochrome preview
 
-Use `--dos-shade-maps` as the first argument to the preview builder. It includes the native sprite lighting preview and adds the original DOS `LIGHT.DAT`, `MONO.DAT`, and `SHADES.DAT` behavior to idle and walking green goblins in the default Level 1 room bank. The bank uploads 16 normal and 16 monochrome shade rows for each of the four DOS palettes.
+The release builder selects `--dos-shade-maps` automatically. Pass the same flag to the preview builder to generate its xdelta without CHD packaging. It includes the native sprite lighting preview and adds the original DOS `LIGHT.DAT`, `MONO.DAT`, and `SHADES.DAT` behavior to idle and walking green goblins in the default Level 1 room bank. The bank uploads 16 normal and 16 monochrome shade rows for each of the four DOS palettes.
 
 In the cumulative preview, the game resolves equipped lights and active spells into one effective light level. The DOS renderer reads that level for each supported goblin draw. Level 5 (Night Vision) selects the monochrome map. The other levels use the normal map. Room bank loads leave the effective level under the game's control.
 
-The expected Track 1 SHA-1 is `78427bb7dea91c18fc2ca345865983a2ad6cc642`. The [gameplay audit](named-dialogue-audit.md#100-gameplay-driven-dos-lighting) records the torch and spell transitions, disc checks, and default recipe regression.
+The expected Track 1 SHA-1 is `78427bb7dea91c18fc2ca345865983a2ad6cc642`. The [gameplay audit](named-dialogue-audit.md#100-gameplay-driven-dos-lighting) records the torch and spell transitions and earlier disc checks.
