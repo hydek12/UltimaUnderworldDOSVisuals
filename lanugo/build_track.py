@@ -1177,22 +1177,29 @@ def form1_sector(original, data):
     result[12:16] = original[12:16]
     return result
 
-def draw_menu_legend(c):
+def draw_menu_legend(c, y=210):
     c.mem("sw", "a0", 16, "sp")
+    if y is None:
+        c.mem("sw", "a1", 12, "sp")
     c.jump(MENU_TEXT_WIDTH, True)
     c.nop()
     c.mem("lw", "a2", 16, "sp")
     c.imm("ori", "a0", "zero", 320)
     c.alu("subu", "a0", "a0", "v0")
+    if y is None:
+        c.mem("lw", "a1", 12, "sp")
     c.shift("sra", "a0", "a0", 1)
     c.jump(MENU_TEXT_DRAW, True)
-    c.imm("ori", "a1", "zero", 218)
+    if y is None:
+        c.nop()
+    else:
+        c.imm("ori", "a1", "zero", y)
 
 
 def options_help():
     """Append an options legend after the stock items and before frame submission."""
-    root = b"Up/Down: Move  Circle: OK  Cross: Exit\x1f"
-    submenu = b"Up/Down: Move  Circle: OK  Cross: Back\x1f"
+    root = b"Up/Down O:OK X:Exit\x1f"
+    submenu = b"Up/Down O:OK X:Back\x1f"
     root_address = OPTIONS_HELP + 0x90
     submenu_address = root_address + len(root)
     c = Code(OPTIONS_HELP)
@@ -1228,12 +1235,12 @@ def options_help():
 def inventory_help():
     """Select a legend using the native inventory cursor, selection and container."""
     labels = (
-        b"D-Pad: Move  Cross: Exit\x1f",
-        b"D-Pad: Move  Cross: Back\x1f",
-        b"D-Pad  Circle: Pick up  Cross: Exit\x1f",
-        b"D-Pad  Circle: Pick up  Cross: Back\x1f",
-        b"D-Pad: Move  Cross: Cancel\x1f",
-        b"D-Pad  Circle: Place  Cross: Cancel\x1f",
+        b"D-Pad: Move  X:Exit\x1f",
+        b"D-Pad: Move  X:Back\x1f",
+        b"D-Pad O: Take X:Exit\x1f",
+        b"D-Pad O: Take X:Back\x1f",
+        b"D-Pad: Move  X:Cancel\x1f",
+        b"D-Pad O:Place X:Cancel\x1f",
     )
     table_offset = 0xd0
     table_address = INVENTORY_HELP + table_offset
@@ -1292,11 +1299,11 @@ def inventory_help():
 def rune_spell_help():
     """Append footers to the rune grid and spell book before frame submission."""
     labels = (
-        b"D-Pad: Browse  Cross: Back\x1f",
-        b"D-Pad  Circle: Choose  Cross: Exit\x1f",
-        b"D-Pad  Circle: Choose  Cross: Back\x1f",
+        b"D-Pad: Browse X:Back\x1f",
+        b"D-Pad O:Pick X:Exit\x1f",
+        b"D-Pad O:Pick X:Back\x1f",
     )
-    label_address = RUNE_HELP + 0x64
+    label_address = RUNE_HELP + 0x70
     c = Code(RUNE_HELP)
     c.address("a0", label_address)
     c.branch("beq", "zero", "zero", "draw")
@@ -1308,10 +1315,11 @@ def rune_spell_help():
     c.nop()
     c.address("a0", label_address + len(labels[0]) + len(labels[1]))
     c.label("draw")
+    c.imm("ori", "a1", "zero", 215)
     submit_help = c.origin + 4 * len(c.words)
     c.imm("addiu", "sp", "sp", -24)
     c.mem("sw", "ra", 20, "sp")
-    draw_menu_legend(c)
+    draw_menu_legend(c, y=None)
     c.mem("lw", "ra", 20, "sp")
     c.nop()
     c.jump(SUBMIT_MENU_FRAME)
@@ -1324,13 +1332,14 @@ def rune_spell_help():
 
 def dialogue_help(submit_help):
     """Show controls only when the conversation loop is waiting for input."""
-    advance = b"Circle: Continue\x1f"
-    replies = b"Up/Down: Move  Circle: Reply\x1f"
+    advance = b"O: Continue\x1f"
+    replies = b"Up/Down O:Reply\x1f"
     text = DIALOGUE_HELP + 0x68
     c = Code(DIALOGUE_HELP)
     # The shared frame routine saves its caller at sp+16. The callers below
     # are all in 0x8002xxxx, so their low half identifies the dialogue state.
     c.mem("lw", "t0", 16, "sp")
+    c.imm("ori", "a1", "zero", 128)  # Between the two text panels.
     c.imm("ori", "t1", "zero", 0x6f9c)  # Reply selection.
     c.imm("andi", "t0", "t0", 0xffff)
     c.branch("beq", "t0", "t1", "replies")
