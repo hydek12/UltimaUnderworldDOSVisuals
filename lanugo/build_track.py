@@ -793,8 +793,13 @@ def creature_payload(variants, actor_types, texture_pages, combat=False, extra_t
                 split_format = 8, split_format[1]
             if room_bank in ("bats-grubs-rats", "grub-imp"):
                 shared_format = ((8, shared_format[0][1]), shared_format[1])
+            directional_only = {
+                "warren": (97,),
+                # Leave room for the goblin combat table and retain native lurker combat.
+                "lurkers-goblins-seven": (87, 116),
+            }.get(room_bank or academy_bank)
             mixed_sources, family_actions = zip(*(
-                (creature_sources(variants, types), ()) if academy_bank == "warren" and types == (97,)
+                (creature_sources(variants, types), ()) if types == directional_only
                 else mixed_combat_sources(variants, types)
                 for types in families
             ))

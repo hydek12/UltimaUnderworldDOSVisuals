@@ -375,8 +375,8 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 6,0x9acb78,82,0,1,43,59,43,59,0x02c328,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Initially linked
 6,0x9acb94,91,0,1,46,60,46,60,0x02c30d,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,headless,headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 6,0x9acbb0,82,0,1,41,61,41,61,0x02c343,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,default,default,2,2,,,00 01 07 0c,00 01 07 0c,Initially linked
-7,0x9add7c,116,0,1,7,1,7,1,0x03439e,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-7,0x9add98,116,0,1,9,2,9,2,0x034368,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9add7c,116,0,1,7,1,7,1,0x03439e,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9add98,116,0,1,9,2,9,2,0x034368,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 7,0x9addb4,78,209,1,21,2,21,2,0x0341d3,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 7,0x9addd0,111,0,1,24,2,24,2,0x0342ab,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9addec,102,0,1,39,2,39,2,0x033e8e,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
@@ -384,15 +384,15 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 7,0x9ade24,118,0,1,27,3,27,3,0x033efa,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 7,0x9ade40,111,255,1,20,5,20,5,0x034224,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9ade5c,78,209,1,22,5,22,5,0x033f66,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,troll-seven-recurring,2,2,,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,Initially linked
-7,0x9ade78,116,0,1,2,6,2,6,0x0342e1,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-7,0x9ade94,87,0,1,4,7,4,7,0x034317,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9ade78,116,0,1,2,6,2,6,0x0342e1,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9ade94,87,0,1,4,7,4,7,0x034317,25,Lurk,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 7,0x9adeb0,78,255,1,19,7,19,7,0x03419d,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 7,0x9adecc,78,209,1,20,7,20,7,0x0341b8,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 7,0x9adee8,66,0,1,3,8,3,8,0x033b7f,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-lurkers,bats-lurkers,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
-7,0x9adf04,78,255,1,18,8,18,8,0x034167,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,lurkers,1,1,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
+7,0x9adf04,78,255,1,18,8,18,8,0x034167,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,lurkers-goblins-seven,2,2,,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 7,0x9adf20,118,0,0,33,8,33,8,,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Create trap identified
-7,0x9adf3c,116,0,1,2,9,2,9,0x0342fc,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-lurkers,lurkers,2,2,00 01 02 03 07 0c,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-7,0x9adf58,116,0,1,15,9,15,9,0x0341ee,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9adf3c,116,0,1,2,9,2,9,0x0342fc,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-lurkers,lurkers-goblins-seven,2,2,00 01 02 03 07 0c,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9adf58,116,0,1,15,9,15,9,0x0341ee,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 7,0x9adf74,102,0,1,30,10,30,10,0x034209,6,gazer,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gazers-golems,gazers-golems,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9adf90,123,231,1,54,10,54,10,0x033fb7,29,tybal,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,tyball,tyball,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9adfac,104,208,1,19,14,19,14,0x034533,26,fight32,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,cardon,cardon,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
@@ -401,17 +401,17 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 7,0x9ae000,66,0,1,10,22,12,22,0x033b9a,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats-seven,bats-rats-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 7,0x9ae01c,80,222,1,27,22,27,22,0x033ca8,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-guards-seven,gray-guards-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 7,0x9ae038,66,0,1,37,22,37,22,0x033c57,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats-seven,bats-rats-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
-7,0x9ae054,116,0,1,6,23,6,23,0x0342c6,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,bats-lurkers,2,2,,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9ae054,116,0,1,6,23,6,23,0x0342c6,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,bats-lurkers,2,2,,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 7,0x9ae070,66,0,1,4,23,7,23,0x033b49,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-lurkers,bats-lurkers,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
-7,0x9ae08c,116,0,1,23,23,23,23,0x034290,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers,lurkers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
+7,0x9ae08c,116,0,1,23,23,23,23,0x034290,25,Lurk,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,lurkers-goblins-seven,lurkers-goblins-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 7,0x9ae0a8,80,222,1,27,24,27,24,0x033edf,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-guards-seven,gray-guards-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 7,0x9ae0c4,80,222,1,29,24,29,24,0x033cde,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-guards-seven,gray-guards-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 7,0x9ae0e0,80,222,1,30,24,30,24,0x033e07,14,graygob,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,gray-guards-seven,gray-guards-seven,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 7,0x9ae0fc,66,0,1,36,24,36,24,0x033bd0,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats-seven,bats-rats-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 7,0x9ae118,97,0,1,16,26,16,26,0x033c3c,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-shadows,ghosts-shadows,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9ae134,66,0,1,38,26,38,26,0x033b2e,3,bat,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,bats-rats-seven,bats-rats-seven,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
-7,0x9ae150,78,219,1,5,29,5,29,0x033f9c,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
-7,0x9ae16c,111,255,1,6,29,6,29,0x03414c,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,default,1,1,00 01 02 03 07 0c 0d,,00 01 02 03 07 0c 0d,,Initially linked
+7,0x9ae150,78,219,1,5,29,5,29,0x033f9c,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,,Initially linked
+7,0x9ae16c,111,255,1,6,29,6,29,0x03414c,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven-recurring,troll-seven-recurring,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 7,0x9ae188,78,255,1,9,28,9,29,0x0340e0,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 7,0x9ae1a4,78,255,1,11,28,11,29,0x0340fb,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,01 02 03 07 0c,01 02 03 07 0c,Initially linked
 7,0x9ae1c0,78,219,1,8,30,8,30,0x034116,0,gngob32,3,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,troll-seven-recurring,2,2,,01 02 03 07 0c,01 02 03 07 0c,01 02 03 07 0c,Initially linked

@@ -1,8 +1,8 @@
 # Ultima Underworld critter inventory
 
-The [record-by-record inventory](ultima-underworld-npc-conversion-backlog.csv) covers all 657 mobile creature and NPC records in the clean Japanese Rev 1 archive. It compares the default release Track 1 (`455aeeb9a3f31eec4bfee8026bc5eb670866ea34`) with the dedicated-bank combat preview (`b98bcdb731c6ff24a4af158ab821a05314ae6526`). The inventory reads the resident bank grids, palette registrations, and combat tables from the built tracks.
+The [record-by-record inventory](ultima-underworld-npc-conversion-backlog.csv) covers all 657 mobile creature and NPC records in the clean Japanese Rev 1 archive. It compares the default release Track 1 (`f209e51d2600bba83eb2af51159981d783496258`) with the dedicated-bank combat preview (`19b4338cb47846ed8205c0dfcebc3f3fff4db9b8`). The inventory reads the resident bank grids, palette registrations, and combat tables from the built tracks.
 
-Each record is checked at two camera cells, the archived spawn tile and one tile west. Directional coverage is identical in the two builds. Both cells register DOS art for **640 records** and one cell registers it for **17 records**. All 17 are initially linked in the archive. The two-cell check measures configured coverage near the spawn. It leaves camera visibility, reachable viewpoints, actors that move, and actual gameplay draws to the [encounter audit](named-dialogue-audit.md).
+Each record is checked at two camera cells, the archived spawn tile and one tile west. Directional coverage is identical in the two builds. Both cells register DOS art for **642 records** and one cell registers it for **15 records**. All 15 are initially linked in the archive. The two-cell check measures configured coverage near the spawn. It leaves camera visibility, reachable viewpoints, actors that move, and actual gameplay draws to the [encounter audit](named-dialogue-audit.md).
 
 | Level | Records | Archive-noninitial | DOS in both views | DOS in one view | Source action candidates |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -12,10 +12,10 @@ Each record is checked at two camera cells, the archived spawn tile and one tile
 | 4 | 70 | 10 | 69 | 1 | 26 |
 | 5 | 59 | 9 | 59 | 0 | 24 |
 | 6 | 60 | 11 | 56 | 4 | 33 |
-| 7 | 94 | 24 | 92 | 2 | 48 |
+| 7 | 94 | 24 | 94 | 0 | 47 |
 | 8 | 115 | 25 | 113 | 2 | 42 |
 | 9 | 72 | 2 | 72 | 0 | 0 |
-| Total | 657 | 107 | 640 | 17 | 261 |
+| Total | 657 | 107 | 642 | 15 | 260 |
 
 ## Level 8 boundary coverage
 
@@ -23,14 +23,20 @@ The three west approach cells for the headless at (12, 3) and rats at (6, 22) an
 
 ## Level 7 troll and green goblin bank
 
-The Level 7 troll bank uses one texture page for the two troll variants and a second page for green goblins. Its room assignments are unchanged. The built-track audit gained west-approach directional coverage for goblins at (22, 5), (8, 30), (2, 34), and (28, 57). Both troll variants retain their previous directional coverage. The combat preview maps goblin slots `01 02 03 07 0c` and troll slots `00 01 02 03 07 0c 0d` when the mixed bank is active. The DOS map marks the west sample cell for (2, 34) as solid, so the registration at that sample is build evidence only.
+The Level 7 troll bank uses one texture page for the two troll variants and a second page for green goblins. This pass kept its room assignments. The built-track audit gained west-approach directional coverage for goblins at (22, 5), (8, 30), (2, 34), and (28, 57). Both troll variants retain their previous directional coverage. The combat preview maps goblin slots `01 02 03 07 0c` and troll slots `00 01 02 03 07 0c 0d` when the mixed bank is active. The DOS map marks the west sample cell for (2, 34) as solid, so the registration at that sample is build evidence only.
 
 DuckStation submitted the expected DOS texture coordinates and palettes for the other three goblins and the troll at (24, 2) with the camera placed by the debugger. This checked directional sprites. Game-selected combat poses and controller-driven approaches still need verification. The release builder verified the xdelta round-trip and all four CHD tracks and CUE indexes.
 
+## Remaining Level 7 approaches
+
+The green goblin at (18, 8) now has DOS sprites in the west approach, where the existing lurker rooms use a mixed bank. The bank preserves lurker directional sprites and native lurker combat, and adds goblin slots `01 02 03 07 0c`. The troll at (6, 29) now uses the existing troll-and-goblin bank at the west approach. The goblin at (5, 29) keeps DOS coverage in the reassigned cell. All 94 Level 7 records register DOS directional sprites in both sampled views. The full audit found no directional coverage losses and retained all previously mapped action slots.
+
+In live DuckStation gameplay, the green goblin at (18, 8) rendered from camera tile (17, 9) with bank 8 and palette `0x7e98`. The troll at (6, 29) rendered from (5, 29) with bank 5 and palette `0x7e18`. The nearby lurker at (15, 9) and goblin at (5, 29) also rendered correctly. The debugger placed the camera, and the game selected all four idle poses. The probe checked the exact DOS texture coordinates and palette for each draw.
+
 ## Remaining checks
 
-- **Directional coverage at bank boundaries.** Filter for `preview_directional_views=1` to get all 17 records with their bank names and coordinates. Level 7 still has one green goblin at (18, 8) on a lurker approach and one troll at (6, 29) on a default-bank approach. Level 6 still has two bat records with a one-view gap. Level 8 still has one rat at (26, 7) and one imp at (8, 61). A neighbouring bank may already serve another family, so confirm visibility and bank ownership in-game before changing its grid cells.
-- **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 337 records, including slot `0d` for 139. There are 261 records across 37 types with one or more decodable source slots missing from a view that already registers their directional art. Fire elementals (27 records) and spiders (26 type-92 records, plus other variants) are the largest groups. Slot `0d` appears in the source for 146 of the candidates. Check whether the original PSX AI can select the corresponding action before mapping it. The Level 6 warren Ghost is an intentional exception and uses native combat. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
+- **Directional coverage at bank boundaries.** Filter for `preview_directional_views=1` to get all 15 records with their bank names and coordinates. Level 6 still has two bat records with a one-view gap. Level 8 still has one rat at (26, 7) and one imp at (8, 61). A neighbouring bank may already serve another family, so confirm visibility and bank ownership in-game before changing its grid cells.
+- **Fixed combat and special actions.** The preview maps at least one fixed DOS action at a sampled view for 339 records, including slot `0d` for 139. There are 260 records across 37 types with one or more decodable source slots missing from a view that already registers their directional art. Fire elementals (27 records) and spiders (26 type-92 records, plus other variants) are the largest groups. Slot `0d` appears in the source for 146 of the candidates. Check whether the original PSX AI can select the corresponding action before mapping it. The Level 6 warren Ghost is an intentional exception and uses native combat. The DOS export has no mapped fixed combat slots for types 79, 125, and 126.
 - **Native activation.** Both sampled views already register DOS directional art for all 107 archive-noninitial records. The earlier native tile-chain trace found 44 already linked on floor load and identified create traps for another 60 records. Two Level 7 fire elementals share a type and spawn coordinate and need record-specific evidence. The remaining record, the Level 3 green goblin at (35, 62), was spawned by controller-driven rest. A create-trap entry identifies a candidate trigger and can include calls exercised with the debugger. The complete ordinary gameplay trigger chain still needs verification where the encounter audit lacks it.
 
 ## Regenerate the inventory

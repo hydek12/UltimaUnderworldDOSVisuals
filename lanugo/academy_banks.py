@@ -144,7 +144,7 @@ RECURRING_BANKS = {
     7: (
         ("bats-rats-seven", ((66,), (72,)),
          ((3, 8), (35, 20), (10, 22), (37, 22), (4, 23), (36, 24), (38, 26), (38, 30), (44, 61))),
-        ("lurkers", ((87, 116),), ((7, 1), (9, 2), (2, 6), (4, 7), (2, 9), (15, 9), (6, 23), (23, 23))),
+        ("lurkers-goblins-seven", ((87, 116), (78,)), ((7, 1), (9, 2), (2, 6), (4, 7), (2, 9), (15, 9), (6, 23), (23, 23))),
         ("spiders", ((68, 83, 92),), ((11, 39), (15, 40), (3, 41), (4, 43), (13, 43), (19, 45))),
         ("ghosts-shadows", ((97, 113), (117,)),
          ((36, 15), (16, 26), (19, 34), (19, 35), (33, 40), (50, 44), (40, 50), (51, 54))),
@@ -199,7 +199,12 @@ ROOM_CELL_OVERRIDES = {
         "bats-grubs-rats": ((35, 15), (27, 51), (29, 54), (33, 55)),
         "grub-imp": ((29, 52),),
     },
-    7: {"imp-seven": ((33, 35), (34, 35)), "golems-imp": ((32, 36), (34, 37))},
+    7: {
+        "imp-seven": ((33, 35), (34, 35)),
+        "golems-imp": ((32, 36), (34, 37)),
+        # The existing goblin on this approach keeps its DOS art in the troll bank.
+        "troll-seven-recurring": ((5, 29),),
+    },
     8: {
         # Keep the ghosts in these approach cells and add the adjacent rats and headless.
         "ghosts-rat-headless": ((21, 40), (27, 49), (11, 3), (5, 22), (25, 61)),
@@ -269,6 +274,7 @@ ROOM_FAMILIES.update({
 SHARED_PAGE_FORMATS = {
     "prison-seven": ((4, (16,)), (8, (9, 8))),
     "troll-seven-recurring": ((4, (16,)), (8, (9,))),
+    "lurkers-goblins-seven": ((8, (16,)), (8, (9,))),
     "bats-grubs-rats": ((4, (16, 16)), (4, (16,))),
     "hazards-nine": ((8, (10, 10)), (8, (10, 10))),
     "gazers-wisps-rats": ((4, (16, 16)), (4, (16,))),
