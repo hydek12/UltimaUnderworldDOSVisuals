@@ -546,7 +546,7 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 8,0x9b045c,81,0,0,39,46,39,46,0x03be62,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Linked on floor load
 8,0x9b0478,81,0,1,1,47,1,47,0x03ba0f,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 8,0x9b0494,118,0,1,28,47,28,47,0x03b65e,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
-8,0x9b04b0,118,0,0,58,47,58,47,,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Create trap identified
+8,0x9b04b0,118,0,0,58,47,58,47,,15,reaper,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,reapers,reapers,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Normal controller movement triggered native create trap 680
 8,0x9b04cc,119,0,0,61,47,61,47,,19,golem,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,golems-wisps,golems-wisps,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
 8,0x9b04e8,83,0,1,23,48,23,48,0x03bb1d,5,spider,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
 8,0x9b0504,81,0,0,25,48,25,48,,18,imp,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-imps,rats-imps,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Create trap identified
