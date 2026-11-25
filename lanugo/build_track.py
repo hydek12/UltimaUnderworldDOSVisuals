@@ -32,6 +32,9 @@ READY_MAGIC = 0x4C414E52
 OPTIONS_HELP = 0x800C2180
 OPTIONS_DRAW_ITEMS = 0x8005BEA0
 OPTIONS_DRAW_CALL = 0x8005C3C0
+INVENTORY_HELP = 0x800C3000
+INVENTORY_SUBMIT_CALL = 0x800210F0
+SUBMIT_MENU_FRAME = 0x80072264
 MENU_TEXT_WIDTH = 0x8007F478
 MENU_TEXT_DRAW = 0x8007DA90
 BOOT = 0x800C2300
@@ -1169,6 +1172,18 @@ def form1_sector(original, data):
     result[12:16] = original[12:16]
     return result
 
+def draw_menu_legend(c):
+    c.mem("sw", "a0", 16, "sp")
+    c.jump(MENU_TEXT_WIDTH, True)
+    c.nop()
+    c.mem("lw", "a2", 16, "sp")
+    c.imm("ori", "a0", "zero", 320)
+    c.alu("subu", "a0", "a0", "v0")
+    c.shift("sra", "a0", "a0", 1)
+    c.jump(MENU_TEXT_DRAW, True)
+    c.imm("ori", "a1", "zero", 218)
+
+
 def options_help():
     """Append an options legend after the stock items and before frame submission."""
     root = b"Up/Down: Move  Circle: OK  Cross: Exit\x1f"
@@ -1194,15 +1209,7 @@ def options_help():
     c.label("submenu")
     c.address("a0", submenu_address)
     c.label("measure")
-    c.mem("sw", "a0", 16, "sp")
-    c.jump(MENU_TEXT_WIDTH, True)
-    c.nop()
-    c.mem("lw", "a2", 16, "sp")
-    c.imm("ori", "a0", "zero", 320)
-    c.alu("subu", "a0", "a0", "v0")
-    c.shift("sra", "a0", "a0", 1)
-    c.jump(MENU_TEXT_DRAW, True)
-    c.imm("ori", "a1", "zero", 218)
+    draw_menu_legend(c)
     c.label("done")
     c.mem("lw", "ra", 20, "sp")
     c.nop()
@@ -1211,6 +1218,70 @@ def options_help():
     if len(code) > root_address - OPTIONS_HELP:
         raise ValueError("Options controls routine overlaps its labels.")
     return code.ljust(root_address - OPTIONS_HELP, b"\0") + root + submenu
+
+
+def inventory_help():
+    """Select a legend using the native inventory cursor, selection and container."""
+    labels = (
+        b"D-Pad: Move  Cross: Exit\x1f",
+        b"D-Pad: Move  Cross: Back\x1f",
+        b"D-Pad  Circle: Pick up  Cross: Exit\x1f",
+        b"D-Pad  Circle: Pick up  Cross: Back\x1f",
+        b"D-Pad: Move  Cross: Cancel\x1f",
+        b"D-Pad  Circle: Place  Cross: Cancel\x1f",
+    )
+    table_offset = 0xd0
+    table_address = INVENTORY_HELP + table_offset
+    address = table_address + 4 * len(labels)
+    pointers = []
+    for label in labels:
+        pointers.append(address)
+        address += len(label)
+
+    c = Code(INVENTORY_HELP)
+    c.imm("addiu", "sp", "sp", -24)
+    c.mem("sw", "ra", 20, "sp")
+    c.mem("lw", "t0", 0x31c, "gp")  # Container pointer.
+    c.branch("bne", "s3", "zero", "held")  # The inventory loop has a selected source.
+    c.nop()
+    c.alu("sltu", "t0", "zero", "t0")
+    # Use the same cursor-to-inventory-slot lookup as the native Circle handler.
+    c.shift("sll", "t1", "s1", 1)
+    c.alu("addu", "t1", "s6", "t1")
+    c.mem("lh", "t1", 0, "t1")
+    c.address("t2", 0x800AE9A8)
+    c.alu("addu", "t1", "t2", "t1")
+    c.mem("lb", "t1", 0, "t1")
+    c.address("t2", 0x801D5E54)
+    c.shift("sll", "t1", "t1", 1)
+    c.alu("addu", "t1", "t2", "t1")
+    c.mem("lhu", "t1", 0, "t1")
+    c.nop()
+    c.imm("andi", "t1", "t1", 0xffc0)
+    c.alu("sltu", "t1", "zero", "t1")
+    c.shift("sll", "t1", "t1", 1)
+    c.branch("beq", "zero", "zero", "select")
+    c.alu("addu", "t0", "t0", "t1")
+    c.label("held")
+    c.alu("XOR", "t0", "s1", "s7")
+    c.alu("sltu", "t0", "zero", "t0")  # Circle does nothing on the source slot.
+    c.imm("addiu", "t0", "t0", 4)
+    c.label("select")
+    c.address("a0", table_address)
+    c.shift("sll", "t0", "t0", 2)
+    c.alu("addu", "a0", "a0", "t0")
+    c.mem("lw", "a0", 0, "a0")
+    c.nop()
+    draw_menu_legend(c)
+    c.mem("lw", "ra", 20, "sp")
+    c.nop()
+    c.jump(SUBMIT_MENU_FRAME)
+    c.imm("addiu", "sp", "sp", 24)
+
+    code = c.out()
+    if len(code) > table_offset:
+        raise ValueError("Inventory controls routine overlaps its labels.")
+    return code.ljust(table_offset, b"\0") + struct.pack("<6I", *pointers) + b"".join(labels)
 
 
 def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False,
@@ -1234,6 +1305,7 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
     }
     if menu_controls:
         code[OPTIONS_HELP] = options_help()
+        code[INVENTORY_HELP] = inventory_help()
     if academy_runtime:
         code.update(academy_banks.gates())
     if walking:
@@ -1276,7 +1348,10 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
         hooks += ((academy_banks.FRAME_HOOK, bytes.fromhex("a0048397e8ffbd27"),
                    jump(academy_banks.GATE) + bytes(4)),)
     if menu_controls:
-        hooks += ((OPTIONS_DRAW_CALL, jump(OPTIONS_DRAW_ITEMS, True), jump(OPTIONS_HELP, True)),)
+        hooks += (
+            (OPTIONS_DRAW_CALL, jump(OPTIONS_DRAW_ITEMS, True), jump(OPTIONS_HELP, True)),
+            (INVENTORY_SUBMIT_CALL, jump(SUBMIT_MENU_FRAME, True), jump(INVENTORY_HELP, True)),
+        )
     for address, expect, replace in hooks:
         offset = 2048 + address - EXE_LOAD
         if target[offset:offset + len(expect)] != expect:

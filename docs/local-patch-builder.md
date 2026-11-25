@@ -183,10 +183,12 @@ In the cumulative preview, the game resolves equipped lights and active spells i
 
 The expected Track 1 SHA-1 is `78427bb7dea91c18fc2ca345865983a2ad6cc642`. The [gameplay audit](named-dialogue-audit.md#100-gameplay-driven-dos-lighting) records the torch and spell transitions and earlier disc checks.
 
-### Options controls development preview
+### Context-sensitive menu controls development preview
 
-Pass `--menu-controls` before the preview profile flag to add a button legend to the PSX Options pages. For example, use `build-local-preview.sh --menu-controls --dos-shade-maps` with the usual source arguments. The top-level page shows Cross to exit. Submenus show Cross to go back. The legend uses the existing menu font and draws just before the frame is submitted. Save and load screens use their stock prompts.
+Pass `--menu-controls` before the preview profile flag to add a button legend to the PSX Options and Inventory pages. For example, use `build-local-preview.sh --menu-controls --dos-shade-maps` with the usual source arguments. The top-level page shows Cross to exit. Submenus show Cross to go back. The legend uses the existing menu font and draws just before the frame is submitted. Save and load screens use their stock prompts.
 
-This prototype covers Options. Inventory, rune selection, and dialogue each need their own menu-state and input checks.
+The inventory footer offers Circle to pick up an item on an occupied slot and Circle to place it on a different slot while held. Cross cancels a held selection, closes an open container, or exits the main inventory. The footer uses the native inventory cursor, item reference, held state, and container pointer. Rune selection and dialogue still need their own menu-state and input checks.
 
 DuckStation restored the preview's executable hook into a disposable gameplay checkpoint and exercised the native Options loop. Down twice and Circle entered the first settings submenu. Cross returned to the top page and then closed Options. Both legend variants fit the 320-pixel screen and submitted text packets at (8, 218). The preview changed two executable sectors relative to v0.1.0, and all four CHD tracks passed readback. The preview Track 1 SHA-1 is `aae21a2b1438968adf1933f3f7b62cb112b98e00`.
+
+The inventory preview was verified in the native loop from a disposable DuckStation checkpoint with a torch and sack staged. Circle selected the torch and placed it in an adjacent empty slot. Cross canceled a separate selection without moving the torch. Opening the sack changed the footer to Back, closing it restored Exit, and the original inventory exit returned to gameplay. The probe checked the font packets in each state and reran the Options navigation check on the same CHD. All four tracks passed readback. The inventory preview Track 1 SHA-1 is `cc1301642eeca6edb3a58e9cb527f57c4e46bf52`.
