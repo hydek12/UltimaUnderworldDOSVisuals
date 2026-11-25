@@ -36,6 +36,8 @@ INVENTORY_HELP = 0x800C3000
 RUNE_HELP = 0x800C31B0
 RUNE_SUBMIT_CALL = 0x800445A0
 SPELL_SUBMIT_CALL = 0x8004A204
+DIALOGUE_HELP = 0x800C2260
+DIALOGUE_SUBMIT_CALL = 0x80026284
 INVENTORY_SUBMIT_CALL = 0x800210F0
 SUBMIT_MENU_FRAME = 0x80072264
 MENU_TEXT_WIDTH = 0x8007F478
@@ -1306,6 +1308,7 @@ def rune_spell_help():
     c.nop()
     c.address("a0", label_address + len(labels[0]) + len(labels[1]))
     c.label("draw")
+    submit_help = c.origin + 4 * len(c.words)
     c.imm("addiu", "sp", "sp", -24)
     c.mem("sw", "ra", 20, "sp")
     draw_menu_legend(c)
@@ -1316,7 +1319,50 @@ def rune_spell_help():
     code = c.out()
     if len(code) > label_address - RUNE_HELP:
         raise ValueError("Rune and spell controls routine overlaps its labels.")
-    return spell_help, code.ljust(label_address - RUNE_HELP, b"\0") + b"".join(labels)
+    return spell_help, submit_help, code.ljust(label_address - RUNE_HELP, b"\0") + b"".join(labels)
+
+
+def dialogue_help(submit_help):
+    """Show controls only when the conversation loop is waiting for input."""
+    advance = b"Circle: Continue\x1f"
+    replies = b"Up/Down: Move  Circle: Reply\x1f"
+    text = DIALOGUE_HELP + 0x68
+    c = Code(DIALOGUE_HELP)
+    # The shared frame routine saves its caller at sp+16. The callers below
+    # are all in 0x8002xxxx, so their low half identifies the dialogue state.
+    c.mem("lw", "t0", 16, "sp")
+    c.imm("ori", "t1", "zero", 0x6f9c)  # Reply selection.
+    c.imm("andi", "t0", "t0", 0xffff)
+    c.branch("beq", "t0", "t1", "replies")
+    c.imm("ori", "t1", "zero", 0x8c9c)  # Scripted wait.
+    c.branch("bne", "t0", "t1", "overflow")
+    c.imm("ori", "t1", "zero", 0x9204)  # Wait for the next page.
+    c.branch("bne", "s2", "zero", "advance")  # Input-enabled dialogue wait.
+    c.nop()
+    c.label("native")
+    c.jump(SUBMIT_MENU_FRAME)
+    c.nop()
+    c.label("overflow")
+    c.branch("beq", "t0", "t1", "more")
+    c.imm("ori", "t1", "zero", 0x93ec)  # Wait for the next page (initial fill).
+    c.branch("bne", "t0", "t1", "native")
+    c.nop()
+    c.label("more")
+    c.branch("blez", "s7", "zero", "native")  # No undisplayed lines.
+    c.nop()
+    c.label("advance")
+    c.imm("lui", "a0", "zero", text >> 16)
+    c.jump(submit_help)
+    c.imm("ori", "a0", "a0", text)
+    c.label("replies")
+    c.branch("beq", "s0", "zero", "native")  # The reply was just confirmed.
+    c.imm("lui", "a0", "zero", text >> 16)
+    c.jump(submit_help)
+    c.imm("ori", "a0", "a0", text + len(advance))
+    code = c.out()
+    if len(code) > text - DIALOGUE_HELP:
+        raise ValueError("Dialogue controls routine overlaps its labels.")
+    return code.ljust(text - DIALOGUE_HELP, b"\0") + advance + replies
 
 
 def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False,
@@ -1341,7 +1387,8 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
     if menu_controls:
         code[OPTIONS_HELP] = options_help()
         code[INVENTORY_HELP] = inventory_help()
-        spell_help, code[RUNE_HELP] = rune_spell_help()
+        spell_help, submit_help, code[RUNE_HELP] = rune_spell_help()
+        code[DIALOGUE_HELP] = dialogue_help(submit_help)
     if academy_runtime:
         code.update(academy_banks.gates())
     if walking:
@@ -1389,6 +1436,7 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
             (INVENTORY_SUBMIT_CALL, jump(SUBMIT_MENU_FRAME, True), jump(INVENTORY_HELP, True)),
             (RUNE_SUBMIT_CALL, jump(SUBMIT_MENU_FRAME, True), jump(RUNE_HELP, True)),
             (SPELL_SUBMIT_CALL, jump(SUBMIT_MENU_FRAME, True), jump(spell_help, True)),
+            (DIALOGUE_SUBMIT_CALL, jump(SUBMIT_MENU_FRAME, True), jump(DIALOGUE_HELP, True)),
         )
     for address, expect, replace in hooks:
         offset = 2048 + address - EXE_LOAD
