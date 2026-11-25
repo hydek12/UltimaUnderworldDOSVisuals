@@ -555,7 +555,7 @@ level,psx_record_offset,psx_type,conversation_id,initially_linked,spawn_x,spawn_
 8,0x9b0558,91,0,1,27,49,27,49,0x03bc97,20,hedless,0,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,ghosts-rat-headless,ghosts-rat-headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Initially linked
 8,0x9b0574,72,0,0,28,49,28,49,,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-grubs-eight,ghosts-rat-headless,2,2,00 01 02 03 07 0c,00 01 02 03 07 0c,00 01 02 03 07 0c,,Create trap identified
 8,0x9b0590,82,0,1,30,49,30,49,0x03bc2b,22,rotgrub,1,4 4 4 4 4 4 4 4,6 6 6 6 6 6 6 6,rats-grubs-eight,rats-grubs-eight,2,2,00 01 07 0c,00 01 07 0c,00 01 07 0c,,Initially linked
-8,0x9b05ac,111,0,0,60,49,60,49,,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven,troll-seven,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Create trap identified
+8,0x9b05ac,111,0,0,60,49,60,49,,7,troll,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,troll-seven,troll-seven,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Normal controller movement triggered native create trap 631
 8,0x9b05c8,97,0,1,6,51,6,51,0x03bf1f,13,ghost,0,4 4 4 4 4 4 4 4,6 4 4 4 6 4 4 4,ghosts-eight,ghosts-eight,2,2,,,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,Initially linked
 8,0x9b05e4,72,0,1,9,51,9,51,0x03b226,16,rat,1,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,default,default,2,2,,,00 01 02 03 07 0c,00 01 02 03 07 0c,Initially linked
 8,0x9b0600,92,0,1,34,51,34,51,0x03bd8a,5,spider,2,4 4 4 4 4 4 4 4,4 4 4 4 4 4 4 4,rats-spiders,rats-spiders,2,2,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,00 01 02 03 07 0c 0d,,Initially linked
