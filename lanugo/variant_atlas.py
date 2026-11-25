@@ -44,10 +44,11 @@ class AtlasDoesNotFit(ValueError):
     pass
 
 
-def pack(frames, texture_pages, width=WIDTH):
+def pack(frames, texture_pages, width=WIDTH, *, scale=16):
     free = [(page, 0, 0, width, rows) for page, (_, _, rows) in enumerate(texture_pages)]
     for frame in sorted(frames, key=lambda item: (-item[4], -item[3], item)):
         _, _, _, width, height = frame
+        width, height = max(1, width * scale // 16), max(1, height * scale // 16)
         choices = (
             (min(fw - w, fh - h), max(fw - w, fh - h), page, y, x, rotated, w, h)
             for rotated, w, h in ((False, width, height), (True, height, width))
@@ -75,7 +76,7 @@ def frame_metadata(texture, texture_pages, width, height, hotspot_x, hotspot_y):
     return struct.pack("<4B4HB3x", width, height, hotspot_x, hotspot_y, *uv, page_command)
 
 
-def build(sources, texture_pages=TEXTURE_PAGES):
+def build(sources, texture_pages=TEXTURE_PAGES, *, minimum_scale=16):
     # The four exported atlases have identical rectangles and hotspots.
     palettes_by_mode = []
     metadata_by_mode = []
@@ -96,15 +97,23 @@ def build(sources, texture_pages=TEXTURE_PAGES):
         for mode, rows in enumerate(metadata_by_mode)
         for u, v, width, height, _, _ in rows
     }
-    textures = dict(pack(frames, texture_pages))
+    for scale in range(16, minimum_scale - 1, -1):
+        try:
+            textures = dict(pack(frames, texture_pages, scale=scale))
+            break
+        except AtlasDoesNotFit:
+            if scale == minimum_scale:
+                raise
     for (mode, src_u, src_v, width, height), texture in textures.items():
         dest = pages[texture.page]
         source = palettes_by_mode[mode]
-        for y in range(height):
-            for x in range(width):
-                u, v = (height - 1 - y, x) if texture.rotated else (x, y)
+        width_out, height_out = max(1, width * scale // 16), max(1, height * scale // 16)
+        for y in range(height_out):
+            for x in range(width_out):
+                u, v = (height_out - 1 - y, x) if texture.rotated else (x, y)
                 index = (texture.v + v) * WIDTH + texture.u + u
-                dest[index] = indices[source[(src_v + y) * WIDTH + src_u + x]]
+                source_x, source_y = x * width // width_out, y * height // height_out
+                dest[index] = indices[source[(src_v + source_y) * WIDTH + src_u + source_x]]
     metadata = b"".join(
         frame_metadata(textures[mode, u, v, w, h], texture_pages, w, h, hx, hy)
         for mode, rows in enumerate(metadata_by_mode)

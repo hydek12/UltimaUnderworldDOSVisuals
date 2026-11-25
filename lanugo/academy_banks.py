@@ -302,6 +302,12 @@ ROOM_FORMATS = {**LEVEL_ONE_FORMATS, "dwarves": (8, 16), "corby": (8, 15),
                 "judy": (4, 16), "ghouls-five": (8, 14), "anjor": (4, 16),
                 "tyball": (4, 16), "cardon": (8, 15), "gray-guards-seven": (4, 16),
                 "troll-seven": (4, 16), "imp-seven": (8, 16), **RECURRING_SINGLE_FORMATS}
+# Internal names for bank zero when the opt-in combat preview is enabled.
+DEFAULT_COMBAT_BANKS = {2: "default-green-goblin", 5: "default-green-goblin",
+                        7: "default-green-goblin", 8: "default-rat"}
+ROOM_FAMILIES.update({"default-green-goblin": ((78,),), "default-rat": ((72,),)})
+ROOM_FORMATS.update({"default-green-goblin": (8, 16), "default-rat": (4, 16)})
+
 SPLIT_ROOM_FORMATS = {"prisoner": (4, (12, 16)), "town": (8, (11, 11)), "carasso": (8, (16, 11)),
                       **RECURRING_FORMATS}
 MIXED_COMBAT_BANKS = (SHARED_PAGE_FORMATS.keys() | SPLIT_ROOM_FORMATS.keys()) - {
@@ -311,7 +317,7 @@ DEDICATED_ROOM_COMBAT_BANKS = frozenset((
     "wizards", "judy", "anjor", "tyball", "ghouls-five", "ghouls-five-recurring", "ghouls-eight", "fire", "spiders",
     "lurkers", "dwarves", "ghosts-five", "reapers", "trolls-four-recurring", "ghosts-eight",
     "bandits", "fighters", "gray-guards-seven", "fighters-four", "troll-seven", "corby", "zak",
-    "south-green-goblin", "cardon", "demon",
+    "south-green-goblin", "cardon", "demon", *DEFAULT_COMBAT_BANKS.values(),
 ))
 ACADEMY_COMBAT_BANKS = frozenset((
     "wizb", "wizc", "warren", "ghouls", "imps", "trolls", "golem", "fire-elemental",
@@ -510,8 +516,11 @@ def sections(base_byte_offset, bank_bytes, bank, *, floor=None, recurring=False,
 
 if __name__ == "__main__":
     from creature_atlas import LEVEL_SIX_WIZARD_TYPES
+    from variant_atlas import GOBLIN_TYPES
+    from build_track import LEVEL_SIX_DIRECTIONAL
 
     families = [ROOM_FAMILIES[bank] for bank in MIXED_COMBAT_BANKS | DEDICATED_ROOM_COMBAT_BANKS]
     families += [BANK_FAMILIES[bank] for bank in ACADEMY_COMBAT_BANKS]
+    families.append(LEVEL_SIX_DIRECTIONAL)
     actors = {actor for bank in families for family in bank for actor in family}
-    print("\n".join(map(str, sorted(actors.union(LEVEL_SIX_WIZARD_TYPES)))))
+    print("\n".join(map(str, sorted(actors.union(LEVEL_SIX_WIZARD_TYPES, GOBLIN_TYPES)))))
