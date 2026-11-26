@@ -151,6 +151,8 @@ The rebuilt CHD passed the original Level 1 and Level 2 staircase round-trip. Du
 
 The end-to-end quest replay through the ending and later floor transitions remain open under the [project milestone criteria](project-rules.md#progress-and-milestones).
 
+The final 100% acceptance check is [Warren dialogue PR #25](https://github.com/hydek12/UltimaUnderworldDOSVisuals/pull/25). After the other milestone checks pass, cold-boot the rebuilt opt-in candidate, open Talk with normal controller input, verify the panel and right-aligned Circle footer, and dismiss it to check Warren’s sprite restoration. Verify hostile and unavailable behavior and close the PR’s acceptance checklist before merging.
+
 ## Levels 1–4 recurring creature preview
 
 The cumulative build adds DOS idle and walking art for grubs, slugs, bats, rats, spiders, skeletons, lurkers, headless, imps, gazers, golems, ghosts, shadows, reapers, and wisps. The existing gray goblin, fighter, dwarf, troll, and wizard palettes cover additional rooms. The Level 4 mixed bank keeps bats, grubs, and rats available within the same room. Original fallback banks remain available for the green goblins and lizardmen.
