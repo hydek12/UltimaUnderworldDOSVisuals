@@ -8,6 +8,10 @@ This macOS Xcode command-line project uses the local DOS release as the visual r
 
 Use the [pull request workflow](docs/pull-request-workflow.md) for all changes to `main`. Follow the [project rules](docs/project-rules.md) for builds, verification, and milestones. See the [historical change log](docs/change-history.md) for changes made before PRs were adopted.
 
+## Release acceptance status
+
+The rebuilt v0.1.0 release passed the four-track disc readback, BIOS cold boot, native memory-card save and reload, and representative staircase round-trips from Level 1 through Level 5. Later floor transitions and the quest replay through the ending remain open. Warren’s dialogue preview is the final acceptance check. [Gameplay audit](docs/named-dialogue-audit.md#published-v010-release-acceptance)
+
 ## Reproduce the asset checks
 
 1. Open `UnderworldVisuals.xcodeproj` and build the `UnderworldVisuals` scheme.
@@ -82,7 +86,7 @@ Build a local preview with `build-local-preview.sh --menu-controls --dos-shade-m
 | Rune Bag and spells | × Back in the Rune Bag, ○ Pick in the spell menu, and × Exit or Back |
 | Dialogue | ○ Reply during selection and ○ Continue when dialogue waits for input, right-aligned in the footer |
 
-Most footers are centered. The inventory text shifts left when needed to clear the HUD, and dialogue uses a 16-pixel right margin. Save and load screens use the original prompts. [Build instructions and verification history](docs/local-patch-builder.md#context-sensitive-menu-controls-development-preview)
+Most footers are centered. The inventory text shifts left when needed to clear the HUD, and dialogue uses a 16-pixel right margin. Save and load screens use the original prompts. [Build instructions and verification history](docs/local-patch-builder.md#context-sensitive-menu-controls-development-preview) · [Controller footer screenshots](docs/npc-screenshots.md#controller-legend-footers)
 
 ## Clean Japanese baseline and Lanugo texture
 

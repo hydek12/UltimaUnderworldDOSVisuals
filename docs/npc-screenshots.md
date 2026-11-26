@@ -67,3 +67,25 @@ This staged melee pose shows the gold DOS palette and the blue arc drawn into th
 ![Gralwart’s English dialogue and two response options](screenshots/ultima-underworld-gralwart-dialogue.png)
 
 Gralwart opens his English dialogue through the original PlayStation conversation routine. The expanded build restores the DOS NPC textures on return to the dungeon.
+
+## Controller legend footers
+
+These DuckStation captures show the context-sensitive controller legend previews.
+
+### Inventory
+
+![Inventory footer showing Square Drop, Circle Pick up, Triangle Open, and Cross Exit](screenshots/controller-footer-inventory.png)
+
+With the Rune Bag selected, the inventory footer shows the four available actions in button order.
+
+### Map
+
+![Map footer showing Circle Toggle marker and Cross Exit](screenshots/controller-footer-map.png)
+
+The map footer shows Circle to toggle the marker on the current tile and Cross to exit.
+
+### Dialogue
+
+![Hagbard dialogue with Circle Reply right-aligned at the bottom](screenshots/controller-footer-dialogue.png)
+
+Hagbard’s conversation shows Circle Reply in the right-aligned footer while responses are available.
