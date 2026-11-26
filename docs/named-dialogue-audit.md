@@ -141,6 +141,14 @@ These percentages track the project checklist. They are estimates based on verif
 | 95% | Verified | Cumulative shade-map preview round-trip, four-track CHD readback, and default recipe hash regression |
 | 100% | Verified | Native torch, Light and Night Vision drive the Level 1 DOS palettes in DuckStation. Preview and default recipe regression checks passed. |
 
+## Published v0.1.0 release acceptance
+
+The [published v0.1.0 tag](https://github.com/hydek12/UltimaUnderworldDOSVisuals/releases/tag/v0.1.0) points to `83f385c8ddce363286114ad3e8c9a3506bcc2c5f` and includes the source recipe, CLI builder, local build guide, and captioned screenshot gallery. A clean source archive rebuilt from the split Japanese Rev 1 CUE, all four original tracks, the separately prepared English v2.0 data track, and a local DOS installation. The xdelta round-trip and all four CHD readback tracks and CUE indexes passed. Patched Track 1 SHA-1 `78427bb7dea91c18fc2ca345865983a2ad6cc642` matched the tagged guide. The release commit and build result were [recorded in Slack](https://hydeksworkspace.slack.com/archives/C0CL4CBU2TE/p1795651345003559).
+
+DuckStation cold-booted the rebuilt CHD through the PlayStation BIOS. Mapped controller input created a new Fighter named AAAAA and entered Level 1. Select opened Main in normal mode. Main → Save → Create new save slot reported “Save succeeded” on an isolated memory card with fast memory-card access disabled. After an emulator reset through the BIOS, Continue listed AAAAA at level 1 with 0 EXP. Loading the slot restored the original dungeon view and HUD, and a right turn confirmed gameplay input resumed. The test used the in-game card menus and mapped controller inputs throughout the save/load sequence.
+
+The end-to-end quest replay through the ending and floor-transition checks remain open under the [project milestone criteria](project-rules.md#progress-and-milestones).
+
 ## Levels 1–4 recurring creature preview
 
 The cumulative build adds DOS idle and walking art for grubs, slugs, bats, rats, spiders, skeletons, lurkers, headless, imps, gazers, golems, ghosts, shadows, reapers, and wisps. The existing gray goblin, fighter, dwarf, troll, and wizard palettes cover additional rooms. The Level 4 mixed bank keeps bats, grubs, and rats available within the same room. Original fallback banks remain available for the green goblins and lizardmen.
