@@ -10,7 +10,7 @@ Use the [pull request workflow](docs/pull-request-workflow.md) for all changes t
 
 ## Release acceptance status
 
-The rebuilt v0.1.0 release passed the four-track disc readback, BIOS cold boot, native memory-card save and reload, and representative staircase round-trips from Level 1 through Level 8. The game’s original eight-talisman sequence also loaded Level 9 from a staged Chamber of Virtue setup. Full chamber access and the ending replay remain open. Warren’s dialogue preview is the final acceptance check. [Gameplay audit](docs/named-dialogue-audit.md#published-v010-release-acceptance)
+The rebuilt v0.1.0 release passed the four-track disc readback, BIOS cold boot, native memory-card save and reload, and representative staircase round-trips from Level 1 through Level 8. The game’s original eight-talisman sequence also loaded Level 9 from a staged Chamber of Virtue setup. The patched disc played the ending film through its final story scene in a controlled fresh-boot test. Full chamber access, the controller-triggered ending replay, and the post-cinematic screen remain open. Warren’s dialogue preview is the final acceptance check. [Gameplay audit](docs/named-dialogue-audit.md#published-v010-release-acceptance)
 
 ## Reproduce the asset checks
 
