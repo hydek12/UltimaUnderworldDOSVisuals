@@ -201,6 +201,8 @@ The expected Track 1 SHA-1 is `72fed1544044659fc323ab86219be2b7eaba8cbf`. The [g
 
 Pass `--menu-controls` before the preview profile flag to add a button legend to the PSX Options, Inventory, map, Rune Bag, spell, and dialogue screens. For example, use `build-local-preview.sh --menu-controls --dos-shade-maps` with the usual source arguments. The top-level page shows Cross to exit. Submenus show Cross to go back. The legend uses single-glyph ○, □, △, and × icons in the native menu font. The opt-in recipe adds the icons to four unused font slots and draws the legend just before the frame is submitted. Save and load screens use their stock prompts.
 
+To include Warren’s optional Level 6 dialogue, pass `--warren-dialogue` before the preview profile flag, for example `build-local-preview.sh --warren-dialogue --dos-shade-maps` with the usual source arguments. This option enables the menu controls runtime and uses the native conversation panel. The default release recipe keeps Warren’s original Talk behavior.
+
 The Academy spider combat preview includes this opt-in menu patch. Its Track 1 SHA-1 is `036fc88e0102939b9450d5fc0d61432204266657`. All four CHD tracks passed byte-for-byte readback.
 
 The legends list applicable buttons in this order: □, ○, △, ×. Inventory centers the footer and shifts long prompts left just enough to clear the health and mana icons. On an occupied slot, □ starts the native drop flow, ○ picks up the item, and △ opens a container or uses the item. While holding an item, ○ places it on a different slot. × cancels a held selection, closes an open container, or exits Inventory.
