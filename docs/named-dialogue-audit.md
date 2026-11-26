@@ -209,6 +209,9 @@ A follow-up from the staged ridge crest supplied native traversal scrolls and ca
 
 The staged east landing resumed at (52, 2). Controller movement traversed the eastern hallway and entered the native return trigger at Level 8 (60, 2). After the load completed, the avatar arrived on Level 7 at (61, 2) with 24 vitality. The same bones remained in the same backpack slot, with type `0xc6` and owner tag `0x3e`. The floor load changed their runtime record index from 513 to 501. The burial flag stayed clear. QA saved the Level 7 arrival locally. Read-only inspection located a candidate Level 7 to 6 trigger at (19, 12). The approach to that trigger, the subsequent staircase transitions, and burial remain open.
 
+From a disposable native memory-card save, a cold boot restored the Level 7 arrival. Controller input backed away from the return trigger to (62, 2). After saving there and resuming through Continue, the avatar took the north bypass through (59, 4) and reached the west hallway. A separate diagnostic replay supplied the matching type-260 key for lock 27. With that key in the backpack, holding R1, aiming at the door, and pressing Circle opened the door at (55, 2). The same input opened the next door at (51, 2). Readback beyond both doors at (47, 2) confirmed 20 vitality, the original bones (type `0xc6`, owner `0x3e`), and a clear burial flag. The north passage, later staircase transitions, and burial remain open.
+
+
 ## Levels 1–4 recurring creature preview
 
 The cumulative build adds DOS idle and walking art for grubs, slugs, bats, rats, spiders, skeletons, lurkers, headless, imps, gazers, golems, ghosts, shadows, reapers, and wisps. The existing gray goblin, fighter, dwarf, troll, and wizard palettes cover additional rooms. The Level 4 mixed bank keeps bats, grubs, and rats available within the same room. Original fallback banks remain available for the green goblins and lizardmen.
