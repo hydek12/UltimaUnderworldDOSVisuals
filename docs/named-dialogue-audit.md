@@ -197,6 +197,12 @@ A disposable retry on the rebuilt v0.1.0 CHD supplied a longsword, Dragon Skin B
 
 A controller retry from the healed Level 8 save used the native Triangle and Down chord. The power gem charged and the longsword visibly swung. Sampled health stayed at 85 for the golem, 14 for the rat, and 16 for the grub. The swing confirms the input reached the attack sequence. Target selection and damage remain unresolved in this encounter. The avatar bypassed the golem and reached (39, 5) with 25 vitality. After further movement and damage, the controller used another red potion and restored vitality to 35. A second local save at (38, 5) has three potions and the original bones in the backpack. Readback confirmed record 904, type `0xc6`, owner tag `0x3e`, and burial flags `0x0`. The approach ended before the final lava gap.
 
+### Level 8 enemy crowding diagnostic
+
+QA kept an enemies-alive control on a disposable native memory card. A separate trial invoked the game's actor damage routine for the nearby rat, grub, and golem, then used the original Save menu to create a second slot. After closing DuckStation, QA copied the card, booted the rebuilt v0.1.0 CHD without an emulator save state, and loaded the second slot through Continue. All three actors reloaded at zero health. Another rat remained alive. The bones reloaded in the same backpack slot with their original type and owner tag. Native save/load reassigned the storage index from 904 to 513, and the burial flag remained clear.
+
+The first reload ran out of vitality after fast-forward extended into gameplay. On a second reload, at normal speed, controller movement reached (36, 5) with 35 vitality. DuckStation reported 30 game FPS and 60 video FPS at 100% speed during that movement. This establishes a usable staged checkpoint. A matched timing comparison against the enemies-alive card slot is pending. The final lava gap, staircase transitions, and burial remain open.
+
 ## Levels 1–4 recurring creature preview
 
 The cumulative build adds DOS idle and walking art for grubs, slugs, bats, rats, spiders, skeletons, lurkers, headless, imps, gazers, golems, ghosts, shadows, reapers, and wisps. The existing gray goblin, fighter, dwarf, troll, and wizard palettes cover additional rooms. The Level 4 mixed bank keeps bats, grubs, and rats available within the same room. Original fallback banks remain available for the green goblins and lizardmen.
