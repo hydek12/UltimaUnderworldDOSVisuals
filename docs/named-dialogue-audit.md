@@ -161,6 +161,8 @@ On the rebuilt release, a read-only scan of the loaded Level 8 object chains fou
 
 The final 100% acceptance check is [Warren dialogue PR #25](https://github.com/hydek12/UltimaUnderworldDOSVisuals/pull/25). After the other milestone checks pass, cold-boot the rebuilt opt-in candidate, open Talk with normal controller input, verify the panel and right-aligned Circle footer, and dismiss it to check Warren’s sprite restoration. Verify hostile and unavailable behavior and close the PR’s acceptance checklist before merging.
 
+The rebuilt v0.1.0 CHD passed a staged Level 5 Garamon burial replay. The debugger put a disposable character at the grave, supplied a native bones item, and started the original grave interaction. Controller Circle advanced the English conversation through Garamon’s explanation of the gate and its energy source. The original code changed the burial flags from `0x0` to `0xc00` and the grave link to `0x8880`. The talisman and lava agreement, Chamber of Virtue transaction, native Level 9 entry, and ending remain open.
+
 ## Levels 1–4 recurring creature preview
 
 The cumulative build adds DOS idle and walking art for grubs, slugs, bats, rats, spiders, skeletons, lurkers, headless, imps, gazers, golems, ghosts, shadows, reapers, and wisps. The existing gray goblin, fighter, dwarf, troll, and wizard palettes cover additional rooms. The Level 4 mixed bank keeps bats, grubs, and rats available within the same room. Original fallback banks remain available for the green goblins and lizardmen.
