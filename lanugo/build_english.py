@@ -17,7 +17,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
           dos_light_preview=None, lower_floor_goblins=False, lizardmen=None, lizardman_combat=False, level_eight_rats=None,
           level_six_wizards=None, level_six_spiders=False, level_six_casting=False, level_six_combat=False,
           dos_spell_effects=None, expanded_level_six=False, academy_bank=None, academy_runtime=False, level_one_dialogue=False, level_two_dialogue=False, level_three_dialogue=False, level_four_dialogue=False, late_dialogue=False, slasher_combat=False,
-          native_sprite_lighting=False, menu_controls=False):
+          native_sprite_lighting=False, menu_controls=False, warren_dialogue=False):
     if native_sprite_lighting and not late_dialogue:
         raise ValueError("Native sprite lighting requires the cumulative room banks.")
     if slasher_combat and not late_dialogue:
@@ -182,6 +182,7 @@ def build(english, atlas, output, walk_atlas=None, goblin_variants=None,
             wizard_payload_lba=wizard_payload_lba, expanded_level_six=expanded_level_six,
             academy_runtime=academy_runtime, level_one_dialogue=level_one_dialogue,
             room_payload_lbas={floor: lbas[0] for floor, lbas in room_lbas.items()}, menu_controls=menu_controls,
+            warren_dialogue=warren_dialogue,
         )
         updates = {}
         if menu_controls:
@@ -251,4 +252,5 @@ if __name__ == "__main__":
     parser.add_argument("--slasher-combat", action="store_true")
     parser.add_argument("--native-sprite-lighting", action="store_true")
     parser.add_argument("--menu-controls", action="store_true")
+    parser.add_argument("--warren-dialogue", action="store_true")
     build(**vars(parser.parse_args()))

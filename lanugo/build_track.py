@@ -49,6 +49,7 @@ INVENTORY_SUBMIT_CALL = 0x800210F0
 SUBMIT_MENU_FRAME = 0x80072264
 MENU_TEXT_WIDTH = 0x8007F478
 MENU_TEXT_DRAW = 0x8007DA90
+WARREN_TALK = MENU_CODE_RAM + 0x700
 BOOT = 0x800C2300
 SUPPRESS_NORMAL = 0x800C23C0
 SUPPRESS_DELAY = 0x800C2400
@@ -1505,7 +1506,7 @@ def map_help():
     return code.ljust(labels - MAP_HELP, b"\0") + exit_label + mark_label
 
 
-def menu_startup(spell_code):
+def menu_startup(spell_code, warren_dialogue=False):
     """Copy the menu code above the lowered stack before native heap setup."""
     sections = {
         OPTIONS_HELP - MENU_CODE_RAM: options_help(),
@@ -1516,6 +1517,10 @@ def menu_startup(spell_code):
     }
     cleanup_offset = 0x6b0
     length = cleanup_offset + 0x40
+    if warren_dialogue:
+        offset = WARREN_TALK - MENU_CODE_RAM
+        sections[offset] = warren_talk()
+        length = (offset + len(sections[offset]) + 3) & ~3
     source = MENU_STARTUP + 0x40
 
     # The native game can reuse the on-disc template's RAM after boot.
@@ -1551,10 +1556,63 @@ def menu_startup(spell_code):
     return boot.ljust(source - MENU_STARTUP, b"\0") + assemble_payload(sections, length)
 
 
+def warren_talk():
+    # This entry replaces the native branch after the conversation lookup.
+    # The stock Talk action has already checked the actor's eligibility.
+    c = Code(WARREN_TALK)
+    line = menu_label("I remember the sun.")
+    text = WARREN_TALK + 0xa0
+    c.branches.append((len(c.words), "check_failure"))
+    c.add(0x04400000)  # bltz v0, check_failure
+    c.imm("ori", "a0", "zero", 0xe01)
+    c.jump(0x80025fb4)
+    c.nop()
+    c.label("check_failure")
+    c.mem("lhu", "t0", 0x1f0, "gp")
+    c.imm("ori", "t1", "zero", 207)
+    c.branch("bne", "t0", "t1", "no_response")
+    c.mem("lw", "t0", 0x998, "gp")
+    c.address("t1", LEVEL_ONE_MODELS + 5 * 0x380)
+    c.branch("bne", "t0", "t1", "no_response")
+    c.mem("lw", "t0", 0xd28, "gp")
+    c.nop()
+    c.mem("lhu", "t0", 0, "t0")
+    c.nop()
+    c.imm("andi", "t0", "t0", 0x1ff)
+    c.imm("ori", "t1", "zero", 97)
+    c.branch("bne", "t0", "t1", "no_response")
+    c.nop()
+    # Open the native portrait panel, display Warren's line, and let the
+    # standard input-enabled wait handle Circle and the dialogue footer.
+    # Talk and the stock conversation wrapper share the same frame layout.
+    c.jump(0x800260fc, True)
+    c.nop()
+    # For this actor the stock name builder returns a long description.
+    # Fit the panel's nameplate with the personal name.
+    c.address("a0", 0x800ca3a4)
+    c.address("a1", text + len(line))
+    c.jump(0x8007f698, True)
+    c.nop()
+    c.address("a0", text)
+    c.jump(0x80027180, True)
+    c.mem("sh", "zero", 0x928, "gp")  # No reply choices on this page.
+    c.imm("ori", "a1", "zero", 1)
+    c.jump(0x80028c28, True)
+    c.imm("ori", "a0", "zero", 0)
+    c.jump(0x800260cc)  # Native panel cleanup and return to the dungeon.
+    c.nop()
+    c.label("no_response")
+    c.jump(0x80025ff8)
+    c.nop()
+    code = c.out()
+    assert len(code) <= 0xa0
+    return code.ljust(text - WARREN_TALK, b"\0") + line + menu_label("Warren")
+
+
 def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False,
                     lower_payload_lba=None, lizard_payload_lba=None, rat_payload_lba=None,
                     wizard_payload_lba=None, expanded_level_six=False, academy_runtime=False, level_one_dialogue=False,
-                    room_payload_lbas=None, menu_controls=False):
+                    room_payload_lbas=None, menu_controls=False, warren_dialogue=False):
     target = bytearray(original)
     deferred_ordering = any(
         lba is not None for lba in (lizard_payload_lba, rat_payload_lba, wizard_payload_lba)
@@ -1570,9 +1628,11 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
         SUPPRESS_DELAY: gate(SUPPRESS_DELAY, WALK_SUPPRESS_DELAY_RAM if walking else SUPPRESS_DELAY_RAM, "a0", walking, floor_aware),
         DRAW_GATE: gate(DRAW_GATE, DRAW_RAM, walking=walking, floor_aware=floor_aware),
     }
+    if warren_dialogue and not menu_controls:
+        raise ValueError("Warren dialogue requires the menu controls runtime.")
     if menu_controls:
         spell_help, spell_code = rune_spell_help()
-        code[MENU_STARTUP] = menu_startup(spell_code)
+        code[MENU_STARTUP] = menu_startup(spell_code, warren_dialogue)
     if academy_runtime:
         code.update(academy_banks.gates())
     if walking:
@@ -1634,6 +1694,8 @@ def edit_executable(original, payload_lba=PAYLOAD_LBA, walking=False, wide=False
             # Raise the lower panel's reply rows six pixels to clear the footer.
             (0x80028AB8, struct.pack("<I", 0x34110090), struct.pack("<I", 0x3411008A)),
         )
+    if warren_dialogue:
+        hooks += ((0x80025fac, bytes.fromhex("12004004"), jump(WARREN_TALK)),)
     for address, expect, replace in hooks:
         offset = 2048 + address - EXE_LOAD
         if target[offset:offset + len(expect)] != expect:

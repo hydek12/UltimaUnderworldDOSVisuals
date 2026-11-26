@@ -1,10 +1,19 @@
 #!/bin/bash
 set -euo pipefail
 
+warren_dialogue=0
+if [[ ${1:-} == --warren-dialogue ]]; then
+    warren_dialogue=1
+    shift
+fi
+
 menu_controls=0
 if [[ ${1:-} == --menu-controls ]]; then
     menu_controls=1
     shift
+fi
+if (( warren_dialogue )); then
+    menu_controls=1
 fi
 
 dos_shade_maps=0
@@ -83,7 +92,7 @@ if [[ ${1:-} == --english-patch ]]; then
 fi
 
 if [[ $# != 5 ]]; then
-    printf 'Usage: %s [--menu-controls] [--level-six-wizards|--level-six-spiders|--level-six-casting|--level-six-combat|--level-six-effects|--level-six-expanded|--academy-wizb|--academy-wizc|--academy-runtime|--level-one-dialogue|--level-two-dialogue|--level-three-dialogue|--level-four-dialogue|--late-dialogue|--slasher-combat|--native-sprite-lighting|--dos-shade-maps] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
+    printf 'Usage: %s [--warren-dialogue] [--menu-controls] [--level-six-wizards|--level-six-spiders|--level-six-casting|--level-six-combat|--level-six-effects|--level-six-expanded|--academy-wizb|--academy-wizc|--academy-runtime|--level-one-dialogue|--level-two-dialogue|--level-three-dialogue|--level-four-dialogue|--late-dialogue|--slasher-combat|--native-sprite-lighting|--dos-shade-maps] [--english-patch] DOS_ROOT JAPANESE_REV1_TRACK1.bin ENGLISH_INPUT UNDERWORLD_VISUALS OUTPUT.xdelta\n' "$0" >&2
     exit 2
 fi
 
@@ -228,6 +237,9 @@ if (( effects_preview )); then
 fi
 
 printf 'Building the English preview data track…\n'
+if (( warren_dialogue )); then
+    wizard_args+=(--warren-dialogue)
+fi
 if (( menu_controls )); then
     wizard_args+=(--menu-controls)
 fi
