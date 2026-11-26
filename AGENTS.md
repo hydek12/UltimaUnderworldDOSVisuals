@@ -10,6 +10,7 @@
 ## Testing directions
 
 - Preserve the original save and test from a disposable checkpoint or backed-up test memory card. When supplies run low, restock the test copy with native recovery items and verify that it reloads. Verify the equipped gear, consumables, and original quest items before continuing.
+- Use in-game inventory containers, such as sacks, when available and compatible with the test. Use normal controller inputs to store and retrieve items. Before a quest handoff, verify the original quest item is accessible in the inventory slot the interaction uses.
 - Use normal controller input for acceptance runs. Equip appropriate armor, heal as needed, and bypass enemies when the route allows. Before confirming or releasing an attack, aim the targeting reticle directly at the enemy if one is displayed. For attacks without a reticle, including charged sword strikes, center the enemy on screen before striking. Try a native damage spell when melee is ineffective.
 - Use an in-game lighting item, such as a torch, when available and compatible with the test. Keep the required lighting conditions for darkness and comparison checks, and record which light source was active.
 - Verify damage with enemy health before and after the action. A swing, a targeting reticle, or a visible projectile confirms input or casting. A health decrease attributable to the player confirms damage.
