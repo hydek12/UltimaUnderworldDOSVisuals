@@ -2,11 +2,17 @@
 
 This macOS Xcode command-line project uses the local DOS release as the visual reference and the English-patched PlayStation disc as the target. The current target inventories the PSX resource archive and exports original DOS critter frames, including their anchors. Game data is supplied locally.
 
-[View the NPC screenshot gallery](docs/npc-screenshots.md) for a matched Level 3 lizardman comparison and a Level 7 goblin capture.
+[View the NPC screenshot gallery](https://github.com/hydek12/UltimaUnderworldDOSVisuals/blob/v0.1.0/docs/npc-screenshots.md) for a matched Level 3 lizardman comparison and a Level 7 goblin capture.
 
 ## Project changes
 
 Use the [pull request workflow](docs/pull-request-workflow.md) for all changes to `main`. Follow the [project rules](docs/project-rules.md) for builds, verification, and milestones. See the [historical change log](docs/change-history.md) for changes made before PRs were adopted.
+
+## Release acceptance status
+
+The published v0.1.0 source ZIP passed its SHA-256 and ZIP integrity checks. All 25 packaged files matched the release tag, and the rebuilt CHD passed both raw and overall SHA-1 verification. The gallery is available in the tagged GitHub source.
+
+The rebuilt v0.1.0 release passed the four-track disc readback, BIOS cold boot, native memory-card save and reload, and representative staircase round-trips from Level 1 through Level 8. The game’s original eight-talisman sequence also loaded Level 9 from a staged Chamber of Virtue setup. The patched disc and English-only baseline both played the ending film through to scrolling credits in matched cold-boot tests. The rebuilt patch then displayed both result pages and the original Japanese power-off prompt. Normal controller input started the ending from a staged position at the edge of the native gate trigger. A follow-up verified that controller movement could enter the trigger tile from an adjacent tile after staging on its north approach. The ending from that approach remains open. A separate controller check assembled the Key of Infinity from staged pieces and opened the original Chamber of Virtue seal. A continuous controller replay picked up Garamon’s original bones on Level 8, used Gate Travel to reach Level 5, and buried them at his grave. QA prepared the starting position and travel supplies before pickup. The staircase route remains open at the Level 7 eastern fork, with Garamon’s original bones still in inventory. The full quest replay also remains open. Warren’s dialogue preview is the final acceptance check. [Gameplay audit](docs/named-dialogue-audit.md#published-v010-release-acceptance)
 
 ## Reproduce the asset checks
 
@@ -82,7 +88,7 @@ Build a local preview with `build-local-preview.sh --menu-controls --dos-shade-m
 | Rune Bag and spells | × Back in the Rune Bag, ○ Pick in the spell menu, and × Exit or Back |
 | Dialogue | ○ Reply during selection and ○ Continue when dialogue waits for input, right-aligned in the footer |
 
-Most footers are centered. The inventory text shifts left when needed to clear the HUD, and dialogue uses a 16-pixel right margin. Save and load screens use the original prompts. [Build instructions and verification history](docs/local-patch-builder.md#context-sensitive-menu-controls-development-preview)
+Most footers are centered. The inventory text shifts left when needed to clear the HUD, and dialogue uses a 16-pixel right margin. Save and load screens use the original prompts. [Build instructions and verification history](docs/local-patch-builder.md#context-sensitive-menu-controls-development-preview) · [Controller footer screenshots](docs/npc-screenshots.md#controller-legend-footers)
 
 ## Clean Japanese baseline and Lanugo texture
 

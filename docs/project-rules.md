@@ -29,7 +29,7 @@ These rules come from the Ultima Underworld PSX project thread in Slack. Use the
 | 85% | Verify applicable stance, attack, casting, retreat, impact, and death poses across families. Compare palettes, lighting, scale, hotspots, transparency, and occlusion. Verify native fallbacks and preserve native gameplay. |
 | 90% | Compare matched DOS and PSX environments, implement feasible visual changes, and capture matched views. Verify English menus, HUD, inventory, prompts, and preview title. |
 | 95% | Reproduce the release candidate from clean local inputs, cold-boot a fresh four-track CHD, and verify the delta and original audio. Play named quest handoffs through the ending, including save/load and floor transitions. |
-| 100% | Publish the source recipe, CLI builder, guide, and curated gallery. Reproduce the build from the published instructions, close the verification and audit checklist, and record the release commit in Slack. |
+| 100% | Publish the source recipe, CLI builder, guide, and curated gallery. Reproduce the build from the published instructions, close the verification and audit checklist, and record the release commit in Slack. Complete the outstanding acceptance checks in [Warren dialogue PR #25](https://github.com/hydek12/UltimaUnderworldDOSVisuals/pull/25) last, after all other milestone verification passes, and merge the PR before marking 100% complete. |
 
 ## Slack references
 
