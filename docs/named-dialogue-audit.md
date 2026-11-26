@@ -155,6 +155,8 @@ The Level 4 and Level 5 staircase at row 26 also passed in both directions on th
 
 The rebuilt v0.1.0 CHD also passed the Level 5 and 6 staircase round-trip at column 43. The debugger staged the disposable character on Level 5 at (43, 31), facing south. Forward input crossed the original trigger at (43, 30) and the game loaded Level 6; the first read after movement was at (43, 26). Backward input crossed the original return trigger at (43, 28) and restored Level 5 at (43, 31). The game supplied both destinations.
 
+The rebuilt release passed the Level 6–7 and Level 7–8 staircase round-trips in DuckStation. After staging the disposable player at Level 6 tile (18, 10), forward movement crossed (18, 11) into Level 7 at (19, 13). Backward movement crossed (19, 12) and restored Level 6 at (18, 10). On a second Level 7 entry, the debugger positioned the player at (58, 54) facing south. Forward movement crossed (58, 53) into Level 8 at (58, 50). Backward movement crossed (58, 51) and restored Level 7 at (58, 54). The native floor table and arrival coordinates verified all four legs. The game selected the destinations.
+
 The end-to-end quest replay through the ending and later floor transitions remain open under the [project milestone criteria](project-rules.md#progress-and-milestones).
 
 The final 100% acceptance check is [Warren dialogue PR #25](https://github.com/hydek12/UltimaUnderworldDOSVisuals/pull/25). After the other milestone checks pass, cold-boot the rebuilt opt-in candidate, open Talk with normal controller input, verify the panel and right-aligned Circle footer, and dismiss it to check Warren’s sprite restoration. Verify hostile and unavailable behavior and close the PR’s acceptance checklist before merging.
