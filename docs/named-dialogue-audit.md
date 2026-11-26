@@ -147,7 +147,9 @@ The [published v0.1.0 tag](https://github.com/hydek12/UltimaUnderworldDOSVisuals
 
 DuckStation cold-booted the rebuilt CHD through the PlayStation BIOS. Mapped controller input created a new Fighter named AAAAA and entered Level 1. Select opened Main in normal mode. Main → Save → Create new save slot reported “Save succeeded” on an isolated memory card with fast memory-card access disabled. After an emulator reset through the BIOS, Continue listed AAAAA at level 1 with 0 EXP. Loading the slot restored the original dungeon view and HUD, and a right turn confirmed gameplay input resumed. The test used the in-game card menus and mapped controller inputs throughout the save/load sequence.
 
-The end-to-end quest replay through the ending and floor-transition checks remain open under the [project milestone criteria](project-rules.md#progress-and-milestones).
+The rebuilt CHD passed the original Level 1 and Level 2 staircase round-trip. DuckStation staged a disposable character at Level 1 tile (26, 20), facing east. Mapped Up crossed the trigger at (27, 20) and loaded Level 2 at (35, 20). Mapped Down crossed the return trigger at (34, 20) and restored Level 1 at (26, 20). The native floor tables and settled arrival positions were read after each crossing. The game selected both destinations from its original triggers.
+
+The end-to-end quest replay through the ending and later floor transitions remain open under the [project milestone criteria](project-rules.md#progress-and-milestones).
 
 ## Levels 1–4 recurring creature preview
 
