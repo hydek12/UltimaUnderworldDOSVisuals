@@ -203,6 +203,8 @@ QA kept an enemies-alive control on a disposable native memory card. A separate 
 
 The first reload ran out of vitality after fast-forward extended into gameplay. On a second reload, at normal speed, controller movement reached (36, 5) with 35 vitality. DuckStation reported 30 game FPS and 60 video FPS at 100% speed during that movement. This establishes a usable staged checkpoint. A matched timing comparison against the enemies-alive card slot is pending. The final lava gap, staircase transitions, and burial remain open.
 
+The staged route continued from (36, 5) north to (36, 7), then east up the lit ramp through (46, 8) to the crest at (48, 8) with 25 vitality. Readback confirmed Garamon’s bones in the backpack. At the crest, the QA combat tool blocked a non-hostile mongbat and a headless with an unconfirmed attack goal. After the native AI targeted the player, the tool applied exactly 54 damage to that headless, reducing it from 54 to 0. The mongbat remained at 17 vitality during this gated test. A separately saved diagnostic branch supplied a map item. Controller input opened the Level 8 automap, which showed the explored ridge and lava beside the crest. The unexplored passage beyond it and the return stair require live verification.
+
 ## Levels 1–4 recurring creature preview
 
 The cumulative build adds DOS idle and walking art for grubs, slugs, bats, rats, spiders, skeletons, lurkers, headless, imps, gazers, golems, ghosts, shadows, reapers, and wisps. The existing gray goblin, fighter, dwarf, troll, and wizard palettes cover additional rooms. The Level 4 mixed bank keeps bats, grubs, and rats available within the same room. Original fallback banks remain available for the green goblins and lizardmen.

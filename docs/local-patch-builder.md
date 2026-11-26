@@ -234,3 +234,16 @@ DuckStation loaded the final preview with disposable Level 1 checkpoints. Mapped
 A Batocera cold boot exposed a memory-lifetime bug in the earlier preview. The game reused the executable regions that held the menu routines, leaving the original hooks pointing at overwritten code. The previous DuckStation checkpoint tests wrote the routines into live RAM and missed the overwrite. The opt-in build now lowers the native stack and heap ceiling by 2 KiB, copies the menu routines into the space above the stack before heap initialization, and clears the startup copy so the game can reuse its original RAM.
 
 The repaired CHD cold-booted through the PlayStation BIOS in DuckStation and loaded a copy of the Batocera memory card through the game’s Continue screen. Mapped inputs opened Main, entered Options, returned to the dungeon, and opened Inventory with the expected prompts. A read-only debugger check after both menus verified all 1,088 reserved bytes against the build. All four CHD tracks passed byte-for-byte readback. The repaired preview Track 1 SHA-1 is `d8bb6bc44bf8780681c8715543fa5109154df4a9`. Use a fresh game boot and a memory-card save to test this change because emulator save states restore the previous executable and RAM layout.
+
+
+## DuckStation combat diagnostics
+
+Use a disposable QA checkpoint and enable DuckStation’s localhost GDB server in its isolated test profile. Close the in-game menus before issuing a damage command. The tool checks the loaded Rev 1 executable at the addresses it uses.
+
+```sh
+python3 lanugo/duckstation_combat.py --interactive
+```
+
+The tool immediately lists living active creatures by distance, with their actor index, type, vitality, tile, and disposition. The default radius is four tiles. Enter `scan` to refresh, `damage INDEX` to stage a defeat, or `quit` to disconnect. Running without `--interactive` or `--damage` lists the candidates and exits.
+
+Only a hostile actor whose native attack goal targets the player is eligible. The tool rechecks that condition just before calling the game’s damage routine. It passes the actor’s current vitality as damage and reads back the result. Report those defeats as staged QA setup. If the result needs to persist on a disposable card, use the game’s Save menu and confirm DuckStation has exited before copying or editing the card file.
