@@ -10,7 +10,7 @@
 ## Testing directions
 
 - Preserve the original save and test from a disposable checkpoint or backed-up test memory card. When supplies run low, restock the test copy with native recovery items and verify that it reloads. Verify the equipped gear, consumables, and original quest items before continuing.
-- Use normal controller input for acceptance runs. Equip appropriate armor, heal as needed, and bypass enemies when the route allows. If combat is necessary, center the enemy in the view before releasing a charged sword attack. Try a native damage spell when melee is ineffective and confirm its target with the in-game reticle.
+- Use normal controller input for acceptance runs. Equip appropriate armor, heal as needed, and bypass enemies when the route allows. If combat is necessary, center the enemy in the view before releasing a charged sword attack. Try a native damage spell when melee is ineffective. Whenever an attack displays a targeting reticle, aim it directly at the enemy before confirming or releasing the attack.
 - Verify damage with enemy health before and after the action. A swing, a targeting reticle, or a visible projectile confirms input or casting. A health decrease attributable to the player confirms damage.
 - Keep staging and verification distinct. Record any staged equipment, supplies, or position. Use read-only inspection during the run to confirm state. For route and quest checks, record each required transition and verify that the original item persists until the expected handoff or consumption.
 - Save verified checkpoints separately, confirm the DuckStation exit dialog, and post verified results and pending checks in the GitHub PR and the `#projects` Slack thread.
